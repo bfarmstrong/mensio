@@ -9,7 +9,14 @@
 
 ## Measurement Clinic Develeopment Environemnt
 
-Start the containers required
+### Start the containers required
+Initialize submodules for laradock
+
+```
+~/measuremyclinic# git submodule init
+~/measuremyclinic# git submodule update
+```
+
 Navigate to laradock submodule folder
 ```
 ~/measuremyclinic# cd laradock/
