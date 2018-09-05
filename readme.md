@@ -7,6 +7,37 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## Measurement Clinic Develeopment Environemnt
+
+Start the containers required
+Navigate to laradock `cd laradock/`
+
+Copy .env var
+```
+cp env-example .env
+````
+
+Start initial containers
+```
+docker-compose up -d nginx mysql
+```
+
+ssh to worksapce
+```
+docker-compose exec workspace bash
+```
+```
+$ root@workspace:/var/www# composer install
+$ root@workspace:/var/www# cp .env.example .env
+$ root@workspace:/var/www# php artisan key:generate
+$ root@workspace:/var/www# exit
+~/laravel/laradock# cd ..
+~/laravel# sudo chmod -R 777 storage bootstrap/cache
+```
+
+You should now be able to visit your `localhost` or if you're edited your dns to point to localhost:80 you may use that as well.
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
