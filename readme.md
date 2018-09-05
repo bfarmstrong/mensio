@@ -10,29 +10,29 @@
 ## Measurement Clinic Develeopment Environemnt
 
 Start the containers required
-Navigate to laradock `~/laravel# cd laradock/`
+Navigate to laradock `~/measuremyclinic# cd laradock/`
 
 Copy .env var
 ```
-~/laravel/laradock# cp env-example .env
+~/measuremyclinic/laradock# cp env-example .env
 ````
 
 Start initial containers
 ```
-~/laravel/laradock# docker-compose up -d nginx mysql
+~/measuremyclinic/laradock# docker-compose up -d nginx mysql
 ```
 
 ssh to worksapce
 ```
-~/laravel/laradock# docker-compose exec workspace bash
+~/measuremyclinic/laradock# docker-compose exec workspace bash
 ```
 ```
 $ root@workspace:/var/www# composer install
 $ root@workspace:/var/www# cp .env.example .env
 $ root@workspace:/var/www# php artisan key:generate
 $ root@workspace:/var/www# exit
-~/laravel/laradock# cd ..
-~/laravel# sudo chmod -R 777 storage bootstrap/cache
+~/measuremyclinic/laradock# cd ..
+~/measuremyclinic# sudo chmod -R 777 storage bootstrap/cache
 ```
 
 You should now be able to visit your `localhost` or if you're edited your dns to point to localhost:80 you may use that as well.
