@@ -10,21 +10,21 @@
 ## Measurement Clinic Develeopment Environemnt
 
 Start the containers required
-Navigate to laradock `cd laradock/`
+Navigate to laradock `~/laravel# cd laradock/`
 
 Copy .env var
 ```
-cp env-example .env
+~/laravel/laradock# cp env-example .env
 ````
 
 Start initial containers
 ```
-docker-compose up -d nginx mysql
+~/laravel/laradock# docker-compose up -d nginx mysql
 ```
 
 ssh to worksapce
 ```
-docker-compose exec workspace bash
+~/laravel/laradock# docker-compose exec workspace bash
 ```
 ```
 $ root@workspace:/var/www# composer install
