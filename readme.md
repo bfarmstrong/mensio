@@ -10,7 +10,10 @@
 ## Measurement Clinic Develeopment Environemnt
 
 Start the containers required
-Navigate to laradock `~/measuremyclinic# cd laradock/`
+Navigate to laradock submodule folder
+```
+~/measuremyclinic# cd laradock/
+```
 
 Copy .env var
 ```
