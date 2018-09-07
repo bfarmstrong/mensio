@@ -36,7 +36,7 @@ class RolesTableSeeder extends Seeder
             Role::create([
                 'name' => 'superadmin',
                 'label' => 'Super Admin',
-                'level' => 1
+                'level' => 5
             ]);
         }
     }

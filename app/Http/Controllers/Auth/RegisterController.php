@@ -71,8 +71,8 @@ class RegisterController extends Controller
                 'email' => $data['email'],
                 'password' => bcrypt($data['password'])
             ]);
-
-            return $this->service->create($user, $data['password']);
+            $role = isset($data['role']) ? $data['role'] : 'client';
+            return $this->service->create($user, $data['password'], $role);
         });
     }
 }

@@ -19,6 +19,10 @@ class CreateRolesTable extends Migration
             $table->string('label')->nullable();
             $table->text('permissions')->nullable();
         });
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('role_id')->unsigned()->index()->nullable();
+            $table->foreign('role_id')->references('id')->on('roles');
+        });
     }
 
     /**
@@ -29,5 +33,8 @@ class CreateRolesTable extends Migration
     public function down()
     {
         Schema::drop('roles');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role_id');
+        });
     }
 }

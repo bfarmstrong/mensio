@@ -23,6 +23,7 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->service->all();
+        // dd($users);
         return view('admin.users.index')->with('users', $users);
     }
 

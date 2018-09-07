@@ -19,8 +19,7 @@ class UserTableSeeder extends Seeder
             $user = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
-                'password' => bcrypt('admin'),
-                'role_id' => 3
+                'password' => bcrypt('admin')
             ]);
 
             $service->create($user, 'admin', 'admin', false);

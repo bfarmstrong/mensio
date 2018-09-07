@@ -38,14 +38,14 @@ class Role extends Model
         'label' => 'required'
     ];
 
-    /**
-     * A Roles users
-     *
-     * @return Relationship
-     */
+    // /**
+    //  * A Roles users
+    //  *
+    //  * @return Relationship
+    //  */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
     }
 
     /**

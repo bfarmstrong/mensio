@@ -51,7 +51,7 @@ class User extends Authenticatable
      */
     public function role()
     {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -74,10 +74,7 @@ class User extends Authenticatable
     public function hasAtLeastRole($role)
     {
         $requiredLevel = Role::getLevelByName($role);
-        dd($this->role);
-        // $pass = $this->role-> >= $requiredLevel;
-        // dd($pass);
-        // return $pass
+        return $this->role()->first()->level >= $requiredLevel;
     }
 
     /**

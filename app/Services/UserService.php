@@ -120,7 +120,7 @@ class UserService
         $users = $this->model->all();
 
         foreach ($users as $user) {
-            if ($user->roles->first()->id == $id) {
+            if ($user->role->first()->id == $id) {
                 $usersWithRepo[] = $user;
             }
         }
@@ -154,14 +154,13 @@ class UserService
      * @param  boolean $sendEmail Whether to send the email or not
      * @return User
      */
-    public function create($user, $password, $role = 'member', $sendEmail = false)
+    public function create($user, $password, $role = 'client', $sendEmail = false)
     {
         try {
             DB::transaction(function () use ($user, $password, $role, $sendEmail) {
                 $this->userMeta->firstOrCreate([
                     'user_id' => $user->id
                 ]);
-
                 $this->assignRole($role, $user->id);
 
                 if ($sendEmail) {
@@ -169,7 +168,8 @@ class UserService
                 }
             });
 
-            $this->setAndSendUserActivationToken($user);
+            // TOOD: Look at this
+            // $this->setAndSendUserActivationToken($user);
 
             return $user;
         } catch (Exception $e) {
@@ -210,9 +210,8 @@ class UserService
 
                 $user->update($payload);
 
-                if (isset($payload['roles'])) {
-                    $this->unassignAllRoles($userId);
-                    $this->assignRole($payload['roles'], $userId);
+                if (isset($payload['role'])) {
+                    $this->assignRole($payload['role'], $userId);
                 }
 
                 return $user;
@@ -230,7 +229,7 @@ class UserService
     public function invite($info)
     {
         $password = substr(md5(rand(1111, 9999)), 0, 10);
-
+        // dd($info);
         return DB::transaction(function () use ($password, $info) {
             $user = $this->model->create([
                 'email' => $info['email'],
@@ -238,7 +237,7 @@ class UserService
                 'password' => bcrypt($password)
             ]);
 
-            return $this->create($user, $password, $info['roles'], true);
+            return $this->create($user, $password, $info['role'], true);
         });
     }
 
