@@ -49,9 +49,9 @@ class User extends Authenticatable
      *
      * @return Relationship
      */
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->hasOne(Role::class);
     }
 
     /**
@@ -62,8 +62,22 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        $roles = array_column($this->roles->toArray(), 'name');
-        return array_search($role, $roles) > -1;
+        return $this->role->name == $role;
+    }
+
+    /**
+     * Check if user has at least permission level
+     *
+     * @param  int   $role
+     * @return boolean
+     */
+    public function hasAtLeastRole($role)
+    {
+        $requiredLevel = Role::getLevelByName($role);
+        dd($this->role);
+        // $pass = $this->role-> >= $requiredLevel;
+        // dd($pass);
+        // return $pass
     }
 
     /**
@@ -72,16 +86,16 @@ class User extends Authenticatable
      * @param  string  $permission
      * @return boolean
      */
-    public function hasPermission($permission)
-    {
-        return $this->roles->each(function ($role) use ($permission) {
-            if (in_array($permission, explode(',', $role->permissions))) {
-                return true;
-            }
-        });
+    // public function hasPermission($permission)
+    // {
+    //     return $this->roles->each(function ($role) use ($permission) {
+    //         if (in_array($permission, explode(',', $role->permissions))) {
+    //             return true;
+    //         }
+    //     });
 
-        return false;
-    }
+    //     return false;
+    // }
 
     /**
      * Teams

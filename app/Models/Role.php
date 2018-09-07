@@ -24,7 +24,8 @@ class Role extends Model
     protected $fillable = [
         'name',
         'label',
-        'permissions'
+        'permissions',
+        'level'
     ];
 
     /**
@@ -56,5 +57,10 @@ class Role extends Model
     public static function findByName($name)
     {
         return Role::where('name', $name)->firstOrFail();
+    }
+
+    public static function getLevelByName($name)
+    {
+        return Role::where('name', $name)->firstOrFail()->level;
     }
 }

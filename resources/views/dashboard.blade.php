@@ -2,7 +2,7 @@
 
 <a href="/user/settings">Settings</a><br>
 <a href="/teams">Teams</a><br>
-@if(Auth::user()->can('admin'))
+@if(Auth::user()->hasAtLeastRole('admin'))
 <h1>Admin</h1>
 <a href="/admin/dashboard">Dashboard</a><br>
 <a href="/admin/users">Users</a><br>

@@ -20,6 +20,7 @@ class UserTableSeeder extends Seeder
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
                 'password' => bcrypt('admin'),
+                'role_id' => 3
             ]);
 
             $service->create($user, 'admin', 'admin', false);
