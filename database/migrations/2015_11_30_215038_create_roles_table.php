@@ -34,6 +34,7 @@ class CreateRolesTable extends Migration
     {
         Schema::drop('roles');
         Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('role_id');
             $table->dropColumn('role_id');
         });
     }

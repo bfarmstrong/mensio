@@ -5,13 +5,16 @@ namespace App\Models;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\UserMeta;
+use App\Models\Traits\Uuids;
 use App\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use Uuids;
 
     /**
      * The database table used by the model.
@@ -33,6 +36,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * Turn off laravel's auto incrementing built-in feature
+     */
+    public $incrementing = false;
 
     /**
      * User UserMeta

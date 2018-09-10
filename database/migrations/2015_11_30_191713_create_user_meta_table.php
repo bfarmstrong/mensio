@@ -15,7 +15,7 @@ class CreateUserMetaTable extends Migration
         Schema::create('user_meta', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_id')->unsigned();
+            $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->string('phone')->nullable();
