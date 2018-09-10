@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Models\UserMeta;
 use App\Models\Traits\Uuids;
+use App\Models\Traits\Encryptable;
 use App\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
 
@@ -14,7 +15,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use Encryptable;
     use Uuids;
+
+    protected $encrypts = [
+        'name'
+    ];
 
     /**
      * The database table used by the model.
@@ -70,6 +76,7 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
+        // dd($this->role);
         return $this->role->name == $role;
     }
 
