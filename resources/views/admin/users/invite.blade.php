@@ -1,35 +1,23 @@
-@include('partials.errors')
+@extends('layout.dashboard')
 
-@if (session('message'))
-    <div class="">
-        {{ session('message') }}
+@section('title', __('admin.users.create.title'))
+
+@section('content.breadcrumbs', Breadcrumbs::render('admin.users.invite'))
+@section('content.dashboard')
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-user-plus mr-1"></i>
+            @lang('admin.users.create.form-title')
+        </div>
+
+        <div class="card-body">
+            {!!
+                Form::open([
+                    'url' => url('admin/users/invite')
+                ])
+            !!}
+            @include('user.form-settings')
+            {!! Form::close() !!}
+        </div>
     </div>
-@endif
-
-<h1>User: Invite</h1>
-
-<form method="POST" action="/admin/users/invite">
-    {!! csrf_field() !!}
-
-    <div class="">
-        @input_maker_label('Email')
-        @input_maker_create('email', ['type' => 'string'])
-    </div>
-
-    <div class="">
-        @input_maker_label('Name')
-        @input_maker_create('name', ['type' => 'string'])
-    </div>
-
-    <div class="">
-        @input_maker_label('Role')
-        @input_maker_create('role', ['type' => 'relationship', 'model' => 'App\Models\Role', 'label' => 'label', 'value' => 'name'])
-    </div>
-
-    <div class="">
-        <a href="{{ URL::previous() }}">Cancel</a>
-        <button type="submit">Save</button>
-    </div>
-</form>
-
-<a href="/admin/users">User Admin</a>
+@endsection

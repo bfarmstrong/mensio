@@ -1,19 +1,25 @@
-<h1>Reset Your Password</h1>
+@extends('layout.guest')
 
-<form method="POST" action="/password/email">
+@section('title', __('auth.passwords.forgot-password.title'))
 
-    {!! csrf_field() !!}
+@section('content.guest')
+    <div class="card p-4">
+        <div class="card-body">
+            <h1>
+                @lang('auth.passwords.forgot-password.form-title')
+            </h1>
 
-    @include('partials.errors')
-    @include('partials.status')
+            <p class="text-muted">
+                @lang('auth.passwords.forgot-password.form-subtitle')
+            </p>
 
-    <div>
-        Email
-        <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}">
+            {!!
+                Form::open([
+                    'url' => url('password/email'),
+                ])
+            !!}
+            @include('auth.passwords.form-forgot-password')
+            {!! Form::close() !!}
+        </div>
     </div>
-
-    <div>
-        <button type="submit" class="button">Send Password Reset Link</button>
-    </div>
-
-</form>
+@endsection

@@ -1,27 +1,25 @@
+@extends('layout.guest')
 
+@section('title', __('auth.login.title'))
 
-<form method="POST" action="/login">
-    {!! csrf_field() !!}
+@section('content.guest')
+    <div class="card p-4">
+        <div class="card-body">
+            <h1>
+                @lang('auth.login.form-title')
+            </h1>
 
-    <div>
-        Email
-        <input type="email" name="email" value="{{ old('email') }}">
+            <p class="text-muted">
+                @lang('auth.login.form-subtitle')
+            </p>
+
+            {!!
+                Form::open([
+                    'url' => url('login'),
+                ])
+            !!}
+            @include('auth.form-login')
+            {!! Form::close() !!}
+        </div>
     </div>
-
-    <div>
-        Password
-        <input type="password" name="password" id="password">
-    </div>
-
-    <div>
-        <input type="checkbox" name="remember"> Remember Me
-    </div>
-
-    <a href="/password/reset">Forgot Password</a>
-
-    <div>
-        <button type="submit">Login</button>
-    </div>
-
-    <a href="/register">Register</a>
-</form>
+@endsection

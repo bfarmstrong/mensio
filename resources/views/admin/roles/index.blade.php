@@ -1,44 +1,46 @@
-@if (session('message'))
-    <div class="">
-        {{ session('message') }}
+@extends('layout.dashboard')
+
+@section('title', __('admin.roles.index.title'))
+
+@section('content.breadcrumbs', Breadcrumbs::render('admin.roles.index'))
+@section('content.dashboard')
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <i class="fas fa-list-ul mr-1"></i>
+            @lang('admin.roles.index.roles')
+
+            <a
+                class="btn btn-primary btn-sm ml-auto"
+                href="{{ url('admin/roles/create') }}"
+            >
+                @lang('admin.roles.index.create-role')
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    {!!
+                        Form::open([
+                            'url' => url('admin/roles/search')
+                        ])
+                    !!}
+                    @include('admin.roles.form-search')
+                    {!! Form::close() !!}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    @if ($roles->isNotEmpty())
+                        @include('admin.roles.table', ['roles' => $roles])
+                    @else
+                        <p class="lead text-center text-muted mt-3">
+                            @lang('admin.roles.index.no-results')
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
-@endif
-
-<h1>Role Admin</h1>
-
-<a href="/admin/roles/create">Create New Role</a>
-
-<form id="" method="post" action="/admin/roles/search">
-    {!! csrf_field() !!}
-    <input name="search" placeholder="Search">
-</form>
-
-@if ($roles->count() > 0)
-    <table>
-        <thead>
-            <th>Name</th>
-            <th>Label</th>
-            <th>Actions</th>
-        </thead>
-        <tbody>
-            @foreach($roles as $role)
-                <tr>
-                    <td>{{ $role->name }}</td>
-                    <td>{{ $role->label }}</td>
-                    <td>
-                        <a href="{{ url('admin/roles/'.$role->id.'/edit') }}"><span class="fa fa-edit"> Edit</span></a>
-                        <form method="post" action="{{ url('admin/roles/'.$role->id) }}">
-                            {!! csrf_field() !!}
-                            {!! method_field('DELETE') !!}
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this role?')"><i class="fa fa-trash"></i> Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@else
-    <p>Sorry no roles</p>
-@endif
-
-<a href="/dashboard">Dashboard</a>
+@endsection

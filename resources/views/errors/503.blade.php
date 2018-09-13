@@ -1,47 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Be right back.</title>
+@extends('layout.guest')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+@section('title', __('errors.503.title'))
 
-        <style>
-            html, body {
-                height: 100%;
-            }
+@section('content.guest')
+    <div class="clearfix">
+        <h1 class="float-left display-3 mr-4">
+            @lang('errors.503.headline')
+        </h1>
 
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
+        <h4 class="pt-3">
+            @lang('errors.503.subheadline')
+        </h4>
 
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 72px;
-                margin-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Be right back.</div>
-            </div>
-        </div>
-    </body>
-</html>
+        <p class="text-muted">
+            @lang('errors.503.contents')
+        </p>
+    </div>
+@endsection

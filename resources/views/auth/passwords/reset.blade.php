@@ -1,29 +1,25 @@
-<!-- resources/views/auth/reset.blade.php -->
+@extends('layout.guest')
 
-<form method="POST" action="/password/reset">
-    {!! csrf_field() !!}
-    <input type="hidden" name="token" value="{{ $token }}">
+@section('title', __('auth.passwords.reset-password.title'))
 
-    @include('partials.errors')
+@section('content.guest')
+    <div class="card p-4">
+        <div class="card-body">
+            <h1>
+                @lang('auth.passwords.reset-password.form-title')
+            </h1>
 
-    <div>
-        Email
-        <input type="email" name="email" value="{{ old('email') }}">
+            <p class="text-muted">
+                @lang('auth.passwords.reset-password.form-subtitle')
+            </p>
+
+            {!!
+                Form::open([
+                    'url' => url('password/reset'),
+                ])
+            !!}
+            @include('auth.passwords.form-reset-password')
+            {!! Form::close() !!}
+        </div>
     </div>
-
-    <div>
-        Password
-        <input type="password" name="password">
-    </div>
-
-    <div>
-        Confirm Password
-        <input type="password" name="password_confirmation">
-    </div>
-
-    <div>
-        <button type="submit">
-            Reset Password
-        </button>
-    </div>
-</form>
+@endsection

@@ -1,40 +1,29 @@
-@include('partials.errors')
+@extends('layout.dashboard')
 
-@if (session('message'))
-    <div class="">
-        {{ session('message') }}
+@section('title', __('admin.users.edit.title'))
+
+@section('content.breadcrumbs', Breadcrumbs::render('admin.users.edit', $user))
+@section('content.dashboard')
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-edit mr-1"></i>
+            @lang('admin.users.edit.form-title')
+        </div>
+
+        <div class="card-body">
+            {!!
+                Form::model(
+                    $user,
+                    ['url' => url("admin/users/$user->id")]
+                )
+            !!}
+            @method('patch')
+            @include('user.form-settings', [
+                'features' => [
+                    'switch_user' => true,
+                ]
+            ])
+            {!! Form::close() !!}
+        </div>
     </div>
-@endif
-
-<form method="POST" action="/admin/users/{{ $user->id }}">
-    <input name="_method" type="hidden" value="PATCH">
-    {!! csrf_field() !!}
-
-    <div>
-        @input_maker_label('Email')
-        @input_maker_create('email', ['type' => 'string'], $user)
-    </div>
-
-    <div>
-        @input_maker_label('Name')
-        @input_maker_create('name', ['type' => 'string'], $user)
-    </div>
-
-    @include('user.meta')
-
-    <div>
-        @input_maker_label('Role')
-        @input_maker_create('role', ['type' => 'relationship', 'model' => 'App\Models\Role', 'label' => 'label', 'value' => 'name'], $user)
-    </div>
-
-    <div>
-        <a href="{{ URL::previous() }}">Cancel</a>
-        <button type="submit">Save</button>
-    </div>
-</form>
-
-@if (! Session::get('original_user'))
-    <a href="/admin/users/switch/{{ $user->id }}">Login as this User</a>
-@endif
-
-<a href="/admin/users">User Admin</a>
+@endsection

@@ -1,43 +1,46 @@
-@if (session('message'))
-    <div class="">
-        {{ session('message') }}
+@extends('layout.dashboard')
+
+@section('title', __('admin.users.index.title'))
+
+@section('content.breadcrumbs', Breadcrumbs::render('admin.users.index'))
+@section('content.dashboard')
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <i class="fas fa-list-ul mr-1"></i>
+            @lang('admin.users.index.users')
+
+            <a
+                class="btn btn-primary btn-sm ml-auto"
+                href="{{ url('admin/users/invite') }}"
+            >
+                @lang('admin.users.index.create-user')
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    {!!
+                        Form::open([
+                            'url' => url('admin/users/search')
+                        ])
+                    !!}
+                    @include('admin.users.form-search')
+                    {!! Form::close() !!}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    @if ($users->isNotEmpty())
+                        @include('admin.users.table', ['users' => $users])
+                    @else
+                        <p class="lead text-center text-muted mt-3">
+                            @lang('admin.users.index.no-results')
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
-@endif
-
-<h1>User Admin</h1>
-<a href="/admin/users/invite">Invite New User</a>
-
-<form id="" method="post" action="/admin/users/search">
-    {!! csrf_field() !!}
-    <input name="search" placeholder="Search">
-</form>
-
-@if ($users->count() > 0)
-    <table>
-        <thead>
-            <th>Email</th>
-            <th>Actions</th>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-                @if ($user->id !== Auth::id())
-                    <tr>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            <a href="{{ url('admin/users/'.$user->id.'/edit') }}"><span class="fa fa-edit"> Edit</span></a>
-                            <form method="post" action="{{ url('admin/users/'.$user->id) }}">
-                                {!! csrf_field() !!}
-                                {!! method_field('DELETE') !!}
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this user?')"><i class="fa fa-trash"></i> Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
-@else
-    <p>Sorry no users</p>
-@endif
-
-<a href="/dashboard">Dashboard</a>
+@endsection

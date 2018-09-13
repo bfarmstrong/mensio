@@ -1,0 +1,8 @@
+.sidebar-minimized .sidebar .nav-link {
+    overflow:hidden;
+}
+
+.brand-minimized .navbar .navbar-brand {
+    // Using !important here to avoid the brand getting crunched to 50px wide
+    width: 155px !important;
+}

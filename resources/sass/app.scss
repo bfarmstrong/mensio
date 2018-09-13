@@ -4,9 +4,11 @@
 
 // Variables
 @import 'variables';
+@import 'components';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import '~@coreui/coreui/scss/coreui';
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 .navbar-laravel {
   background-color: #fff;

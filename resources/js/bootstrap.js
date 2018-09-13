@@ -12,6 +12,12 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('@coreui/coreui');
+
+    // Prevent CoreUI from closing the sidebar when a link is used
+    window.$('body').on('click', function() {
+        window.$(this).addClass('sidebar-show');
+    });
 } catch (e) {}
 
 /**

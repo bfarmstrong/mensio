@@ -1,27 +1,23 @@
-@include('partials.errors')
+@extends('layout.dashboard')
 
-<form method="POST" action="/user/password">
-    {!! csrf_field() !!}
+@section('title', __('user.password.title'))
 
-    <div>
-        @input_maker_label('Old Password')
-        @input_maker_create('old_password', ['type' => 'password', 'placeholder' => 'Old Password'])
+@section('content.breadcrumbs', Breadcrumbs::render('user.password'))
+@section('content.dashboard')
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-asterisk mr-1"></i>
+            @lang('user.password.form-title')
+        </div>
+
+        <div class="card-body">
+            {!!
+                Form::open([
+                    'url' => url('user/password'),
+                ])
+            !!}
+            @include('user.form-password')
+            {!! Form::close() !!}
+        </div>
     </div>
-
-    <div>
-        @input_maker_label('New Password')
-        @input_maker_create('new_password', ['type' => 'password', 'placeholder' => 'New Password'])
-    </div>
-
-    <div>
-        @input_maker_label('Confirm Password')
-        @input_maker_create('new_password_confirmation', ['type' => 'password', 'placeholder' => 'Confirm Password'])
-    </div>
-
-    <div>
-        <button type="submit">Save</button>
-    </div>
-</form>
-
-<a href="/user/settings">Settings</a><br>
-<a href="/dashboard">Dashboard</a>
+@endsection
