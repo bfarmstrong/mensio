@@ -233,7 +233,8 @@ class UserService
         return DB::transaction(function () use ($password, $info) {
             $user = $this->model->create([
                 'email' => $info['email'],
-                'name' => $info['name'],
+                'firstname' => $info['firstname'],
+                'lastname' => $info['lastname'],
                 'password' => bcrypt($password)
             ]);
 

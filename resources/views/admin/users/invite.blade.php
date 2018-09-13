@@ -17,8 +17,13 @@
     </div>
 
     <div class="">
-        @input_maker_label('Name')
-        @input_maker_create('name', ['type' => 'string'])
+         @input_maker_label('FirstName')
+        @input_maker_create('firstname', ['type' => 'string'])
+    </div>
+
+    <div class="">
+        @input_maker_label('LastName')
+        @input_maker_create('lastname', ['type' => 'string'])
     </div>
 
     <div class="">

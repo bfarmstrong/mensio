@@ -19,7 +19,9 @@ class User extends Authenticatable
     use Uuids;
 
     protected $encrypts = [
-        'name'
+        'firstname',
+        'lastname',
+        'email'
     ];
 
     /**
