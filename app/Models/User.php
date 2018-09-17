@@ -7,13 +7,14 @@ use App\Models\Team;
 use App\Models\UserMeta;
 use App\Models\Traits\Uuids;
 use App\Models\Traits\Encryptable;
+use App\Models\Traits\Loggable;
 use App\Notifications\ResetPassword;
-use Illuminate\Notifications\Notifiable;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Loggable;
     use Notifiable;
     use Encryptable;
     use Uuids;

@@ -5,16 +5,6 @@
                 @lang('layout.sidebar.menu')
             </li>
 
-            <li class="nav-item">
-                <a
-                    class="nav-link"
-                    href="{{ url('teams') }}"
-                >
-                    <i class="nav-icon fas fa-users"></i>
-                    @lang('layout.sidebar.teams')
-                </a>
-            </li>
-
             @if (Auth::user()->hasAtLeastRole('admin'))
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
@@ -50,6 +40,16 @@
                             >
                                 <i class="nav-icon fas fa-lock"></i>
                                 @lang('layout.sidebar.roles')
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/logs') }}"
+                            >
+                                <i class="nav-icon fas fa-archive"></i>
+                                @lang('layout.sidebar.activity')
                             </a>
                         </li>
                     </ul>

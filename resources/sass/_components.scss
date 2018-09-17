@@ -1,8 +1,13 @@
 .sidebar-minimized .sidebar .nav-link {
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .brand-minimized .navbar .navbar-brand {
     // Using !important here to avoid the brand getting crunched to 50px wide
     width: 155px !important;
+}
+
+.pagination {
+    // We will add margin if we deem it necessary
+    margin-bottom: 0;
 }

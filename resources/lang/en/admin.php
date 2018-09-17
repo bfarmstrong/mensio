@@ -1,6 +1,39 @@
 <?php
 
 return [
+    'logs' => [
+        'form-static' => [
+            'action' => 'Action',
+            'causer-id' => 'Causer Id',
+            'causer-type' => 'Causer Type',
+            'details' => 'Details',
+            'encrypted-value' => 'These details are encrypted',
+            'subject-id' => 'Subject Id',
+            'subject-type' => 'Subject Type',
+            'timestamp' => 'Timestamp',
+        ],
+        'index' => [
+            'activity-log' => 'Activity Log',
+            'breadcrumb' => 'Activity Log',
+            'no-results' => 'No logs were found...',
+            'title' => 'Activity Log',
+        ],
+        'show' => [
+            'activity-log' => 'Activity Log',
+            'breadcrumb' => 'View',
+            'title' => 'Activity Log',
+        ],
+        'table' => [
+            'action' => 'Action',
+            'actions' => 'Actions',
+            'causer-id' => 'Causer Id',
+            'causer-type' => 'Causer Type',
+            'subject-id' => 'Subject Id',
+            'subject-type' => 'Subject Type',
+            'timestamp' => 'Timestamp',
+            'view' => 'View',
+        ],
+    ],
     'roles' => [
         'create' => [
             'breadcrumb' => 'Create',

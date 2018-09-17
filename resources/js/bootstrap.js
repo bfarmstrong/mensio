@@ -14,9 +14,12 @@ try {
     require('bootstrap');
     require('@coreui/coreui');
 
+    // Enable tooltips
+    $('[data-toggle="tooltip"]').tooltip()
+
     // Prevent CoreUI from closing the sidebar when a link is used
-    window.$('body').on('click', function() {
-        window.$(this).addClass('sidebar-show');
+    window.$('.sidebar').on('click', function() {
+        window.$('body').addClass('sidebar-show');
     });
 } catch (e) {}
 

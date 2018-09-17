@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Loggable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    use Loggable;
+
     public $timestamps = false;
 
     /**

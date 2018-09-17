@@ -1,5 +1,16 @@
 <?php
 
+// Activity Log
+Breadcrumbs::for('admin.logs.index', function ($trail) {
+    $trail->push(__('admin.logs.index.breadcrumb'), url('admin/logs'));
+});
+
+// Activity Log > View
+Breadcrumbs::for('admin.logs.show', function ($trail, $log) {
+    $trail->parent('admin.logs.index');
+    $trail->push(__('admin.logs.show.breadcrumb'), url('admin/logs', $log->id));
+});
+
 // Roles
 Breadcrumbs::for('admin.roles.index', function ($trail) {
     $trail->push(__('admin.roles.index.breadcrumb'), url('admin/roles'));

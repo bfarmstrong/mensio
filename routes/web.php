@@ -128,5 +128,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('roles', 'RoleController', ['except' => ['show']]);
         Route::post('roles/search', 'RoleController@search');
         Route::get('roles/search', 'RoleController@index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Logs
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('logs', 'LogAuditController');
+
     });
 });

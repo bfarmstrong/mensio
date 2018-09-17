@@ -76,7 +76,9 @@ class UserService
      */
     public function find($id)
     {
-        return $this->model->find($id);
+        $user = $this->model->find($id);
+        activity()->performedOn($user)->log('viewed');
+        return $user;
     }
 
     /**
@@ -95,6 +97,12 @@ class UserService
             $query->orWhere($attribute, 'LIKE', '%'.$input.'%');
         };
 
+        activity()
+            ->withProperties([
+                'search_table' => 'users',
+                'search_term' => $input,
+            ])
+            ->log('searched');
         return $query->paginate(env('PAGINATE', 25));
     }
 
@@ -106,7 +114,9 @@ class UserService
      */
     public function findByEmail($email)
     {
-        return $this->model->findByEmail($email);
+        $user = $this->model->findByEmail($email);
+        activity()->performedOn($user)->log('viewed');
+        return $user;
     }
 
     /**
@@ -275,6 +285,10 @@ class UserService
         try {
             $user = $this->model->find($id);
             Session::put('original_user', Auth::id());
+            activity()
+                ->causedBy(Auth::user())
+                ->performedOn($user)
+                ->log('switched to');
             Auth::login($user);
             return true;
         } catch (Exception $e) {
@@ -293,6 +307,10 @@ class UserService
         try {
             $original = Session::pull('original_user');
             $user = $this->model->find($original);
+            activity()
+                ->causedBy($user)
+                ->performedOn(Auth::user())
+                ->log('switched back');
             Auth::login($user);
             return true;
         } catch (Exception $e) {

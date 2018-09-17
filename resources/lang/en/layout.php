@@ -15,12 +15,12 @@ return [
         'toggle-sidebar' => 'Toggle sidebar',
     ],
     'sidebar' => [
+        'activity' => 'Activity',
         'admin' => 'Admin',
         'dashboard' => 'Dashboard',
         'menu' => 'Main Menu',
         'roles' => 'Roles',
         'switch-back' => 'Switch Back',
-        'teams' => 'Teams',
         'users' => 'Users',
     ],
 ];
