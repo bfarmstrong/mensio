@@ -1,5 +1,5 @@
-<table class="table table-hover table-striped">
-    <thead>
+<table class="table table-hover table-outline table-striped">
+    <thead class="thead-light">
         <tr>
             <th>@lang('admin.users.table.email')</th>
             <th>@lang('admin.users.table.actions')</th>
