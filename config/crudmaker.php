@@ -10,7 +10,6 @@
 */
 
 return [
-
     'template_source' => app()->basePath().'/resources/crudmaker',
 
     /*
@@ -72,5 +71,4 @@ return [
         '_namespace_api_controller_' => app_namespace().'Http\Controllers\Api',
         '_namespace_request_' => app_namespace().'Http\Requests',
     ],
-
 ];

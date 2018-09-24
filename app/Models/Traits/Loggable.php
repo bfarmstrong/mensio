@@ -7,7 +7,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Adds the defaults for activity logging to a model.
  */
-trait Loggable {
+trait Loggable
+{
     use LogsActivity;
 
     /**
@@ -27,7 +28,7 @@ trait Loggable {
     /**
      * Only log the attributes that have changed.
      *
-     * @var boolean
+     * @var bool
      */
     protected static $logOnlyDirty = true;
 }

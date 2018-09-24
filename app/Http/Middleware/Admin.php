@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Gate;
 use Closure;
+use Gate;
 use Illuminate\Contracts\Auth\Guard;
 
 class Admin
@@ -18,7 +18,8 @@ class Admin
     /**
      * Create a new filter instance.
      *
-     * @param  Guard  $auth
+     * @param Guard $auth
+     *
      * @return void
      */
     public function __construct(Guard $auth)
@@ -29,8 +30,9 @@ class Admin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)

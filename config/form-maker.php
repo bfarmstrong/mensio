@@ -7,7 +7,6 @@
 */
 
 return [
-
     'form' => [
         'group-class' => 'form-group',
         'error-class' => 'has-error',
@@ -49,5 +48,5 @@ return [
         'checkbox-inline'   => null,
         'radio'             => null,
         'radio-inline'      => null,
-    ]
+    ],
 ];

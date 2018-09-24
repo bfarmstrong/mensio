@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Role;
-use App\Models\Team;
-use App\Models\UserMeta;
-use App\Models\Traits\Uuids;
 use App\Models\Traits\Encryptable;
 use App\Models\Traits\Loggable;
+use App\Models\Traits\Uuids;
 use App\Notifications\ResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +17,7 @@ class User extends Authenticatable
     use Uuids;
 
     protected $encrypts = [
-        'name'
+        'name',
     ];
 
     /**
@@ -35,7 +32,16 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = [
+        'activation_token',
+        'email',
+        'is_active',
+        'marketing',
+        'name',
+        'password',
+        'phone',
+        'terms_and_cond',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -45,22 +51,12 @@ class User extends Authenticatable
     protected $hidden = ['password', 'remember_token'];
 
     /**
-     * Turn off laravel's auto incrementing built-in feature
+     * Turn off laravel's auto incrementing built-in feature.
      */
     public $incrementing = false;
 
     /**
-     * User UserMeta
-     *
-     * @return Relationship
-     */
-    public function meta()
-    {
-        return $this->hasOne(UserMeta::class);
-    }
-
-    /**
-     * User Roles
+     * User Roles.
      *
      * @return Relationship
      */
@@ -70,87 +66,36 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has role
+     * Check if user has role.
      *
-     * @param  string  $role
-     * @return boolean
+     * @param string $role
+     *
+     * @return bool
      */
     public function hasRole($role)
     {
-        // dd($this->role);
         return $this->role->name == $role;
     }
 
     /**
-     * Check if user has at least permission level
+     * Check if user has at least permission level.
      *
-     * @param  int   $role
-     * @return boolean
+     * @param int $role
+     *
+     * @return bool
      */
     public function hasAtLeastRole($role)
     {
         $requiredLevel = Role::getLevelByName($role);
+
         return $this->role()->first()->level >= $requiredLevel;
     }
 
     /**
-     * Check if user has permission
+     * Find by Email.
      *
-     * @param  string  $permission
-     * @return boolean
-     */
-    // public function hasPermission($permission)
-    // {
-    //     return $this->roles->each(function ($role) use ($permission) {
-    //         if (in_array($permission, explode(',', $role->permissions))) {
-    //             return true;
-    //         }
-    //     });
-
-    //     return false;
-    // }
-
-    /**
-     * Teams
+     * @param string $email
      *
-     * @return Relationship
-     */
-    public function teams()
-    {
-        return $this->belongsToMany(Team::class);
-    }
-
-    /**
-     * Team member
-     *
-     * @return boolean
-     */
-    public function isTeamMember($id)
-    {
-        $teams = array_column($this->teams->toArray(), 'id');
-        return array_search($id, $teams) > -1;
-    }
-
-    /**
-     * Team admin
-     *
-     * @return boolean
-     */
-    public function isTeamAdmin($id)
-    {
-        $team = $this->teams->find($id);
-
-        if ($team) {
-            return (int) $team->user_id === (int) $this->id;
-        }
-
-        return false;
-    }
-
-    /**
-     * Find by Email
-     *
-     * @param  string $email
      * @return User
      */
     public function findByEmail($email)
@@ -161,7 +106,8 @@ class User extends Authenticatable
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

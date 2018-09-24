@@ -1,8 +1,8 @@
 <?php
 
-use Tests\TestCase;
 use App\Services\UserService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class UserServiceTest extends TestCase
 {
@@ -25,7 +25,6 @@ class UserServiceTest extends TestCase
     public function testGetUser()
     {
         $user = factory(App\Models\User::class)->create();
-        factory(App\Models\UserMeta::class)->create(['user_id' => $user->id]);
         $response = $this->service->find($user->id);
 
         $this->assertTrue(is_object($response));
@@ -45,20 +44,16 @@ class UserServiceTest extends TestCase
     public function testUpdateUser()
     {
         $user = factory(App\Models\User::class)->create();
-        factory(App\Models\UserMeta::class)->create(['user_id' => $user->id]);
 
         $response = $this->service->update($user->id, [
             'email' => $user->email,
+            'marketing' => 1,
             'name' => 'jim',
+            'phone' => '666',
             'role' => 'member',
-            'meta' => [
-                'phone' => '666',
-                'marketing' => 1,
-                'terms_and_cond' => 1,
-            ],
+            'terms_and_cond' => 1,
         ]);
 
-        $this->assertDatabaseHas('user_meta', ['phone' => '666']);
         $this->assertDatabaseHas('users', ['name' => 'jim']);
     }
 
@@ -96,23 +91,5 @@ class UserServiceTest extends TestCase
         $this->service->assignRole('member', $user->id);
         $this->service->unassignAllRoles($user->id);
         $this->assertEquals(0, count($user->roles));
-    }
-
-    public function testJoinTeam()
-    {
-        $team = factory(App\Models\Team::class)->create();
-        $user = factory(App\Models\User::class)->create();
-        $this->service->joinTeam($team->id, $user->id);
-        $this->assertDatabaseHas('team_user', ['team_id' => $team->id, 'user_id' => $user->id]);
-        $this->assertEquals($user->teams->first()->name, $team->name);
-    }
-
-    public function testLeaveTeam()
-    {
-        $team = factory(App\Models\Team::class)->create();
-        $user = factory(App\Models\User::class)->create();
-        $this->service->joinTeam($team->id, $user->id);
-        $this->service->leaveTeam($team->id, $user->id);
-        $this->assertEquals(0, count($user->teams));
     }
 }

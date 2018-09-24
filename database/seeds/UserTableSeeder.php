@@ -15,18 +15,15 @@ class UserTableSeeder extends Seeder
     {
         $service = app(UserService::class);
 
-        if (!User::where('name', 'admin')->first()) {
+        if (! User::where('name', 'admin')->first()) {
             $user = User::create([
-                'name' => 'Admin',
                 'email' => 'admin@example.com',
-                'password' => bcrypt('admin')
+                'name' => 'Admin',
+                'is_active' => true,
+                'password' => bcrypt('admin'),
             ]);
 
             $service->create($user, 'admin', 'admin', false);
-            $user->meta->update([
-                'is_active' => true,
-            ]);
         }
-
     }
 }

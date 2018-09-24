@@ -15,8 +15,6 @@ class UserInviteRequest extends FormRequest
     {
         if (auth()->user()->can('admin')) {
             return true;
-        } elseif (auth()->user()->isTeamAdmin($this->route('id'))) {
-            return true;
         }
 
         return false;

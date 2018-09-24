@@ -56,7 +56,6 @@ Route::group(['middleware' => ['auth']], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['auth']], function () {
-
     /*
     |--------------------------------------------------------------------------
     | General
@@ -88,24 +87,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Team Routes
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('team/{name}', 'TeamController@showByName');
-    Route::resource('teams', 'TeamController', ['except' => ['show']]);
-    Route::post('teams/search', 'TeamController@search');
-    Route::post('teams/{id}/invite', 'TeamController@inviteMember');
-    Route::get('teams/{id}/remove/{userId}', 'TeamController@removeMember');
-
-    /*
-    |--------------------------------------------------------------------------
     | Admin
     |--------------------------------------------------------------------------
     */
 
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
-
         Route::get('dashboard', 'DashboardController@index');
 
         /*
@@ -135,6 +121,5 @@ Route::group(['middleware' => ['auth']], function () {
         |--------------------------------------------------------------------------
         */
         Route::resource('logs', 'LogAuditController');
-
     });
 });

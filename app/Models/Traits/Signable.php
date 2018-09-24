@@ -3,7 +3,7 @@
 namespace App\Models\Traits;
 
 /**
- * Signable
+ * Signable.
  *
  * Adds the ability to a model to handle digital signatures.
  *
@@ -25,7 +25,8 @@ namespace App\Models\Traits;
  * validated against a signee by calling the function isSignatureValid and
  * passing a signee value.
  */
-trait Signable {
+trait Signable
+{
     /**
      * Creates a hook which signs the instance whenever it is saved.
      *
@@ -76,7 +77,7 @@ trait Signable {
      *
      * @param string $signee
      *
-     * @return boolean
+     * @return bool
      */
     public function isSignatureValid(string $signee)
     {
@@ -88,7 +89,7 @@ trait Signable {
      * `verified` attribute.  Returns if the signature is valid for the
      * signee.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVerifiedAttribute()
     {
@@ -105,7 +106,7 @@ trait Signable {
     public function getPlaintextSignature(string $signee)
     {
         return collect($this->signable)->reduce(function ($carry, $item) {
-            return $carry . $this[$item];
+            return $carry.$this[$item];
         }, $signee);
     }
 

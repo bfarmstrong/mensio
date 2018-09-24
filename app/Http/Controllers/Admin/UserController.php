@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\UserInviteRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -39,6 +38,7 @@ class UserController extends Controller
         }
 
         $users = $this->service->search($request->search);
+
         return view('admin.users.index')->with('users', $users);
     }
 
@@ -69,7 +69,7 @@ class UserController extends Controller
     }
 
     /**
-     * Switch to a different User profile
+     * Switch to a different User profile.
      *
      * @return \Illuminate\Http\Response
      */
@@ -83,7 +83,7 @@ class UserController extends Controller
     }
 
     /**
-     * Switch back to your original user
+     * Switch back to your original user.
      *
      * @return \Illuminate\Http\Response
      */
@@ -99,20 +99,23 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $user = $this->service->find($id);
+
         return view('admin.users.edit')->with('user', $user);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -129,7 +132,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

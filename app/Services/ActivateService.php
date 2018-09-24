@@ -3,20 +3,18 @@
 namespace App\Services;
 
 use App\Notifications\ActivateUserEmail;
-use App\Services\UserService;
-use Illuminate\Support\Str;
 
 class ActivateService
 {
     /**
-     * UserService
+     * UserService.
      *
      * @var UserService
      */
     protected $userService;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param UserService $userService
      */
@@ -26,7 +24,7 @@ class ActivateService
     }
 
     /**
-     * Send the current user a new activation token
+     * Send the current user a new activation token.
      *
      * @return bool
      */
@@ -34,15 +32,15 @@ class ActivateService
     {
         $token = md5(str_random(40));
 
-        auth()->user()->meta->update([
-            'activation_token' => $token
+        auth()->user()->update([
+            'activation_token' => $token,
         ]);
 
         return auth()->user()->notify(new ActivateUserEmail($token));
     }
 
     /**
-     * Activate the user
+     * Activate the user.
      *
      * @return bool
      */
@@ -51,9 +49,9 @@ class ActivateService
         $user = $this->userService->findByActivationToken($token);
 
         if ($user) {
-            return $user->meta->update([
+            return $user->update([
                 'is_active' => true,
-                'activation_token' => null
+                'activation_token' => null,
             ]);
         }
 

@@ -1,8 +1,8 @@
 <?php
 
-use Tests\TestCase;
 use App\Services\RoleService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class RoleServiceTest extends TestCase
 {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\User;
 
 class UserUpdateRequest extends FormRequest
 {

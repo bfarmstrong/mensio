@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
@@ -20,7 +19,7 @@ class Role extends Model
     protected $table = 'roles';
 
     /**
-     * Fillable fields
+     * Fillable fields.
      *
      * @var array
      */
@@ -28,17 +27,17 @@ class Role extends Model
         'name',
         'label',
         'permissions',
-        'level'
+        'level',
     ];
 
     /**
-     * Rules
+     * Rules.
      *
      * @var array
      */
     public static $rules = [
         'name' => 'required|unique:roles',
-        'label' => 'required'
+        'label' => 'required',
     ];
 
     // /**
@@ -52,9 +51,10 @@ class Role extends Model
     }
 
     /**
-     * Find a role by name
+     * Find a role by name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return Role
      */
     public static function findByName($name)

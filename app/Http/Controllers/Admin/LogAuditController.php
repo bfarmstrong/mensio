@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\LogAuditService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class LogAuditController extends Controller
@@ -34,6 +33,7 @@ class LogAuditController extends Controller
     public function index()
     {
         $logs = $this->service->paginate();
+
         return view('admin.logs.index')->with('logs', $logs);
     }
 
@@ -47,6 +47,7 @@ class LogAuditController extends Controller
     public function show(string $id)
     {
         $log = $this->service->find($id);
+
         return view('admin.logs.show')->with('log', $log);
     }
 }

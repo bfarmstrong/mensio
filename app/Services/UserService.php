@@ -2,65 +2,43 @@
 
 namespace App\Services;
 
-use DB;
-use Auth;
-use Mail;
-use Config;
-use Session;
-use Exception;
-use App\Models\User;
-use App\Models\UserMeta;
-use App\Models\Team;
-use App\Models\Role;
-use App\Services\Traits\HasTeams;
-use App\Services\Traits\HasRoles;
 use App\Events\UserRegisteredEmail;
+use App\Models\Role;
+use App\Models\User;
 use App\Notifications\ActivateUserEmail;
+use App\Services\Traits\HasRoles;
+use Auth;
+use DB;
+use Exception;
 use Illuminate\Support\Facades\Schema;
+use Session;
 
 class UserService
 {
-    use HasRoles,
-        HasTeams;
+    use HasRoles;
 
     /**
-     * User model
+     * User model.
+     *
      * @var User
      */
     public $model;
 
     /**
-     * User Meta model
-     * @var UserMeta
-     */
-    protected $userMeta;
-
-    /**
-     * Team Service
-     * @var TeamService
-     */
-    protected $team;
-
-    /**
-     * Role Service
+     * Role Service.
+     *
      * @var RoleService
      */
     protected $role;
 
-    public function __construct(
-        User $model,
-        UserMeta $userMeta,
-        Team $team,
-        Role $role
-    ) {
+    public function __construct(User $model, Role $role)
+    {
         $this->model = $model;
-        $this->userMeta = $userMeta;
-        $this->team = $team;
         $this->role = $role;
     }
 
     /**
-     * Get all users
+     * Get all users.
      *
      * @return array
      */
@@ -70,21 +48,25 @@ class UserService
     }
 
     /**
-     * Find a user
-     * @param  integer $id
+     * Find a user.
+     *
+     * @param int $id
+     *
      * @return User
      */
     public function find($id)
     {
         $user = $this->model->find($id);
         activity()->performedOn($user)->log('viewed');
+
         return $user;
     }
 
     /**
-     * Search the users
+     * Search the users.
      *
-     * @param  string $input
+     * @param string $input
+     *
      * @return mixed
      */
     public function search($input)
@@ -95,7 +77,7 @@ class UserService
 
         foreach ($columns as $attribute) {
             $query->orWhere($attribute, 'LIKE', '%'.$input.'%');
-        };
+        }
 
         activity()
             ->withProperties([
@@ -103,25 +85,30 @@ class UserService
                 'search_term' => $input,
             ])
             ->log('searched');
+
         return $query->paginate(env('PAGINATE', 25));
     }
 
     /**
-     * Find a user by email
+     * Find a user by email.
      *
-     * @param  string $email
+     * @param string $email
+     *
      * @return User
      */
     public function findByEmail($email)
     {
         $user = $this->model->findByEmail($email);
         activity()->performedOn($user)->log('viewed');
+
         return $user;
     }
 
     /**
-     * Find by Role ID
-     * @param  integer $id
+     * Find by Role ID.
+     *
+     * @param int $id
+     *
      * @return Collection
      */
     public function findByRoleID($id)
@@ -139,38 +126,31 @@ class UserService
     }
 
     /**
-     * Find by the user meta activation token
+     * Find by the user meta activation token.
      *
-     * @param  string $token
-     * @return boolean
+     * @param string $token
+     *
+     * @return bool
      */
     public function findByActivationToken($token)
     {
-        $userMeta = $this->userMeta->where('activation_token', $token)->first();
-
-        if ($userMeta) {
-            return $userMeta->user()->first();
-        }
-
-        return false;
+        return $this->model->where('activation_token', $token)->first();
     }
 
     /**
-     * Create a user's profile
+     * Create a user's profile.
      *
-     * @param  User $user User
-     * @param  string $password the user password
-     * @param  string $role the role of this user
-     * @param  boolean $sendEmail Whether to send the email or not
+     * @param User   $user      User
+     * @param string $password  the user password
+     * @param string $role      the role of this user
+     * @param bool   $sendEmail Whether to send the email or not
+     *
      * @return User
      */
     public function create($user, $password, $role = 'client', $sendEmail = false)
     {
         try {
             DB::transaction(function () use ($user, $password, $role, $sendEmail) {
-                $this->userMeta->firstOrCreate([
-                    'user_id' => $user->id
-                ]);
                 $this->assignRole($role, $user->id);
 
                 if ($sendEmail) {
@@ -183,40 +163,39 @@ class UserService
 
             return $user;
         } catch (Exception $e) {
-            throw new Exception("We were unable to generate your profile, please try again later.", 1);
+            throw new Exception('We were unable to generate your profile, please try again later.', 1);
         }
     }
 
     /**
-     * Update a user's profile
+     * Update a user's profile.
      *
-     * @param  int $userId User Id
-     * @param  array $inputs UserMeta info
+     * @param int   $userId User Id
+     * @param array $inputs UserMeta info
+     *
      * @return User
      */
     public function update($userId, $payload)
     {
-        if (isset($payload['meta']) && ! isset($payload['meta']['terms_and_cond'])) {
-            throw new Exception("You must agree to the terms and conditions.", 1);
+        if (! isset($payload['terms_and_cond'])) {
+            throw new Exception('You must agree to the terms and conditions.', 1);
         }
 
         try {
             return DB::transaction(function () use ($userId, $payload) {
                 $user = $this->model->find($userId);
 
-                if (isset($payload['meta']['marketing']) && ($payload['meta']['marketing'] == 1 || $payload['meta']['marketing'] == 'on')) {
-                    $payload['meta']['marketing'] = 1;
+                if (isset($payload['marketing']) && (1 == $payload['marketing'] || 'on' == $payload['marketing'])) {
+                    $payload['marketing'] = 1;
                 } else {
-                    $payload['meta']['marketing'] = 0;
+                    $payload['marketing'] = 0;
                 }
 
-                if (isset($payload['meta']['terms_and_cond']) && ($payload['meta']['terms_and_cond'] == 1 || $payload['meta']['terms_and_cond'] == 'on')) {
-                    $payload['meta']['terms_and_cond'] = 1;
+                if (isset($payload['terms_and_cond']) && (1 == $payload['terms_and_cond'] || 'on' == $payload['terms_and_cond'])) {
+                    $payload['terms_and_cond'] = 1;
                 } else {
-                    $payload['meta']['terms_and_cond'] = 0;
+                    $payload['terms_and_cond'] = 0;
                 }
-
-                $userMetaResult = (isset($payload['meta'])) ? $user->meta->update($payload['meta']) : true;
 
                 $user->update($payload);
 
@@ -227,24 +206,26 @@ class UserService
                 return $user;
             });
         } catch (Exception $e) {
-            throw new Exception("We were unable to update your profile", 1);
+            throw new Exception('We were unable to update your profile', 1);
         }
     }
 
     /**
-     * Invite a new member
-     * @param  array $info
+     * Invite a new member.
+     *
+     * @param array $info
+     *
      * @return void
      */
     public function invite($info)
     {
         $password = substr(md5(rand(1111, 9999)), 0, 10);
-        // dd($info);
+
         return DB::transaction(function () use ($password, $info) {
             $user = $this->model->create([
                 'email' => $info['email'],
                 'name' => $info['name'],
-                'password' => bcrypt($password)
+                'password' => bcrypt($password),
             ]);
 
             return $this->create($user, $password, $info['role'], true);
@@ -252,9 +233,10 @@ class UserService
     }
 
     /**
-     * Destroy the profile
+     * Destroy the profile.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return bool
      */
     public function destroy($id)
@@ -262,23 +244,20 @@ class UserService
         try {
             return DB::transaction(function () use ($id) {
                 $this->unassignAllRoles($id);
-                $this->leaveAllTeams($id);
 
-                $userMetaResult = $this->userMeta->where('user_id', $id)->delete();
-                $userResult = $this->model->find($id)->delete();
-
-                return ($userMetaResult && $userResult);
+                return $this->model->find($id)->delete();
             });
         } catch (Exception $e) {
-            throw new Exception("We were unable to delete this profile", 1);
+            throw new Exception('We were unable to delete this profile', 1);
         }
     }
 
     /**
-     * Switch user login
+     * Switch user login.
      *
-     * @param  integer $id
-     * @return boolean
+     * @param int $id
+     *
+     * @return bool
      */
     public function switchToUser($id)
     {
@@ -290,17 +269,19 @@ class UserService
                 ->performedOn($user)
                 ->log('switched to');
             Auth::login($user);
+
             return true;
         } catch (Exception $e) {
-            throw new Exception("Error logging in as user", 1);
+            throw new Exception('Error logging in as user', 1);
         }
     }
 
     /**
-     * Switch back
+     * Switch back.
      *
-     * @param  integer $id
-     * @return boolean
+     * @param int $id
+     *
+     * @return bool
      */
     public function switchUserBack()
     {
@@ -312,14 +293,15 @@ class UserService
                 ->performedOn(Auth::user())
                 ->log('switched back');
             Auth::login($user);
+
             return true;
         } catch (Exception $e) {
-            throw new Exception("Error returning to your user", 1);
+            throw new Exception('Error returning to your user', 1);
         }
     }
 
     /**
-     * Set and send the user activation token via email
+     * Set and send the user activation token via email.
      *
      * @param void
      */
@@ -327,8 +309,8 @@ class UserService
     {
         $token = md5(str_random(40));
 
-        $user->meta()->update([
-            'activation_token' => $token
+        $user->update([
+            'activation_token' => $token,
         ]);
 
         $user->notify(new ActivateUserEmail($token));

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Services\UserService;
-use App\Services\ActivateService;
 use App\Http\Controllers\Controller;
+use App\Services\ActivateService;
 
 class ActivateController extends Controller
 {
@@ -19,7 +18,7 @@ class ActivateController extends Controller
     }
 
     /**
-     * Inform the user they must activate thier account
+     * Inform the user they must activate thier account.
      *
      * @return Illuminate\Http\Response
      */
@@ -29,18 +28,19 @@ class ActivateController extends Controller
     }
 
     /**
-     * Send a new token for activation
+     * Send a new token for activation.
      *
      * @return User
      */
     public function sendToken()
     {
         $this->service->sendActivationToken();
+
         return view('auth.activate.token');
     }
 
     /**
-     * Activate a user account
+     * Activate a user account.
      *
      * @return User
      */

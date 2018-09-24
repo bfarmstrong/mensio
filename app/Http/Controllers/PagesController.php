@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
 class PagesController extends Controller
 {
     /**
-     * Homepage
+     * Homepage.
      *
      * @return \Illuminate\Http\Response
      */
@@ -19,7 +15,7 @@ class PagesController extends Controller
     }
 
     /**
-     * Dashboard
+     * Dashboard.
      *
      * @return \Illuminate\Http\Response
      */

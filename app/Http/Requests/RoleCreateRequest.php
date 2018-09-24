@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Role;
 
 class RoleCreateRequest extends FormRequest
 {

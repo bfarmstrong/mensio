@@ -24,7 +24,8 @@ class LogAuditService
      *
      * @param LogAudit $model
      */
-    public function __construct(LogAudit $model) {
+    public function __construct(LogAudit $model)
+    {
         $this->model = $model;
     }
 
@@ -49,6 +50,7 @@ class LogAuditService
     {
         $log = $this->model->find($id);
         activity()->performedOn($log)->log('viewed');
+
         return $log;
     }
 

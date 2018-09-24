@@ -54,7 +54,7 @@
         <div class="form-group">
             {!!
                 Form::label(
-                    'meta[phone]',
+                    'phone',
                     __('user.form-settings.phone')
                 )
             !!}
@@ -68,8 +68,8 @@
 
                 {!!
                     Form::tel(
-                        'meta[phone]',
-                        old('meta[phone]'),
+                        'phone',
+                        old('phone'),
                         ['class' => 'form-control']
                     )
                 !!}
@@ -107,19 +107,19 @@
             <div class="custom-control custom-checkbox mb-2">
                 {!!
                     Form::checkbox(
-                        'meta[marketing]',
+                        'marketing',
                         null,
-                        old('meta[marketing]'),
+                        old('marketing'),
                         [
                             'class' => 'custom-control-input',
-                            'id' => 'meta[marketing]',
+                            'id' => 'marketing',
                         ]
                     )
                 !!}
 
                 {!!
                     Form::label(
-                        'meta[marketing]',
+                        'marketing',
                         __('user.form-settings.agree-marketing'),
                         ['class' => 'custom-control-label']
                     )
@@ -129,19 +129,19 @@
             <div class="custom-control custom-checkbox">
                 {!!
                     Form::checkbox(
-                        'meta[terms_and_cond]',
+                        'terms_and_cond',
                         null,
-                        old('meta[terms_and_cond]'),
+                        old('terms_and_cond'),
                         [
                             'class' => 'custom-control-input',
-                            'id' => 'meta[terms_and_cond]',
+                            'id' => 'terms_and_cond',
                         ]
                     )
                 !!}
 
                 {!!
                     Form::label(
-                        'meta[terms_and_cond]',
+                        'terms_and_cond',
                         __('user.form-settings.agree-terms'),
                         ['class' => 'custom-control-label']
                     )

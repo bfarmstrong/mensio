@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use DB;
-use Auth;
-use Config;
-use Exception;
-use App\Services\UserService;
 use App\Models\Role;
+use DB;
+use Exception;
 use Illuminate\Support\Facades\Schema;
 
 class RoleService
@@ -26,9 +23,9 @@ class RoleService
     |--------------------------------------------------------------------------
     */
 
-
     /**
-     * All roles
+     * All roles.
+     *
      * @return \Illuminate\Support\Collection|null|static|Role
      */
     public function all()
@@ -37,7 +34,8 @@ class RoleService
     }
 
     /**
-     * Paginated roles
+     * Paginated roles.
+     *
      * @return \Illuminate\Support\Collection|null|static|Role
      */
     public function paginated()
@@ -46,8 +44,10 @@ class RoleService
     }
 
     /**
-     * Find a role
-     * @param  integer $id
+     * Find a role.
+     *
+     * @param int $id
+     *
      * @return \Illuminate\Support\Collection|null|static|Role
      */
     public function find($id)
@@ -55,10 +55,11 @@ class RoleService
         return $this->model->find($id);
     }
 
-
     /**
-     * Search the roles
-     * @param  string $input
+     * Search the roles.
+     *
+     * @param string $input
+     *
      * @return \Illuminate\Support\Collection|null|static|Role
      */
     public function search($input)
@@ -69,13 +70,13 @@ class RoleService
 
         foreach ($columns as $attribute) {
             $query->orWhere($attribute, 'LIKE', '%'.$input.'%');
-        };
+        }
 
         return $query->paginate(env('PAGINATE', 25));
     }
 
     /**
-     * Find Role by name
+     * Find Role by name.
      *
      * @param string $name
      *
@@ -93,9 +94,10 @@ class RoleService
     */
 
     /**
-     * Create a role
+     * Create a role.
      *
-     * @param  array $input
+     * @param array $input
+     *
      * @return Role
      */
     public function create($input)
@@ -106,18 +108,20 @@ class RoleService
             } else {
                 $input['permissions'] = null;
             }
+
             return $this->model->create($input);
         } catch (Exception $e) {
-            throw new Exception("Failed to create role", 1);
+            throw new Exception('Failed to create role', 1);
         }
     }
 
     /**
-     * Update a role
+     * Update a role.
      *
-     * @param  int $id
-     * @param  array $input
-     * @return boolean
+     * @param int   $id
+     * @param array $input
+     *
+     * @return bool
      */
     public function update($id, $input)
     {
@@ -134,9 +138,10 @@ class RoleService
     }
 
     /**
-     * Destroy the role
+     * Destroy the role.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return bool
      */
     public function destroy($id)
@@ -146,14 +151,14 @@ class RoleService
                 $result = false;
                 $userCount = count($this->userService->findByRoleID($id));
 
-                if ($userCount == 0) {
+                if (0 == $userCount) {
                     $result = $this->model->find($id)->delete();
                 }
 
                 return $result;
             });
         } catch (Exception $e) {
-            throw new Exception("We were unable to delete this role", 1);
+            throw new Exception('We were unable to delete this role', 1);
         }
 
         return $result;

@@ -6,7 +6,6 @@ use App\Models\Traits\Encryptable;
 use App\Models\Traits\Uuids;
 use Spatie\Activitylog\Models\Activity;
 
-
 /**
  * An audit for a distinct action in the system.  It consists of a causer
  * performing an action against a subject with extra optional metadata attached.
@@ -26,9 +25,9 @@ class LogAudit extends Activity
     /**
      * Indicates that the table does not have an auto incrementing key.
      *
-     * @var boolean
+     * @var bool
      */
-    public  $incrementing = false;
+    public $incrementing = false;
 
     /**
      * The columns in the activity log that are encrypted.

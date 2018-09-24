@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use DB;
-use Validator;
-use App\Services\UserService;
-use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Services\UserService;
+use DB;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Validator;
 
 class RegisterController extends Controller
 {
@@ -45,7 +45,8 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -60,18 +61,20 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return User
      */
     protected function create(array $data)
     {
-        return DB::transaction(function() use ($data) {
+        return DB::transaction(function () use ($data) {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'password' => bcrypt($data['password'])
+                'password' => bcrypt($data['password']),
             ]);
             $role = isset($data['role']) ? $data['role'] : 'client';
+
             return $this->service->create($user, $data['password'], $role);
         });
     }

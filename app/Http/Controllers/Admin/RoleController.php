@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests;
-use Illuminate\Http\Request;
-use App\Services\RoleService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleCreateRequest;
+use App\Services\RoleService;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -23,6 +22,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = $this->service->all();
+
         return view('admin.roles.index')->with('roles', $roles);
     }
 
@@ -38,6 +38,7 @@ class RoleController extends Controller
         }
 
         $roles = $this->service->search($request->search);
+
         return view('admin.roles.index')->with('roles', $roles);
     }
 
@@ -70,20 +71,23 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $role = $this->service->find($id);
+
         return view('admin.roles.edit')->with('role', $role);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -100,7 +104,8 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

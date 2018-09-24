@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateRolesTable extends Migration
 {
@@ -19,6 +19,7 @@ class CreateRolesTable extends Migration
             $table->string('label')->nullable();
             $table->text('permissions')->nullable();
         });
+
         Schema::table('users', function (Blueprint $table) {
             $table->integer('role_id')->unsigned()->index()->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
@@ -32,10 +33,10 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('roles');
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('role_id');
+            $table->dropForeign(['role_id']);
             $table->dropColumn('role_id');
         });
+        Schema::dropIfExists('roles');
     }
 }
