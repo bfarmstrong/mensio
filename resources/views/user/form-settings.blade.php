@@ -161,23 +161,32 @@
                 )
             !!}
 
-            @isset ($features['switch_user'])
+            @if ($features['switch_user'] ?? false)
                 <a
                     class="btn btn-link"
                     href="{{ url("admin/users/switch/$user->id") }}"
                 >
                     @lang('user.form-settings.switch-user')
                 </a>
-            @endisset
+            @endif
 
-            @isset ($features['change_password'])
+            @if ($features['change_password'] ?? false)
                 <a
                     class="btn btn-link"
                     href="{{ url('user/password') }}"
                 >
                     @lang('user.form-settings.change-password')
                 </a>
-            @endisset
+            @endif
+
+            @if ($features['therapists'] ?? false)
+                <a
+                    class="btn btn-link"
+                    href="{{ url("admin/users/$user->id/therapists") }}"
+                >
+                    @lang('user.form-settings.therapists')
+                </a>
+            @endif
         </div>
     </div>
 </div>

@@ -18,11 +18,17 @@ return [
         'role' => 'Role',
         'save' => 'Save',
         'switch-user' => 'Switch To User',
+        'therapists' => 'Therapists',
     ],
     'password' => [
         'breadcrumb' => 'Change Password',
         'form-title' => 'Change Password',
         'title' => 'Change Password',
+    ],
+    'presenter' => [
+        'admin' => 'Admin',
+        'client' => 'Client',
+        'therapist' => 'Therapist',
     ],
     'settings' => [
         'breadcrumb' => 'Settings',

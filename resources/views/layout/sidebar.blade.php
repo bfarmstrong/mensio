@@ -5,6 +5,18 @@
                 @lang('layout.sidebar.menu')
             </li>
 
+            @can('viewClients', \App\Models\User::class)
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url('clients') }}"
+                    >
+                        <i class="nav-icon fas fa-users"></i>
+                        @lang('layout.sidebar.clients')
+                    </a>
+                </li>
+            @endcan
+
             @if (Auth::user()->hasAtLeastRole('admin'))
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">

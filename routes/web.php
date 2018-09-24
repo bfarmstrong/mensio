@@ -45,7 +45,7 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 Route::get('activate/token/{token}', 'Auth\ActivateController@activate');
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'auth.role']], function () {
     Route::get('activate', 'Auth\ActivateController@showActivate');
     Route::get('activate/send-token', 'Auth\ActivateController@sendToken');
 });
@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
 | Authenticated Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'auth.role']], function () {
     /*
     |--------------------------------------------------------------------------
     | General
@@ -75,6 +75,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('settings', 'SettingsController@update');
         Route::get('password', 'PasswordController@password');
         Route::post('password', 'PasswordController@update');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Client
+    |--------------------------------------------------------------------------
+    */
+    Route::group(['prefix' => 'clients', 'namespace' => 'Client'], function () {
+        Route::get('', 'ClientController@index');
+        Route::get('{user_id}', 'ClientController@show');
     });
 
     /*
@@ -99,12 +109,21 @@ Route::group(['middleware' => ['auth']], function () {
         | Users
         |--------------------------------------------------------------------------
         */
-        Route::resource('users', 'UserController', ['except' => ['create', 'show']]);
-        Route::post('users/search', 'UserController@search');
         Route::get('users/search', 'UserController@index');
         Route::get('users/invite', 'UserController@getInvite');
+        Route::post('users/search', 'UserController@search');
         Route::get('users/switch/{id}', 'UserController@switchToUser');
         Route::post('users/invite', 'UserController@postInvite');
+        Route::resource('users', 'UserController', ['except' => ['create']]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Therapist Management
+        |--------------------------------------------------------------------------
+        */
+        Route::get('users/{user_id}/therapists', 'TherapistController@index');
+        Route::post('users/{user_id}/therapists', 'TherapistController@store');
+        Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
 
         /*
         |--------------------------------------------------------------------------

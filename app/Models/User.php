@@ -6,6 +6,9 @@ use App\Models\Traits\Encryptable;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\Uuids;
 use App\Notifications\ResetPassword;
+use App\Presenters\UserPresenter;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -15,6 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use Encryptable;
     use Uuids;
+    use UserPresenter;
 
     protected $encrypts = [
         'name',
@@ -26,6 +30,13 @@ class User extends Authenticatable
      * @var string
      */
     protected $table = 'users';
+
+    /**
+     * Indicates that users are keyed by a string.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -56,13 +67,43 @@ class User extends Authenticatable
     public $incrementing = false;
 
     /**
+     * Returns the list of patients associated to a user.
+     *
+     * @return BelongsToMany
+     */
+    public function patients()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'therapist_patient',
+            'therapist_id',
+            'patient_id'
+        );
+    }
+
+    /**
      * User Roles.
      *
-     * @return Relationship
+     * @return BelongsTo
      */
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Returns the list of therapists associated to a user.
+     *
+     * @return BelongsToMany
+     */
+    public function therapists()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'therapist_patient',
+            'patient_id',
+            'therapist_id'
+        );
     }
 
     /**
@@ -78,6 +119,26 @@ class User extends Authenticatable
     }
 
     /**
+     * Returns if the user is a client.
+     *
+     * @return bool
+     */
+    public function isClient()
+    {
+        return $this->hasRole('client');
+    }
+
+    /**
+     * Returns if the user is a therapist.
+     *
+     * @return bool
+     */
+    public function isTherapist()
+    {
+        return $this->hasRole('therapist1') || $this->hasRole('therapist2');
+    }
+
+    /**
      * Check if user has at least permission level.
      *
      * @param int $role
@@ -88,7 +149,7 @@ class User extends Authenticatable
     {
         $requiredLevel = Role::getLevelByName($role);
 
-        return $this->role()->first()->level >= $requiredLevel;
+        return $this->role->level >= $requiredLevel;
     }
 
     /**

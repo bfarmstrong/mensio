@@ -11,6 +11,20 @@ Breadcrumbs::for('admin.logs.show', function ($trail, $log) {
     $trail->push(__('admin.logs.show.breadcrumb'), url('admin/logs', $log->id));
 });
 
+// Clients
+Breadcrumbs::for('clients.index', function ($trail) {
+    $trail->push(__('clients.index.breadcrumb'), url('clients'));
+});
+
+// Clients > Client Profile
+Breadcrumbs::for('clients.show', function ($trail, $user) {
+    $trail->parent('clients.index');
+    $trail->push(
+        __('clients.show.breadcrumb'),
+        url("clients/$user->id")
+    );
+});
+
 // Roles
 Breadcrumbs::for('admin.roles.index', function ($trail) {
     $trail->push(__('admin.roles.index.breadcrumb'), url('admin/roles'));
@@ -43,6 +57,21 @@ Breadcrumbs::for('admin.users.edit', function ($trail, $user) {
 Breadcrumbs::for('admin.users.invite', function ($trail) {
     $trail->parent('admin.users.index');
     $trail->push(__('admin.users.create.breadcrumb'), url('admin/users/invite'));
+});
+
+// Users > User Profile
+Breadcrumbs::for('admin.users.show', function ($trail, $user) {
+    $trail->parent('admin.users.index');
+    $trail->push(__('admin.users.show.breadcrumb'), url("admin/users/$user->id"));
+});
+
+// Users > Edit > Therapists
+Breadcrumbs::for('admin.users.therapists.index', function ($trail, $user) {
+    $trail->parent('admin.users.edit', $user);
+    $trail->push(
+        __('admin.users.therapists.index.breadcrumb'),
+        url("admin/users/$user->id/therapists")
+    );
 });
 
 // User Settings

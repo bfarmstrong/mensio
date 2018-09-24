@@ -92,6 +92,11 @@ return [
             'search' => 'Search...',
             'submit' => 'Get Results',
         ],
+        'form-static' => [
+            'email' => 'Email',
+            'name' => 'Name',
+            'user-since' => ':name Since',
+        ],
         'index' => [
             'breadcrumb' => 'Users',
             'create-user' => 'Invite User',
@@ -99,10 +104,38 @@ return [
             'title' => 'All Users',
             'users' => 'Users',
         ],
+        'show' => [
+            'breadcrumb' => 'User Profile',
+            'form-title' => 'User Profile',
+            'title' => 'User Profile',
+        ],
         'table' => [
             'actions' => 'Actions',
             'edit' => 'Edit',
             'email' => 'Email',
+            'name' => 'Name',
+            'view' => 'View',
+        ],
+        'therapists' => [
+            'form-add' => [
+                'name' => 'Name',
+                'save' => 'Save',
+            ],
+            'form-delete' => [
+                'remove' => 'Remove',
+            ],
+            'index' => [
+                'add-therapist' => 'Add Therapist',
+                'added-therapist' => 'The therapist was added successfully.',
+                'breadcrumb' => 'Therapists',
+                'current-therapists' => 'Current Therapists',
+                'removed-therapist' => 'The therapist was removed successfully.',
+                'title' => 'Therapists',
+            ],
+            'table' => [
+                'actions' => 'Actions',
+                'name' => 'Name',
+            ],
         ],
     ],
 ];

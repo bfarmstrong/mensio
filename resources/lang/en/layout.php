@@ -17,6 +17,7 @@ return [
     'sidebar' => [
         'activity' => 'Activity',
         'admin' => 'Admin',
+        'clients' => 'Clients',
         'dashboard' => 'Dashboard',
         'menu' => 'Main Menu',
         'roles' => 'Roles',

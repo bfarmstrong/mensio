@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->service->all();
-        // dd($users);
+
         return view('admin.users.index')->with('users', $users);
     }
 
@@ -108,6 +108,20 @@ class UserController extends Controller
         $user = $this->service->find($id);
 
         return view('admin.users.edit')->with('user', $user);
+    }
+
+    /**
+     * Shows the page to view static user information.
+     *
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show(string $id)
+    {
+        $user = $this->service->find($id);
+
+        return view('admin.users.show')->with('user', $user);
     }
 
     /**

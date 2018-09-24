@@ -21,6 +21,7 @@
             @include('user.form-settings', [
                 'features' => [
                     'switch_user' => true,
+                    'therapists' => Auth::user()->can('viewTherapists', $user),
                 ]
             ])
             {!! Form::close() !!}
