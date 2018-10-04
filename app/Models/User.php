@@ -9,6 +9,7 @@ use App\Notifications\ResetPassword;
 use App\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -79,6 +80,16 @@ class User extends Authenticatable
             'therapist_id',
             'patient_id'
         );
+    }
+
+    /**
+     * A user has many responses to questionnaires.
+     *
+     * @return HasMany
+     */
+    public function responses()
+    {
+        return $this->hasMany(Response::class, 'user_id');
     }
 
     /**
