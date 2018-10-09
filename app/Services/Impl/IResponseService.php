@@ -9,4 +9,11 @@ use App\Services\IBaseService;
  */
 interface IResponseService extends IBaseService
 {
+    public function answer($response, string $answers);
+
+    public function assignToClient($client, $questionnaire);
+
+    public function getScore($response);
+
+    public function unassignFromClient($client, $questionnaire);
 }

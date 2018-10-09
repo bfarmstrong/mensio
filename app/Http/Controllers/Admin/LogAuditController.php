@@ -48,6 +48,10 @@ class LogAuditController extends Controller
     {
         $log = $this->service->find($id);
 
+        if (is_null($log)) {
+            abort(404);
+        }
+
         return view('admin.logs.show')->with('log', $log);
     }
 }

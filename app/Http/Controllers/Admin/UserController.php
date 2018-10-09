@@ -4,32 +4,63 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInviteRequest;
-use App\Services\UserService;
+use App\Services\Criteria\User\WithRole;
+use App\Services\Impl\IRoleService;
+use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Manages administrative actions against users.
+ */
 class UserController extends Controller
 {
-    public function __construct(UserService $userService)
-    {
-        $this->service = $userService;
+    /**
+     * The role service implementation.
+     *
+     * @var IRoleService
+     */
+    protected $roleService;
+
+    /**
+     * The user service implementation.
+     *
+     * @var IUserService
+     */
+    protected $userService;
+
+    /**
+     * Creates an instance of `UserController`.
+     *
+     * @param IRoleService $roleService
+     * @param IUserService $userService
+     */
+    public function __construct(
+        IRoleService $roleService,
+        IUserService $userService
+    ) {
+        $this->roleService = $roleService;
+        $this->userService = $userService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $users = $this->service->all();
+        $users = $this->userService->getByCriteria(new WithRole())->paginate();
 
-        return view('admin.users.index')->with('users', $users);
+        return view('admin.users.index')->with([
+            'users' => $users,
+        ]);
     }
 
     /**
      * Display a listing of the resource searched.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function search(Request $request)
     {
@@ -37,77 +68,106 @@ class UserController extends Controller
             return redirect('admin/users');
         }
 
-        $users = $this->service->search($request->search);
+        $users = $this->userService->getByCriteria(new WithRole())->search($request->search);
 
-        return view('admin.users.index')->with('users', $users);
+        if ($users->isNotEmpty()) {
+            if (1 === $users->count()) {
+                $user = $users->first();
+
+                return redirect("admin/users/$user->id");
+            }
+
+            return view('admin.users.index')->with([
+                'users' => $users,
+            ]);
+        }
+
+        return redirect()->back()->withErrors([
+            __('admin.users.index.no-search-results'),
+        ]);
     }
 
     /**
      * Show the form for inviting a customer.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function getInvite()
     {
-        return view('admin.users.invite');
+        $roles = $this->roleService->all();
+
+        return view('admin.users.invite', [
+            'roles' => $roles,
+        ]);
     }
 
     /**
-     * Show the form for inviting a customer.
+     * Creates a new user in the database.  Sends them a welcome email.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $result = $this->service->invite($request->except(['_token', '_method']));
+        $this->userService->invite($request->except(['_token', '_method']));
 
-        if ($result) {
-            return redirect('admin/users')->with('message', 'Successfully invited');
-        }
-
-        return back()->with('errors', ['Failed to invite']);
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.created-user'),
+        ]);
     }
 
     /**
      * Switch to a different User profile.
      *
-     * @return \Illuminate\Http\Response
+     * @param string $id
+     *
+     * @return Response
      */
-    public function switchToUser($id)
+    public function switchToUser(string $id)
     {
-        if ($this->service->switchToUser($id)) {
-            return redirect('dashboard')->with('message', 'You\'ve switched users.');
-        }
+        $user = $this->userService->find($id);
+        $this->userService->switchToUser($id);
 
-        return redirect('dashboard')->with('errors', ['Could not switch users']);
+        return redirect('dashboard')->with([
+            'message' => __('admin.users.index.switched-to', [
+                'user' => $user->name,
+            ]),
+        ]);
     }
 
     /**
      * Switch back to your original user.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function switchUserBack()
     {
-        if ($this->service->switchUserBack()) {
-            return back()->with('message', 'You\'ve switched back.');
-        }
+        $this->userService->switchBack();
 
-        return back()->with('errors', ['Could not switch back']);
+        return redirect('admin/dashboard')->with([
+            'message' => __('admin.users.index.switched-back'),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param string $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        $user = $this->service->find($id);
+        $user = $this->userService->getByCriteria(new WithRole())->find($id);
 
-        return view('admin.users.edit')->with('user', $user);
+        if (is_null($user)) {
+            abort(404);
+        }
+        $roles = $this->roleService->all();
+
+        return view('admin.users.edit')->with([
+            'roles' => $roles,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -115,49 +175,54 @@ class UserController extends Controller
      *
      * @param string $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(string $id)
     {
-        $user = $this->service->find($id);
+        $user = $this->userService->getByCriteria(new WithRole())->find($id);
 
-        return view('admin.users.show')->with('user', $user);
+        if (is_null($user)) {
+            abort(404);
+        }
+
+        return view('admin.users.show')->with([
+            'user' => $user,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param Request $request
+     * @param string  $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        $result = $this->service->update($id, $request->except(['_token', '_method']));
+        $this->userService->update(
+            $id,
+            $request->except(['_token', '_method'])
+        );
 
-        if ($result) {
-            return back()->with('message', 'Successfully updated');
-        }
-
-        return back()->with('errors', ['Failed to update']);
+        return back()->with([
+            'message' => __('admin.users.index.updated-user'),
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param string $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        $result = $this->service->destroy($id);
+        $this->userService->delete($id);
 
-        if ($result) {
-            return redirect('admin/users')->with('message', 'Successfully deleted');
-        }
-
-        return redirect('admin/users')->with('errors', ['Failed to delete']);
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.deleted-user'),
+        ]);
     }
 }

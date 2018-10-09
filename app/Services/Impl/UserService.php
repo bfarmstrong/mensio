@@ -2,7 +2,13 @@
 
 namespace App\Services\Impl;
 
+use App\Notifications\NewAccountEmail;
 use App\Services\BaseService;
+use Auth;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
+use Notification;
+use Session;
 
 /**
  * Implementation of the user service.
@@ -73,5 +79,71 @@ class UserService extends BaseService implements IUserService
     {
         $user = $this->find($user);
         $user->therapists()->detach($therapist);
+    }
+
+    /**
+     * Creates a new user and sends them the welcome email.
+     *
+     * @param array $attributes
+     *
+     * @return Model
+     */
+    public function invite(array $attributes)
+    {
+        $password = substr(md5(rand(1111, 9999)), 0, 10);
+
+        $user = $this->create(array_merge($attributes, [
+            'is_active' => true,
+            'password' => bcrypt($password),
+        ]));
+
+        Notification::send($user, new NewAccountEmail($password));
+
+        return $user;
+    }
+
+    /**
+     * Switches back to the original user.
+     *
+     * @return void
+     */
+    public function switchBack()
+    {
+        $original = Session::pull('original_user');
+        $user = $this->find($original);
+        Auth::login($user);
+    }
+
+    /**
+     * Switches to the specified user.
+     *
+     * @param string $id
+     *
+     * @return void
+     */
+    public function switchToUser(string $id)
+    {
+        $user = $this->find($id);
+        Session::put('original_user', Auth::id());
+        Auth::login($user);
+    }
+
+    /**
+     * Enables searching for a user by their name.  The name field is encrypted
+     * and so we must use a blind index.
+     *
+     * @param string $query
+     *
+     * @return LengthAwarePaginator
+     */
+    public function search(string $query)
+    {
+        $model = app($this->model());
+        $searchIndex = $model->getSearchIndex($query);
+
+        $this->applyCriteria();
+        $this->model->where($model->getBlindIndexColumn(), $searchIndex);
+
+        return $this->model->paginate();
     }
 }

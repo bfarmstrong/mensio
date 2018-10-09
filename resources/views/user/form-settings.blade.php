@@ -1,6 +1,6 @@
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-4">
         <div class="form-group">
             {!!
                 Form::label(
@@ -26,10 +26,8 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-4">
         <div class="form-group">
             {!!
                 Form::label(
@@ -47,10 +45,8 @@
             !!}
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-4">
         <div class="form-group">
             {!!
                 Form::label(
@@ -78,28 +74,29 @@
     </div>
 </div>
 
-@if (isset($user) && ($user->role->first()->name === 'admin' || $user->id == 1))
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group">
-                @input_maker_label(
-                    __('user.form-settings.role'),
-                    ['name' => 'roles']
+@if (Auth::user()->isAdmin() && isset($roles))
+    <div class="form-row">
+        <div class="form-group col-12">
+            {!!
+                Form::label(
+                    'role_id',
+                    __('user.form-settings.role')
                 )
-                @input_maker_create(
-                    'roles',
-                    [
-                        'label' => 'label',
-                        'model' => 'App\Models\Role',
-                        'type' => 'relationship',
-                        'value' => 'name',
-                    ],
-                    $user
+            !!}
+
+            {!!
+                Form::select(
+                    'role_id',
+                    $roles->pluck('label', 'id'),
+                    old('role_id'),
+                    ['class' => 'form-control']
                 )
-            </div>
+            !!}
         </div>
     </div>
 @endif
+
+<hr class="mt-1">
 
 <div class="row">
     <div class="col-12">
@@ -108,7 +105,7 @@
                 {!!
                     Form::checkbox(
                         'marketing',
-                        null,
+                        1,
                         old('marketing'),
                         [
                             'class' => 'custom-control-input',
@@ -126,27 +123,33 @@
                 !!}
             </div>
 
-            <div class="custom-control custom-checkbox">
-                {!!
-                    Form::checkbox(
-                        'terms_and_cond',
-                        null,
-                        old('terms_and_cond'),
-                        [
-                            'class' => 'custom-control-input',
-                            'id' => 'terms_and_cond',
-                        ]
-                    )
-                !!}
+            @unless (isset($user->id))
+                @if (Auth::user()->isAdmin())
+                    {!! Form::hidden('terms_and_cond', 1) !!}
+                @else
+                    <div class="custom-control custom-checkbox">
+                        {!!
+                            Form::checkbox(
+                                'terms_and_cond',
+                                1,
+                                old('terms_and_cond'),
+                                [
+                                    'class' => 'custom-control-input',
+                                    'id' => 'terms_and_cond',
+                                ]
+                            )
+                        !!}
 
-                {!!
-                    Form::label(
-                        'terms_and_cond',
-                        __('user.form-settings.agree-terms'),
-                        ['class' => 'custom-control-label']
-                    )
-                !!}
-            </div>
+                        {!!
+                            Form::label(
+                                'terms_and_cond',
+                                __('user.form-settings.agree-terms'),
+                                ['class' => 'custom-control-label']
+                            )
+                        !!}
+                    </div>
+                @endif
+            @endunless
         </div>
     </div>
 </div>
@@ -161,9 +164,9 @@
                 )
             !!}
 
-            @if ($features['switch_user'] ?? false)
+            @if (($features['switch_user'] ?? false) && !Session::get('original_user'))
                 <a
-                    class="btn btn-link"
+                    class="btn btn-secondary"
                     href="{{ url("admin/users/switch/$user->id") }}"
                 >
                     @lang('user.form-settings.switch-user')
@@ -172,7 +175,7 @@
 
             @if ($features['change_password'] ?? false)
                 <a
-                    class="btn btn-link"
+                    class="btn btn-secondary"
                     href="{{ url('user/password') }}"
                 >
                     @lang('user.form-settings.change-password')
@@ -181,7 +184,7 @@
 
             @if ($features['therapists'] ?? false)
                 <a
-                    class="btn btn-link"
+                    class="btn btn-secondary"
                     href="{{ url("admin/users/$user->id/therapists") }}"
                 >
                     @lang('user.form-settings.therapists')

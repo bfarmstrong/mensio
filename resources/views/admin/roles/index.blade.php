@@ -39,6 +39,8 @@
                             @lang('admin.roles.index.no-results')
                         </p>
                     @endif
+
+                    {{ $roles->links() }}
                 </div>
             </div>
         </div>

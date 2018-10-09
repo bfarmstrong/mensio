@@ -1,0 +1,206 @@
+{
+	"pages": [{
+		"name": "intake_eng",
+		"elements": [{
+				"type": "multipletext",
+				"name": "full_name",
+				"startWithNewLine": false,
+				"title": "Enter your name",
+				"items": [{
+						"name": "First:",
+						"isRequired": true
+					},
+					{
+						"name": "Last:",
+						"isRequired": true
+					}
+				],
+				"colCount": 2
+			},
+			{
+				"type": "text",
+				"name": "phone",
+				"title": "Phone number",
+				"items": [{
+					"name": "Personal:",
+					"isRequired": true
+				}],
+				"colCount": 2
+			},
+			{
+				"type": "text",
+				"name": "Email",
+				"title": "Email:",
+				"inputType": "email"
+			},
+			{
+				"type": "text",
+				"name": "birthdate",
+				"title": "Date of Birth:",
+				"inputType": "datetime"
+			},
+			{
+				"type": "dropdown",
+				"name": "relationship_status",
+				"title": "What is your marital status?",
+				"choices": [
+					"Single",
+					"In a relationship",
+					"Married/Common Law",
+					"Divorced",
+					"Other"
+				]
+			},
+			{
+				"type": "text",
+				"name": "occupation",
+				"title": "What is your current occupation?"
+			},
+
+
+			{
+				"type": "checkbox",
+				"choices": [
+					"Stress/Anxiety",
+					"Depressed Mood",
+					"Relationship Problems",
+					"Burnout",
+					"Anger Management",
+					"Issues related to food/eating",
+					"Work/career concerns",
+					"Coping with physical illness",
+					"ADHD"
+				],
+				"name": "reason",
+				"title": "What is the reason for this consultation?"
+			},
+			{
+				"type": "dropdown",
+				"name": "reason_duration",
+				"title": "When did this difficulty begin?",
+				"choices": [
+					"A few weeks ago",
+					"A few months ago",
+					"A year or more",
+					"Many years ago"
+				]
+			},
+			{
+				"type": "checkbox",
+				"choices": [
+					"Cognitive Behavior Therapy (CBT)",
+					"Mindfulness-based Intervention (MBI)",
+					"Acceptance and Commitment Therapy (ACT)",
+					"Emotion Focused Therapy (EFT)",
+					"Dialectical Behavior Therapy (DBT)",
+					"Couples Therapy",
+					"I Don't Know"
+				],
+				"name": "therapy_preference",
+				"title": "What type of therapy are you interested in? (if you're not sure, just pick 'I Don't Know')"
+			},
+			{
+				"type": "dropdown",
+				"name": "prev_consult",
+				"title": "Have you ever consulted with a mental health professional before?",
+				"choices": [
+					"Never",
+					"I have consulted but did not receive therapy",
+					"I have consulted and did receive therapy in the past",
+					"I have consulted and did receive therapy during multiple periods in the past"
+				]
+			},
+			{
+				"type": "dropdown",
+				"name": "medication",
+				"title": "Are you taking any psychiatric medication?",
+				"choices": [
+					"Yes",
+					"No"
+				]
+			},
+			{
+				"type": "dropdown",
+				"name": "suicide_attempt",
+				"title": "Have you ever attempted suicide?",
+				"choices": [
+					"Yes",
+					"No"
+				]
+			},
+			{
+				"type": "dropdown",
+				"name": "suicide_attempt",
+				"title": "Have you self-injured or self-harmed in the past 12 months?",
+				"choices": [
+					"Yes",
+					"No"
+				]
+			},
+			{
+				"type": "checkbox",
+				"choices": [
+					"Monday - day",
+					"Monday - evening only",
+					"Tuesday - day",
+					"Tuesday - evening only",
+					"Wednesday - day",
+					"Wednesday - evening only",
+					"Thursday - day",
+					"Thursday - evening only",
+					"Friday - day",
+					"Friday - evening only"
+				],
+				"name": "availability",
+				"title": "When are you available to meet your therapist? (You can select more than one)"
+			},
+			{
+				"type": "checkbox",
+				"choices": [
+					"Westmount - Greene Avenue",
+					"Outrement - Laurier Ouest",
+					"Downtown - St Catherine / Drummond"
+				],
+				"name": "location_preference",
+				"title": "At which MindSpace location(s) are you willing to attend meetings? (You can select more than one) "
+			},
+			{
+				"type": "dropdown",
+				"name": "language",
+				"title": "What is your preferred language for therapy?",
+				"choices": [
+					"English",
+					"French",
+					"Either is fine (may lead to being seen sooner)"
+				]
+			},
+
+			{
+				"type": "checkbox",
+				"choices": [
+					"Referral from a physician (if so, please indicate the name of your physician in the section below)",
+					"Referral from another health care professional",
+					"Referral from a friend, colleague, or family member",
+					"Web search",
+					"Social media",
+					"Mailing list",
+					"Conference or public appearance by MindSpace staff",
+					"Media appearance by MindSpace staff",
+					"Other"
+				],
+				"name": "referral",
+				"title": "How did you hear about the clinic?"
+			},
+			{
+				"type": "text",
+				"name": "referral_note",
+				"title": "If you were referred by a physician, please list their name here"
+			},
+			{
+				"type": "text",
+				"name": "other_info",
+				"title": "Is there anything else you think we should know?"
+			}
+		]
+	}]
+}

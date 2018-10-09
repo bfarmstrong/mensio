@@ -23,6 +23,8 @@ return [
     'password' => [
         'breadcrumb' => 'Change Password',
         'form-title' => 'Change Password',
+        'password-incorrect' => 'Your old password is not correct.',
+        'password-updated' => 'Your password was updated successfully.',
         'title' => 'Change Password',
     ],
     'presenter' => [
@@ -33,6 +35,7 @@ return [
     'settings' => [
         'breadcrumb' => 'Settings',
         'form-title' => 'Edit Profile',
+        'profile-updated' => 'Your profile has been updated successfully.',
         'title' => 'User Settings',
     ],
 ];

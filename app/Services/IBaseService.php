@@ -15,9 +15,11 @@ interface IBaseService
 
     public function find($id);
 
-    public function findBy($field, $value);
+    public function findBy($field, $value = null);
 
     public function paginate(int $limit = 15);
+
+    public function search(string $query);
 
     public function update($id, array $attributes);
 }

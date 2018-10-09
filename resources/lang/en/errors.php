@@ -8,6 +8,13 @@ return [
         'subheadline' => 'You\'re not authorized.',
         'title' => '401 Unauthorized',
     ],
+    '403' => [
+        'contents' => 'You do not have permission to view this page.',
+        'headline' => '403',
+        'return-home' => 'Return Home',
+        'subheadline' => 'You\'re not authorized.',
+        'title' => '403 Forbidden',
+    ],
     '404' => [
         'contents' => 'The page you are looking for was not found.',
         'headline' => '404',

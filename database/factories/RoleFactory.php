@@ -1,14 +1,13 @@
 <?php
 
-/*
- * --------------------------------------------------------------------------
- * Role Factory
- * --------------------------------------------------------------------------
-*/
+use App\Models\Role;
+use Faker\Generator;
 
-$factory->define(App\Models\Role::class, function (Faker\Generator $faker) {
+$factory->define(Role::class, function (Generator $faker) {
     return [
-        'name' => 'member',
-        'label' => 'Member',
+        'label' => $faker->word,
+        'level' => $faker->numberBetween(1, 5),
+        'name' => $faker->word,
+        'protected' => false,
     ];
 });

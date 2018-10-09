@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'dashboard' => [
+        'breadcrumb' => 'Dashboard',
+    ],
     'logs' => [
         'form-static' => [
             'action' => 'Action',
@@ -49,11 +52,13 @@ return [
             'cancel' => 'Cancel',
             'name' => 'Name',
             'label' => 'Label',
+            'level' => 'Level',
             'permissions' => 'Permissions',
             'save' => 'Save',
         ],
         'form-delete' => [
             'delete' => 'Delete',
+            'on-submit' => 'Are you sure you want to delete this role?',
         ],
         'form-search' => [
             'search' => 'Search...',
@@ -62,8 +67,11 @@ return [
         'index' => [
             'breadcrumb' => 'Roles',
             'create-role' => 'Create Role',
+            'created-role' => 'Role was successfully created.',
+            'deleted-role' => 'Role was successfully deleted.',
             'no-results' => 'No roles were found...',
             'roles' => 'Roles',
+            'updated-role' => 'Role was successfully updated.',
             'title' => 'All Roles',
         ],
         'table' => [
@@ -82,14 +90,15 @@ return [
         ],
         'edit' => [
             'breadcrumb' => 'Edit',
-            'form-title' => 'Edit User',
-            'title' => 'Edit User',
+            'form-title' => 'Edit :Role',
+            'title' => 'Edit :Role',
         ],
         'form-delete' => [
             'delete' => 'Delete',
+            'on-submit' => 'Are you sure you want to delete this user?',
         ],
         'form-search' => [
-            'search' => 'Search...',
+            'search' => 'Exact name required...',
             'submit' => 'Get Results',
         ],
         'form-static' => [
@@ -100,20 +109,27 @@ return [
         'index' => [
             'breadcrumb' => 'Users',
             'create-user' => 'Invite User',
+            'created-user' => 'User was successfully created.',
+            'deleted-user' => 'User was successfully deleted.',
             'no-results' => 'No users were found...',
+            'no-search-results' => 'No user was found matching your query.',
+            'switched-back' => 'You have restored your original session.',
+            'switched-to' => 'You are now signed in as :User.',
             'title' => 'All Users',
+            'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
         ],
         'show' => [
-            'breadcrumb' => 'User Profile',
-            'form-title' => 'User Profile',
-            'title' => 'User Profile',
+            'breadcrumb' => ':Role Profile',
+            'form-title' => ':Role Profile',
+            'title' => ':Role Profile',
         ],
         'table' => [
             'actions' => 'Actions',
             'edit' => 'Edit',
             'email' => 'Email',
             'name' => 'Name',
+            'role' => 'Role',
             'view' => 'View',
         ],
         'therapists' => [
@@ -122,6 +138,7 @@ return [
                 'save' => 'Save',
             ],
             'form-delete' => [
+                'on-submit' => 'Are you sure you want to remove this therapist?',
                 'remove' => 'Remove',
             ],
             'index' => [

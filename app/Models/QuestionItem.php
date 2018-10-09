@@ -20,7 +20,13 @@ class QuestionItem extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'question_id', 'value'];
+    protected $fillable = [
+        'label',
+        'name',
+        'question_id',
+        'question_item_group_id',
+        'value',
+    ];
 
     /**
      * A question item is used in many answers.

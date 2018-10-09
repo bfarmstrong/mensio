@@ -39,6 +39,8 @@
                             @lang('admin.users.index.no-results')
                         </p>
                     @endif
+
+                    {{ $users->links() }}
                 </div>
             </div>
         </div>

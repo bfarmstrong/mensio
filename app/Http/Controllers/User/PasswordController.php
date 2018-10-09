@@ -4,38 +4,36 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordUpdateRequest;
-use App\Services\UserService;
 use Auth;
 use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Controller responsible for allowing a user to update their password.
+ */
 class PasswordController extends Controller
 {
     use ResetsPasswords;
 
+    /**
+     * The path that the controller redirects to when the password is updated.
+     *
+     * @var string
+     */
     protected $redirectPath = '/user/password';
 
-    public function __construct(UserService $userService)
-    {
-        $this->service = $userService;
-    }
-
     /**
-     * User wants to change their password.
+     * Display the form for a user to change their password.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function password(Request $request)
+    public function edit(Request $request)
     {
-        $user = $request->user();
-
-        if ($user) {
-            return view('user.password')
-            ->with('user', $user);
-        }
-
-        return back()->withErrors(['Could not find user']);
+        return view('user.password')->with([
+            'user' => $request->user(),
+        ]);
     }
 
     /**
@@ -47,15 +45,14 @@ class PasswordController extends Controller
      */
     public function update(PasswordUpdateRequest $request)
     {
-        $password = $request->new_password;
+        if (Hash::check($request->get('old_password'), Auth::user()->password)) {
+            $this->resetPassword(Auth::user(), $request->get('new_password'));
 
-        if (Hash::check($request->old_password, Auth::user()->password)) {
-            $this->resetPassword(Auth::user(), $password);
-
-            return redirect('user/settings')
-                ->with('message', 'Password updated successfully');
+            return redirect('user/settings')->with([
+                'message' => __('user.password.password-updated'),
+            ]);
         }
 
-        return back()->withErrors(['Password could not be updated']);
+        return back()->withErrors([__('user.password.password-incorrect')]);
     }
 }

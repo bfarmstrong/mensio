@@ -8,6 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Base implementation for a service.
@@ -43,6 +44,13 @@ abstract class BaseService implements IBaseService, ICriteria
     protected $skipCriteria = false;
 
     /**
+     * The name of the table that this service accesses.
+     *
+     * @var string
+     */
+    protected $table;
+
+    /**
      * Creates an instance of `BaseService`.
      *
      * @param Container $container
@@ -69,6 +77,7 @@ abstract class BaseService implements IBaseService, ICriteria
     public function init()
     {
         $model = $this->container->make($this->model());
+        $this->table = $model->getTable();
 
         return $this->model = $model->newQuery();
     }
@@ -92,7 +101,7 @@ abstract class BaseService implements IBaseService, ICriteria
      *
      * @return $this
      */
-    public function skipCriteria($status = true)
+    public function skipCriteria(bool $status = true)
     {
         $this->skipCriteria = $status;
 
@@ -203,7 +212,9 @@ abstract class BaseService implements IBaseService, ICriteria
      */
     public function delete($id)
     {
-        return $this->model->destroy($id);
+        $entity = $this->find($id);
+
+        return $entity->delete();
     }
 
     /**
@@ -215,6 +226,11 @@ abstract class BaseService implements IBaseService, ICriteria
      */
     public function find($id)
     {
+        // Short circuit if the passed value is already the model
+        if (is_a($id, $this->model())) {
+            return $id;
+        }
+
         $this->applyCriteria();
 
         return $this->model->find($id);
@@ -228,9 +244,13 @@ abstract class BaseService implements IBaseService, ICriteria
      *
      * @return Model
      */
-    public function findBy($field, $value)
+    public function findBy($field, $value = null)
     {
         $this->applyCriteria();
+
+        if (is_array($field)) {
+            return $this->model->where($field)->first();
+        }
 
         return $this->model->where($field, $value)->first();
     }
@@ -250,6 +270,26 @@ abstract class BaseService implements IBaseService, ICriteria
     }
 
     /**
+     * Performs a search based on the columns of a table.  Paginates the
+     * results.
+     *
+     * @param string $query
+     *
+     * @return LengthAwarePaginator
+     */
+    public function search(string $query)
+    {
+        $this->applyCriteria();
+        $columns = Schema::getColumnListing($this->table);
+
+        foreach ($columns as $attribute) {
+            $this->model->orWhere($attribute, 'LIKE', "%$query%");
+        }
+
+        return $this->model->paginate();
+    }
+
+    /**
      * Updates an entity.  Returns if the update was successful.
      *
      * @param mixed $id
@@ -259,7 +299,7 @@ abstract class BaseService implements IBaseService, ICriteria
      */
     public function update($id, array $attributes)
     {
-        $entity = $this->model->findOrFail($id);
+        $entity = $this->find($id);
         $entity->fill($attributes);
 
         return $entity->save();

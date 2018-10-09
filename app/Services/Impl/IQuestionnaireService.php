@@ -9,4 +9,5 @@ use App\Services\IBaseService;
  */
 interface IQuestionnaireService extends IBaseService
 {
+    public function importFromJson($data);
 }

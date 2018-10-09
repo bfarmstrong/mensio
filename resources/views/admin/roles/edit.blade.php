@@ -14,11 +14,13 @@
             {!!
                 Form::model(
                     $role,
-                    ['url' => url("admin/roles/$role->id")]
+                    ['url' => url("admin/roles/$role->uuid")]
                 )
             !!}
             @method('patch')
-            @include('admin.roles.form')
+            @include('admin.roles.form', [
+                'role' => $role,
+            ])
             {!! Form::close() !!}
         </div>
     </div>

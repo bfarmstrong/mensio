@@ -1,0 +1,199 @@
+{
+ "pages": [
+  {
+   "name": "general_info",
+   "elements": [
+    {
+     "type": "multipletext",
+     "name": "full_name",
+     "startWithNewLine": false,
+     "title": "Enter your name",
+     "items": [
+      {
+       "name": "First:",
+       "isRequired": true
+      },
+      {
+       "name": "Last:",
+       "isRequired": true
+      }
+     ],
+     "colCount": 2
+    },
+    {
+     "type": "multipletext",
+     "name": "phone",
+     "title": "Enter your phone number",
+     "items": [
+      {
+       "name": "Personal:",
+       "isRequired": true
+      },
+      {
+       "name": "Work:",
+       "isRequired": true
+      }
+     ],
+     "colCount": 2
+    },
+    {
+     "type": "text",
+     "name": "address1",
+     "title": "Street Address"
+    },
+    {
+     "type": "text",
+     "name": "address2",
+     "title": "Address Line 2"
+    },
+    {
+     "type": "text",
+     "name": "city",
+     "title": "City"
+    },
+    {
+     "type": "dropdown",
+     "name": "state",
+     "startWithNewLine": false,
+     "title": "State / Province / Region",
+     "choices": [
+      {
+       "value": "AB",
+       "text": "Alberta"
+      },
+      {
+       "value": "BC",
+       "text": "British Columbia"
+      },
+      {
+       "value": "MB",
+       "text": "Manitoba"
+      },
+      {
+       "value": "NB",
+       "text": "New Brunswick"
+      },
+      {
+       "value": "NL",
+       "text": "Newfoundland and Labrador"
+      },
+      {
+       "value": "NS",
+       "text": "Nova Scotia"
+      },
+      {
+       "value": "ON",
+       "text": "Ontario"
+      },
+      {
+       "value": "PE",
+       "text": "Prince Edward Island"
+      },
+      {
+       "value": "QC",
+       "text": "Quebec"
+      },
+      {
+       "value": "SK",
+       "text": "Saskatchewan"
+      },
+      {
+       "value": "NT",
+       "text": "Northwest Territories"
+      },
+      {
+       "value": "NU",
+       "text": "Nunavut"
+      },
+      {
+       "value": "YT",
+       "text": "Yukon"
+      },
+      {
+       "value": "OTHER",
+       "text": "Other"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "zip",
+     "title": "Zip / Postal Code"
+    },
+    {
+     "type": "dropdown",
+     "name": "country",
+     "startWithNewLine": false,
+     "title": "Country",
+     "choices": [
+      "Canada",
+      "Other"
+     ]
+    },
+    {
+     "type": "text",
+     "name": "Email",
+     "title": "Email:",
+     "inputType": "email"
+    },
+    {
+     "type": "text",
+     "name": "birthdate",
+     "title": "Date of Birth:",
+     "inputType": "datetime"
+    },
+    {
+     "type": "dropdown",
+     "name": "relationship_status",
+     "title": "What is your relationship status?",
+     "choices": [
+      "Single",
+      "In a relationship",
+      "Married/Common Law",
+      "Divorced",
+      "Other"
+     ]
+    },
+    {
+     "type": "text",
+     "name": "children_number",
+     "title": "How many children do you have?"
+    },
+    {
+     "type": "text",
+     "name": "children_ages",
+     "title": "What are their ages?"
+    },
+    {
+     "type": "text",
+     "name": "occupation",
+     "title": "What is your occupation?"
+    },
+    {
+     "type": "text",
+     "name": "physician_name",
+     "title": "Who is your family physician?"
+    },
+    {
+     "type": "text",
+     "name": "physician_contact",
+     "title": "Family physician: contact info:"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "Mindspace newsletter",
+      "Online search",
+      "Social media",
+      "Friend, family or colleague",
+      "Physician referral",
+      "Referral from other health care professional",
+      "Other"
+     ],
+     "name": "referral",
+     "title": "How did you hear about the clinic?"
+    }
+   ]
+  }
+ ]
+}

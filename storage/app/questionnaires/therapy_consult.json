@@ -1,0 +1,95 @@
+{
+ "pages": [
+  {
+   "elements": [
+    {
+     "type": "html",
+     "html": "<h2>Reason for Consultation</h2>",
+     "name": "therapy_consult_header"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "Stress",
+      "Anxiety",
+      "Depressed mood",
+      "Relationship problems",
+      "Work/career concerns",
+      "Attention deficit",
+      "Burnout",
+      "Anger management",
+      "Issues related to food/eating",
+      "Alcohol or substance use",
+      "Coping with physical illness",
+      "Post-traumatic stress",
+      "Other"
+     ],
+     "name": "therapeutic_targets",
+     "title": "Which of the following problems would you like help with?"
+    },
+    {
+     "type": "text",
+     "name": "therapy_targets_other",
+     "title": "If you selected 'other', please describe:"
+    },
+    {
+     "type": "text",
+     "name": "therapy_targets_time",
+     "title": "When did these difficulties begin?"
+    },
+    {
+     "type": "text",
+     "name": "therapy_goals",
+     "title": "What would you like to achieve in therapy?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "prev_consult",
+     "title": "Have you ever consulted with a mental health professional before?"
+    },
+    {
+     "type": "multipletext",
+     "items": [
+      {
+       "name": "prev_consult_dates",
+       "title": "Approximate dates:"
+      },
+      {
+       "name": "prev_consult_length",
+       "title": "Length of treatment:"
+      },
+      {
+       "name": "prev_consult_type",
+       "title": "Type of professional:"
+      },
+      {
+       "name": "prev_consult_issue",
+       "title": "Description of issue:"
+      },
+      {
+       "name": "prev_consult_treatment",
+       "title": "Nature of treatment"
+      }
+     ],
+     "name": "prev_consult_details",
+     "title": "If you selected 'yes' to having seen a mental health professional before:"
+    },
+    {
+     "type": "text",
+     "name": "medical_issues",
+     "title": "Please list any current medical issues:"
+    },
+    {
+     "type": "text",
+     "name": "medications",
+     "title": "Please list any current medications"
+    }
+   ],
+   "name": "therapy_consult"
+  }
+ ]
+}

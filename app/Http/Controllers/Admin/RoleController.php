@@ -4,32 +4,50 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleCreateRequest;
-use App\Services\RoleService;
+use App\Services\Impl\IRoleService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Manages administrative actions against roles.
+ */
 class RoleController extends Controller
 {
-    public function __construct(RoleService $roleService)
+    /**
+     * The service implementation for roles.
+     *
+     * @var IRoleService
+     */
+    protected $service;
+
+    /**
+     * Creates an instance of `RoleController`.
+     *
+     * @param IRoleService $service
+     */
+    public function __construct(IRoleService $service)
     {
-        $this->service = $roleService;
+        $this->service = $service;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $roles = $this->service->all();
+        $roles = $this->service->paginate();
 
-        return view('admin.roles.index')->with('roles', $roles);
+        return view('admin.roles.index')->with([
+            'roles' => $roles,
+        ]);
     }
 
     /**
      * Display a listing of the resource searched.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function search(Request $request)
     {
@@ -39,13 +57,15 @@ class RoleController extends Controller
 
         $roles = $this->service->search($request->search);
 
-        return view('admin.roles.index')->with('roles', $roles);
+        return view('admin.roles.index')->with([
+            'roles' => $roles,
+        ]);
     }
 
     /**
-     * Show the form for inviting a customer.
+     * Show the form for creating a role.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -55,67 +75,82 @@ class RoleController extends Controller
     /**
      * Show the form for inviting a customer.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(RoleCreateRequest $request)
     {
-        $result = $this->service->create($request->except(['_token', '_method']));
+        $this->service->create($request->except(['_token', '_method']));
 
-        if ($result) {
-            return redirect('admin/roles')->with('message', 'Successfully created');
-        }
-
-        return back()->with('error', 'Failed to invite');
+        return redirect('admin/roles')->with([
+            'message' => __('admin.roles.index.created-role'),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param string $uuid
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function edit($id)
+    public function edit(string $uuid)
     {
-        $role = $this->service->find($id);
+        $role = $this->service->findBy('uuid', $uuid);
 
-        return view('admin.roles.edit')->with('role', $role);
+        if (is_null($role)) {
+            abort(404);
+        }
+
+        return view('admin.roles.edit')->with([
+            'role' => $role,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param Request $request
+     * @param string  $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $uuid)
     {
-        $result = $this->service->update($id, $request->except(['_token', '_method']));
+        $role = $this->service->findBy('uuid', $uuid);
 
-        if ($result) {
-            return back()->with('message', 'Successfully updated');
+        if (is_null($role)) {
+            abort(404);
         }
 
-        return back()->with('error', 'Failed to update');
+        $this->service->update(
+            $role->id,
+            $request->except(['_token', '_method'])
+        );
+
+        return back()->with([
+            'message' => __('admin.roles.index.updated-role'),
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param string $uuid
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(string $uuid)
     {
-        $result = $this->service->destroy($id);
+        $role = $this->service->findBy('uuid', $uuid);
 
-        if ($result) {
-            return redirect('admin/roles')->with('message', 'Successfully deleted');
+        if (is_null($role)) {
+            abort(404);
         }
 
-        return redirect('admin/roles')->with('error', 'Failed to delete');
+        $this->service->delete($role->id);
+
+        return redirect('admin/roles')->with([
+            'message' => __('admin.roles.index.deleted-role'),
+        ]);
     }
 }

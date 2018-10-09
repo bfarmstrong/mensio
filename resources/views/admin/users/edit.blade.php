@@ -1,13 +1,13 @@
 @extends('layout.dashboard')
 
-@section('title', __('admin.users.edit.title'))
+@section('title', __('admin.users.edit.title', ['role' => $user->roleName()]))
 
 @section('content.breadcrumbs', Breadcrumbs::render('admin.users.edit', $user))
 @section('content.dashboard')
     <div class="card">
         <div class="card-header">
             <i class="fas fa-edit mr-1"></i>
-            @lang('admin.users.edit.form-title')
+            @lang('admin.users.edit.form-title', ['role' => $user->roleName()])
         </div>
 
         <div class="card-body">

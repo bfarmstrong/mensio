@@ -23,6 +23,8 @@
                             @lang('clients.index.no-results')
                         </p>
                     @endif
+
+                    {{ $clients->links() }}
                 </div>
             </div>
         </div>

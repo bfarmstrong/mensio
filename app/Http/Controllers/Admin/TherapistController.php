@@ -62,6 +62,11 @@ class TherapistController extends Controller
     public function index(string $user)
     {
         $user = $this->user->getByCriteria(new WithTherapists())->find($user);
+
+        if (is_null($user)) {
+            abort(404);
+        }
+
         $this->authorize('viewTherapists', $user);
         $therapists = $this->user
             ->resetCriteria()

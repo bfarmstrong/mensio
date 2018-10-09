@@ -25,6 +25,36 @@ Breadcrumbs::for('clients.show', function ($trail, $user) {
     );
 });
 
+// Clients > Client Profile > Questionnaire
+Breadcrumbs::for('clients.questionnaires.show', function ($trail, $user, $response) {
+    $trail->parent('clients.show', $user);
+    $trail->push(
+        __('clients.questionnaires.show.breadcrumb'),
+        url("clients/$user->id/questionnaires/$response->id")
+    );
+});
+
+// Dashboard (Admin)
+Breadcrumbs::for('admin.dashboard', function ($trail) {
+    $trail->push(__('admin.dashboard.breadcrumb'), url('admin/dashboard'));
+});
+
+// Dashboard (Client & Therapist)
+Breadcrumbs::for('dashboard', function ($trail) {
+    $trail->push(__('dashboard.breadcrumb'), url('dashboard'));
+});
+
+// Questionnaires
+Breadcrumbs::for('responses.index', function ($trail) {
+    $trail->push(__('responses.index.breadcrumb'), url('responses'));
+});
+
+// Questionnaires > View
+Breadcrumbs::for('responses.show', function ($trail, $response) {
+    $trail->parent('responses.index');
+    $trail->push(__('responses.show.breadcrumb'), url("responses/$response->uuid"));
+});
+
 // Roles
 Breadcrumbs::for('admin.roles.index', function ($trail) {
     $trail->push(__('admin.roles.index.breadcrumb'), url('admin/roles'));
@@ -62,7 +92,10 @@ Breadcrumbs::for('admin.users.invite', function ($trail) {
 // Users > User Profile
 Breadcrumbs::for('admin.users.show', function ($trail, $user) {
     $trail->parent('admin.users.index');
-    $trail->push(__('admin.users.show.breadcrumb'), url("admin/users/$user->id"));
+    $trail->push(
+        __('admin.users.show.breadcrumb', ['role' => $user->roleName()]),
+        url("admin/users/$user->id")
+    );
 });
 
 // Users > Edit > Therapists

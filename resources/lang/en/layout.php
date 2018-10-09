@@ -20,6 +20,7 @@ return [
         'clients' => 'Clients',
         'dashboard' => 'Dashboard',
         'menu' => 'Main Menu',
+        'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',
         'switch-back' => 'Switch Back',
         'users' => 'Users',

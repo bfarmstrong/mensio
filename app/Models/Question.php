@@ -40,6 +40,16 @@ class Question extends Model
     }
 
     /**
+     * A question may have a grid layout.
+     *
+     * @return HasMany
+     */
+    public function questionGrid()
+    {
+        return $this->hasMany(QuestionGrid::class, 'question_id');
+    }
+
+    /**
      * A question has many items.
      *
      * @return HasMany

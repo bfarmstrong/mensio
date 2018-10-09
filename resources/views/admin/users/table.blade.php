@@ -3,6 +3,7 @@
         <tr>
             <th>@lang('admin.users.table.name')</th>
             <th>@lang('admin.users.table.email')</th>
+            <th>@lang('admin.users.table.role')</th>
             <th>@lang('admin.users.table.actions')</th>
         </tr>
     </thead>
@@ -13,6 +14,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->roleName() }}</td>
                     <td>
                         <a
                             class="btn btn-primary btn-sm"
@@ -37,6 +39,7 @@
                                 Form::open([
                                     'class' => 'd-inline-block',
                                     'method' => 'delete',
+                                    'onsubmit' => 'return confirm(\'' . __('admin.users.form-delete.on-submit') . '\')',
                                     'url' => url(($base ?? "admin/users") . "/$user->id"),
                                 ])
                             !!}

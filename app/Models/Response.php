@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +16,7 @@ class Response extends Model
 {
     // Log all changes to the response model.
     use Loggable;
+    use SetsUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -23,10 +25,19 @@ class Response extends Model
      */
     protected $fillable = [
         'complete',
+        'data',
         'questionnaire_id',
         'survey_id',
         'user_id',
+        'uuid',
     ];
+
+    /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * A response has many answers.

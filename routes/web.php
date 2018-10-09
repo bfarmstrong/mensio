@@ -4,33 +4,25 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a given Closure or controller and enjoy the fresh air.
-|
-*/
-
-/*
-|--------------------------------------------------------------------------
 | Welcome Page
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', 'PagesController@home');
 
 /*
 |--------------------------------------------------------------------------
-| Login/ Logout/ Password
+| Authentication
 |--------------------------------------------------------------------------
 */
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-// Password Reset Routes...
+/*
+|--------------------------------------------------------------------------
+| Reset Password
+|--------------------------------------------------------------------------
+*/
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
@@ -38,17 +30,11 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 /*
 |--------------------------------------------------------------------------
-| Registration & Activation
+| Questionnaires
 |--------------------------------------------------------------------------
 */
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
-
-Route::get('activate/token/{token}', 'Auth\ActivateController@activate');
-Route::group(['middleware' => ['auth', 'auth.role']], function () {
-    Route::get('activate', 'Auth\ActivateController@showActivate');
-    Route::get('activate/send-token', 'Auth\ActivateController@sendToken');
-});
+Route::get('responses/{response_id}/external', 'ResponseController@showExternal')->name('responses.show-external');
+Route::patch('responses/{response_id}/data', 'ResponseController@updateData')->name('responses.update-data');
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +47,6 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     | General
     |--------------------------------------------------------------------------
     */
-
     Route::get('/users/switch-back', 'Admin\UserController@switchUserBack');
 
     /*
@@ -69,11 +54,10 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     | User
     |--------------------------------------------------------------------------
     */
-
     Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
-        Route::get('settings', 'SettingsController@settings');
+        Route::get('settings', 'SettingsController@edit');
         Route::post('settings', 'SettingsController@update');
-        Route::get('password', 'PasswordController@password');
+        Route::get('password', 'PasswordController@edit');
         Route::post('password', 'PasswordController@update');
     });
 
@@ -85,6 +69,20 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     Route::group(['prefix' => 'clients', 'namespace' => 'Client'], function () {
         Route::get('', 'ClientController@index');
         Route::get('{user_id}', 'ClientController@show');
+
+        Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
+        Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
+        Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Responses
+    |--------------------------------------------------------------------------
+    */
+    Route::group(['prefix' => 'responses'], function () {
+        Route::get('', 'ResponseController@index');
+        Route::get('{response_id}', 'ResponseController@show');
     });
 
     /*
@@ -92,7 +90,6 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     | Dashboard
     |--------------------------------------------------------------------------
     */
-
     Route::get('/dashboard', 'PagesController@dashboard');
 
     /*
@@ -100,7 +97,6 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     | Admin
     |--------------------------------------------------------------------------
     */
-
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
         Route::get('dashboard', 'DashboardController@index');
 

@@ -14,6 +14,7 @@
                     [
                         'class' => 'form-control',
                         'id' => 'name',
+                        'readonly' => isset($role),
                     ]
                 )
             !!}
@@ -23,7 +24,7 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="form-group mb-2">
+        <div class="form-group">
             {!!
                 Form::label(
                     'label',
@@ -45,38 +46,26 @@
     </div>
 </div>
 
-<hr>
-
 <div class="row">
     <div class="col-12">
         <div class="form-group">
-            <h4 class="mb-3">
-                @lang('admin.roles.form.permissions')
-            </h4>
+            {!!
+                Form::label(
+                    'level',
+                    __('admin.roles.form.level')
+                )
+            !!}
 
-            @foreach(Config::get('permissions', []) as $permission => $name)
-                <div class="custom-control custom-checkbox mb-2">
-                    {!!
-                        Form::checkbox(
-                            "permissions[$permission]",
-                            $name,
-                            old("permissions[$permission]"),
-                            [
-                                'class' => 'custom-control-input',
-                                'id' => $name,
-                            ]
-                        )
-                    !!}
-
-                    {!!
-                        Form::label(
-                            $name,
-                            $name,
-                            ['class' => 'custom-control-label']
-                        )
-                    !!}
-                </div>
-            @endforeach
+            {!!
+                Form::number(
+                    'level',
+                    old('level'),
+                    [
+                        'class' => 'form-control',
+                        'id' => 'level',
+                    ]
+                )
+            !!}
         </div>
     </div>
 </div>

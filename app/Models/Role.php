@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
     use Loggable;
+    use SetsUuids;
 
     public $timestamps = false;
 
@@ -24,11 +26,19 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
         'label',
-        'permissions',
         'level',
+        'name',
+        'permissions',
+        'protected',
     ];
+
+    /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * Rules.

@@ -10,6 +10,7 @@ window.Popper = require('popper.js').default;
 
 try {
     window.$ = window.jQuery = require('jquery');
+    window.Survey = require('survey-jquery');
 
     require('bootstrap');
     require('@coreui/coreui');

@@ -1,0 +1,41 @@
+{
+ "pages": [
+  {
+   "name": "gad7",
+   "elements": [
+    {
+     "type": "matrix",
+     "name": "gad7_main",
+     "title": "During the PAST 2 WEEKS, how often have you been bothered by any of the following problems?",
+     "columns": [
+      "not at all",
+      "several days",
+      "more than half the days",
+      "nearly every day"
+     ],
+     "rows": [
+      "Feeling nervous, anxious, or on edge",
+      "Not being able to stop or control worrying",
+      "Worrying too much about different things",
+      "Trouble relaxing",
+      "Being so restless that it's hard to sit still",
+      "Becoming easily annoyed or irritable",
+      "Feeling afraid as if something awful might happen"
+     ]
+   },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Not at all difficult",
+      "Somewhat difficult",
+      "Very difficult",
+      "Extremely difficult"
+     ],
+     "colCount": 4,
+     "name": "gad7_difficulty",
+     "title": "If you have been bothered by any of the problems listed above: How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
+    }
+   ]
+  }
+ ]
+}

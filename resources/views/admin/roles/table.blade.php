@@ -15,21 +15,24 @@
                 <td>
                     <a
                         class="btn btn-primary btn-sm"
-                        href="{{ url("admin/roles/$role->id/edit") }}"
+                        href="{{ url("admin/roles/$role->uuid/edit") }}"
                     >
                         <i class="fas fa-edit mr-1"></i>
                         @lang('admin.roles.table.edit')
                     </a>
 
-                    {!!
-                        Form::open([
-                            'class' => 'd-inline-block',
-                            'method' => 'delete',
-                            'url' => url("admin/roles/$role->id"),
-                        ])
-                    !!}
-                    @include('admin.roles.form-delete')
-                    {!! Form::close() !!}
+                    @unless ($role->protected)
+                        {!!
+                            Form::open([
+                                'class' => 'd-inline-block',
+                                'method' => 'delete',
+                                'onsubmit' => 'return confirm(\'' . __('admin.roles.form-delete.on-submit') . '\')',
+                                'url' => url("admin/roles/$role->uuid"),
+                            ])
+                        !!}
+                        @include('admin.roles.form-delete')
+                        {!! Form::close() !!}
+                    @endunless
                 </td>
             </tr>
         @endforeach

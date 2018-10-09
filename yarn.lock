@@ -17,6 +17,10 @@
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.3.1.tgz#5466b8f31c1f493a96754c1426c25796d0633dd9"
 
+"@types/knockout@3.4.46":
+  version "3.4.46"
+  resolved "https://registry.yarnpkg.com/@types/knockout/-/knockout-3.4.46.tgz#e8bf3c356524f4b4b6b4e4159da363e49e826468"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -3006,7 +3010,7 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-jquery@^3.2:
+jquery@>=1.12.4, jquery@^3.2:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -5372,6 +5376,13 @@ supports-color@^5.1.0, supports-color@^5.3.0, supports-color@^5.4.0:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
   dependencies:
     has-flag "^3.0.0"
+
+survey-jquery@1.0.45:
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/survey-jquery/-/survey-jquery-1.0.45.tgz#03687a13963983d2e4c57e936ab0a79920e9459e"
+  dependencies:
+    "@types/knockout" "3.4.46"
+    jquery ">=1.12.4"
 
 svgo@^0.7.0:
   version "0.7.2"

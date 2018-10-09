@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Roles;
 use App\Models\Traits\Encryptable;
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsBlindIndex;
 use App\Models\Traits\Uuids;
 use App\Notifications\ResetPassword;
 use App\Presenters\UserPresenter;
@@ -18,12 +20,27 @@ class User extends Authenticatable
     use Loggable;
     use Notifiable;
     use Encryptable;
+    use SetsBlindIndex;
     use Uuids;
     use UserPresenter;
 
     protected $encrypts = [
         'name',
     ];
+
+    /**
+     * The name of the blind index column.
+     *
+     * @var string
+     */
+    protected $blindIndex = 'name_bidx';
+
+    /**
+     * The name of the column being indexed.
+     *
+     * @var string
+     */
+    protected $blindIndexed = 'name';
 
     /**
      * The database table used by the model.
@@ -52,6 +69,7 @@ class User extends Authenticatable
         'name',
         'password',
         'phone',
+        'role_id',
         'terms_and_cond',
     ];
 
@@ -118,15 +136,25 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has role.
+     * Check if user has a specific role level.
      *
-     * @param string $role
+     * @param int $level
      *
      * @return bool
      */
-    public function hasRole($role)
+    public function hasRole(int $level)
     {
-        return $this->role->name == $role;
+        return $this->role->level == $level;
+    }
+
+    /**
+     * Returns if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->hasAtLeastRole(Roles::Administrator);
     }
 
     /**
@@ -136,7 +164,7 @@ class User extends Authenticatable
      */
     public function isClient()
     {
-        return $this->hasRole('client');
+        return $this->hasRole(Roles::Client);
     }
 
     /**
@@ -146,21 +174,19 @@ class User extends Authenticatable
      */
     public function isTherapist()
     {
-        return $this->hasRole('therapist1') || $this->hasRole('therapist2');
+        return $this->hasRole(Roles::JuniorTherapist) || $this->hasRole(Roles::SeniorTherapist);
     }
 
     /**
      * Check if user has at least permission level.
      *
-     * @param int $role
+     * @param int $level
      *
      * @return bool
      */
-    public function hasAtLeastRole($role)
+    public function hasAtLeastRole(int $level)
     {
-        $requiredLevel = Role::getLevelByName($role);
-
-        return $this->role->level >= $requiredLevel;
+        return $this->role->level >= $level;
     }
 
     /**

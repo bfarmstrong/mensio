@@ -1,0 +1,30 @@
+{
+ "pages": [
+  {
+   "name": "msi",
+   "elements": [
+    {
+     "type": "matrix",
+     "name": "msi_main",
+     "title": "Please answer the following 10 yes or no questions 'in general':",
+     "columns": [
+      "yes",
+      "no"
+     ],
+     "rows": [
+        "Have any of your closest relationships been troubled by a lot of arguments or repeated breakups?s",
+        "Have you deliberately hurt yourself physically (e.g., punched yourself, cut yourself, burned yourself) or made a suicide attempt?",
+        "Have you had at least two other problems with impulsivity (e.g., eating binges and spending sprees, drinking too much and verbal outbursts)?",
+        "Have you been extremely moody?",
+        "Have you felt very angry a lot of the time. How about often acted in an angry or sarcastic manner?",
+        "Have you often been distrustful of other people?",
+        "Have you frequently felt unreal or as if things around you were unreal?",
+        "Have you chronically felt empty?",
+        "Have you often felt that you had no idea of who you are or that you have no identity?",
+        "Have you made desperate efforts to avoid feeling abandoned or being abandoned (e.g., repeatedly called someone to reassure yourself that he or she still cared, begged then not to leave you, clung to them physically)?"
+     ]
+    }
+   ]
+  }
+ ]
+}

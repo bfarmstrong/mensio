@@ -177,10 +177,6 @@ class UserService
      */
     public function update($userId, $payload)
     {
-        if (! isset($payload['terms_and_cond'])) {
-            throw new Exception('You must agree to the terms and conditions.', 1);
-        }
-
         try {
             return DB::transaction(function () use ($userId, $payload) {
                 $user = $this->model->find($userId);

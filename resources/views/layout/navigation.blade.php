@@ -1,5 +1,12 @@
 <header class="app-header navbar">
-    <a class="navbar-brand text-dark" href="{{ url('admin/dashboard') }}">
+    <a
+        class="navbar-brand text-dark"
+        @if (Auth::user()->isAdmin())
+        href="{{ url('admin/dashboard') }}"
+        @else
+        href="{{ url('dashboard') }}"
+        @endif
+    >
         @lang('dashboard.navigation-brand')
     </a>
 

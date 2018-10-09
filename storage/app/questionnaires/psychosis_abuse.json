@@ -1,0 +1,60 @@
+{
+ "pages": [
+  {
+   "name": "psychosis_abuse",
+   "elements": [
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "psychosis",
+     "title": "Have you ever experienced symptoms of psychosis (e.g., hearing voices that other people could not hear; feeling that others could read your thoughts or that thoughts were being stolen from your mind; thinking there was a plot against you)?"
+    },
+    {
+     "type": "text",
+     "name": "psychosis_describe",
+     "title": "If yes, please elaborate: "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "drugs",
+     "title": "Are you currently or have you ever abused alcohol, street drugs, or prescription drugs?"
+    },
+    {
+     "type": "text",
+     "name": "drugs_describe",
+     "title": "If yes, please elaborate: "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "trauma",
+     "title": "Have you ever experienced severe psychological trauma such as being assaulted or abused?"
+    },
+    {
+     "type": "text",
+     "name": "trauma_describe",
+     "title": "If yes, please elaborate: "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "trauma_interference",
+     "title": "If yes, does this event/trauma currently interfere with your life?"
+    }
+   ]
+  }
+ ]
+}

@@ -20,7 +20,7 @@ class Questionnaire extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'name', 'scoring_method'];
+    protected $fillable = ['data', 'description', 'name', 'scoring_method'];
 
     /**
      * A questionnaire has many questions assigned to it.

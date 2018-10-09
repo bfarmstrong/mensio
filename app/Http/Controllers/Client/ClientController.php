@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Criteria\Questionnaire\WhereAssigned;
+use App\Services\Criteria\Questionnaire\WhereNotAssigned;
+use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
+use App\Services\Criteria\User\WithRole;
+use App\Services\Impl\IQuestionnaireService;
+use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Response;
 
@@ -14,6 +20,20 @@ use Illuminate\Http\Response;
  */
 class ClientController extends Controller
 {
+    /**
+     * The questionnaire service implementation.
+     *
+     * @var IQuestionnaireService
+     */
+    protected $questionnaire;
+
+    /**
+     * The response service implementation.
+     *
+     * @var IResponseService
+     */
+    protected $response;
+
     /**
      * The user service implementation.
      *
@@ -26,8 +46,13 @@ class ClientController extends Controller
      *
      * @param IUserService $user
      */
-    public function __construct(IUserService $user)
-    {
+    public function __construct(
+        IQuestionnaireService $questionnaire,
+        IResponseService $response,
+        IUserService $user
+    ) {
+        $this->questionnaire = $questionnaire;
+        $this->response = $response;
         $this->user = $user;
     }
 
@@ -42,6 +67,7 @@ class ClientController extends Controller
         $clients = $this->user
             ->pushCriteria(new WhereClient())
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+            ->pushCriteria(new WithRole())
             ->paginate();
 
         return view('clients.index')->with([
@@ -60,12 +86,30 @@ class ClientController extends Controller
     public function show(string $user)
     {
         $this->authorize('viewClients', User::class);
+
         $client = $this->user
             ->pushCriteria(new WhereClient())
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+            ->pushCriteria(new WithRole())
             ->find($user);
+        if (is_null($user)) {
+            abort(404);
+        }
+
+        $unassignedQuestionnaires = $this->questionnaire
+            ->getByCriteria(new WhereNotAssigned($user))
+            ->all();
+
+        $assignedResponses = $this->response
+            ->pushCriteria(new WithQuestionnaire())
+            ->pushCriteria(new WhereAssigned($user))
+            ->all();
 
         return view('clients.show')->with([
+            'questionnaires' => [
+                'assigned' => $assignedResponses,
+                'unassigned' => $unassignedQuestionnaires,
+            ],
             'user' => $client,
         ]);
     }

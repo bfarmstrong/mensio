@@ -16,4 +16,10 @@ interface IUserService extends IBaseService
     public function addPatient($patient, $user);
 
     public function removePatient($patient, $user);
+
+    public function invite(array $attributes);
+
+    public function switchBack();
+
+    public function switchToUser(string $id);
 }

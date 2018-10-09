@@ -22,7 +22,7 @@ class UserPolicy
      */
     public function addTherapist(User $user, User $client)
     {
-        return $user->hasAtLeastRole('admin') && $client->isClient();
+        return $user->isAdmin() && $client->isClient();
     }
 
     /**
@@ -34,7 +34,7 @@ class UserPolicy
      */
     public function delete(User $user)
     {
-        return $user->hasAtLeastRole('admin');
+        return $user->isAdmin();
     }
 
     /**
@@ -47,7 +47,7 @@ class UserPolicy
      */
     public function removeTherapist(User $user, User $client)
     {
-        return $user->hasAtLeastRole('admin') && $client->isClient();
+        return $user->isAdmin() && $client->isClient();
     }
 
     /**
@@ -59,7 +59,7 @@ class UserPolicy
      */
     public function update(User $user)
     {
-        return $user->hasAtLeastRole('admin');
+        return $user->isAdmin();
     }
 
     /**
@@ -84,6 +84,6 @@ class UserPolicy
      */
     public function viewTherapists(User $user, User $client)
     {
-        return $user->hasAtLeastRole('admin') && $client->isClient();
+        return $user->isAdmin() && $client->isClient();
     }
 }

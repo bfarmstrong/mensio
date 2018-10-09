@@ -17,7 +17,33 @@
                 </li>
             @endcan
 
-            @if (Auth::user()->hasAtLeastRole('admin'))
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    @if (Auth::user()->isAdmin())
+                    href="{{ url('admin/dashboard') }}"
+                    @else
+                    href="{{ url('dashboard') }}"
+                    @endif
+                >
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    @lang('layout.sidebar.dashboard')
+                </a>
+            </li>
+
+            @if (Auth::user()->isClient())
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url('responses') }}"
+                    >
+                        <i class="nav-icon fas fa-question"></i>
+                        @lang('layout.sidebar.questionnaires')
+                    </a>
+                </li>
+            @endif
+
+            @if (Auth::user()->isAdmin())
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="nav-icon fas fa-user-tie"></i>
@@ -25,16 +51,6 @@
                     </a>
 
                     <ul class="nav-dropdown-items">
-                        <li class="nav-item">
-                            <a
-                                class="nav-link"
-                                href="{{ url('admin/dashboard') }}"
-                            >
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                @lang('layout.sidebar.dashboard')
-                            </a>
-                        </li>
-
                         <li class="nav-item">
                             <a
                                 class="nav-link"

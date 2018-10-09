@@ -15,6 +15,7 @@
                         Form::open([
                             'class' => 'd-inline-block',
                             'method' => 'delete',
+                            'onsubmit' => 'return confirm(\'' . __('admin.users.therapists.form-delete.on-submit') . '\')',
                             'url' => url("admin/users/$user->id/therapists/$therapist->id"),
                         ])
                     !!}

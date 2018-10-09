@@ -11,7 +11,7 @@ class PagesController extends Controller
      */
     public function home()
     {
-        return view('welcome');
+        return redirect('dashboard');
     }
 
     /**
@@ -21,6 +21,10 @@ class PagesController extends Controller
      */
     public function dashboard()
     {
+        if (auth()->user()->isAdmin()) {
+            return redirect('admin/dashboard');
+        }
+
         return view('dashboard');
     }
 }

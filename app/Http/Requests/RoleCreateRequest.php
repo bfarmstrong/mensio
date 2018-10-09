@@ -15,11 +15,7 @@ class RoleCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()->can('admin')) {
-            return true;
-        }
-
-        return false;
+        return Auth::user()->isAdmin();
     }
 
     /**
