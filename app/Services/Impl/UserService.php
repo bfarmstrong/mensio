@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Exceptions\DigitalSignatureInvalidException;
 use App\Notifications\NewAccountEmail;
 use App\Services\BaseService;
 use Auth;
@@ -82,6 +83,46 @@ class UserService extends BaseService implements IUserService
     }
 
     /**
+     * Compares a digital signature to a therapist to ensure that the
+     * signature is valid.
+     *
+     * @param mixed $therapist
+     * @param array $signature
+     *
+     * @return bool
+     */
+    public function compareSignature($therapist, array $signature)
+    {
+        $therapist = $this->find($therapist);
+        if (
+            ! isset($signature['name']) ||
+            ! isset($signature['license']) ||
+            $therapist->name !== $signature['name'] ||
+            $therapist->license !== $signature['license']
+        ) {
+            throw new DigitalSignatureInvalidException();
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifies that a therapist is in fact a therapist of the provided
+     * client.
+     *
+     * @param mixed  $therapist
+     * @param string $client
+     *
+     * @return bool
+     */
+    public function verifyTherapist($therapist, string $client)
+    {
+        $therapist = $this->find($therapist);
+
+        return $therapist->patients()->where('patient_id', $client)->exists();
+    }
+
+    /**
      * Creates a new user and sends them the welcome email.
      *
      * @param array $attributes
@@ -129,6 +170,34 @@ class UserService extends BaseService implements IUserService
     }
 
     /**
+     * Updates the supervisor for a client, returns if the operation was
+     * successful.
+     *
+     * @param mixed  $client
+     * @param mixed  $therapist
+     * @param string $supervisor
+     *
+     * @return bool
+     */
+    public function updateSupervisor($client, $therapist, $supervisor)
+    {
+        $client = $this->find($client);
+        $therapist = $this->find($therapist);
+
+        if (is_null($supervisor)) {
+            $therapist->supervisors()->detach();
+        } else {
+            $therapist->supervisors()->sync([
+                $supervisor => [
+                    'client_id' => $client->id,
+                ],
+            ]);
+        }
+
+        return true;
+    }
+
+    /**
      * Enables searching for a user by their name.  The name field is encrypted
      * and so we must use a blind index.
      *
@@ -143,7 +212,9 @@ class UserService extends BaseService implements IUserService
 
         $this->applyCriteria();
         $this->model->where($model->getBlindIndexColumn(), $searchIndex);
+        $results = $this->model->paginate();
+        $this->resetCriteria();
 
-        return $this->model->paginate();
+        return $results;
     }
 }

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\SearchClientRequest;
 use App\Models\User;
-use App\Services\Criteria\Questionnaire\WhereAssigned;
-use App\Services\Criteria\Questionnaire\WhereNotAssigned;
-use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WithRole;
@@ -76,6 +74,44 @@ class ClientController extends Controller
     }
 
     /**
+     * Performs a search for a client by their name.
+     *
+     * @param SearchClientRequest $request
+     *
+     * @return Response
+     */
+    public function search(SearchClientRequest $request)
+    {
+        $this->authorize('viewClients', User::class);
+
+        if (! $request->search) {
+            return redirect('clients');
+        }
+
+        $clients = $this->user
+            ->pushCriteria(new WhereClient())
+            ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+            ->pushCriteria(new WithRole())
+            ->search($request->get('search'));
+
+        if ($clients->isNotEmpty()) {
+            if (1 === $clients->count()) {
+                $user = $clients->first();
+
+                return redirect("clients/$user->id");
+            }
+
+            return view('clients.index')->with([
+                'clients' => $clients,
+            ]);
+        }
+
+        return redirect()->back()->withErrors([
+            __('clients.index.no-search-results'),
+        ]);
+    }
+
+    /**
      * Displays the page for a single client's information.  The client must be
      * a client of the current user.
      *
@@ -85,31 +121,14 @@ class ClientController extends Controller
      */
     public function show(string $user)
     {
-        $this->authorize('viewClients', User::class);
-
         $client = $this->user
             ->pushCriteria(new WhereClient())
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
             ->pushCriteria(new WithRole())
             ->find($user);
-        if (is_null($user)) {
-            abort(404);
-        }
-
-        $unassignedQuestionnaires = $this->questionnaire
-            ->getByCriteria(new WhereNotAssigned($user))
-            ->all();
-
-        $assignedResponses = $this->response
-            ->pushCriteria(new WithQuestionnaire())
-            ->pushCriteria(new WhereAssigned($user))
-            ->all();
+        $this->authorize('view', $client);
 
         return view('clients.show')->with([
-            'questionnaires' => [
-                'assigned' => $assignedResponses,
-                'unassigned' => $unassignedQuestionnaires,
-            ],
             'user' => $client,
         ]);
     }

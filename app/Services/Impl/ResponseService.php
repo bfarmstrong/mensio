@@ -108,10 +108,12 @@ class ResponseService extends BaseService implements IResponseService
      */
     public function assignToClient($client, $questionnaire)
     {
-        $assigned = $this->findBy([
-            ['questionnaire_id', $questionnaire],
-            ['user_id', $client],
-        ]);
+        $assigned = $this
+            ->optional()
+            ->findBy([
+                ['questionnaire_id', $questionnaire],
+                ['user_id', $client],
+            ]);
 
         // Prevent assignment of a questionnaire if it is already assigned
         if (! is_null($assigned)) {
@@ -147,6 +149,10 @@ class ResponseService extends BaseService implements IResponseService
                 ->answers()
                 ->where('response_id', $response->id)
                 ->first();
+
+            if (is_null($answer)) {
+                return null;
+            }
 
             if (! is_null($answer->questionItem)) {
                 return $answer->questionItem->score ?? null;

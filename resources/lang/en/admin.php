@@ -103,6 +103,7 @@ return [
         ],
         'form-static' => [
             'email' => 'Email',
+            'license' => 'License Number',
             'name' => 'Name',
             'user-since' => ':name Since',
         ],
@@ -141,17 +142,24 @@ return [
                 'on-submit' => 'Are you sure you want to remove this therapist?',
                 'remove' => 'Remove',
             ],
+            'form-supervisor' => [
+                'save' => 'Save',
+            ],
             'index' => [
                 'add-therapist' => 'Add Therapist',
+                'added-supervisor' => 'The supervisor was added successfully.',
                 'added-therapist' => 'The therapist was added successfully.',
                 'breadcrumb' => 'Therapists',
                 'current-therapists' => 'Current Therapists',
+                'removed-supervisor' => 'The supervisor was removed successfully.',
                 'removed-therapist' => 'The therapist was removed successfully.',
                 'title' => 'Therapists',
             ],
             'table' => [
                 'actions' => 'Actions',
                 'name' => 'Name',
+                'supervisor' => 'Supervisor',
+                'supervisor-required' => 'A supervisor should be assigned.',
             ],
         ],
     ],

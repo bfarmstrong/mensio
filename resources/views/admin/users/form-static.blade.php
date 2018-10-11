@@ -13,6 +13,22 @@
         </div>
     </div>
 
+    @if (!is_null($user->license))
+        <div class="form-group row">
+            <div class="col-3">
+                <strong>
+                    @lang('admin.users.form-static.license')
+                </strong>
+            </div>
+
+            <div class="col-9">
+                <p class="form-control-static">
+                    {{ $user->license }}
+                </p>
+            </div>
+        </div>
+    @endif
+
     <div class="form-group row">
         <div class="col-3">
             <strong>

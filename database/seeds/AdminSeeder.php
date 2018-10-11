@@ -20,8 +20,8 @@ class AdminSeeder extends Seeder
         $roleService = app(RoleService::class);
         $userService = app(UserService::class);
 
-        $role = $roleService->findBy('name', 'admin');
-        $user = $userService->findBy('email', 'admin@example.com');
+        $user = $userService->optional()->findBy('email', 'admin@example.com');
+        $role = $roleService->optional()->findBy('name', 'admin');
 
         if (is_null($user) && ! is_null($role)) {
             factory(User::class)->create([

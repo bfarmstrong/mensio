@@ -10,10 +10,12 @@
         "davejamesmiller/laravel-breadcrumbs": "5.x",
         "fideloper/proxy": "^4.0",
         "grafite/builder": "^2.5",
+        "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
         "spatie/laravel-activitylog": "^2.8",
+        "stevebauman/purify": "2.0.*",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {

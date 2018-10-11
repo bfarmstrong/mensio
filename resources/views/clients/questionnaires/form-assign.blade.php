@@ -3,7 +3,7 @@
         {!!
             Form::label(
                 'questionnaire_id',
-                __('clients.form-assign-questionnaire.questionnaire')
+                __('clients.questionnaires.form-assign.questionnaire')
             )
         !!}
 
@@ -12,7 +12,7 @@
                 'questionnaire_id',
                 $questionnaires->pluck('name', 'id'),
                 old('questionnaire_id'),
-                ['class' => 'form-control']
+                ['class' => 'form-control selectpicker']
             )
         !!}
     </div>
@@ -22,7 +22,7 @@
     <div class="form-group col-12 mb-0">
         {!!
             Form::submit(
-                __('clients.form-assign-questionnaire.assign'),
+                __('clients.questionnaires.form-assign.assign'),
                 ['class' => 'btn btn-primary']
             )
         !!}

@@ -25,9 +25,54 @@ Breadcrumbs::for('clients.show', function ($trail, $user) {
     );
 });
 
-// Clients > Client Profile > Questionnaire
-Breadcrumbs::for('clients.questionnaires.show', function ($trail, $user, $response) {
+// Clients > Client Profile > Notes
+Breadcrumbs::for('clients.notes.index', function ($trail, $user) {
     $trail->parent('clients.show', $user);
+    $trail->push(
+        __('clients.notes.index.breadcrumb'),
+        url("clients/$user->id/notes")
+    );
+});
+
+// Clients > Client Profile > Notes > Create
+Breadcrumbs::for('clients.notes.create', function ($trail, $user) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.notes.create.breadcrumb'),
+        url("clients/$user->id/notes/create")
+    );
+});
+
+// Clients > Client Profile > Notes > View
+Breadcrumbs::for('clients.notes.show', function ($trail, $user, $note) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.notes.show.breadcrumb'),
+        url("clients/$user->id/notes/$note->uuid")
+    );
+});
+
+// Clients > Client Profile > Questionnaires
+Breadcrumbs::for('clients.questionnaires.index', function ($trail, $user) {
+    $trail->parent('clients.show', $user);
+    $trail->push(
+        __('clients.questionnaires.index.breadcrumb'),
+        url("clients/$user->id/questionnaires")
+    );
+});
+
+// Clients > Client Profile > Questionnaires > Assign
+Breadcrumbs::for('clients.questionnaires.create', function ($trail, $user) {
+    $trail->parent('clients.questionnaires.index', $user);
+    $trail->push(
+        __('clients.questionnaires.create.breadcrumb'),
+        url("clients/$user->id/questionnaires/create")
+    );
+});
+
+// Clients > Client Profile > Questionnaires > View
+Breadcrumbs::for('clients.questionnaires.show', function ($trail, $user, $response) {
+    $trail->parent('clients.questionnaires.index', $user);
     $trail->push(
         __('clients.questionnaires.show.breadcrumb'),
         url("clients/$user->id/questionnaires/$response->id")

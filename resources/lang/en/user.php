@@ -13,6 +13,7 @@ return [
         'agree-terms' => 'I agree to the Terms &amp; Conditions',
         'change-password' => 'Change Password',
         'email' => 'Email',
+        'license' => 'License Number',
         'name' => 'Name',
         'phone' => 'Phone',
         'role' => 'Role',

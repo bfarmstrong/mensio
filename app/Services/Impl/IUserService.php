@@ -17,9 +17,15 @@ interface IUserService extends IBaseService
 
     public function removePatient($patient, $user);
 
+    public function compareSignature($therapist, array $signature);
+
+    public function verifyTherapist($therapist, string $client);
+
     public function invite(array $attributes);
 
     public function switchBack();
 
     public function switchToUser(string $id);
+
+    public function updateSupervisor($patient, $therapist, $supervisor);
 }

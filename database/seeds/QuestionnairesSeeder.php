@@ -27,7 +27,6 @@ class QuestionnairesSeeder extends Seeder
         foreach ($jsonFiles as $jsonFile) {
             $data = json_decode(Storage::get($jsonFile));
             $questionnaire = $questionnaireService->importFromJson($data);
-            $questionnaireService->resetCriteria();
             $questionnaireService->update($questionnaire->id, [
                 'scoring_method' => 'sum',
             ]);

@@ -8,7 +8,10 @@ trait Encryptable
     {
         $attributes = parent::attributesToArray();
         foreach ($this->getEncrypts() as $key) {
-            if (array_key_exists($key, $attributes)) {
+            if (
+                array_key_exists($key, $attributes) &&
+                ! is_null($attributes[$key])
+            ) {
                 $attributes[$key] = decrypt($attributes[$key]);
             }
         }
@@ -18,7 +21,10 @@ trait Encryptable
 
     public function getAttributeValue($key)
     {
-        if (in_array($key, $this->getEncrypts())) {
+        if (
+            in_array($key, $this->getEncrypts()) &&
+            ! is_null($this->attributes[$key])
+        ) {
             return decrypt($this->attributes[$key]);
         }
 
@@ -27,7 +33,7 @@ trait Encryptable
 
     public function setAttribute($key, $value)
     {
-        if (in_array($key, $this->getEncrypts())) {
+        if (in_array($key, $this->getEncrypts()) && ! is_null($value)) {
             $this->attributes[$key] = encrypt($value);
         } else {
             parent::setAttribute($key, $value);

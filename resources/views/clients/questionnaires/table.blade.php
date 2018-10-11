@@ -1,9 +1,9 @@
 <table class="table table-hover table-outline table-striped">
     <thead class="thead-light">
         <tr>
-            <th>@lang('clients.table-questionnaires.status')</th>
-            <th>@lang('clients.table-questionnaires.name')</th>
-            <th>@lang('clients.table-questionnaires.actions')</th>
+            <th>@lang('clients.questionnaires.table.status')</th>
+            <th>@lang('clients.questionnaires.table.name')</th>
+            <th>@lang('clients.questionnaires.table.actions')</th>
         </tr>
     </thead>
 
@@ -27,7 +27,7 @@
                         @endif
                     >
                         <i class="fas fa-search mr-1"></i>
-                        @lang('clients.table-questionnaires.view')
+                        @lang('clients.questionnaires.table.view')
                     </a>
 
                     @can('destroy', $response)
@@ -35,11 +35,11 @@
                             Form::open([
                                 'class' => 'd-inline-block',
                                 'method' => 'delete',
-                                'onsubmit' => 'return confirm(\'' . __('clients.form-unassign-questionnaire.on-submit') . '\')',
+                                'onsubmit' => 'return confirm(\'' . __('clients.questionnaires.form-unassign.on-submit') . '\')',
                                 'url' => url("clients/$user->id/questionnaires/$response->questionnaire_id"),
                             ])
                         !!}
-                        @include('clients.form-unassign-questionnaire')
+                        @include('clients.questionnaires.form-unassign')
                         {!! Form::close() !!}
                     @endcan
                 </td>

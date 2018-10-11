@@ -12,7 +12,7 @@
                 'therapist_id',
                 $therapists->pluck('name', 'id'),
                 old('therapist_id'),
-                ['class' => 'form-control']
+                ['class' => 'form-control selectpicker']
             )
         !!}
     </div>

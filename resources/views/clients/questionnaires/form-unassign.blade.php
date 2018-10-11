@@ -3,5 +3,5 @@
     type="submit"
 >
     <i class="fas fa-trash mr-1"></i>
-    @lang('clients.form-unassign-questionnaire.remove')
+    @lang('clients.questionnaires.form-unassign.remove')
 </button>

@@ -13,7 +13,14 @@ try {
     window.Survey = require('survey-jquery');
 
     require('bootstrap');
+    require('bootstrap-select');
     require('@coreui/coreui');
+
+    // Initialize select boxes
+    window.$('.selectpicker').selectpicker();
+
+    // Initialize Summernote
+    require('summernote/dist/summernote-bs4');
 
     // Enable tooltips
     $('[data-toggle="tooltip"]').tooltip()

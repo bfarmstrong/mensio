@@ -6,16 +6,29 @@
 @section('content.dashboard')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <i class="fas fa-list-ul mr-1"></i>
-            @lang('clients.index.clients')
+            <span>
+                <i class="fas fa-list-ul mr-1"></i>
+                @lang('clients.index.clients')
+            </span>
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
+                    {!!
+                        Form::open([
+                            'url' => url('clients/search')
+                        ])
+                    !!}
+                    @include('clients.form-search')
+                    {!! Form::close() !!}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
                     @if ($clients->isNotEmpty())
-                        @include('admin.users.table', [
-                            'base' => 'clients',
+                        @include('clients.table', [
                             'users' => $clients
                         ])
                     @else

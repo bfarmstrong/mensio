@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Exceptions\NoAvailableQuestionnairesException;
 use App\Http\Controllers\Controller;
+use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\Questionnaire\WhereAssigned;
+use App\Services\Criteria\Questionnaire\WhereNotAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
+use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
@@ -14,6 +20,13 @@ use Illuminate\Http\Response;
  */
 class QuestionnaireController extends Controller
 {
+    /**
+     * The questionnaire service implementation.
+     *
+     * @var IQuestionnaireService
+     */
+    protected $questionnaire;
+
     /**
      * The response service implementation.
      *
@@ -31,13 +44,44 @@ class QuestionnaireController extends Controller
     /**
      * Creates an instance of `ClientController`.
      *
-     * @param IResponseService $response
-     * @param IUserService     $user
+     * @param IQuestionnaireService $questionnaire
+     * @param IResponseService      $response
+     * @param IUserService          $user
      */
-    public function __construct(IResponseService $response, IUserService $user)
-    {
+    public function __construct(
+        IQuestionnaireService $questionnaire,
+        IResponseService $response,
+        IUserService $user
+    ) {
+        $this->questionnaire = $questionnaire;
         $this->response = $response;
         $this->user = $user;
+    }
+
+    /**
+     * Displays the page to assign a questionnaire to a client.
+     *
+     * @param string $user
+     *
+     * @return Response
+     */
+    public function create(string $user)
+    {
+        $user = $this->user->find($user);
+        $this->authorize('addQuestionnaire', $user);
+
+        $questionnaires = $this->questionnaire
+            ->getByCriteria(new WhereNotAssigned($user->id))
+            ->all();
+
+        if ($questionnaires->isEmpty()) {
+            throw new NoAvailableQuestionnairesException();
+        }
+
+        return view('clients.questionnaires.create')->with([
+            'questionnaires' => $questionnaires,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -49,14 +93,42 @@ class QuestionnaireController extends Controller
      */
     public function destroy(Request $request)
     {
+        $user = $this->user->find($request->user_id);
+        $this->authorize('removeQuestionnaire', $user);
+
         $this->response->unassignFromClient(
-            $request->user_id,
+            $user->id,
             $request->questionnaire_id
         );
 
         return redirect()
             ->back()
             ->with('message', __('clients.show.questionnaire-unassigned'));
+    }
+
+    /**
+     * Displays a page with the list of questionnaires that a client has
+     * been assigned.
+     *
+     * @param string $user
+     *
+     * @return Response
+     */
+    public function index(string $user)
+    {
+        $user = $this->user->find($user);
+        $this->authorize('viewQuestionnaires', $user);
+
+        $responses = $this->response
+            ->pushCriteria(new WithRelation('questionnaire'))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->pushCriteria(new WhereAssigned($user->id))
+            ->paginate();
+
+        return view('clients.questionnaires.index')->with([
+            'responses' => $responses,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -70,18 +142,11 @@ class QuestionnaireController extends Controller
     public function show(string $user, string $response)
     {
         $user = $this->user->find($user);
-        if (is_null($user)) {
-            abort(404);
-        }
+        $this->authorize('viewQuestionnaires', $user);
 
         $response = $this->response
             ->getByCriteria(new WithQuestionnaire())
             ->findBy('uuid', $response);
-
-        if (is_null($response)) {
-            abort(404);
-        }
-
         $score = $this->response->getScore($response);
 
         return view('clients.questionnaires.show', [
@@ -100,13 +165,16 @@ class QuestionnaireController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $this->user->find($request->user_id);
+        $this->authorize('addQuestionnaire', $user);
+
         $this->response->assignToClient(
-            $request->user_id,
+            $user->id,
             $request->get('questionnaire_id')
         );
 
         return redirect()
-            ->back()
+            ->to(url("clients/$request->user_id/questionnaires"))
             ->with('message', __('clients.show.questionnaire-assigned'));
     }
 }

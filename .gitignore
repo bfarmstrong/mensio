@@ -6,6 +6,7 @@
 /public/mix-manifest.json
 /public/storage
 /storage/*.key
+/storage/purify
 /vendor
 /.idea
 /.vscode

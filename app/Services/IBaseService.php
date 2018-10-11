@@ -7,6 +7,8 @@ namespace App\Services;
  */
 interface IBaseService
 {
+    public function optional(bool $optional = true);
+
     public function all();
 
     public function create(array $attributes);

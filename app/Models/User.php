@@ -25,6 +25,7 @@ class User extends Authenticatable
     use UserPresenter;
 
     protected $encrypts = [
+        'license',
         'name',
     ];
 
@@ -65,6 +66,7 @@ class User extends Authenticatable
         'activation_token',
         'email',
         'is_active',
+        'license',
         'marketing',
         'name',
         'password',
@@ -84,6 +86,20 @@ class User extends Authenticatable
      * Turn off laravel's auto incrementing built-in feature.
      */
     public $incrementing = false;
+
+    /**
+     * A user has either notes created for them or notes created by them.
+     *
+     * @return HasMany
+     */
+    public function notes()
+    {
+        if ($this->isClient()) {
+            return $this->hasMany(Note::class, 'client_id');
+        }
+
+        return $this->hasMany(Note::class, 'therapist_id');
+    }
 
     /**
      * Returns the list of patients associated to a user.
@@ -118,6 +134,23 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Returns the list of supervisors associated to a user.
+     *
+     * @return BelongsToMany
+     */
+    public function supervisors()
+    {
+        return $this
+            ->belongsToMany(
+                User::class,
+                'supervisors',
+                'therapist_id',
+                'supervisor_id'
+            )
+            ->withPivot('client_id');
     }
 
     /**

@@ -6,8 +6,10 @@
 @section('content.dashboard')
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <i class="fas fa-list-ul mr-1"></i>
-            @lang('admin.users.index.users')
+            <span>
+                <i class="fas fa-list-ul mr-1"></i>
+                @lang('admin.users.index.users')
+            </span>
 
             <a
                 class="btn btn-primary btn-sm ml-auto"

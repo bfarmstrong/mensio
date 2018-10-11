@@ -1,26 +1,92 @@
 <?php
 
 return [
-    'form-unassign-questionnaire' => [
-        'remove' => 'Remove',
-        'on-submit' => 'Are you sure you want to remove this questionnaire?',
-    ],
-    'form-assign-questionnaire' => [
-        'assign' => 'Assign',
-        'questionnaire' => 'Questionnaire',
+    'form-search' => [
+        'search' => 'Exact name required...',
+        'submit' => 'Get Results',
     ],
     'index' => [
         'breadcrumb' => 'Clients',
         'clients' => 'Clients',
         'no-results' => 'No clients were found...',
+        'no-search-results' => 'No client was found matching your query.',
         'title' => 'All Clients',
     ],
-    'questionnaires' => [
+    'notes' => [
+        'create' => [
+            'breadcrumb' => 'Create',
+            'form-title' => 'Create Note',
+            'title' => 'Create Note',
+        ],
+        'form' => [
+            'addition' => 'Additional Information',
+            'contents' => 'Contents',
+            'date' => 'Date',
+            'invalid' => 'Invalid',
+            'save-draft' => 'Save Draft',
+            'save-final' => 'Submit',
+            'signature' => 'Signature',
+            'signature-invalid' => 'This note has been unexpectedly modified.',
+            'therapist' => 'Therapist',
+            'valid' => 'Valid',
+        ],
+        'index' => [
+            'breadcrumb' => 'Notes',
+            'create' => 'Create Note',
+            'no-results' => 'No notes were found...',
+            'note-created' => 'Note was created successfully.',
+            'note-updated' => 'Note was updated successfully.',
+            'notes' => 'Notes',
+            'title' => 'All Notes',
+        ],
         'show' => [
-            'breadcrumb' => 'Questionnaire',
+            'additional-added' => 'Additional information has been successfully added to the note.',
+            'breadcrumb' => 'View',
+            'form-title' => 'Note',
+            'title' => 'Note',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'creator' => 'Therapist',
+            'date' => 'Date',
+            'draft' => 'Draft',
+            'final' => 'Final',
+            'status' => 'Status',
+            'view' => 'View',
+        ],
+    ],
+    'questionnaires' => [
+        'create' => [
+            'assign-questionnaire' => 'Assign Questionnaire',
+            'breadcrumb' => 'Assign',
+            'title' => 'Assign Questionnaire',
+        ],
+        'form-assign' => [
+            'assign' => 'Assign',
+            'questionnaire' => 'Questionnaire',
+        ],
+        'form-unassign' => [
+            'remove' => 'Remove',
+            'on-submit' => 'Are you sure you want to remove this questionnaire?',
+        ],
+        'index' => [
+            'assign' => 'Assign',
+            'breadcrumb' => 'Questionnaires',
+            'card-title' => 'Questionnaires',
+            'no-results' => 'No questionnaires were found...',
+            'title' => 'All Questionnaires',
+        ],
+        'show' => [
+            'breadcrumb' => 'View',
             'card-title' => 'Questionnaire',
             'score' => 'Score: :score',
             'title' => 'Questionnaire',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'name' => 'Name',
+            'status' => 'Status',
+            'view' => 'View',
         ],
     ],
     'show' => [
@@ -28,14 +94,20 @@ return [
         'assigned-questionnaires' => 'Assigned Questionnaires',
         'breadcrumb' => 'Client Profile',
         'form-title' => 'Client Profile',
+        'notes' => 'Notes',
         'questionnaire-assigned' => 'The questionnaire has been successfully assigned.',
         'questionnaire-unassigned' => 'The questionnaire has been successfully unassigned.',
+        'questionnaires' => 'Questionnaires',
         'title' => 'Client Profile',
     ],
-    'table-questionnaires' => [
+    'table' => [
         'actions' => 'Actions',
+        'edit' => 'Edit',
+        'email' => 'Email',
         'name' => 'Name',
-        'status' => 'Status',
+        'notes' => 'Notes',
+        'questionnaires' => 'Questionnaires',
+        'toggle-dropdown' => 'Toggle dropdown',
         'view' => 'View',
     ],
 ];

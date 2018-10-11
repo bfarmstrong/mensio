@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Criteria\User\WhereNotCurrentTherapist;
+use App\Services\Criteria\User\WhereRole;
 use App\Services\Criteria\User\WhereTherapist;
-use App\Services\Criteria\User\WithTherapists;
+use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\User\WithSupervisors;
+use App\Services\Criteria\User\WithTherapistsAndSupervisors;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -61,7 +65,9 @@ class TherapistController extends Controller
      */
     public function index(string $user)
     {
-        $user = $this->user->getByCriteria(new WithTherapists())->find($user);
+        $user = $this->user
+            ->getByCriteria(new WithTherapistsAndSupervisors($user))
+            ->find($user);
 
         if (is_null($user)) {
             abort(404);
@@ -69,12 +75,19 @@ class TherapistController extends Controller
 
         $this->authorize('viewTherapists', $user);
         $therapists = $this->user
-            ->resetCriteria()
+            ->pushCriteria(new WithSupervisors($user->id))
             ->pushCriteria(new WhereTherapist())
+            ->pushCriteria(new WithRole())
+            ->pushCriteria(new WhereNotCurrentTherapist($user->id))
+            ->all();
+
+        $supervisors = $this->user
+            ->pushCriteria(new WhereRole(Roles::SeniorTherapist))
             ->pushCriteria(new WhereNotCurrentTherapist($user->id))
             ->all();
 
         return view('admin.users.therapists.index')->with([
+            'supervisors' => $supervisors,
             'therapists' => $therapists,
             'user' => $user,
         ]);

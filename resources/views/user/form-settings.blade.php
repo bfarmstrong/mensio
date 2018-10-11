@@ -74,6 +74,27 @@
     </div>
 </div>
 
+@if ($features['license'] ?? false)
+    <div class="form-row">
+        <div class="form-group col-12">
+            {!!
+                Form::label(
+                    'license',
+                    __('user.form-settings.license')
+                )
+            !!}
+
+            {!!
+                Form::text(
+                    'license',
+                    old('license'),
+                    ['class' => 'form-control']
+                )
+            !!}
+        </div>
+    </div>
+@endif
+
 @if (Auth::user()->isAdmin() && isset($roles))
     <div class="form-row">
         <div class="form-group col-12">
@@ -89,7 +110,7 @@
                     'role_id',
                     $roles->pluck('label', 'id'),
                     old('role_id'),
-                    ['class' => 'form-control']
+                    ['class' => 'form-control selectpicker']
                 )
             !!}
         </div>

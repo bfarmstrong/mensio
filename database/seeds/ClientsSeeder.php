@@ -17,9 +17,11 @@ class ClientsSeeder extends Seeder
     public function run()
     {
         $roleService = app(RoleService::class);
-        $clientRole = $roleService->findBy('name', 'client');
+        $clientRole = $roleService
+            ->optional()
+            ->findBy('name', 'client');
         $therapist1Role = $roleService
-            ->resetCriteria()
+            ->optional()
             ->findBy('name', 'therapist1');
 
         factory(User::class, 5)

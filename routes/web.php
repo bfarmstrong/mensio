@@ -68,8 +68,18 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     */
     Route::group(['prefix' => 'clients', 'namespace' => 'Client'], function () {
         Route::get('', 'ClientController@index');
+        Route::post('search', 'ClientController@search');
         Route::get('{user_id}', 'ClientController@show');
 
+        Route::get('{user_id}/notes', 'NoteController@index');
+        Route::post('{user_id}/notes', 'NoteController@store');
+        Route::post('{user_id}/notes/{note_id}/addition', 'NoteController@addAddition');
+        Route::get('{user_id}/notes/create', 'NoteController@create');
+        Route::get('{user_id}/notes/{note_id}', 'NoteController@show');
+        Route::put('{user_id}/notes/{note_id}', 'NoteController@update');
+
+        Route::get('{user_id}/questionnaires', 'QuestionnaireController@index');
+        Route::get('{user_id}/questionnaires/create', 'QuestionnaireController@create');
         Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
         Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
         Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
@@ -120,6 +130,13 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::get('users/{user_id}/therapists', 'TherapistController@index');
         Route::post('users/{user_id}/therapists', 'TherapistController@store');
         Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Supervisor Management
+        |--------------------------------------------------------------------------
+        */
+        Route::patch('users/{user_id}/therapists/{therapist_id}/supervisors', 'SupervisorController@update');
 
         /*
         |--------------------------------------------------------------------------

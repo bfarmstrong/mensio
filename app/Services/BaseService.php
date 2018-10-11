@@ -37,6 +37,13 @@ abstract class BaseService implements IBaseService, ICriteria
     protected $model;
 
     /**
+     * Whether or not the next "find" query throws an exception.
+     *
+     * @var bool
+     */
+    protected $optional;
+
+    /**
      * Whether the next query will skip the criteria.
      *
      * @var bool
@@ -127,7 +134,9 @@ abstract class BaseService implements IBaseService, ICriteria
      */
     public function getByCriteria(Criteria $criteria)
     {
+        $this->pushCriteria($criteria);
         $this->model = $criteria->apply($this->model, $this);
+        $this->skipCriteria(true);
 
         return $this;
     }
@@ -147,13 +156,26 @@ abstract class BaseService implements IBaseService, ICriteria
     }
 
     /**
+     * Clears out the criteria list.
+     *
+     * @return $this
+     */
+    public function flushCriteria()
+    {
+        $this->criteria = $this->container->make(Collection::class);
+
+        return $this;
+    }
+
+    /**
      * Resets the criteria list so that new criteria may be used.
      *
      * @return $this
      */
     public function resetCriteria()
     {
-        $this->criteria = $this->container->make(Collection::class);
+        $this->flushCriteria();
+        $this->skipCriteria(false);
         $this->init();
 
         return $this;
@@ -180,6 +202,20 @@ abstract class BaseService implements IBaseService, ICriteria
     }
 
     /**
+     * Sets the optional parameter.
+     *
+     * @param bool $optional
+     *
+     * @return $this
+     */
+    public function optional(bool $optional = true)
+    {
+        $this->optional = $optional;
+
+        return $this;
+    }
+
+    /**
      * Returns the list of all of the entities in a table.
      *
      * @return Collection
@@ -187,8 +223,10 @@ abstract class BaseService implements IBaseService, ICriteria
     public function all()
     {
         $this->applyCriteria();
+        $results = $this->model->get();
+        $this->resetCriteria();
 
-        return $this->model->get();
+        return $results;
     }
 
     /**
@@ -228,12 +266,21 @@ abstract class BaseService implements IBaseService, ICriteria
     {
         // Short circuit if the passed value is already the model
         if (is_a($id, $this->model())) {
-            return $id;
+            if ($this->criteria->isEmpty()) {
+                $this->resetCriteria();
+
+                return $id;
+            }
+            $id = $id->id;
         }
 
         $this->applyCriteria();
+        $entity = $this->optional ?
+            $this->model->find($id) :
+            $this->model->findOrFail($id);
+        $this->resetCriteria();
 
-        return $this->model->find($id);
+        return $entity;
     }
 
     /**
@@ -249,10 +296,18 @@ abstract class BaseService implements IBaseService, ICriteria
         $this->applyCriteria();
 
         if (is_array($field)) {
-            return $this->model->where($field)->first();
+            $entity = $this->optional ?
+                $this->model->where($field)->first() :
+                $this->model->where($field)->firstOrFail();
+        } else {
+            $entity = $this->optional ?
+                $this->model->where($field, $value)->first() :
+                $this->model->where($field, $value)->firstOrFail();
         }
 
-        return $this->model->where($field, $value)->first();
+        $this->resetCriteria();
+
+        return $entity;
     }
 
     /**
@@ -265,8 +320,10 @@ abstract class BaseService implements IBaseService, ICriteria
     public function paginate(int $limit = 15)
     {
         $this->applyCriteria();
+        $results = $this->model->paginate($limit);
+        $this->resetCriteria();
 
-        return $this->model->paginate($limit);
+        return $results;
     }
 
     /**
@@ -286,7 +343,10 @@ abstract class BaseService implements IBaseService, ICriteria
             $this->model->orWhere($attribute, 'LIKE', "%$query%");
         }
 
-        return $this->model->paginate();
+        $results = $this->model->paginate();
+        $this->resetCriteria();
+
+        return $results;
     }
 
     /**

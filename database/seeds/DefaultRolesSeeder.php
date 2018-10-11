@@ -18,7 +18,7 @@ class DefaultRolesSeeder extends Seeder
     {
         $roleService = app(RoleService::class);
 
-        if (is_null($roleService->findBy('name', 'client'))) {
+        if (is_null($roleService->optional()->findBy('name', 'client'))) {
             factory(Role::class)->create([
                 'label' => 'Client',
                 'level' => 1,
@@ -27,8 +27,7 @@ class DefaultRolesSeeder extends Seeder
             ]);
         }
 
-        $roleService->resetCriteria();
-        if (is_null($roleService->findBy('name', 'therapist1'))) {
+        if (is_null($roleService->optional()->findBy('name', 'therapist1'))) {
             factory(Role::class)->create([
                 'label' => 'Jr. Therapist',
                 'level' => 2,
@@ -37,8 +36,7 @@ class DefaultRolesSeeder extends Seeder
             ]);
         }
 
-        $roleService->resetCriteria();
-        if (is_null($roleService->findBy('name', 'therapist2'))) {
+        if (is_null($roleService->optional()->findBy('name', 'therapist2'))) {
             factory(Role::class)->create([
                 'label' => 'Sr. Therapist',
                 'level' => 3,
@@ -47,8 +45,7 @@ class DefaultRolesSeeder extends Seeder
             ]);
         }
 
-        $roleService->resetCriteria();
-        if (is_null($roleService->findBy('name', 'admin'))) {
+        if (is_null($roleService->optional()->findBy('name', 'admin'))) {
             factory(Role::class)->create([
                 'label' => 'Admin',
                 'level' => 4,
@@ -57,8 +54,7 @@ class DefaultRolesSeeder extends Seeder
             ]);
         }
 
-        $roleService->resetCriteria();
-        if (is_null($roleService->findBy('name', 'superadmin'))) {
+        if (is_null($roleService->optional()->findBy('name', 'superadmin'))) {
             factory(Role::class)->create([
                 'label' => 'Super Admin',
                 'level' => 5,

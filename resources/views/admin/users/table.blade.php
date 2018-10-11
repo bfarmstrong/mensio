@@ -18,7 +18,7 @@
                     <td>
                         <a
                             class="btn btn-primary btn-sm"
-                            href="{{ url(($base ?? "admin/users") . "/$user->id") }}"
+                            href="{{ url("admin/users/$user->id") }}"
                         >
                             <i class="fas fa-search mr-1"></i>
                             @lang('admin.users.table.view')
@@ -27,7 +27,7 @@
                         @can('update', $user)
                             <a
                                 class="btn btn-primary btn-sm"
-                                href="{{ url(($base ?? "admin/users") . "/$user->id/edit") }}"
+                                href="{{ url("admin/users/$user->id/edit") }}"
                             >
                                 <i class="fas fa-edit mr-1"></i>
                                 @lang('admin.users.table.edit')
@@ -40,7 +40,7 @@
                                     'class' => 'd-inline-block',
                                     'method' => 'delete',
                                     'onsubmit' => 'return confirm(\'' . __('admin.users.form-delete.on-submit') . '\')',
-                                    'url' => url(($base ?? "admin/users") . "/$user->id"),
+                                    'url' => url("admin/users/$user->id"),
                                 ])
                             !!}
                             @include('admin.users.form-delete')

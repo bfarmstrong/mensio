@@ -5,7 +5,7 @@
 @section('content.breadcrumbs', Breadcrumbs::render('admin.logs.index'))
 @section('content.dashboard')
     <div class="card">
-        <div class="card-header d-flex align-items-center">
+        <div class="card-header">
             <i class="fas fa-list-ul mr-1"></i>
             @lang('admin.logs.index.activity-log')
         </div>

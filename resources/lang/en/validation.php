@@ -127,6 +127,12 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'signature.name' => [
+            'required_if' => 'The name field is required.',
+        ],
+        'signature.license' => [
+            'required_if' => 'The license field is required.',
+        ],
     ],
 
     /*

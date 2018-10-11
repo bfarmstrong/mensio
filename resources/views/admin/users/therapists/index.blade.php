@@ -15,6 +15,7 @@
                 <div class="row">
                     <div class="col-12">
                         @include('admin.users.therapists.table', [
+                            'supervisors' => $supervisors,
                             'therapists' => $user->therapists,
                             'user' => $user,
                         ])
@@ -39,7 +40,7 @@
                     ])
                 !!}
                 @include('admin.users.therapists.form-add', [
-                    'therapists' => $therapists
+                    'therapists' => $therapists,
                 ])
                 {!! Form::close() !!}
             </div>

@@ -16,6 +16,8 @@ interface ICriteria
 
     public function pushCriteria(Criteria $criteria);
 
+    public function flushCriteria();
+
     public function resetCriteria();
 
     public function applyCriteria();
