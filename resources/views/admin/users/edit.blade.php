@@ -23,7 +23,6 @@
                     'license' => $user->isTherapist(),
                     'switch_user' => true,
                     'therapists' => Auth::user()->can('viewTherapists', $user),
-					'groups' => true,
                 ]
             ])
             {!! Form::close() !!}
