@@ -245,4 +245,14 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
+	
+	/**
+    * return group if in user groups.
+    *
+    * @param string group_id
+    */
+	public function groups()
+    {
+        return $this->belongsToMany('App\Models\Group','user_groups','user_id','group_id');
+    }
 }
