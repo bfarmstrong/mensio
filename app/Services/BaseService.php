@@ -339,9 +339,11 @@ abstract class BaseService implements IBaseService, ICriteria
         $this->applyCriteria();
         $columns = Schema::getColumnListing($this->table);
 
-        foreach ($columns as $attribute) {
-            $this->model->orWhere($attribute, 'LIKE', "%$query%");
-        }
+        $this->model->where(function ($q) use ($columns, $query) {
+            foreach ($columns as $attribute) {
+                $q->orWhere($attribute, 'LIKE', "%$query%");
+            }
+        });
 
         $results = $this->model->paginate();
         $this->resetCriteria();

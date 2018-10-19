@@ -44,7 +44,7 @@
             @endif
 
             @if (Auth::user()->isAdmin())
-                <li class="nav-item nav-dropdown">
+                <li class="nav-item nav-dropdown open">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="nav-icon fas fa-user-tie"></i>
                         @lang('layout.sidebar.admin')
@@ -58,6 +58,16 @@
                             >
                                 <i class="nav-icon fas fa-user-friends"></i>
                                 @lang('layout.sidebar.users')
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/doctors') }}"
+                            >
+                                <i class="nav-icon fas fa-user-md"></i>
+                                @lang('layout.sidebar.doctors')
                             </a>
                         </li>
 

@@ -25,8 +25,21 @@ class User extends Authenticatable
     use UserPresenter;
 
     protected $encrypts = [
+        'address_line_1',
+        'address_line_2',
+        'city',
+        'country',
+        'emergency_name',
+        'emergency_phone',
+        'emergency_relationship',
+        'health_card_number',
+        'home_phone',
         'license',
         'name',
+        'notes',
+        'postal_code',
+        'province',
+        'work_phone',
     ];
 
     /**
@@ -64,15 +77,31 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'activation_token',
+        'address_line_1',
+        'address_line_2',
+        'city',
+        'country',
+        'doctor_id',
         'email',
+        'emergency_name',
+        'emergency_phone',
+        'emergency_relationship',
+        'health_card_number',
+        'home_phone',
         'is_active',
         'license',
         'marketing',
         'name',
+        'notes',
         'password',
         'phone',
+        'postal_code',
+        'preferred_contact_method',
+        'province',
+        'referrer_id',
         'role_id',
         'terms_and_cond',
+        'work_phone',
     ];
 
     /**
@@ -86,6 +115,16 @@ class User extends Authenticatable
      * Turn off laravel's auto incrementing built-in feature.
      */
     public $incrementing = false;
+
+    /**
+     * A client may have a doctor assigned to them.
+     *
+     * @return BelongsTo
+     */
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id');
+    }
 
     /**
      * A user is associated with many groups.  They are either a therapist of
@@ -139,6 +178,16 @@ class User extends Authenticatable
             'therapist_id',
             'patient_id'
         );
+    }
+
+    /**
+     * A client may have been referred to the clinic by a doctor.
+     *
+     * @return BelongsTo
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(Doctor::class, 'referrer_id');
     }
 
     /**

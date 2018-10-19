@@ -19,6 +19,7 @@ return [
         'admin' => 'Admin',
         'clients' => 'Clients',
         'dashboard' => 'Dashboard',
+        'doctors' => 'Doctors',
         'menu' => 'Main Menu',
         'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',

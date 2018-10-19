@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateRequest;
+use App\Services\Criteria\General\OrderBy;
+use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IUserService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -15,6 +17,13 @@ use Illuminate\Http\Response;
 class SettingsController extends Controller
 {
     /**
+     * The doctor service implementation.
+     *
+     * @var IDoctorService
+     */
+    protected $doctorService;
+
+    /**
      * The user service implementation.
      *
      * @var IUserService
@@ -24,10 +33,14 @@ class SettingsController extends Controller
     /**
      * Creates an instance of `SettingsController`.
      *
-     * @param IUserService $userService
+     * @param IDoctorService $doctorService
+     * @param IUserService   $userService
      */
-    public function __construct(IUserService $userService)
-    {
+    public function __construct(
+        IDoctorService $doctorService,
+        IUserService $userService
+    ) {
+        $this->doctorService = $doctorService;
         $this->userService = $userService;
     }
 
@@ -38,7 +51,13 @@ class SettingsController extends Controller
      */
     public function edit(Request $request)
     {
+        $doctors = $this->doctorService
+            ->getByCriteria(new OrderBy('is_default', 'desc'))
+            ->getByCriteria(new OrderBy('name'))
+            ->all();
+
         return view('user.settings')->with([
+            'doctors' => $doctors,
             'user' => $request->user(),
         ]);
     }

@@ -89,6 +89,26 @@ Breadcrumbs::for('dashboard', function ($trail) {
     $trail->push(__('dashboard.breadcrumb'), url('dashboard'));
 });
 
+// Doctors
+Breadcrumbs::for('admin.doctors.index', function ($trail) {
+    $trail->push(__('admin.doctors.index.breadcrumb'), url('admin/doctors'));
+});
+
+// Doctors > Create
+Breadcrumbs::for('admin.doctors.create', function ($trail) {
+    $trail->parent('admin.doctors.index');
+    $trail->push(__('admin.doctors.create.breadcrumb'), url('admin/doctors/create'));
+});
+
+// Doctors > Edit
+Breadcrumbs::for('admin.doctors.edit', function ($trail, $doctor) {
+    $trail->parent('admin.doctors.index');
+    $trail->push(
+        __('admin.doctors.edit.breadcrumb'),
+        url("admin/doctors/$doctor->uuid/edit")
+    );
+});
+
 // Questionnaires
 Breadcrumbs::for('responses.index', function ($trail) {
     $trail->push(__('responses.index.breadcrumb'), url('responses'));

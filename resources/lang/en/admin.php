@@ -4,6 +4,49 @@ return [
     'dashboard' => [
         'breadcrumb' => 'Dashboard',
     ],
+    'doctors' => [
+        'create' => [
+            'breadcrumb' => 'Create',
+            'form-title' => 'Create Doctor',
+            'title' => 'Create Doctor',
+        ],
+        'edit' => [
+            'breadcrumb' => 'Edit',
+            'form-title' => 'Edit Doctor',
+            'title' => 'Edit Doctor',
+        ],
+        'form' => [
+            'address' => 'Address',
+            'email' => 'Email',
+            'name' => 'Name',
+            'phone' => 'Practice Phone',
+            'save' => 'Save',
+            'specialty' => 'Specialty',
+        ],
+        'form-delete' => [
+            'delete' => 'Delete',
+            'on-submit' => 'Are you sure you want to delete this doctor?',
+        ],
+        'form-search' => [
+            'search' => 'Search...',
+            'submit' => 'Get Results',
+        ],
+        'index' => [
+            'breadcrumb' => 'Doctors',
+            'create-doctor' => 'Create Doctor',
+            'created-doctor' => 'Doctor was successfully created.',
+            'deleted-doctor' => 'Doctor was successfully deleted.',
+            'doctors' => 'Doctors',
+            'no-results' => 'No doctors were found...',
+            'title' => 'All Doctors',
+            'updated-doctor' => 'Doctor was successfully updated.',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'edit' => 'Edit',
+            'name' => 'Name',
+        ],
+    ],
     'logs' => [
         'form-static' => [
             'action' => 'Action',
@@ -102,10 +145,30 @@ return [
             'submit' => 'Get Results',
         ],
         'form-static' => [
+            'address-line-1' => 'Line 1',
+            'address-line-2' => 'Line 2',
+            'address' => 'Address',
+            'basic-information' => 'Basic Information',
+            'cell-phone' => 'Cell Phone',
+            'city' => 'City',
+            'country' => 'Country',
+            'doctor' => 'Doctor',
             'email' => 'Email',
+            'emergency-contact' => 'Emergency Contact',
+            'emergency-name' => 'Name',
+            'emergency-phone' => 'Phone',
+            'emergency-relationship' => 'Relationship',
+            'health-card-number' => 'Health Insurance Number',
+            'home-phone' => 'Home Phone',
             'license' => 'License Number',
             'name' => 'Name',
+            'notes' => 'Notes',
+            'postal-code' => 'Postal Code',
+            'preferred-contact-method' => 'Preferred Contact Method',
+            'province' => 'Province',
+            'referrer' => 'Referrer',
             'user-since' => ':name Since',
+            'work-phone' => 'Work Phone',
         ],
         'index' => [
             'breadcrumb' => 'Users',
@@ -122,6 +185,7 @@ return [
         ],
         'show' => [
             'breadcrumb' => ':Role Profile',
+            'edit' => 'Edit',
             'form-title' => ':Role Profile',
             'title' => ':Role Profile',
         ],
