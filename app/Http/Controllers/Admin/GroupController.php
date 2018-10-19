@@ -47,11 +47,13 @@ class GroupController extends Controller
     {
         $groups = $this->group->paginate();
 		if ($request->user_id) {
+			$all_groups = $groups;
 			$user = User::find($request->user_id);
 			$groups = $user->groups()->paginate();
 			return view('admin.users.groups.index')->with([
 				'groups' => $groups,
-				'user' => $user
+				'user' => $user,
+				'all_groups' => $all_groups
 				]);	
 		} else {
 			return view('admin.groups.index')->with([
@@ -100,15 +102,30 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
-    {
-		$r = $this->group->create($request->except(['_token', '_method']));
-		foreach($request->therapist_id as $userid){
-			$user = User::find($userid);
-			$user->groups()->attach($r->id);
+    {	if ($request->user_id) {
+			
+			$user = User::find($request->user_id);
+			$already_exist = $user->groups()->pluck('group_id')->toArray();
+			if (!in_array($request->group_id,$already_exist)) {
+				$user->groups()->attach($request->group_id);
+				return redirect()
+					->back()
+					->with('message', __('admin.users.groups.index.added-group'));
+			} else {
+				return redirect()
+					->back()
+					->with('message', __('admin.users.groups.index.already-in-group'));
+			}
+		} else {
+			$r = $this->group->create($request->except(['_token', '_method']));
+			foreach($request->therapist_id as $userid){
+				$user = User::find($userid);
+				$user->groups()->attach($r->id);
+			}
+			return redirect('admin/groups')->with([
+				'message' => __('admin.groups.index.created-group'),
+			]);
 		}
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.created-group'),
-        ]);
     }
 	
 	/**

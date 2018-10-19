@@ -211,7 +211,7 @@
                     @lang('user.form-settings.therapists')
                 </a>
             @endif
-			@if ($features['groups'] ?? false)
+			@if ($features['therapists'] ?? false)
 				<a
                     class="btn btn-secondary"
                     href="{{ url("admin/users/$user->id/groups") }}"

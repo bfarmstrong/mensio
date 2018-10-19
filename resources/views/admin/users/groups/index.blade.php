@@ -1,8 +1,7 @@
 @extends('layout.dashboard')
 
 @section('title', __('admin.users.groups.index.title'))
-
-
+@section('content.breadcrumbs', Breadcrumbs::render('admin.users.therapists.index', $user))
 @section('content.dashboard')
     @unless ($user->groups->isEmpty())
         <div class="card">
@@ -23,7 +22,7 @@
         </div>
     @endunless
 
-    @unless ($groups->isEmpty())
+    @unless ($all_groups->isEmpty())
         <div class="card">
             <div class="card-header">
                 <i class="fas fa-plus mr-1"></i>
@@ -37,7 +36,9 @@
                         'url' => url("admin/users/$user->id/groups"),
                     ])
                 !!}
-               
+                @include('admin.users.groups.form-add', [
+                    'all_groups' => $all_groups,
+                ])
                 {!! Form::close() !!}
             </div>
         </div>

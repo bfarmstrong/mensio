@@ -22,6 +22,7 @@
                             'url' => url("admin/users/$user->id/groups/$group->id"),
                         ])
                     !!}
+					
                     @include('admin.users.groups.form-delete')
                     {!! Form::close() !!}
                 </td>

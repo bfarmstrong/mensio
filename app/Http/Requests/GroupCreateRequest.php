@@ -25,6 +25,13 @@ class GroupCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return Group::$rules;
+		if($this->input()['user_id']) {
+			return [
+				'group_id' => 'required',
+				'user_id' => 'required',
+			];
+		} else {
+			return Group::$rules;
+		}
     }
 }
