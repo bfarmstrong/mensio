@@ -217,4 +217,18 @@ class UserService extends BaseService implements IUserService
 
         return $results;
     }
+	
+	/**
+     * Removes a Group from a user.
+     *
+     * @param mixed $group
+     * @param mixed $user
+     *
+     * @return void
+    */
+    public function removeGroup($group, $user_id)
+    {
+        $user = $this->find($user_id);
+        $user->groups()->detach($group);
+    }
 }

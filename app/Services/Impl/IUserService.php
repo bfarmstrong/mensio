@@ -28,4 +28,6 @@ interface IUserService extends IBaseService
     public function switchToUser(string $id);
 
     public function updateSupervisor($patient, $therapist, $supervisor);
+	
+	public function removeGroup($group, $user);
 }

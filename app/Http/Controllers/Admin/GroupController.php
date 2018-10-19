@@ -43,13 +43,21 @@ class GroupController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $groups = $this->group->paginate();
-
-        return view('admin.groups.index')->with([
-            'groups' => $groups,
-        ]);
+		if ($request->user_id) {
+			$user = User::find($request->user_id);
+			$groups = $user->groups()->paginate();
+			return view('admin.users.groups.index')->with([
+				'groups' => $groups,
+				'user' => $user
+				]);	
+		} else {
+			return view('admin.groups.index')->with([
+				'groups' => $groups,
+			]);
+		}
     }
 
     /**
@@ -173,18 +181,28 @@ class GroupController extends Controller
      *
      * @return Response
      */
-    public function destroy(string $id)
+    public function destroy(string $id,Request $request)
     {
-        $group = $this->group->findBy('id', $id);
+		if ($request->group_id) {
+			$this->user->removeGroup($request->group_id, $request->user_id);
 
-        if (is_null($group)) {
-            abort(404);
-        }
-		User::where('group_id',$id)->update(['group_id' => null]);
-        $this->group->delete($group->id);
+			return redirect()
+				->back()
+				->with('message', __('admin.users.groups.index.removed-group'));
+		} else {
+			$group = $this->group->findBy('id', $id);
 
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.deleted-group'),
-        ]);
+			if (is_null($group)) {
+				abort(404);
+			}
+			
+			$this->group->delete($group->id);
+
+			return redirect('admin/groups')->with([
+				'message' => __('admin.groups.index.deleted-group'),
+			]);
+		}
     }
+
 }
+

@@ -20,6 +20,7 @@ return [
         'save' => 'Save',
         'switch-user' => 'Switch To User',
         'therapists' => 'Therapists',
+        'groups' => 'Groups',
     ],
     'password' => [
         'breadcrumb' => 'Change Password',

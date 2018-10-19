@@ -131,6 +131,15 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::post('users/{user_id}/therapists', 'TherapistController@store');
         Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
 
+		/*
+        |--------------------------------------------------------------------------
+        | Groups Management
+        |--------------------------------------------------------------------------
+        */
+        Route::get('users/{user_id}/groups', 'GroupController@index');
+        Route::post('users/{user_id}/groups', 'GroupController@store');
+        Route::delete('users/{user_id}/groups/{group_id}', 'GroupController@destroy');
+		
         /*
         |--------------------------------------------------------------------------
         | Supervisor Management

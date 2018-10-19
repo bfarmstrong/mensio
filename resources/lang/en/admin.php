@@ -205,6 +205,34 @@ return [
                 'supervisor-required' => 'A supervisor should be assigned.',
             ],
         ],
-
+       'groups' => [
+            'form-add' => [
+                'name' => 'Name',
+                'save' => 'Save',
+            ],
+            'form-delete' => [
+                'on-submit' => 'Are you sure you want to remove this Group?',
+                'remove' => 'Remove',
+            ],
+            'form-supervisor' => [
+                'save' => 'Save',
+            ],
+            'index' => [
+                'add-group' => 'Add Group',
+                'added-supervisor' => 'The supervisor was added successfully.',
+                'added-group' => 'The Group was added successfully.',
+                'breadcrumb' => 'Groups',
+                'current-groups' => 'Current Groups',
+                'removed-supervisor' => 'The supervisor was removed successfully.',
+                'removed-group' => 'The Group was removed successfully.',
+                'title' => 'Groups',
+            ],
+            'table' => [
+                'actions' => 'Actions',
+                'name' => 'Name',
+                'supervisor' => 'Supervisor',
+                'supervisor-required' => 'A supervisor should be assigned.',
+            ],
+        ],
     ],
 ];
