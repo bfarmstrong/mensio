@@ -22,6 +22,7 @@ return [
         'menu' => 'Main Menu',
         'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',
+        'groups' => 'Groups',
         'switch-back' => 'Switch Back',
         'users' => 'Users',
     ],

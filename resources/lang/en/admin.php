@@ -82,6 +82,49 @@ return [
             'name' => 'Name',
         ],
     ],
+	'groups' => [
+			'create' => [
+				'breadcrumb' => 'Create',
+				'form-title' => 'Create Group',
+				'title' => 'Create Group',
+			],
+			'edit' => [
+				'breadcrumb' => 'Edit',
+				'form-title' => 'Edit Group',
+				'title' => 'Edit Group',
+			],
+			'form' => [
+				'cancel' => 'Cancel',
+				'name' => 'Name',
+				'therapists' => 'Therapists',
+				'save' => 'Save',
+			],
+			'form-delete' => [
+				'delete' => 'Delete',
+				'on-submit' => 'Are you sure you want to delete this group?',
+			],
+			'form-search' => [
+				'search' => 'Search...',
+				'submit' => 'Get Results',
+			],
+			'index' => [
+				'breadcrumb' => 'Groups',
+				'create-groups' => 'Create Group',
+				'created-group' => 'Group was successfully created.',
+				'deleted-group' => 'Group was successfully deleted.',
+				'no-results' => 'No groups were found...',
+				'groups' => 'Groups',
+				'updated-group' => 'Group was successfully updated.',
+				'title' => 'All Groups',
+			],
+			'table' => [
+				'actions' => 'Actions',
+				'delete' => 'Delete',
+				'edit' => 'Edit',
+				'label' => 'Label',
+				'name' => 'Name',
+			],
+	],
     'users' => [
         'create' => [
             'breadcrumb' => 'Invite',
@@ -162,5 +205,6 @@ return [
                 'supervisor-required' => 'A supervisor should be assigned.',
             ],
         ],
+
     ],
 ];
