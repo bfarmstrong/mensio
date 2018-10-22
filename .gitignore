@@ -1,4 +1,6 @@
 /node_modules
+/playbooks/**/*.retry
+/playbooks/**/*.tar
 /public/css
 /public/fonts
 /public/hot

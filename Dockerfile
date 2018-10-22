@@ -33,6 +33,28 @@ RUN yarn install && yarn production
 #
 FROM php:7.2-apache-stretch
 
+# Install the missing extensions
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        libfreetype6-dev \
+        libjpeg-dev \
+        libmcrypt-dev \
+        libmemcached-dev \
+        libpng-dev \
+        libpq-dev \
+        libssl-dev \
+        libz-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install mysqli && \
+    docker-php-ext-install pdo && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-configure gd \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2 && \
+    docker-php-ext-install gd
+
 # Configure Apache to work with Laravel
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf

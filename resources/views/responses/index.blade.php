@@ -12,7 +12,7 @@
 
         <div class="card-body">
             @if ($responses->isNotEmpty())
-                @include('clients.table-questionnaires', [
+                @include('clients.questionnaires.table', [
                     'responses' => $responses,
                     'user' => Auth::user(),
                 ])

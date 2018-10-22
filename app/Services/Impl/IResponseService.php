@@ -13,6 +13,8 @@ interface IResponseService extends IBaseService
 
     public function assignToClient($client, $questionnaire);
 
+    public function getJson($response);
+
     public function getScore($response);
 
     public function unassignFromClient($client, $questionnaire);

@@ -20,11 +20,23 @@ class Answer extends Model
      * @var array
      */
     protected $fillable = [
+        'column_id',
         'question_id',
         'question_item_id',
         'response_id',
+        'row_id',
         'value',
     ];
+
+    /**
+     * An answer may be tied to a column in the question.
+     *
+     * @return BelongsTo
+     */
+    public function column()
+    {
+        return $this->belongsTo(QuestionGrid::class, 'column_id');
+    }
 
     /**
      * An answer is tied to a question.
@@ -54,5 +66,15 @@ class Answer extends Model
     public function response()
     {
         return $this->belongsTo(Response::class, 'response_id');
+    }
+
+    /**
+     * An answer may be tied to a row in the question.
+     *
+     * @return BelongsTo
+     */
+    public function row()
+    {
+        return $this->belongsTo(QuestionGrid::class, 'row_id');
     }
 }
