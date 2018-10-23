@@ -1,7 +1,7 @@
 @extends('layout.dashboard')
 
 @section('title', __('admin.users.groups.index.title'))
-@section('content.breadcrumbs', Breadcrumbs::render('admin.users.therapists.index', $user))
+@section('content.breadcrumbs', Breadcrumbs::render('admin.users.groups.index', $user))
 @section('content.dashboard')
     @unless ($user->groups->isEmpty())
         <div class="card">
