@@ -134,6 +134,15 @@ Breadcrumbs::for('admin.groups.edit', function ($trail, $group) {
     $trail->push(__('admin.groups.edit.breadcrumb'), url("admin/groups/$group->id/edit"));
 });
 
+// User > Edit > Groups
+Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
+    $trail->parent('admin.users.edit', $user);
+    $trail->push(
+        __('admin.users.groups.index.breadcrumb'),
+        url("admin/users/$user->id/groups")
+    );
+});
+
 // Users
 Breadcrumbs::for('admin.users.index', function ($trail) {
     $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));
