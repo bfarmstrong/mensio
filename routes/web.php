@@ -176,6 +176,15 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::resource('roles', 'RoleController', ['except' => ['show']]);
         Route::post('roles/search', 'RoleController@search');
         Route::get('roles/search', 'RoleController@index');
+		
+        /*
+        |--------------------------------------------------------------------------
+        | Groups
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('groups', 'GroupController', ['except' => ['show']]);
+        Route::post('groups/search', 'GroupController@search');
+        Route::get('groups/search', 'GroupController@index');
 
         /*
         |--------------------------------------------------------------------------

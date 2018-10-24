@@ -137,6 +137,23 @@ Breadcrumbs::for('admin.roles.create', function ($trail) {
     $trail->push(__('admin.roles.create.breadcrumb'), url('admin/roles/create'));
 });
 
+// Groups
+Breadcrumbs::for('admin.groups.index', function ($trail) {
+    $trail->push(__('admin.groups.index.breadcrumb'), url('admin/groups'));
+});
+
+// Groups > Create
+Breadcrumbs::for('admin.groups.create', function ($trail) {
+    $trail->parent('admin.groups.index');
+    $trail->push(__('admin.groups.create.breadcrumb'), url('admin/groups/create'));
+});
+
+// Groups > Edit
+Breadcrumbs::for('admin.groups.edit', function ($trail, $group) {
+    $trail->parent('admin.groups.index');
+    $trail->push(__('admin.groups.edit.breadcrumb'), url("admin/groups/$group->id/edit"));
+});
+
 // Users
 Breadcrumbs::for('admin.users.index', function ($trail) {
     $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));
