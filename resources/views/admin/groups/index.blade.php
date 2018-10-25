@@ -11,22 +11,39 @@
                 @lang('admin.groups.index.groups')
             </span>
 
+		@if (Auth::user()->isAdmin())
+
             <a
                 class="btn btn-primary btn-sm ml-auto"
                 href="{{ url('admin/groups/create') }}"
             >
                 @lang('admin.groups.index.create-groups')
             </a>
+
+		@endif
+
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
+
+				@if (Auth::user()->isAdmin())
+
                     {!!
                         Form::open([
                             'url' => url('admin/groups/search')
                         ])
                     !!}
+
+				@else
+					{!!
+                        Form::open([
+                            'url' => url('groups/search')
+                        ])
+                    !!}
+				@endif
+
                     @include('admin.groups.form-search')
                     {!! Form::close() !!}
                 </div>

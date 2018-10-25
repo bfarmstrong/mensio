@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\GroupNote;
 
-use App\Models\Group;
-use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GroupCreateRequest extends FormRequest
+/**
+ * Request object for a therapist to add additional information to a note.
+ */
+class AddAdditionalNoteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +16,7 @@ class GroupCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->isAdmin();
+        return true;
     }
 
     /**
@@ -25,15 +26,8 @@ class GroupCreateRequest extends FormRequest
      */
     public function rules()
     {
-
-		if(isset($this->input()['user_id'])) {
-
-			return [
-				'group_id' => 'required',
-				'user_id' => 'required',
-			];
-		} else {
-			return Group::$rules;
-		}
+        return [
+            'addition' => 'required',
+        ];
     }
 }

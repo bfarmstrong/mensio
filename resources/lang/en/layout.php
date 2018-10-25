@@ -18,6 +18,7 @@ return [
         'activity' => 'Activity',
         'admin' => 'Admin',
         'clients' => 'Clients',
+        'groups' => 'Groups',
         'dashboard' => 'Dashboard',
         'doctors' => 'Doctors',
         'menu' => 'Main Menu',

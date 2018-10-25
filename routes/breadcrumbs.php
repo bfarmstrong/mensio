@@ -163,6 +163,33 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
     );
 });
 
+// Admin > Groups > Notes
+Breadcrumbs::for('groups.notes.index', function ($trail, $group) {
+   
+    $trail->push(
+        __('groups.notes.index.breadcrumb'),
+        url("groups/$group->id/notes")
+    );
+});
+
+// Admin > Groups > Notes > Create
+Breadcrumbs::for('groups.notes.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('groups.notes.create.breadcrumb'),
+        url("groups/$group->id/notes/create")
+    );
+});
+
+// Admin > Groups > Notes > View
+Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
+    $trail->parent('groups.notes.index', $group, $note);
+    $trail->push(
+        __('groups.notes.show.breadcrumb'),
+        url("groups/$group->id/notes/$note->id")
+    );
+});
+
 // Users
 Breadcrumbs::for('admin.users.index', function ($trail) {
     $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));
