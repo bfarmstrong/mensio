@@ -537,6 +537,14 @@
                     @lang('user.form-settings.therapists')
                 </a>
             @endif
+			@if ($features['license'] ?? false)
+				<a
+                    class="btn btn-secondary"
+                    href="{{ url("admin/users/$user->id/groups") }}"
+                >
+                    @lang('user.form-settings.groups')
+                </a>
+			@endif
         </div>
     </div>
 </div>

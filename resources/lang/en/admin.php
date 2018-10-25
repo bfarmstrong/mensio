@@ -256,7 +256,7 @@ return [
                 'add-therapist' => 'Add Therapist',
                 'added-supervisor' => 'The supervisor was added successfully.',
                 'added-therapist' => 'The therapist was added successfully.',
-                'breadcrumb' => 'Therapists',
+                'breadcrumb' => 'Therapist',
                 'current-therapists' => 'Current Therapists',
                 'removed-supervisor' => 'The supervisor was removed successfully.',
                 'removed-therapist' => 'The therapist was removed successfully.',
@@ -270,5 +270,29 @@ return [
             ],
         ],
 
+       'groups' => [
+            'form-add' => [
+                'name' => 'Name',
+                'save' => 'Save',
+            ],
+            'form-delete' => [
+                'on-submit' => 'Are you sure you want to remove this Group?',
+                'remove' => 'Remove',
+            ],
+            'index' => [
+                'add-group' => 'Add Group',
+                'added-group' => 'The Group was added successfully.',
+                'breadcrumb' => 'Groups',
+                'current-groups' => 'Current Groups',
+                'removed-supervisor' => 'The supervisor was removed successfully.',
+                'removed-group' => 'The Group was removed successfully.',
+                'already-in-group' => 'The Group was already added',
+				'title' => 'Therapists',
+            ],
+            'table' => [
+                'actions' => 'Actions',
+                'name' => 'Name',
+            ],
+        ],
     ],
 ];

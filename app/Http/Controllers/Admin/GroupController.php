@@ -43,6 +43,25 @@ class GroupController extends Controller
      *
      * @return Response
      */
+
+    public function index(Request $request)
+    {
+        $groups = $this->group->paginate();
+		if ($request->user_id) {
+			$all_groups = $groups;
+			$user = User::find($request->user_id);
+			$groups = $user->groups()->paginate();
+			return view('admin.users.groups.index')->with([
+				'groups' => $groups,
+				'user' => $user,
+				'all_groups' => $all_groups
+				]);	
+		} else {
+			return view('admin.groups.index')->with([
+				'groups' => $groups,
+			]);
+		}
+	}
     public function index()
     {
         $groups = $this->group->paginate();
@@ -50,6 +69,7 @@ class GroupController extends Controller
         return view('admin.groups.index')->with([
             'groups' => $groups,
         ]);
+
     }
 
     /**
@@ -92,6 +112,32 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
+
+    {	if ($request->user_id) {
+			
+			$user = User::find($request->user_id);
+			$already_exist = $user->groups()->pluck('group_id')->toArray();
+			if (!in_array($request->group_id,$already_exist)) {
+				$user->groups()->attach($request->group_id);
+				return redirect()
+					->back()
+					->with('message', __('admin.users.groups.index.added-group'));
+			} else {
+				return redirect()
+					->back()
+					->with('message', __('admin.users.groups.index.already-in-group'));
+			}
+		} else {
+			$r = $this->group->create($request->except(['_token', '_method']));
+			foreach($request->therapist_id as $userid){
+				$user = User::find($userid);
+				$user->groups()->attach($r->id);
+			}
+			return redirect('admin/groups')->with([
+				'message' => __('admin.groups.index.created-group'),
+			]);
+		}
+
     {
 		$r = $this->group->create($request->except(['_token', '_method']));
 		foreach($request->therapist_id as $userid){
@@ -101,6 +147,7 @@ class GroupController extends Controller
         return redirect('admin/groups')->with([
             'message' => __('admin.groups.index.created-group'),
         ]);
+
     }
 	
 	/**
@@ -173,6 +220,32 @@ class GroupController extends Controller
      *
      * @return Response
      */
+
+    public function destroy(string $id,Request $request)
+    {
+		if ($request->group_id) {
+			$this->user->removeGroup($request->group_id, $request->user_id);
+
+			return redirect()
+				->back()
+				->with('message', __('admin.users.groups.index.removed-group'));
+		} else {
+			$group = $this->group->findBy('id', $id);
+
+			if (is_null($group)) {
+				abort(404);
+			}
+			
+			$this->group->delete($group->id);
+
+			return redirect('admin/groups')->with([
+				'message' => __('admin.groups.index.deleted-group'),
+			]);
+		}
+    }
+
+}
+
     public function destroy(string $id)
     {
         $group = $this->group->findBy('id', $id);
@@ -188,3 +261,4 @@ class GroupController extends Controller
         ]);
     }
 }
+

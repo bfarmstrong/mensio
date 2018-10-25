@@ -40,6 +40,7 @@ return [
         'save' => 'Save',
         'switch-user' => 'Switch To User',
         'therapists' => 'Therapists',
+        'groups' => 'Groups',
         'work-phone' => 'Work Phone',
     ],
     'password' => [
