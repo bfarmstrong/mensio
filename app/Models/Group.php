@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Group extends Model
 {
@@ -38,21 +37,7 @@ class Group extends Model
     public static $rules = [
         'name' => 'required|unique:groups',
     ];
-	
-    /**
-     * A group may have many clients associated with it.
-     *
-     * @return BelongsToMany
-     */
-    public function clients()
-    {
-        return $this->belongsToMany(
-            User::class,
-            'group_clients',
-            'group_id',
-            'user_id'
-        );
-    }
+
     /**
      * Find a group by name.
      *
@@ -72,19 +57,5 @@ class Group extends Model
 	public function users()
     {
         return $this->belongsToMany('App\Models\User','user_groups','group_id','user_id');
-    }
-	/**
-     * A group may have many therapists associated with it.
-     *
-     * @return BelongsToMany
-     */
-    public function therapists()
-    {
-        return $this->belongsToMany(
-            User::class,
-            'group_therapists',
-            'group_id',
-            'user_id'
-        );
     }
 }

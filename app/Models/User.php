@@ -126,12 +126,12 @@ class User extends Authenticatable
         return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 
-    /**
+ /*    /**
      * A user is associated with many groups.  They are either a therapist of
      * the group or a client of the group.
      *
      * @return BelongsToMany
-     */
+     
     public function groups()
     {
         if ($this->isClient()) {
@@ -149,7 +149,7 @@ class User extends Authenticatable
             'user_id',
             'group_id'
         );
-    }
+    } */
 
     /**
      * A user has either notes created for them or notes created by them.
