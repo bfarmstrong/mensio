@@ -61,14 +61,6 @@ class GroupController extends Controller
 				'groups' => $groups,
 			]);
 		}
-	}
-    public function index()
-    {
-        $groups = $this->group->paginate();
-
-        return view('admin.groups.index')->with([
-            'groups' => $groups,
-        ]);
 
     }
 
@@ -112,8 +104,8 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
-
-    {	if ($request->user_id) {
+    {	
+	if ($request->user_id) {
 			
 			$user = User::find($request->user_id);
 			$already_exist = $user->groups()->pluck('group_id')->toArray();
@@ -137,16 +129,6 @@ class GroupController extends Controller
 				'message' => __('admin.groups.index.created-group'),
 			]);
 		}
-
-    {
-		$r = $this->group->create($request->except(['_token', '_method']));
-		foreach($request->therapist_id as $userid){
-			$user = User::find($userid);
-			$user->groups()->attach($r->id);
-		}
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.created-group'),
-        ]);
 
     }
 	
@@ -242,23 +224,6 @@ class GroupController extends Controller
 				'message' => __('admin.groups.index.deleted-group'),
 			]);
 		}
-    }
-
-}
-
-    public function destroy(string $id)
-    {
-        $group = $this->group->findBy('id', $id);
-
-        if (is_null($group)) {
-            abort(404);
-        }
-		
-        $this->group->delete($group->id);
-
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.deleted-group'),
-        ]);
     }
 }
 
