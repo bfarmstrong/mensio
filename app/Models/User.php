@@ -164,7 +164,17 @@ class User extends Authenticatable
 
         return $this->hasMany(Note::class, 'therapist_id');
     }
-
+	
+    /**
+     * A user has either group notes created for them or group notes created by them.
+     *
+     * @return HasMany
+     */
+    public function groupnotes()
+    {
+        return $this->hasMany(GroupNote::class, 'created_by');
+    }
+	
     /**
      * Returns the list of patients associated to a user.
      *

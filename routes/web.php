@@ -100,7 +100,22 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
         Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
     });
-
+	/*
+    |--------------------------------------------------------------------------
+    | Notes for Group
+    |--------------------------------------------------------------------------
+    */
+	Route::get('groups', 'admin\GroupController@index');
+	Route::post('groups/search', 'admin\GroupController@search');
+    Route::get('groups/search', 'admin\GroupController@index');
+	Route::group(['prefix' => 'groups', 'namespace' => 'Group'], function () {
+		Route::get('{group_id}/notes', 'GroupNoteController@index');
+		Route::post('{group_id}/notes', 'GroupNoteController@store');
+		Route::post('{group_id}/notes/{note_id}/addition', 'GroupNoteController@addAddition');
+		Route::get('{group_id}/notes/create', 'GroupNoteController@create');
+		Route::get('{group_id}/notes/{note_id}', 'GroupNoteController@show');
+		Route::put('{group_id}/notes/{note_id}', 'GroupNoteController@update');
+	});
     /*
     |--------------------------------------------------------------------------
     | Responses

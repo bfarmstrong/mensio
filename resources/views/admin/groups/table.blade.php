@@ -12,6 +12,15 @@
                 <td>{{ $group->name }}</td>
               
                 <td>
+
+					<a
+						class="btn btn-primary btn-sm"
+						href="{{ url("groups/$group->id/notes") }}"
+					> <i class="fas fa-sticky-note mr-1"></i>
+						@lang('groups.show.notes')
+					</a>
+				@if (Auth::user()->isAdmin())
+
                     <a
                         class="btn btn-primary btn-sm"
                         href="{{ url("admin/groups/$group->id/edit") }}"
@@ -32,6 +41,9 @@
                         @include('admin.groups.form-delete')
                         {!! Form::close() !!}
                     @endunless
+
+				@endif
+
                 </td>
             </tr>
         @endforeach

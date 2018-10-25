@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\GroupNote;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IUserService;
 use App\Services\Criteria\User\WithSupervisors;
@@ -43,9 +44,9 @@ class GroupController extends Controller
      *
      * @return Response
      */
-
     public function index(Request $request)
     {
+		if(\Auth::user()->role_id == 4 ){
         $groups = $this->group->paginate();
 		if ($request->user_id) {
 			$all_groups = $groups;
@@ -61,17 +62,17 @@ class GroupController extends Controller
 				'groups' => $groups,
 			]);
 		}
+
+		} else {
+			$user = User::find(\Auth::user()->id);
+			$groups = $user->groups()->paginate();
+			return view('admin.groups.index')->with([
+				'groups' => $groups,
+			]);
+		}
+
 	}
-    public function index()
-    {
-        $groups = $this->group->paginate();
-
-        return view('admin.groups.index')->with([
-            'groups' => $groups,
-        ]);
-
-    }
-
+   
     /**
      * Display a listing of the resource searched.
      *
@@ -82,6 +83,14 @@ class GroupController extends Controller
         if (! $request->search) {
             return redirect('admin/groups');
         }
+
+		if(\Auth::user()->role_id == 4 ){
+			$groups = $this->group->search($request->search);
+		} else {
+			$user = User::find(\Auth::user()->id);
+			$groups = $user->groups()->where('name','=',$request->search)->paginate();
+		}
+
 
         $groups = $this->group->search($request->search);
 
@@ -112,8 +121,8 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
-
-    {	if ($request->user_id) {
+    {	
+		if ($request->user_id) {
 			
 			$user = User::find($request->user_id);
 			$already_exist = $user->groups()->pluck('group_id')->toArray();
@@ -137,16 +146,6 @@ class GroupController extends Controller
 				'message' => __('admin.groups.index.created-group'),
 			]);
 		}
-
-    {
-		$r = $this->group->create($request->except(['_token', '_method']));
-		foreach($request->therapist_id as $userid){
-			$user = User::find($userid);
-			$user->groups()->attach($r->id);
-		}
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.created-group'),
-        ]);
 
     }
 	
@@ -220,7 +219,6 @@ class GroupController extends Controller
      *
      * @return Response
      */
-
     public function destroy(string $id,Request $request)
     {
 		if ($request->group_id) {
@@ -236,6 +234,11 @@ class GroupController extends Controller
 				abort(404);
 			}
 			
+			GroupNote::where('group_id',$group->id)->delete();
+			$users = $group->users()->get();
+			foreach($users as $user){
+				$group->users()->detach($user->user_id);
+			}
 			$this->group->delete($group->id);
 
 			return redirect('admin/groups')->with([
@@ -245,20 +248,3 @@ class GroupController extends Controller
     }
 
 }
-
-    public function destroy(string $id)
-    {
-        $group = $this->group->findBy('id', $id);
-
-        if (is_null($group)) {
-            abort(404);
-        }
-		
-        $this->group->delete($group->id);
-
-        return redirect('admin/groups')->with([
-            'message' => __('admin.groups.index.deleted-group'),
-        ]);
-    }
-}
-

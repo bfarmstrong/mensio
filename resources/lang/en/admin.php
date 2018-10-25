@@ -287,7 +287,7 @@ return [
                 'removed-supervisor' => 'The supervisor was removed successfully.',
                 'removed-group' => 'The Group was removed successfully.',
                 'already-in-group' => 'The Group was already added',
-				'title' => 'Therapists',
+				'title' => 'Groups',
             ],
             'table' => [
                 'actions' => 'Actions',

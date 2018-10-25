@@ -5,16 +5,15 @@ namespace App\Models;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\Purifiable;
 use App\Models\Traits\SetsUuids;
-use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use App\Models\Traits\Signable;
 /**
- * A note is information that is created about a client in regard to an
+ * A note is information that is created about a group in regard to an
  * encounter of some form.  Supports HTML format.
  */
-class Note extends Model
+class GroupNote extends Model
 {
     // Log all changes to the notes model.
     use Loggable;
@@ -28,15 +27,21 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'client_id',
-        'contents',
+		'contents',
         'digital_signature',
         'is_draft',
-        'note_id',
-        'therapist_id',
-		'group_note_id'
+		'group_id',
+		'note_id',
+		'created_by',
     ];
-
+	
+    /**
+     * The columns that generate a UUID.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
+	
     /**
      * The content that is cleaned of any unsafe HTML.
      *
@@ -45,42 +50,33 @@ class Note extends Model
     protected $purifiable = [
         'contents',
     ];
-
+	
     /**
      * The attributes that are signed.
      *
      * @var array
      */
     protected $signable = [
-        'client_id',
         'contents',
     ];
-
     /**
-     * The columns that generate a UUID.
-     *
-     * @var array
-     */
-    protected $uuids = ['uuid'];
-
-    /**
-     * A note may have many children notes under it.
+     * A GroupNote may have many children notes under it.
      *
      * @return HasMany
      */
     public function children()
     {
-        return $this->hasMany(Note::class, 'note_id');
+        return $this->hasMany(GroupNote::class, 'note_id');
     }
 
     /**
-     * A note is created for a client.
+     * A GroupNote is created for a group.
      *
      * @return BelongsTo
      */
-    public function client()
+    public function group()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(Group::class, 'group_id');
     }
 
     /**
@@ -90,26 +86,16 @@ class Note extends Model
      */
     public function parent()
     {
-        return $this->belongsTo(Note::class, 'note_id');
+        return $this->belongsTo(Group::class, 'group_id');
     }
-
+	
     /**
-     * A note is created by a therapist.
+     * A GroupNote is created for a user.
      *
      * @return BelongsTo
      */
-    public function therapist()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'therapist_id');
-    }
-
-    /**
-     * Returns the value that is used to sign the note.
-     *
-     * @return string
-     */
-    public function getSignee()
-    {
-        return $this->therapist_id;
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

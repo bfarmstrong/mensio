@@ -15,6 +15,15 @@
                         @lang('layout.sidebar.clients')
                     </a>
                 </li>
+				<li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url('groups') }}"
+                    >
+                        <i class="nav-icon fas fa-user-plus"></i>
+                        @lang('layout.sidebar.groups')
+                    </a>
+                </li>
             @endcan
 
             <li class="nav-item">
