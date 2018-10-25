@@ -43,6 +43,7 @@ class GroupController extends Controller
      *
      * @return Response
      */
+<<<<<<< HEAD
     public function index(Request $request)
     {
         $groups = $this->group->paginate();
@@ -60,6 +61,15 @@ class GroupController extends Controller
 				'groups' => $groups,
 			]);
 		}
+=======
+    public function index()
+    {
+        $groups = $this->group->paginate();
+
+        return view('admin.groups.index')->with([
+            'groups' => $groups,
+        ]);
+>>>>>>> master
     }
 
     /**
@@ -102,6 +112,7 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
+<<<<<<< HEAD
     {	if ($request->user_id) {
 			
 			$user = User::find($request->user_id);
@@ -126,6 +137,17 @@ class GroupController extends Controller
 				'message' => __('admin.groups.index.created-group'),
 			]);
 		}
+=======
+    {
+		$r = $this->group->create($request->except(['_token', '_method']));
+		foreach($request->therapist_id as $userid){
+			$user = User::find($userid);
+			$user->groups()->attach($r->id);
+		}
+        return redirect('admin/groups')->with([
+            'message' => __('admin.groups.index.created-group'),
+        ]);
+>>>>>>> master
     }
 	
 	/**
@@ -198,6 +220,7 @@ class GroupController extends Controller
      *
      * @return Response
      */
+<<<<<<< HEAD
     public function destroy(string $id,Request $request)
     {
 		if ($request->group_id) {
@@ -223,3 +246,20 @@ class GroupController extends Controller
 
 }
 
+=======
+    public function destroy(string $id)
+    {
+        $group = $this->group->findBy('id', $id);
+
+        if (is_null($group)) {
+            abort(404);
+        }
+		
+        $this->group->delete($group->id);
+
+        return redirect('admin/groups')->with([
+            'message' => __('admin.groups.index.deleted-group'),
+        ]);
+    }
+}
+>>>>>>> master

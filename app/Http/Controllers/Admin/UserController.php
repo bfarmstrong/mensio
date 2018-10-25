@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInviteRequest;
+use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
+use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
@@ -15,6 +18,13 @@ use Illuminate\Http\Response;
  */
 class UserController extends Controller
 {
+    /**
+     * The doctor service implementation.
+     *
+     * @var IDoctorService
+     */
+    protected $doctorService;
+
     /**
      * The role service implementation.
      *
@@ -32,13 +42,16 @@ class UserController extends Controller
     /**
      * Creates an instance of `UserController`.
      *
-     * @param IRoleService $roleService
-     * @param IUserService $userService
+     * @param IDoctorService $doctorService
+     * @param IRoleService   $roleService
+     * @param IUserService   $userService
      */
     public function __construct(
+        IDoctorService $doctorService,
         IRoleService $roleService,
         IUserService $userService
     ) {
+        $this->doctorService = $doctorService;
         $this->roleService = $roleService;
         $this->userService = $userService;
     }
@@ -94,9 +107,11 @@ class UserController extends Controller
      */
     public function getInvite()
     {
+        $doctors = $this->doctorService->all();
         $roles = $this->roleService->all();
 
         return view('admin.users.invite', [
+            'doctors' => $doctors,
             'roles' => $roles,
         ]);
     }
@@ -162,9 +177,15 @@ class UserController extends Controller
         if (is_null($user)) {
             abort(404);
         }
+
+        $doctors = $this->doctorService
+            ->getByCriteria(new OrderBy('is_default', 'desc'))
+            ->getByCriteria(new OrderBy('name'))
+            ->all();
         $roles = $this->roleService->all();
 
         return view('admin.users.edit')->with([
+            'doctors' => $doctors,
             'roles' => $roles,
             'user' => $user,
         ]);
@@ -179,7 +200,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = $this->userService->getByCriteria(new WithRole())->find($id);
+        $user = $this->userService
+            ->pushCriteria(new WithRelation('doctor'))
+            ->pushCriteria(new WithRelation('referrer'))
+            ->pushCriteria(new WithRelation('role'))
+            ->find($id);
 
         if (is_null($user)) {
             abort(404);

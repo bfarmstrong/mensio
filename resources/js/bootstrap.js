@@ -13,17 +13,18 @@ try {
     window.Survey = require('survey-jquery');
 
     require('bootstrap');
-    require('bootstrap-select');
     require('@coreui/coreui');
+    require('bootstrap-select');
 
     // Initialize select boxes
     window.$('.selectpicker').selectpicker();
+    require('./country-picker');
 
     // Initialize Summernote
     require('summernote/dist/summernote-bs4');
 
     // Enable tooltips
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
 
     // Prevent CoreUI from closing the sidebar when a link is used
     window.$('.sidebar').on('click', function() {

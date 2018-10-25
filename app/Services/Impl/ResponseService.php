@@ -5,6 +5,8 @@ namespace App\Services\Impl;
 use App\Exceptions\QuestionnaireAlreadyAssignedException;
 use App\Exceptions\QuestionnaireAlreadyCompletedException;
 use App\Services\BaseService;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\Questionnaire\WithQuestionsAndItems;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
@@ -124,6 +126,61 @@ class ResponseService extends BaseService implements IResponseService
             'questionnaire_id' => $questionnaire,
             'user_id' => $client,
         ]);
+    }
+
+    /**
+     * Converts a response into its array equivalent.
+     *
+     * @param mixed $response
+     *
+     * @return array
+     */
+    public function getJson($response)
+    {
+        $response = $this->find($response);
+
+        $answers = $this->answerService
+            ->pushCriteria(new WhereEqual('response_id', $response->id))
+            ->pushCriteria(new WithRelation('column'))
+            ->pushCriteria(new WithRelation('question'))
+            ->pushCriteria(new WithRelation('questionItem'))
+            ->pushCriteria(new WithRelation('row'))
+            ->all();
+
+        $json = collect();
+        $answers->each(function ($answer) use ($json) {
+            if (
+                is_null($answer->column) &&
+                is_null($answer->row) &&
+                ! is_null($answer->questionItem->value ?? null) &&
+                (
+                    ! is_null($answer->questionItem) ||
+                    ! is_null($answer->value)
+                )
+            ) {
+                $json->put($answer->question->name, $answer->value);
+
+                return;
+            }
+
+            $data = $json->get($answer->question->name) ?? collect();
+            $key = $answer->row->value ?? null;
+            $value = $answer->column->value ?? $answer->questionItem->value ?? $answer->value;
+
+            if (
+                is_null($key) &&
+                $answer->question->name === ($answer->questionItem->name ?? $answer->question->name)
+            ) {
+                $json->put($answer->question->name, $data->push($value));
+
+                return;
+            }
+
+            $data->put($answer->questionItem->name ?? $key, $value);
+            $json->put($answer->question->name, $data);
+        });
+
+        return $json->toArray();
     }
 
     /**

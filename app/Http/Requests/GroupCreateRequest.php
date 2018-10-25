@@ -25,6 +25,7 @@ class GroupCreateRequest extends FormRequest
      */
     public function rules()
     {
+<<<<<<< HEAD
 		if($this->input()['user_id']) {
 			return [
 				'group_id' => 'required',
@@ -33,5 +34,8 @@ class GroupCreateRequest extends FormRequest
 		} else {
 			return Group::$rules;
 		}
+=======
+        return Group::$rules;
+>>>>>>> master
     }
 }

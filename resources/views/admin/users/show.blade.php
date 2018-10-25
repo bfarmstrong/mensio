@@ -5,9 +5,20 @@
 @section('content.breadcrumbs', Breadcrumbs::render('admin.users.show', $user))
 @section('content.dashboard')
     <div class="card">
-        <div class="card-header">
-            <i class="fas fa-user mr-1"></i>
-            @lang('admin.users.show.form-title', ['role' => $user->roleName()])
+        <div class="card-header d-flex align-items-center">
+            <span>
+                <i class="fas fa-user mr-1"></i>
+                @lang('admin.users.show.form-title', ['role' => $user->roleName()])
+            </span>
+
+            <div class="ml-auto">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("admin/users/$user->id/edit") }}"
+                >
+                    @lang('admin.users.show.edit')
+                </a>
+            </div>
         </div>
 
         <div class="card-body">

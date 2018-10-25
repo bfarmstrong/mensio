@@ -16,6 +16,7 @@ class ServiceServiceProvider extends ServiceProvider
      */
     public $bindings = [
         \App\Services\Impl\IAnswerService::class => \App\Services\Impl\AnswerService::class,
+        \App\Services\Impl\IDoctorService::class => \App\Services\Impl\DoctorService::class,
         \App\Services\Impl\INoteService::class => \App\Services\Impl\NoteService::class,
         \App\Services\Impl\IQuestionGridService::class => \App\Services\Impl\QuestionGridService::class,
         \App\Services\Impl\IQuestionItemService::class => \App\Services\Impl\QuestionItemService::class,

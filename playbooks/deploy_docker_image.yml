@@ -1,0 +1,21 @@
+-
+  name: 'Deploy project Docker image to production repository'
+  connection: local
+  hosts: 127.0.0.1
+  vars_files:
+    - vars/deploy_docker_image.yml
+  tasks:
+    -
+      name: 'Sign into the private repository'
+      shell: '$(aws ecr get-login --no-include-email --region {{ region }})'
+    -
+      name: 'Build, tag and push the production Docker image to the registry'
+      docker_image:
+        force: yes
+        name: '{{ image_name }}'
+        nocache: yes
+        path: ./../
+        pull: no
+        push: yes
+        repository: '{{ repository }}/{{ image_name }}'
+        tag: '{{ version }}'

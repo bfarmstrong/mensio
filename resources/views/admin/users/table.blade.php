@@ -33,7 +33,15 @@
                                 @lang('admin.users.table.edit')
                             </a>
                         @endcan
-
+						@if (!Session::get('original_user'))
+							<a
+								class="btn btn-primary btn-sm"
+								href="{{ url("admin/users/switch/$user->id") }}"
+							> 
+								<i class="fas fa-user mr-1"></i>
+								@lang('user.form-settings.switch-user')
+							</a>
+						@endif
                         @can('delete', $user)
                             {!!
                                 Form::open([

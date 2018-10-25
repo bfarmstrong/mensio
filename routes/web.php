@@ -36,6 +36,22 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('responses/{response_id}/external', 'ResponseController@showExternal')->name('responses.show-external');
 Route::patch('responses/{response_id}/data', 'ResponseController@updateData')->name('responses.update-data');
 
+Route::group([
+    'middleware' => ['auth', 'auth.role'],
+    'namespace' => 'Api',
+    'prefix' => 'api',
+], function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Country
+    |--------------------------------------------------------------------------
+    */
+    Route::group(['prefix' => 'countries'], function () {
+        Route::get('', 'CountryController@index');
+        Route::get('{country}', 'CountryController@states');
+    });
+});
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
@@ -109,6 +125,20 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     */
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
         Route::get('dashboard', 'DashboardController@index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctors
+        |--------------------------------------------------------------------------
+        */
+        Route::get('doctors', 'DoctorController@index');
+        Route::get('doctors/create', 'DoctorController@create');
+        Route::post('doctors', 'DoctorController@store');
+        Route::delete('doctors/{doctor_id}', 'DoctorController@destroy');
+        Route::get('doctors/{doctor_id}/edit', 'DoctorController@edit');
+        Route::patch('doctors/{doctor_id}', 'DoctorController@update');
+        Route::post('doctors/search', 'DoctorController@search');
+        Route::get('doctors/search', 'DoctorController@index');
 
         /*
         |--------------------------------------------------------------------------

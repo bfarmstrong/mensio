@@ -14,11 +14,13 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
+        "pragmarx/countries-laravel": "^0.6.2",
         "spatie/laravel-activitylog": "^2.8",
         "stevebauman/purify": "2.0.*",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
+        "ajthinking/tinx": "^2.1",
         "barryvdh/laravel-debugbar": "^3.2",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
