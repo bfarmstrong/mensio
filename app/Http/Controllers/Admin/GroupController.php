@@ -61,7 +61,7 @@ class GroupController extends Controller
 				'groups' => $groups,
 			]);
 		}
-
+	}
     public function index()
     {
         $groups = $this->group->paginate();
