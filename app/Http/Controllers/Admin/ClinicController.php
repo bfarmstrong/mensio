@@ -50,7 +50,7 @@ class ClinicController extends Controller
      */
     public function create()
     {
-		$this->authorize('create', Clinic::class);
+
         return view('admin.clinics.create');
     }
     /**
@@ -117,6 +117,24 @@ class ClinicController extends Controller
 
         return redirect('admin/clinics')->with([
             'message' => __('admin.clinics.index.deleted-clinic'),
+        ]);
+    }
+	
+	/**
+     * Display a listing of the resource searched.
+     *
+     * @return Response
+    */
+    public function search(Request $request)
+    {
+        if (! $request->search) {
+            return redirect('admin/clinics');
+        }
+		
+        $clinics = $this->clinicservice->search($request->search);
+		
+        return view('admin.clinics.index')->with([
+            'clinics' => $clinics,
         ]);
     }
 }
