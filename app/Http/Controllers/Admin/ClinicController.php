@@ -50,7 +50,7 @@ class ClinicController extends Controller
      */
     public function create()
     {
-
+		$this->authorize('create', Clinic::class);
         return view('admin.clinics.create');
     }
     /**
@@ -63,7 +63,7 @@ class ClinicController extends Controller
     public function store(CreateClinicRequest $request)
     {
         $this->clinicservice->create($request->all());
-
+		$this->authorize('create', Clinic::class);
         return redirect('admin/clinics')->with([
             'message' => __('admin.clinics.index.created-clinics'),
         ]);
@@ -79,6 +79,7 @@ class ClinicController extends Controller
     public function edit(string $clinic)
     {
         $clinic = $this->clinicservice->findBy('uuid', $clinic);
+		$this->authorize('update', $clinic);
         return view('admin.clinics.edit')->with([
             'clinic' => $clinic,
         ]);
@@ -94,6 +95,7 @@ class ClinicController extends Controller
     public function update(UpdateClinicRequest $request,string $clinic)
     {
 		$clinic = $this->clinicservice->findBy('uuid', $clinic);
+		$this->authorize('update', $clinic);
         $this->clinicservice->update($clinic, $request->all());
 
         return back()->with([
@@ -112,7 +114,7 @@ class ClinicController extends Controller
     public function destroy(string $clinic)
     {
         $clinic = $this->clinicservice->findBy('uuid', $clinic);
-
+		$this->authorize('destroy', $clinic);
         $this->clinicservice->delete($clinic);
 
         return redirect('admin/clinics')->with([
