@@ -4,6 +4,47 @@ return [
     'dashboard' => [
         'breadcrumb' => 'Dashboard',
     ],
+	'clinics' => [
+        'create' => [
+            'breadcrumb' => 'Create',
+            'form-title' => 'Create Clinic',
+            'title' => 'Create Clinic',
+        ],
+        'edit' => [
+            'breadcrumb' => 'Edit',
+            'form-title' => 'Edit Clinic',
+            'title' => 'Edit Clinic',
+        ],
+        'form' => [
+            'address' => 'Address',
+            'name' => 'Name',
+            'save' => 'Save',
+            'subdomain' => 'Subdomain',
+        ],
+        'form-delete' => [
+            'delete' => 'Delete',
+            'on-submit' => 'Are you sure you want to delete this Clinic?',
+        ],
+        'form-search' => [
+            'search' => 'Search...',
+            'submit' => 'Get Results',
+        ],
+        'index' => [
+            'breadcrumb' => 'Clinic',
+            'create-clinic' => 'Create Clinic',
+            'created-clinic' => 'Clinic was successfully created.',
+            'deleted-clinic' => 'Clinic was successfully deleted.',
+            'clinics' => 'Clinic',
+            'no-results' => 'No Clinic were found...',
+            'title' => 'All Clinic',
+            'updated-clinic' => 'Clinic was successfully updated.',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'edit' => 'Edit',
+            'name' => 'Name',
+        ],
+    ],
     'doctors' => [
         'create' => [
             'breadcrumb' => 'Create',
