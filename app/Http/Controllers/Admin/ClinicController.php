@@ -50,6 +50,7 @@ class ClinicController extends Controller
      */
     public function create()
     {
+		$this->authorize('create', Clinic::class);
         return view('admin.clinics.create');
     }
     /**
@@ -99,5 +100,23 @@ class ClinicController extends Controller
             'message' => __('admin.clinics.index.updated-clinic'),
         ]);
 
+    }
+	
+	/**
+     * Deletes a clinic in the database.
+     *
+     * @param string $clinic
+     *
+     * @return Response
+     */
+    public function destroy(string $clinic)
+    {
+        $clinic = $this->clinicservice->findBy('uuid', $clinic);
+
+        $this->clinicservice->delete($clinic);
+
+        return redirect('admin/clinics')->with([
+            'message' => __('admin.clinics.index.deleted-clinic'),
+        ]);
     }
 }
