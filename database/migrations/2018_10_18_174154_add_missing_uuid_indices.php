@@ -16,10 +16,6 @@ class AddMissingUuidIndices extends Migration
      */
     public function up()
     {
-        Schema::table('groups', function (Blueprint $table) {
-            $table->index('uuid');
-        });
-
         Schema::table('doctors', function (Blueprint $table) {
             $table->index('uuid');
         });
@@ -32,10 +28,6 @@ class AddMissingUuidIndices extends Migration
      */
     public function down()
     {
-        Schema::table('groups', function (Blueprint $table) {
-            $table->dropIndex(['uuid']);
-        });
-
         Schema::table('doctors', function (Blueprint $table) {
             $table->dropIndex(['uuid']);
         });

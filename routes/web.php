@@ -102,7 +102,7 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     });
 	/*
     |--------------------------------------------------------------------------
-    | Notes for Group
+    | Notes and Questionnaire for Group
     |--------------------------------------------------------------------------
     */
 	Route::get('groups', 'admin\GroupController@index');
@@ -115,6 +115,10 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
 		Route::get('{group_id}/notes/create', 'GroupNoteController@create');
 		Route::get('{group_id}/notes/{note_id}', 'GroupNoteController@show');
 		Route::put('{group_id}/notes/{note_id}', 'GroupNoteController@update');
+		
+		Route::get('{group_id}/questionnaires', 'GroupQuestionnaireController@index');
+        Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
+        Route::post('{group_id}/questionnaires', 'GroupQuestionnaireController@store');
 	});
     /*
     |--------------------------------------------------------------------------

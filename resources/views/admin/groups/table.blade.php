@@ -19,6 +19,13 @@
 					> <i class="fas fa-sticky-note mr-1"></i>
 						@lang('groups.show.notes')
 					</a>
+					
+					<a
+						class="btn btn-primary btn-sm ml-auto"
+						href="{{ url("groups/$group->id/questionnaires/create") }}"
+					>
+						@lang('groups.questionnaires.index.assign')
+					</a>						
 				@if (Auth::user()->isAdmin())
 
                     <a

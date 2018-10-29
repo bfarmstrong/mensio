@@ -190,6 +190,33 @@ Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
     );
 });
 
+// Groups > Group Profile > Questionnaires
+Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
+    //$trail->parent('groups.show', $group);
+    $trail->push(
+        __('groups.questionnaires.index.breadcrumb'),
+        url("groups/$group->id/questionnaires")
+    );
+});
+
+// Groups > Group Profile > Questionnaires > Assign
+Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
+   
+    $trail->push(
+        __('groups.questionnaires.create.breadcrumb'),
+        url("groups/$group->id/questionnaires/create")
+    );
+});
+
+// Groups > Group Profile > Questionnaires > View
+Breadcrumbs::for('groups.questionnaires.show', function ($trail, $group, $response) {
+   // $trail->parent('groups.questionnaires.index', $group);
+    $trail->push(
+        __('groups.questionnaires.show.breadcrumb'),
+        url("groups/$group->id/questionnaires/$response->id")
+    );
+});
+
 // Users
 Breadcrumbs::for('admin.users.index', function ($trail) {
     $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));

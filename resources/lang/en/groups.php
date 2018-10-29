@@ -55,6 +55,41 @@ return [
             'view' => 'View',
         ],
     ],
+	
+    'questionnaires' => [
+        'create' => [
+            'assign-questionnaire' => 'Assign Questionnaire',
+            'breadcrumb' => 'Questionnaire',
+            'title' => 'Assign Questionnaire',
+        ],
+        'form-assign' => [
+            'assign' => 'Assign',
+            'questionnaire' => 'Questionnaire',
+        ],
+        'form-unassign' => [
+            'unassign' => 'Unassign',
+            'on-submit' => 'Are you sure you want to remove this questionnaire?',
+        ],
+        'index' => [
+            'assign' => 'Questionnaire',
+            'breadcrumb' => 'Questionnaires',
+            'card-title' => 'Questionnaires',
+            'no-results' => 'No questionnaires were found...',
+            'title' => 'All Questionnaires',
+        ],
+        'show' => [
+            'breadcrumb' => 'View',
+            'card-title' => 'Questionnaire',
+            'score' => 'Score: :score',
+            'title' => 'Questionnaire',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'name' => 'Name',
+            'status' => 'Status',
+            'view' => 'View',
+        ],
+    ],
     'show' => [
         'assign-questionnaire' => 'Assign Questionnaire',
         'assigned-questionnaires' => 'Assigned Questionnaires',
