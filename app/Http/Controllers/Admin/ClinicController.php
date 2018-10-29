@@ -18,13 +18,13 @@ class ClinicController extends Controller
      * Creates an instance of `IClinicService`.
      *
      * @param IClinicService $userService
-     * 
+     *
      */
     public function __construct(IClinicService $clinicservice) {
-		
+
 		$this->clinicservice = $clinicservice;
     }
-	
+
 	/**
      * Displays the page with the list of clinic.
      *
@@ -65,7 +65,7 @@ class ClinicController extends Controller
         $this->clinicservice->create($request->all());
 		$this->authorize('create', Clinic::class);
         return redirect('admin/clinics')->with([
-            'message' => __('admin.clinics.index.created-clinics'),
+            'message' => __('admin.clinics.index.created-clinic'),
         ]);
     }
     /**
@@ -103,7 +103,7 @@ class ClinicController extends Controller
         ]);
 
     }
-	
+
 	/**
      * Deletes a clinic in the database.
      *
@@ -121,7 +121,7 @@ class ClinicController extends Controller
             'message' => __('admin.clinics.index.deleted-clinic'),
         ]);
     }
-	
+
 	/**
      * Display a listing of the resource searched.
      *
@@ -132,9 +132,9 @@ class ClinicController extends Controller
         if (! $request->search) {
             return redirect('admin/clinics');
         }
-		
+
         $clinics = $this->clinicservice->search($request->search);
-		
+
         return view('admin.clinics.index')->with([
             'clinics' => $clinics,
         ]);
