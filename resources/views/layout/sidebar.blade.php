@@ -89,7 +89,15 @@
                                 @lang('layout.sidebar.doctors')
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/clinics') }}"
+                            >
+                                <i class="nav-icon fas fa-hospital"></i>
+                                @lang('layout.sidebar.clinics')
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a
                                 class="nav-link"

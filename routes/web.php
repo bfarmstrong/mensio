@@ -189,6 +189,27 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::post('users/{user_id}/groups', 'GroupController@store');
         Route::delete('users/{user_id}/groups/{group_id}', 'GroupController@destroy');
 		
+		/*
+        |--------------------------------------------------------------------------
+        | Clinic Management
+        |--------------------------------------------------------------------------
+        */
+        Route::get('clinics', 'ClinicController@index');
+        Route::get('clinics/create', 'ClinicController@create');
+        Route::post('clinics', 'ClinicController@store');
+        Route::delete('clinics/{clinic_id}', 'ClinicController@destroy');
+        Route::get('clinics/{clinic_id}/edit', 'ClinicController@edit');
+        Route::patch('clinics/{clinic_id}', 'ClinicController@update');
+        Route::post('clinics/search', 'ClinicController@search');
+        Route::get('clinics/search', 'ClinicController@index');
+		Route::group(['prefix' => 'clinics'], function () {
+			Route::get('{clinic_id}/assignclinic', 'UserClinicController@index');
+			Route::get('{clinic_id}/assignclinic/create', 'UserClinicController@create');
+			Route::post('{clinic_id}/assignclinic', 'UserClinicController@store');
+			Route::delete('{user_id}/assignclinic', 'UserClinicController@destroy');
+			Route::post('{clinic_id}/assignclinic/search', 'UserClinicController@search');
+			Route::get('{clinic_id}/assignclinic/search', 'UserClinicController@index');
+		});
         /*
         |--------------------------------------------------------------------------
         | Supervisor Management

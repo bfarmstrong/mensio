@@ -4,6 +4,62 @@ return [
     'dashboard' => [
         'breadcrumb' => 'Dashboard',
     ],
+	'clinics' => [
+        'create' => [
+            'breadcrumb' => 'Create',
+            'form-title' => 'Create Clinic',
+            'title' => 'Create Clinic',
+        ],
+		'assignclinic' => [
+            'assign' => 'Assign User',
+			'breadcrumb' => 'Assign User',
+			'users' => 'Users',
+			'assign-users' =>'Assign',
+			'no-results' => 'No users were found...',
+			'form-title' => 'Create Clinic',
+			'form-assign-button' => 'Assign',
+			'user-assigned' => "Clinic was successfully assigned",
+			'form-delete' => 'Unassign',
+			'on-submit' => 'Are you sure you want to unassign this user?',
+			'deleted-user-clinic' => 'User was unassigned successfully',
+            'title' => 'All Users',
+        ],
+        'edit' => [
+            'breadcrumb' => 'Edit',
+            'form-title' => 'Edit Clinic',
+            'title' => 'Edit Clinic',
+        ],
+        'form' => [
+            'address' => 'Address',
+            'name' => 'Name',
+            'save' => 'Save',
+            'subdomain' => 'Subdomain',
+        ],
+        'form-delete' => [
+            'delete' => 'Delete',
+            'on-submit' => 'Are you sure you want to delete this clinic?',
+        ],
+        'form-search' => [
+            'search' => 'Search...',
+            'submit' => 'Get Results',
+        ],
+        'index' => [
+            'breadcrumb' => 'Clinics',
+            'create-clinic' => 'Create Clinic',
+            'created-clinic' => 'Clinic was successfully created.',
+            'deleted-clinic' => 'Clinic was successfully deleted.',
+            'clinics' => 'Clinics',
+            'no-results' => 'No clinics were found...',
+            'title' => 'All Clinics',
+            'updated-clinic' => 'Clinic was successfully updated.',
+        ],
+        'table' => [
+            'actions' => 'Actions',
+            'edit' => 'Edit',
+            'name' => 'Name',
+            'email' => 'Email',
+        ],
+    ],
     'doctors' => [
         'create' => [
             'breadcrumb' => 'Create',

@@ -231,4 +231,32 @@ class UserService extends BaseService implements IUserService
         $user = $this->find($user_id);
         $user->groups()->detach($group);
     }
+	
+	/**
+     * Removes a Clinic from a user.
+     *
+     * @param mixed $clinic
+     * @param mixed $user
+     *
+     * @return void
+    */
+    public function removeClinic($clinic, $user_id)
+    {
+        $user = $this->find($user_id);
+        $user->clinics()->detach($clinic);
+    }
+	
+	/**
+     * Adds a clinic to a user.
+     *
+     * @param mixed $clinic
+     * @param mixed $user
+     *
+     * @return void
+     */
+    public function assignClinic($clinic, $user)
+    {
+        $user = $this->find($user);
+        $user->clinics()->attach($clinic);
+    }
 }

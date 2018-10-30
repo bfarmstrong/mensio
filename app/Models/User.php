@@ -274,6 +274,16 @@ class User extends Authenticatable
         return $this->hasAtLeastRole(Roles::Administrator);
     }
 
+	/**
+     * Returns if the user is an admin.
+     *
+     * @return bool
+    */
+    public function isSuperAdmin()
+    {
+        return $this->hasAtLeastRole(Roles::Super);
+    }
+	
     /**
      * Returns if the user is a client.
      *
@@ -338,5 +348,15 @@ class User extends Authenticatable
 	public function groups()
     {
         return $this->belongsToMany('App\Models\Group','user_groups','user_id','group_id');
+    }
+	
+	/**
+    * return clinic if in user xlinix.
+    *
+    * @param string clinic_id
+    */
+	public function clinics()
+    {
+        return $this->belongsToMany('App\Models\Clinic','user_clinics','user_id','clinic_id');
     }
 }

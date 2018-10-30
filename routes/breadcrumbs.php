@@ -109,6 +109,38 @@ Breadcrumbs::for('admin.doctors.edit', function ($trail, $doctor) {
     );
 });
 
+// Clinics
+Breadcrumbs::for('admin.clinics.index', function ($trail) {
+    $trail->push(__('admin.clinics.index.breadcrumb'), url('admin/clinics'));
+});
+
+// Clinics > assign
+Breadcrumbs::for('admin.clinics.assignclinic', function ($trail,$clinic) {
+	$trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics'));
+});
+
+// Clinics > assign >assign user
+Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail,$clinic) {
+	$trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics/assign'));
+});
+
+// Clinics > Create
+Breadcrumbs::for('admin.clinics.create', function ($trail) {
+    $trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.create.breadcrumb'), url('admin/clinics/create'));
+});
+
+// Clinics > Edit
+Breadcrumbs::for('admin.clinics.edit', function ($trail, $clinic) {
+    $trail->parent('admin.clinics.index');
+    $trail->push(
+        __('admin.clinics.edit.breadcrumb'),
+        url("admin/clinics/$clinic->uuid/edit")
+    );
+});
+
 // Questionnaires
 Breadcrumbs::for('responses.index', function ($trail) {
     $trail->push(__('responses.index.breadcrumb'), url('responses'));
