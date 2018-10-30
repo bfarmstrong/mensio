@@ -27,7 +27,7 @@ class GroupController extends Controller
      * @var IGroupService
      */
     protected $group,$user;
-	
+
     /**
      * Creates an instance of `GroupController`.
      *
@@ -46,7 +46,7 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
-		if(\Auth::user()->role_id == 4 ){
+		if($request->user()->isAdmin()) {
         $groups = $this->group->paginate();
 		if ($request->user_id) {
 			$all_groups = $groups;
@@ -56,7 +56,7 @@ class GroupController extends Controller
 				'groups' => $groups,
 				'user' => $user,
 				'all_groups' => $all_groups
-				]);	
+				]);
 		} else {
 			return view('admin.groups.index')->with([
 				'groups' => $groups,
@@ -64,15 +64,15 @@ class GroupController extends Controller
 		}
 
 		} else {
-			$user = User::find(\Auth::user()->id);
-			$groups = $user->groups()->paginate();
+            $groups = $request->user()->groups()->paginate();
+
 			return view('admin.groups.index')->with([
 				'groups' => $groups,
 			]);
 		}
 
 	}
-   
+
     /**
      * Display a listing of the resource searched.
      *
@@ -84,7 +84,7 @@ class GroupController extends Controller
             return redirect('admin/groups');
         }
 
-		if(\Auth::user()->role_id == 4 ){
+		if($request->user()->isAdmin() ) {
 			$groups = $this->group->search($request->search);
 		} else {
 			$user = User::find(\Auth::user()->id);
@@ -98,7 +98,7 @@ class GroupController extends Controller
             'groups' => $groups,
         ]);
     }
-	
+
     /**
      * Show the form for creating a group.
      *
@@ -121,9 +121,9 @@ class GroupController extends Controller
      * @return Response
      */
     public function store(GroupCreateRequest $request)
-    {	
+    {
 		if ($request->user_id) {
-			
+
 			$user = User::find($request->user_id);
 			$already_exist = $user->groups()->pluck('group_id')->toArray();
 			if (!in_array($request->group_id,$already_exist)) {
@@ -148,7 +148,7 @@ class GroupController extends Controller
 		}
 
     }
-	
+
 	/**
      * Show the form for editing the specified resource.
      *
@@ -156,19 +156,15 @@ class GroupController extends Controller
      *
      * @return Response
      */
-    public function edit(string $id)
+    public function edit(string $uuid)
     {
-        $group = Group::find($id);
+        $group = $this->group->findBy('uuid', $uuid);
 		$users_id = $group->users()->pluck('user_id');
-		
+
 		$therapists = $this->user
             ->pushCriteria(new WhereTherapist())
             ->pushCriteria(new WithRole())
             ->all();
-			
-        if (is_null($group)) {
-            abort(404);
-        }
 
         return view('admin.groups.edit')->with([
             'group' => $group,
@@ -176,22 +172,18 @@ class GroupController extends Controller
 			'users_id' => $users_id,
         ]);
     }
-		
+
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param string  $id
+     * @param string  $uuid
      *
      * @return Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $uuid)
     {
-		$group = Group::find($id);
-		
-        if (is_null($group)) {
-            abort(404);
-        }
+        $group = $this->group->findBy('uuid', $uuid);
 
         $this->group->update(
             $group->id,
@@ -201,25 +193,25 @@ class GroupController extends Controller
 		foreach($users as $user){
 			$group->users()->detach($user->user_id);
 		}
-		
+
 		foreach($request->therapist_id as $userid){
 			$user = User::find($userid);
-			$user->groups()->attach($id);
+			$user->groups()->attach($group->id);
 		}
-		
+
         return back()->with([
             'message' => __('admin.groups.index.updated-group'),
         ]);
     }
-	
+
 	/**
      * Remove the specified resource from storage.
      *
-     * @param string $id
+     * @param string $uuid
      *
      * @return Response
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $uuid,Request $request)
     {
 		if ($request->group_id) {
 			$this->user->removeGroup($request->group_id, $request->user_id);
@@ -228,12 +220,8 @@ class GroupController extends Controller
 				->back()
 				->with('message', __('admin.users.groups.index.removed-group'));
 		} else {
-			$group = $this->group->findBy('id', $id);
+			$group = $this->group->findBy('uuid', $uuid);
 
-			if (is_null($group)) {
-				abort(404);
-			}
-			
 			GroupNote::where('group_id',$group->id)->delete();
 			$users = $group->users()->get();
 			foreach($users as $user){

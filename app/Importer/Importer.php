@@ -453,6 +453,16 @@ class Importer implements IImporter
                     'role_id' => $therapistRole->id,
                 ];
 
+                // Validate therapist data
+                $validator = Validator::make($therapistData, [
+                    'email' => 'required|filled|email',
+                    'name' => 'required|filled',
+                ]);
+
+                if ($validator->fails()) {
+                    continue;
+                }
+
                 $therapistUser = $this->userService
                     ->optional()
                     ->findBy('email', $therapistData['email']);
@@ -468,6 +478,16 @@ class Importer implements IImporter
                         'phone' => $client->phone,
                         'role_id' => $clientRole->id,
                     ];
+
+                    // Validate client data
+                    $validator = Validator::make($clientData, [
+                        'email' => 'required|filled|email',
+                        'name' => 'required|filled',
+                    ]);
+
+                    if ($validator->fails()) {
+                        return true;
+                    }
 
                     $clientUser = $this->userService
                         ->optional()

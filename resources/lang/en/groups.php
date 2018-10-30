@@ -15,8 +15,8 @@ return [
     'notes' => [
         'create' => [
             'breadcrumb' => 'Create',
-            'form-title' => 'Create Note For Group',
-            'title' => 'Create Note For Group',
+            'form-title' => 'Create Note',
+            'title' => 'Create Note',
         ],
         'form' => [
             'addition' => 'Additional Information',
@@ -32,11 +32,11 @@ return [
         ],
         'index' => [
             'breadcrumb' => 'Notes',
-            'create' => 'Create Note For Group',
+            'create' => 'Create Note',
             'no-results' => 'No notes were found...',
             'note-created' => 'Note was created successfully.',
             'note-updated' => 'Note was updated successfully.',
-            'notes' => 'Notes For Group',
+            'notes' => 'Notes',
             'title' => 'All Notes',
         ],
         'show' => [
@@ -47,7 +47,7 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
-            'content' => 'Content',
+            'creator' => 'Creator',
             'date' => 'Date',
             'draft' => 'Draft',
             'final' => 'Final',
@@ -55,7 +55,7 @@ return [
             'view' => 'View',
         ],
     ],
-	
+
     'questionnaires' => [
         'create' => [
             'assign-questionnaire' => 'Assign Questionnaire',
@@ -71,7 +71,7 @@ return [
             'on-submit' => 'Are you sure you want to remove this questionnaire?',
         ],
         'index' => [
-            'assign' => 'Questionnaire',
+            'assign' => 'Questionnaires',
             'breadcrumb' => 'Questionnaires',
             'card-title' => 'Questionnaires',
             'no-results' => 'No questionnaires were found...',

@@ -69,13 +69,13 @@
                                 @lang('layout.sidebar.users')
                             </a>
                         </li>
-						
+
 						<li class="nav-item">
                             <a
                                 class="nav-link"
                                 href="{{ url('admin/groups') }}"
                             >
-                                <i class="nav-icon fas fa-user-friends"></i>
+                                <i class="nav-icon fas fa-user-plus"></i>
                                 @lang('layout.sidebar.groups')
                             </a>
                         </li>

@@ -14,7 +14,7 @@
             {!!
                 Form::model(
                     $group,
-                    ['url' => url("admin/groups/$group->id")]
+                    ['url' => url("admin/groups/$group->uuid")]
                 )
             !!}
             @method('patch')

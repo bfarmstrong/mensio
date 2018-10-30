@@ -12,7 +12,7 @@
 			@if (!Auth::user()->isAdmin() && !Auth::user()->isClient())
             <a
                 class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("groups/$group->id/notes/create") }}"
+                href="{{ url("groups/$group->uuid/notes/create") }}"
             >
                 @lang('groups.notes.index.create')
             </a>

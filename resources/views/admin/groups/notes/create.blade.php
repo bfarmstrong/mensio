@@ -12,7 +12,7 @@
         <div class="card-body">
             {!!
                 Form::open([
-                    'url' => url("groups/$group->id/notes"),
+                    'url' => url("groups/$group->uuid/notes"),
                 ])
             !!}
             @include('admin.groups.notes.form', [

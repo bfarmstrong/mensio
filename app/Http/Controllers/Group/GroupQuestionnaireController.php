@@ -71,13 +71,13 @@ class GroupQuestionnaireController extends Controller
     /**
      * Displays the page to assign a questionnaire to a group.
      *
-     * @param string $user
+     * @param string $uuid
      *
      * @return Response
      */
-    public function create(string $group)
-    { 
-        $group = $this->group->find($group);
+    public function create(string $uuid)
+    {
+        $group = $this->group->findBy('uuid', $uuid);
 
         $questionnaires = $this->questionnaire->all();
 
@@ -90,7 +90,7 @@ class GroupQuestionnaireController extends Controller
             'group' => $group,
         ]);
     }
-	
+
     /**
      * Assigns a questionnaire to a group.
      *
@@ -106,8 +106,8 @@ class GroupQuestionnaireController extends Controller
 				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
 				->pushCriteria(new WithRole())
 				->all();
-		
-			foreach($clients as $client){		
+
+			foreach($clients as $client){
 				$this->response->assignToClient(
 					$client->id,
 					$request->get('questionnaire_id'),
@@ -115,17 +115,17 @@ class GroupQuestionnaireController extends Controller
 				);
 			}
         return redirect()
-            ->to(url("groups/$request->group_id/questionnaires/create"))
+            ->back()
             ->with('message', __('groups.show.questionnaire-assigned'));
-	   } 
+	   }
 	   if ($request->is_submit == 1) {
 		   $clients = $this->user
 				->pushCriteria(new WhereClient())
 				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
 				->pushCriteria(new WithRole())
 				->all();
-		
-			foreach($clients as $client){		
+
+			foreach($clients as $client){
 				$this->response->unassignFromClient(
 					$client->id,
 					$request->get('questionnaire_id'),

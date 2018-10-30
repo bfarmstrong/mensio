@@ -197,10 +197,10 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
 
 // Admin > Groups > Notes
 Breadcrumbs::for('groups.notes.index', function ($trail, $group) {
-   
+    // $trail->parent('groups.index');
     $trail->push(
         __('groups.notes.index.breadcrumb'),
-        url("groups/$group->id/notes")
+        url("groups/$group->uuid/notes")
     );
 });
 
@@ -209,7 +209,7 @@ Breadcrumbs::for('groups.notes.create', function ($trail, $group) {
     $trail->parent('groups.notes.index', $group);
     $trail->push(
         __('groups.notes.create.breadcrumb'),
-        url("groups/$group->id/notes/create")
+        url("groups/$group->uuid/notes/create")
     );
 });
 
@@ -218,34 +218,32 @@ Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
     $trail->parent('groups.notes.index', $group, $note);
     $trail->push(
         __('groups.notes.show.breadcrumb'),
-        url("groups/$group->id/notes/$note->id")
+        url("groups/$group->uuid/notes/$note->uuid")
     );
 });
 
 // Groups > Group Profile > Questionnaires
 Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
-    //$trail->parent('groups.show', $group);
     $trail->push(
         __('groups.questionnaires.index.breadcrumb'),
-        url("groups/$group->id/questionnaires")
+        url("groups/$group->uuid/questionnaires")
     );
 });
 
 // Groups > Group Profile > Questionnaires > Assign
 Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
-   
+
     $trail->push(
         __('groups.questionnaires.create.breadcrumb'),
-        url("groups/$group->id/questionnaires/create")
+        url("groups/$group->uuid/questionnaires/create")
     );
 });
 
 // Groups > Group Profile > Questionnaires > View
 Breadcrumbs::for('groups.questionnaires.show', function ($trail, $group, $response) {
-   // $trail->parent('groups.questionnaires.index', $group);
     $trail->push(
         __('groups.questionnaires.show.breadcrumb'),
-        url("groups/$group->id/questionnaires/$response->id")
+        url("groups/$group->uuid/questionnaires/$response->uuid")
     );
 });
 

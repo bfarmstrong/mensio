@@ -20,6 +20,7 @@
             @method('patch')
             @include('user.form-settings', [
                 'features' => [
+                    'groups' => $user->isClient(),
                     'license' => $user->isTherapist(),
                     'switch_user' => true,
                     'therapists' => Auth::user()->can('viewTherapists', $user),
