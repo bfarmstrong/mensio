@@ -282,6 +282,7 @@ return [
             'title' => 'All Users',
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
+            'assign-clinic' => 'Assign Clinics',
         ],
         'show' => [
             'breadcrumb' => ':Role Profile',

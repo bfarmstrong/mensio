@@ -12,6 +12,7 @@ use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Impl\IClinicService;
 
 /**
  * Manages administrative actions against users.
@@ -49,11 +50,13 @@ class UserController extends Controller
     public function __construct(
         IDoctorService $doctorService,
         IRoleService $roleService,
-        IUserService $userService
+        IUserService $userService,
+		IClinicService $clinicservice
     ) {
         $this->doctorService = $doctorService;
         $this->roleService = $roleService;
         $this->userService = $userService;
+		$this->clinicservice = $clinicservice;
     }
 
     /**
@@ -250,4 +253,33 @@ class UserController extends Controller
             'message' => __('admin.users.index.deleted-user'),
         ]);
     }
+	
+	
+	/**
+     * Show the form to assign a clinic.
+     *
+     * @return Response
+    */	
+	public function getassignclinic()
+	{
+		$clinic = $this->clinicservice->findBy('subdomain',config('subdomain'));
+			print_r($clinic); exit;
+        return view('admin.users.clinics.form-assignclinic', [
+            'clinic' => $clinic,
+        ]);
+	}
+	
+	/**
+     * assign a user to clinic.
+     *
+     * @return Response
+    */
+	public function postassignclinic()
+	{
+		$clinic = $this->clinicservice->findBy('subdomain',config('subdomain'));
+		$this->userService->assignClinic($clinic->id,$request->user_id);
+		return redirect('admin/users')->with([
+            'message' => __('clinic assigned'),
+        ]);
+	}
 }

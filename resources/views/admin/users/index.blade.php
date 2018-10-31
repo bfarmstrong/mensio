@@ -5,19 +5,27 @@
 @section('content.breadcrumbs', Breadcrumbs::render('admin.users.index'))
 @section('content.dashboard')
     <div class="card">
-        <div class="card-header d-flex align-items-center">
+        <div class="card-header align-items-center">
             <span>
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('admin.users.index.users')
             </span>
-
+			<div class="float-right">
             <a
-                class="btn btn-primary btn-sm ml-auto"
+                class="btn btn-primary btn-sm"
+                href="{{ url('admin/users/add') }}"
+            >
+                @lang('admin.users.index.assign-clinic')
+            </a>
+			
+            <a
+                class="btn btn-primary btn-sm"
                 href="{{ url('admin/users/invite') }}"
             >
                 @lang('admin.users.index.create-user')
             </a>
         </div>
+		</div>
 
         <div class="card-body">
             <div class="row">
