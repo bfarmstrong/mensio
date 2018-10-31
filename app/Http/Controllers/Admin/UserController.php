@@ -7,12 +7,15 @@ use App\Http\Requests\UserInviteRequest;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\User\WhereClient;
+use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Impl\IClinicService;
+use App\Http\Requests\Admin\AdminAssignClinicRequest;
 
 /**
  * Manages administrative actions against users.
@@ -262,8 +265,9 @@ class UserController extends Controller
     */	
 	public function getassignclinic()
 	{
-		$clinic = $this->clinicservice->findBy('subdomain',config('subdomain'));
-			print_r($clinic); exit;
+		
+		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+			
         return view('admin.users.clinics.form-assignclinic', [
             'clinic' => $clinic,
         ]);
@@ -274,10 +278,21 @@ class UserController extends Controller
      *
      * @return Response
     */
-	public function postassignclinic()
+	public function postassignclinic(AdminAssignClinicRequest $request)
 	{
-		$clinic = $this->clinicservice->findBy('subdomain',config('subdomain'));
-		$this->userService->assignClinic($clinic->id,$request->user_id);
+		
+		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+		$clients = $this->userService
+			/* 	->pushCriteria(new WhereClient())
+				->pushCriteria(new WhereTherapist())
+				->pushCriteria(new WithRole()) */
+				->findBy('health_card_number',$request->health_card_number)
+				->all();
+
+		foreach($clients as $client){
+			$this->userService->assignClinic($clinic->id,$client->id);
+		}
+		
 		return redirect('admin/users')->with([
             'message' => __('clinic assigned'),
         ]);

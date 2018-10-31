@@ -12,7 +12,7 @@
             {!!
                 Form::model(
                     $clinic,
-                    ['url' => url("users/assign/$clinic->id")]
+                    ['url' => url("admin/users/assign")]
                 )
             !!}
         <div class="card-body">
@@ -34,7 +34,18 @@
 					!!}
 				</div>
 			</div>
-        </div>
+			
+			<div class="form-group">
+				{!!
+					Form::submit(
+						__('user.form-settings.save'),
+						['class' => 'btn btn-primary']
+					)
+				!!}
+			</div>
+				
+			</div>
+
 		{!! Form::close() !!}
     </div>
 @endsection

@@ -257,6 +257,8 @@ class UserService extends BaseService implements IUserService
     public function assignClinic($clinic, $user)
     {
         $user = $this->find($user);
-        $user->clinics()->attach($clinic);
+		
+		$user->clinics()->sync($clinic,false);
+		
     }
 }
