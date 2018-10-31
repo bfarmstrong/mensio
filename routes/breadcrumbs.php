@@ -109,6 +109,38 @@ Breadcrumbs::for('admin.doctors.edit', function ($trail, $doctor) {
     );
 });
 
+// Clinics
+Breadcrumbs::for('admin.clinics.index', function ($trail) {
+    $trail->push(__('admin.clinics.index.breadcrumb'), url('admin/clinics'));
+});
+
+// Clinics > assign
+Breadcrumbs::for('admin.clinics.assignclinic', function ($trail,$clinic) {
+	$trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics'));
+});
+
+// Clinics > assign >assign user
+Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail,$clinic) {
+	$trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics/assign'));
+});
+
+// Clinics > Create
+Breadcrumbs::for('admin.clinics.create', function ($trail) {
+    $trail->parent('admin.clinics.index');
+    $trail->push(__('admin.clinics.create.breadcrumb'), url('admin/clinics/create'));
+});
+
+// Clinics > Edit
+Breadcrumbs::for('admin.clinics.edit', function ($trail, $clinic) {
+    $trail->parent('admin.clinics.index');
+    $trail->push(
+        __('admin.clinics.edit.breadcrumb'),
+        url("admin/clinics/$clinic->uuid/edit")
+    );
+});
+
 // Questionnaires
 Breadcrumbs::for('responses.index', function ($trail) {
     $trail->push(__('responses.index.breadcrumb'), url('responses'));
@@ -165,10 +197,10 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
 
 // Admin > Groups > Notes
 Breadcrumbs::for('groups.notes.index', function ($trail, $group) {
-   
+    // $trail->parent('groups.index');
     $trail->push(
         __('groups.notes.index.breadcrumb'),
-        url("groups/$group->id/notes")
+        url("groups/$group->uuid/notes")
     );
 });
 
@@ -177,7 +209,7 @@ Breadcrumbs::for('groups.notes.create', function ($trail, $group) {
     $trail->parent('groups.notes.index', $group);
     $trail->push(
         __('groups.notes.create.breadcrumb'),
-        url("groups/$group->id/notes/create")
+        url("groups/$group->uuid/notes/create")
     );
 });
 
@@ -186,7 +218,32 @@ Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
     $trail->parent('groups.notes.index', $group, $note);
     $trail->push(
         __('groups.notes.show.breadcrumb'),
-        url("groups/$group->id/notes/$note->id")
+        url("groups/$group->uuid/notes/$note->uuid")
+    );
+});
+
+// Groups > Group Profile > Questionnaires
+Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
+    $trail->push(
+        __('groups.questionnaires.index.breadcrumb'),
+        url("groups/$group->uuid/questionnaires")
+    );
+});
+
+// Groups > Group Profile > Questionnaires > Assign
+Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
+
+    $trail->push(
+        __('groups.questionnaires.create.breadcrumb'),
+        url("groups/$group->uuid/questionnaires/create")
+    );
+});
+
+// Groups > Group Profile > Questionnaires > View
+Breadcrumbs::for('groups.questionnaires.show', function ($trail, $group, $response) {
+    $trail->push(
+        __('groups.questionnaires.show.breadcrumb'),
+        url("groups/$group->uuid/questionnaires/$response->uuid")
     );
 });
 

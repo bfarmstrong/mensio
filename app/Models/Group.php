@@ -39,6 +39,13 @@ class Group extends Model
     ];
 
     /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
+
+    /**
      * Find a group by name.
      *
      * @param string $name

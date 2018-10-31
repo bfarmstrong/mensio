@@ -6,7 +6,7 @@
 @section('content.dashboard')
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-lock mr-1"></i>
+            <i class="fas fa-user-plus mr-1"></i>
             @lang('admin.groups.create.form-title')
         </div>
 

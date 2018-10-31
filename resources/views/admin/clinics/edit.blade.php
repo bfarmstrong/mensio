@@ -1,25 +1,25 @@
 @extends('layout.dashboard')
 
-@section('title', __('admin.groups.edit.title'))
+@section('title', __('admin.clinics.edit.title'))
 
-@section('content.breadcrumbs', Breadcrumbs::render('admin.groups.edit', $group))
+@section('content.breadcrumbs', Breadcrumbs::render('admin.clinics.edit', $clinic))
 @section('content.dashboard')
     <div class="card">
         <div class="card-header">
             <i class="fas fa-edit mr-1"></i>
-            @lang('admin.groups.edit.form-title')
+            @lang('admin.clinics.edit.form-title')
         </div>
 
         <div class="card-body">
             {!!
                 Form::model(
-                    $group,
-                    ['url' => url("admin/groups/$group->uuid")]
+                    $clinic,
+                    ['url' => url("admin/clinics/$clinic->uuid")]
                 )
             !!}
             @method('patch')
-            @include('admin.groups.form', [
-                'group' => $group,
+            @include('admin.clinics.form', [
+                'clinic' => $clinic,
             ])
             {!! Form::close() !!}
         </div>

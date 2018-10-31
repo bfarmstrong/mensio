@@ -1,38 +1,42 @@
 @extends('layout.dashboard')
 
-@section('title', __('groups.notes.index.title'))
-@section('content.breadcrumbs', Breadcrumbs::render('groups.notes.index', $group))
+@section('title', __('clients.questionnaires.index.title'))
+
+@section(
+    'content.breadcrumbs',
+    Breadcrumbs::render('clients.questionnaires.index', $user)
+)
 @section('content.dashboard')
     <div class="card">
         <div class="card-header d-flex align-items-center">
             <span>
                 <i class="fas fa-list-ul mr-1"></i>
-                @lang('groups.notes.index.notes')
+                @lang('clients.questionnaires.index.card-title')
             </span>
-			@if (!Auth::user()->isAdmin() && !Auth::user()->isClient())
+
             <a
                 class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("groups/$group->uuid/notes/create") }}"
+                href="{{ url("clients/$user->id/questionnaires/create") }}"
             >
-                @lang('groups.notes.index.create')
+                @lang('clients.questionnaires.index.assign')
             </a>
-			@endif
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($notes->isNotEmpty())
-                        @include('admin.groups.notes.table', [
-                            'notes' => $notes,
+                    @if ($responses->isNotEmpty())
+                        @include('clients.questionnaires.table', [
+                            'responses' => $responses,
+                            'user' => $user,
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">
-                            @lang('groups.notes.index.no-results')
+                            @lang('clients.questionnaires.index.no-results')
                         </p>
                     @endif
 
-                    {{ $notes->links() }}
+                    {{ $responses->links() }}
                 </div>
             </div>
         </div>

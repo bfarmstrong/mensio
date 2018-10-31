@@ -21,6 +21,7 @@ return [
         'groups' => 'Groups',
         'dashboard' => 'Dashboard',
         'doctors' => 'Doctors',
+        'clinics' => 'Clinics',
         'menu' => 'Main Menu',
         'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',

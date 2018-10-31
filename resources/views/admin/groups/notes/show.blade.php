@@ -14,7 +14,7 @@
                 {!!
                     Form::open([
                         'method' => 'put',
-                        'url' => "groups/$group->id/notes/$note->id",
+                        'url' => "groups/$group->uuid/notes/$note->uuid",
                     ])
                 !!}
 

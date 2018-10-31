@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Note;
 use Illuminate\Http\Response;
 use App\Services\Impl\IUserService;
+use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WithRole;
@@ -25,56 +26,74 @@ use App\Services\Criteria\User\WithRole;
 class GroupNoteController extends Controller
 {
     /**
+     * The group service implementation.
+     *
+     * @var IGroupService
+     */
+    protected $groupService;
+
+    /**
      * The note service implementation.
      *
      * @var IGroupNoteService
      */
     protected $groupnoteService;
-	
+
     /**
      * The note service implementation.
      *
      * @var INoteService
      */
     protected $noteService;
+
 	/**
      * The user service implementation.
      *
      * @var IUserService
      */
-    
-	protected $user;
+
+    protected $user;
+
     /**
      * Creates an instance of `IGroupNoteService`.
      *
+     * @param IGroupService $groupService
      * @param IGroupNoteService $groupnoteService
-     * 
      */
     public function __construct(
-        IGroupNoteService $groupnoteService,       
+        IGroupService $groupService,
+        IGroupNoteService $groupnoteService,
 		INoteService $noteService,
 		IUserService $user
     ) {
+        $this->groupService = $groupService;
         $this->groupnoteService = $groupnoteService;
 		$this->noteService = $noteService;
 		$this->user = $user;
     }
-	
+
 	/**
      * Displays the page with the list of notes for a group.
      *
-     * @param string $group
+     * @param string $uuid
      *
      * @return Response
     */
-    public function index(string $group_id)
+    public function index(string $uuid)
     {
-        $group = Group::find($group_id); 
-		if(\Auth::user()->role_id == 4 ){
-			$notes = GroupNote::where('group_id',$group_id)->paginate();
+        $group = $this->groupService->findBy('uuid', $uuid);
+
+        if(request()->user()->isAdmin()) {
+            $notes = $this->groupnoteService
+                ->getByCriteria(new WhereEqual('group_id', $group->id))
+                ->paginate();
 		} else {
-			$notes = GroupNote::where([['group_id','=',$group_id],['created_by','=',\Auth::user()->id]])->paginate();
-		}
+            $notes = $this->groupnoteService
+                ->getByCriteria(new WhereEqual('group_id', $group->id))
+                ->getByCriteria(new WhereEqual('created_by', request()->user()->id))
+                ->paginate();
+        }
+
         return view('admin.groups.notes.index')->with([
             'notes' => $notes,
             'group' => $group,
@@ -84,13 +103,14 @@ class GroupNoteController extends Controller
     /**
      * Displays the page to create a new note.
      *
-     * @param string $group
+     * @param string $uuid
      *
      * @return Response
      */
-    public function create(string $group)
+    public function create(string $uuid)
     {
-        $group = Group::find($group);
+        $group = $this->groupService->findBy('uuid', $uuid);
+
         return view('admin.groups.notes.create')->with([
             'group' => $group,
         ]);
@@ -107,14 +127,14 @@ class GroupNoteController extends Controller
         $group = Group::find($request->group_id);
 		$id =	GroupNote::create(array_merge($request->all(), [
 				'group_id' => $group->id,
-			])); 
+			]));
 		if ($request->is_draft == 0 ) {
 			$clients = $this->user
 				->pushCriteria(new WhereClient())
 				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
 				->pushCriteria(new WithRole())
 				->all();
-		
+
 			foreach($clients as $client){
 				$this->noteService->create(array_merge($request->all(), [
 					'client_id' => $client->id,
@@ -123,10 +143,10 @@ class GroupNoteController extends Controller
 				]));
 			}
 		}
-			
-		
-		
-        return redirect()->to("groups/$group->id/notes")->with([
+
+
+
+        return redirect()->to("groups/$group->uuid/notes")->with([
             'message' => __('groups.notes.index.note-created'),
         ]);
     }
@@ -140,8 +160,8 @@ class GroupNoteController extends Controller
      */
     public function show(string $group, string $note)
     {
-        $group = Group::find($group);
-		$note = GroupNote::find($note);
+        $group = $this->groupService->findBy('uuid', $group);
+        $note = $this->groupnoteService->findBy('uuid', $note);
 
         return view('admin.groups.notes.show')->with([
             'note' => $note,
@@ -167,7 +187,7 @@ class GroupNoteController extends Controller
 				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
 				->pushCriteria(new WithRole())
 				->all();
-	
+
 			foreach($clients as $client){
 				$this->noteService->create(array_merge($request->all(), [
 					'client_id' => $client->id,
@@ -178,11 +198,11 @@ class GroupNoteController extends Controller
 		}
 		GroupNote::whereId($request->note_id)->update($request->except(['_token', '_method','files','signature']));
 
-        return redirect()->to("groups/$group->id/notes")->with([
+        return redirect()->to("groups/$group->uuid/notes")->with([
             'message' => __('groups.notes.index.note-updated'),
         ]);
     }
-	
+
 	/**
      * Adds additional information to an existing note.
      *
@@ -194,7 +214,7 @@ class GroupNoteController extends Controller
     {
         $group = Group::find($request->group_id);
 		$note = GroupNote::find($request->note_id);
-  
+
         $this->groupnoteService->addAddition($note, $request->get('addition'));
 
         return redirect()->back()->with([
