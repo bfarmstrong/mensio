@@ -138,7 +138,7 @@ class UserService extends BaseService implements IUserService
             'password' => bcrypt($password),
         ]));
 
-        Notification::send($user, new NewAccountEmail($password));
+       // Notification::send($user, new NewAccountEmail($password));
 
         return $user;
     }
@@ -206,12 +206,14 @@ class UserService extends BaseService implements IUserService
      * @return LengthAwarePaginator
      */
     public function search(string $query)
-    {
+    { 
         $model = app($this->model());
         $searchIndex = $model->getSearchIndex($query);
 
         $this->applyCriteria();
-        $this->model->where($model->getBlindIndexColumn(), $searchIndex);
+		foreach($model->getBlindIndexColumn() as $col) {
+			$this->model->orWhere($col, $searchIndex);
+		}
         $results = $this->model->paginate();
         $this->resetCriteria();
 

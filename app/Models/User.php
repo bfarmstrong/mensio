@@ -49,7 +49,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $blindIndex = 'name_bidx';
+    protected $blindIndex = ['name_bidx','health_card_number_bidx'];
 
     /**
      * The name of the column being indexed.

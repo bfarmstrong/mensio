@@ -28,10 +28,11 @@ trait SetsBlindIndex
     protected static function bootSetsBlindIndex()
     {
         static::saving(function ($instance) {
-            $instance[$instance->getBlindIndexColumn()] =
-                $instance->getBlindIndex(
-                    $instance[$instance->getBlindIndexedColumn()]
-                );
+			foreach($instance->getBlindIndexColumn()  as $key => $column){
+				$indexedColumn = $instance->getBlindIndexedColumn()[$key];
+				$instance[$column] =  $instance->getBlindIndex($instance[$indexedColumn]);
+			
+			}
         });
     }
 
