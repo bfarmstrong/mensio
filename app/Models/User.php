@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,8 @@ class User extends Authenticatable
     use SetsBlindIndex;
     use Uuids;
     use UserPresenter;
-
+	use SoftDeletes;
+	
     protected $encrypts = [
         'address_line_1',
         'address_line_2',
@@ -69,7 +71,13 @@ class User extends Authenticatable
      * @var string
      */
     protected $keyType = 'string';
-
+	
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that are mass assignable.
      *
