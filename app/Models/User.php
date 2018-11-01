@@ -56,7 +56,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $blindIndexed = 'name';
+    protected $blindIndexed = ['name','health_card_number'];
 
     /**
      * The database table used by the model.
@@ -133,31 +133,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Doctor::class, 'doctor_id');
     }
-
- /*    /**
-     * A user is associated with many groups.  They are either a therapist of
-     * the group or a client of the group.
-     *
-     * @return BelongsToMany
-     
-    public function groups()
-    {
-        if ($this->isClient()) {
-            return $this->belongsToMany(
-                Group::class,
-                'group_clients',
-                'user_id',
-                'group_id'
-            );
-        }
-
-        return $this->belongsToMany(
-            Group::class,
-            'group_therapists',
-            'user_id',
-            'group_id'
-        );
-    } */
 
     /**
      * A user has either notes created for them or notes created by them.
