@@ -15,6 +15,7 @@ use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Impl\IClinicService;
+use App\Services\Criteria\General\WhereEqual;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 
 /**
@@ -69,8 +70,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->getByCriteria(new WithRole())->paginate();
-
+		if (request()->user()->isSuperAdmin()) {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->paginate();
+		} else {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->paginate();
+		}
         return view('admin.users.index')->with([
             'users' => $users,
         ]);
@@ -86,9 +95,17 @@ class UserController extends Controller
         if (! $request->search) {
             return redirect('admin/users');
         }
-
-        $users = $this->userService->getByCriteria(new WithRole())->search($request->search);
-
+		if (request()->user()->isSuperAdmin()) {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->search($request->search);
+		} else {
+ 
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->search($request->search);
+		}
         if ($users->isNotEmpty()) {
             if (1 === $users->count()) {
                 $user = $users->first();
@@ -129,8 +146,10 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $this->userService->invite($request->except(['_token', '_method']));
-
+		$user = $this->userService->invite($request->except(['_token', '_method']));
+		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+		$this->userService->assignClinic($clinic->id,$user->id);
+	
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
         ]);
@@ -230,7 +249,7 @@ class UserController extends Controller
      * @return Response
      */
     public function update(Request $request, string $id)
-    {
+    { 
         $this->userService->update(
             $id,
             $request->except(['_token', '_method'])
@@ -250,8 +269,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->userService->delete($id);
-
+		if (request()->user()->isSuperAdmin()) {
+			$this->userService->delete($id);
+		}
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.deleted-user'),
         ]);
@@ -283,9 +303,6 @@ class UserController extends Controller
 		
 		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
 		$clients = $this->userService
-			/* 	->pushCriteria(new WhereClient())
-				->pushCriteria(new WhereTherapist())
-				->pushCriteria(new WithRole()) */
 				->findBy('health_card_number',$request->health_card_number)
 				->all();
 
@@ -295,6 +312,25 @@ class UserController extends Controller
 		
 		return redirect('admin/users')->with([
             'message' => __('clinic assigned'),
+        ]);
+	}
+	
+	/**
+     * activate a user.
+     *
+     * @return Response
+    */
+	public function activateUser(string $id){
+
+        if (is_null($id)) {
+            abort(404);
+        }
+		$this->userService->update(
+            $id,
+            ['is_active'=>0]
+        );
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.inactive-user'),
         ]);
 	}
 }

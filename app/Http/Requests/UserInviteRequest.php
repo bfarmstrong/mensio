@@ -28,7 +28,8 @@ class UserInviteRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required',
+            'email' => 'required|unique:users',
+            'health_card_number' => 'required|unique:users',
         ];
     }
 }

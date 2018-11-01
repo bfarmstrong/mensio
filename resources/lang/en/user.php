@@ -42,6 +42,8 @@ return [
         'therapists' => 'Therapists',
         'groups' => 'Groups',
         'work-phone' => 'Work Phone',
+        'inactive' => 'Inactive',
+        'active' => 'Active',
     ],
     'password' => [
         'breadcrumb' => 'Change Password',
