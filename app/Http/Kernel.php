@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\Admin::class,
         'permissions' => \App\Http\Middleware\Permissions::class,
         'roles' => \App\Http\Middleware\Roles::class,
+        'domain' => \App\Http\Middleware\ClinicSubdomain::class,
     ];
 }
