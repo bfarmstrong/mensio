@@ -33,7 +33,7 @@ class AttachRoleToUser
      */
     public function handle($request, Closure $next)
     { 
-		if (Config::get('subdomain') != '' && \Auth::user()->load('role') != '5'){
+		if (Config::get('subdomain') != '' && !$request->user()->isSuperAdmin()){
 			$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 			$count = $clinic->users()->where('user_id',\Auth::user()->id)->count();
 			if($count == 0 ){
