@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+Route::group(['middleware' => ['domain']], function () {
 /*
 |--------------------------------------------------------------------------
 | Welcome Page
@@ -245,4 +245,5 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         */
         Route::resource('logs', 'LogAuditController');
     });
+});
 });
