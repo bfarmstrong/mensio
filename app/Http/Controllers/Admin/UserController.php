@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
 use App\Services\Impl\IClinicService;
 use App\Services\Criteria\General\WhereEqual;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
-
+use Config;
 /**
  * Manages administrative actions against users.
  */
