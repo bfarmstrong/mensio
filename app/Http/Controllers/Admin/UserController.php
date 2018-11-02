@@ -302,10 +302,12 @@ class UserController extends Controller
 	{
 		
 		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
-		$clients = $this->userService
-				->findBy('health_card_number',$request->health_card_number)
-				->all();
 
+		$clients = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->searchencryptedcolumn($request->health_card_number,'health_card_number_bidx');
+	
 		foreach($clients as $client){
 			$this->userService->assignClinic($clinic->id,$client->id);
 		}

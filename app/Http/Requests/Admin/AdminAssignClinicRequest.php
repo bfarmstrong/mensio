@@ -27,7 +27,7 @@ class AdminAssignClinicRequest extends FormRequest
     public function rules()
     {
         return [
-            'health_card_number' => 'required|exists:users,health_card_number',
+            'health_card_number' => 'required',
         ];
     }
 }

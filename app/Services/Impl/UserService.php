@@ -225,7 +225,32 @@ class UserService extends BaseService implements IUserService
 
         return $results;
     }
-	
+    /**
+     * Enables searching for a user by their encrupted column.
+     * and so we must use a blind index.
+     *
+     * @param string $query
+     *
+     * @return LengthAwarePaginator
+     */	
+	public function searchencryptedcolumn(string $query, string $column)
+    { 
+        $model = app($this->model());
+        $searchIndex = $model->getSearchIndex($query);
+
+        $this->applyCriteria();
+		
+		foreach($model->getBlindIndexColumn() as $key => $col) {
+			if ($col == $column){
+				$this->model->where($col, $searchIndex);
+			} 
+		}
+		
+        $results = $this->model->paginate();
+        $this->resetCriteria();
+
+        return $results;
+    }
 	/**
      * Removes a Group from a user.
      *
