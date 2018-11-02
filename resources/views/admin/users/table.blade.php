@@ -42,13 +42,23 @@
 								@lang('user.form-settings.switch-user')
 							</a>
 						@endif
+						@if ($user->is_active == 1)
+							<a
+								class="btn btn-danger btn-sm"
+								href="{{ url("admin/users/inactivate/$user->id") }}"
+							> 
+								
+								@lang('user.form-settings.inactive')
+							</a>
+						@else
 							<a
 								class="btn btn-danger btn-sm"
 								href="{{ url("admin/users/activate/$user->id") }}"
 							> 
-								<i class="fas fa-trash mr-1"></i>
-								@lang('user.form-settings.inactive')
+								
+								@lang('user.form-settings.active')
 							</a>
+						@endif
 						@if (Auth::user()->isSuperadmin())
                         @can('delete', $user)
                             {!!

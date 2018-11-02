@@ -12,6 +12,23 @@
             </span>
 
             <div class="ml-auto">
+			@if ($user->is_active == 1)
+				<a
+					class="btn btn-danger btn-sm"
+					href="{{ url("admin/users/inactivate/$user->id") }}"
+				> 
+					
+					@lang('user.form-settings.inactive')
+				</a>
+			@else
+				<a
+					class="btn btn-danger btn-sm"
+					href="{{ url("admin/users/activate/$user->id") }}"
+				> 
+								
+					@lang('user.form-settings.active')
+				</a>
+			@endif
                 <a
                     class="btn btn-primary btn-sm"
                     href="{{ url("admin/users/$user->id/edit") }}"

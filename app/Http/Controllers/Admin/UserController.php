@@ -316,7 +316,26 @@ class UserController extends Controller
 	}
 	
 	/**
-     * activate a user.
+     * inactivate a user.
+     *
+     * @return Response
+    */
+	public function inactivateUser(string $id){
+
+        if (is_null($id)) {
+            abort(404);
+        }
+		$this->userService->update(
+            $id,
+            ['is_active'=>0]
+        );
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.inactive-user'),
+        ]);
+	}
+	
+	/**
+     * inactivate a user.
      *
      * @return Response
     */
@@ -327,7 +346,7 @@ class UserController extends Controller
         }
 		$this->userService->update(
             $id,
-            ['is_active'=>0]
+            ['is_active'=>1]
         );
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.inactive-user'),

@@ -168,6 +168,7 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::get('users/invite', 'UserController@getInvite');
         Route::get('users/add', 'UserController@getassignclinic');
         Route::post('users/assign', 'UserController@postassignclinic');
+        Route::get('users/inactivate/{id}', 'UserController@inactivateUser');
         Route::get('users/activate/{id}', 'UserController@activateUser');
         Route::post('users/search', 'UserController@search');
         Route::get('users/switch/{id}', 'UserController@switchToUser');
