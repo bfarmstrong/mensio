@@ -147,7 +147,7 @@ class UserController extends Controller
     public function postInvite(UserInviteRequest $request)
     {
 		$user = $this->userService->invite($request->except(['_token', '_method']));
-		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 		$this->userService->assignClinic($clinic->id,$user->id);
 	
         return redirect('admin/users')->with([
@@ -286,7 +286,7 @@ class UserController extends Controller
 	public function getassignclinic()
 	{
 		
-		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 			
         return view('admin.users.clinics.form-assignclinic', [
             'clinic' => $clinic,
@@ -301,7 +301,7 @@ class UserController extends Controller
 	public function postassignclinic(AdminAssignClinicRequest $request)
 	{
 		
-		$clinic = $this->clinicservice->findBy('subdomain','clinic1');
+		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 		$clients = $this->userService
 				->findBy('health_card_number',$request->health_card_number)
 				->all();
