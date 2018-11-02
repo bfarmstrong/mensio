@@ -211,9 +211,15 @@ class UserService extends BaseService implements IUserService
         $searchIndex = $model->getSearchIndex($query);
 
         $this->applyCriteria();
-		foreach($model->getBlindIndexColumn() as $col) {
-			$this->model->orWhere($col, $searchIndex);
+		
+		foreach($model->getBlindIndexColumn() as $key => $col) {
+			if ($key == 0 ){
+				$this->model->where($col, $searchIndex);
+			} else {
+				$this->model->orWhere($col, $searchIndex);
+			}
 		}
+		
         $results = $this->model->paginate();
         $this->resetCriteria();
 
