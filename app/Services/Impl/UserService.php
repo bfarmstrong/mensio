@@ -138,7 +138,7 @@ class UserService extends BaseService implements IUserService
             'password' => bcrypt($password),
         ]));
 
-       // Notification::send($user, new NewAccountEmail($password));
+        Notification::send($user, new NewAccountEmail($password));
 
         return $user;
     }
