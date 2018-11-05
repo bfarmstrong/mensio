@@ -6,6 +6,7 @@ use Closure;
 use App\Models\Clinic;
 use Config;
 use App\Services\Impl\IClinicService;
+use App\Services\Impl\IUserService;
 use Illuminate\Support\Facades\URL;
 /**
  * Middleware which attaches the user role to the user object so that it does
@@ -19,9 +20,11 @@ class AttachRoleToUser
      * @var IClinicService
     */
 	public function __construct(
-        IClinicService $clinicservice
+        IClinicService $clinicservice,
+		IUserService $userService
     ) {
 		$this->clinicservice = $clinicservice;
+		$this->userService = $userService;
     }
     /**
      * Handle an incoming request.
@@ -34,10 +37,21 @@ class AttachRoleToUser
     public function handle($request, Closure $next)
     { 
 		if (Config::get('subdomain') != '' && !$request->user()->isSuperAdmin()){
+			$UserAssignedClinic = array('Switch Clinic');
 			$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 			$count = $clinic->users()->where('user_id',\Auth::user()->id)->count();
+			$assignedClinics = $this->userService->find(\Auth::user()->id);
 			if($count == 0 ){
 				return response()->view('errors.401', [], 401);
+			} else {
+				$UserClinic = $assignedClinics->clinics->pluck('name','id'); 
+				foreach($UserClinic as $k => $v){
+					if(Config::get('subdomain') != $v){
+						$UserAssignedClinic[$k] = $v;
+					}
+				}
+				\View::share('totalClinicAssign',$assignedClinics->clinics->count());
+				\View::share('assignedClinics',$UserAssignedClinic);
 			}
 		}
 		

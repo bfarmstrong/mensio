@@ -9,5 +9,7 @@ use App\Services\IBaseService;
  */
 interface IClinicService extends IBaseService
 {
+    public function switchBackClinic();
 
+    public function switchToClinic(string $id);
 }

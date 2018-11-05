@@ -10,6 +10,7 @@ use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
+use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -38,7 +39,13 @@ class UserController extends Controller
      * @var IUserService
      */
     protected $userService;
-
+	    
+	/**
+     * The clinic service implementation.
+     *
+     * @var IClinicService
+     */
+	protected $clinicservice;
     /**
      * Creates an instance of `UserController`.
      *
@@ -49,11 +56,13 @@ class UserController extends Controller
     public function __construct(
         IDoctorService $doctorService,
         IRoleService $roleService,
-        IUserService $userService
+        IUserService $userService,
+		IClinicService $clinicservice
     ) {
         $this->doctorService = $doctorService;
         $this->roleService = $roleService;
         $this->userService = $userService;
+        $this->clinicservice = $clinicservice;
     }
 
     /**
@@ -148,7 +157,23 @@ class UserController extends Controller
             ]),
         ]);
     }
-
+	
+    /**
+     * Switch to a different clinic.
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function switchToClinic(string $id)
+    {
+        $this->clinicservice->switchToClinic($id);
+		$clinic = $this->clinicservice->find($id);
+        return redirect($clinic->subdomain.'.measuremyclinic.loc/dashboard')->with([
+            'message' => __('admin.users.index.switched-to'),
+        ]);
+    }
+	
     /**
      * Switch back to your original user.
      *
@@ -159,6 +184,20 @@ class UserController extends Controller
         $this->userService->switchBack();
 
         return redirect('admin/dashboard')->with([
+            'message' => __('admin.users.index.switched-back'),
+        ]);
+    }
+	
+	/**
+     * Switch back to your original user.
+     *
+     * @return Response
+    */
+    public function switchClinicBack()
+    {
+		$subdomainback = $this->clinicservice->switchBackClinic();
+		$clinic = $this->clinicservice->find($subdomainback);
+        return redirect($clinic->subdomain.'.measuremyclinic.loc/admin/dashboard')->with([
             'message' => __('admin.users.index.switched-back'),
         ]);
     }

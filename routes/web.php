@@ -168,6 +168,8 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::get('users/invite', 'UserController@getInvite');
         Route::post('users/search', 'UserController@search');
         Route::get('users/switch/{id}', 'UserController@switchToUser');
+        Route::post('users/switch-clinic/{id}', 'UserController@switchToClinic');
+        Route::get('users/switch-clinic-back', 'UserController@switchClinicBack');
         Route::post('users/invite', 'UserController@postInvite');
         Route::resource('users', 'UserController', ['except' => ['create']]);
 

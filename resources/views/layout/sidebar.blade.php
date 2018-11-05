@@ -132,6 +132,15 @@
                     </a>
                 </li>
             @endif
+			@if (!Auth::user()->isSuperAdmin())
+				@if ($totalClinicAssign > 1 )
+					<li class="nav-item mt-auto">
+						
+						{!!  Form::select('switch_clinic',$assignedClinics, '', ['class' => 'form-control','id' => 'switch_clinic' ]) !!}
+						
+					</li>
+				@endif
+			@endif
         </ul>
     </nav>
 
@@ -140,3 +149,15 @@
         type="button"
     ></button>
 </div>
+<script>
+$("body").on('click', '#switch_clinic', function() {
+	 $.ajax({
+           type:"POST",
+           url:"{{url('users/switch-clinic/')}}",
+		   data:{clinic_id:$(this).val()},
+           success:function(res){ 
+
+		   }
+	});		
+});
+</script>
