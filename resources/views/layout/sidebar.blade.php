@@ -175,21 +175,6 @@
 	function switch_domain(selval) {
 		$('#clinic_id').val(selval);
 		document.getElementById("switchclinic").submit(); 
-	/* 
-		  $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-	 $.ajax({
-           type:"POST",
-           url:"{{url('admin/users/switch-clinic/')}}",
-		   data:{clinic_id:$('#switch_clinic').val()},
-           success:function(res){ 
-				 location.href =res;
-				 
-		   }
-	});		 */
 	}
 
 </script>

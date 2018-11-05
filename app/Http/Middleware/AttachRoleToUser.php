@@ -39,12 +39,15 @@ class AttachRoleToUser
     { 
 		if (Config::get('subdomain') != '' && !$request->user()->isSuperAdmin()){
 			$UserAssignedClinic = array('Switch Clinic');
+			
 			$url = parse_url(URL::current());
 			$domain = explode('.', $url['host']);
 			$subdomain = $domain[0];
+			
 			$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 			$count = $clinic->users()->where('user_id',\Auth::user()->id)->count();
 			$assignedClinics = $this->userService->find(\Auth::user()->id);
+			
 			if($count == 0 ){
 				return response()->view('errors.401', [], 401);
 			} else {
