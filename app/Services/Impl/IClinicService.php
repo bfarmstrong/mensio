@@ -11,5 +11,5 @@ interface IClinicService extends IBaseService
 {
     public function switchBackClinic();
 
-    public function switchToClinic(string $id);
+    public function switchToClinic(string $id,string $clinic_id);
 }

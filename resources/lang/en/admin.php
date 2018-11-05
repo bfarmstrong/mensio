@@ -52,6 +52,7 @@ return [
             'no-results' => 'No clinics were found...',
             'title' => 'All Clinics',
             'updated-clinic' => 'Clinic was successfully updated.',
+			'switched-back' => 'You have restored your original session.',
         ],
         'table' => [
             'actions' => 'Actions',

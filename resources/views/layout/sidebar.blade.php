@@ -133,11 +133,32 @@
                 </li>
             @endif
 			@if (!Auth::user()->isSuperAdmin())
-				@if ($totalClinicAssign > 1 )
+				@if (isset($totalClinicAssign) && $totalClinicAssign > 1 )
 					<li class="nav-item mt-auto">
 						
-						{!!  Form::select('switch_clinic',$assignedClinics, '', ['class' => 'form-control','id' => 'switch_clinic' ]) !!}
+						{!!  Form::select('switch_clinic',$assignedClinics, '', ['onchange'=>'switch_domain(this.value);','class' => 'form-control','id' => 'switch_clinic' ]) !!}
 						
+					</li>
+				@endif
+				{!!
+                                Form::open([
+                                    'class' => 'd-inline-block',
+                                    'method' => 'POST',
+									'id' => 'switchclinic',
+                                    'url' => url("admin/users/switch-clinic/"),
+                                ])
+                            !!}
+                            {{ Form::hidden('clinic_id', '',['id'=>'clinic_id']) }}
+                {!! Form::close() !!}
+				@if (Session::get('original_clinic'))
+					<li class="nav-item mt-auto">
+						<a
+							class="nav-link nav-link-primary bg-primary"
+							href="{{ url('admin/users/switch-clinic-back') }}"
+						>
+							<i class="nav-icon fas fa-undo"></i>
+							@lang('layout.sidebar.switch-clinic')
+						</a>
 					</li>
 				@endif
 			@endif
@@ -150,14 +171,25 @@
     ></button>
 </div>
 <script>
-$("body").on('click', '#switch_clinic', function() {
+
+	function switch_domain(selval) {
+		$('#clinic_id').val(selval);
+		document.getElementById("switchclinic").submit(); 
+	/* 
+		  $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
 	 $.ajax({
            type:"POST",
-           url:"{{url('users/switch-clinic/')}}",
-		   data:{clinic_id:$(this).val()},
+           url:"{{url('admin/users/switch-clinic/')}}",
+		   data:{clinic_id:$('#switch_clinic').val()},
            success:function(res){ 
-
+				 location.href =res;
+				 
 		   }
-	});		
-});
+	});		 */
+	}
+
 </script>

@@ -13,7 +13,7 @@ use App\Services\Impl\IUserService;
 use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Config;
 /**
  * Manages administrative actions against users.
  */
@@ -165,13 +165,16 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function switchToClinic(string $id)
+    public function switchToClinic(Request $request)
     {
-        $this->clinicservice->switchToClinic($id);
-		$clinic = $this->clinicservice->find($id);
-        return redirect($clinic->subdomain.'.measuremyclinic.loc/dashboard')->with([
-            'message' => __('admin.users.index.switched-to'),
-        ]);
+		$explodehost = explode('://',env('APP_URL')); 
+		$host = $explodehost[0];
+		$maindomain = $explodehost[1];
+		$clinic = $this->clinicservice->find($request->clinic_id);
+		$current_clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+        $user = \Auth::id();
+		return redirect($host.'://'.$clinic->subdomain.'.'.$maindomain.'/sessionlogin/'.$user.'/'.$current_clinic->id);
+		
     }
 	
     /**
@@ -195,11 +198,11 @@ class UserController extends Controller
     */
     public function switchClinicBack()
     {
+		$explodehost = explode('://',env('APP_URL')); 
+		$host = $explodehost[0];
+		$maindomain = $explodehost[1];
 		$subdomainback = $this->clinicservice->switchBackClinic();
-		$clinic = $this->clinicservice->find($subdomainback);
-        return redirect($clinic->subdomain.'.measuremyclinic.loc/admin/dashboard')->with([
-            'message' => __('admin.users.index.switched-back'),
-        ]);
+        return redirect($host.'://'.$subdomainback.'.'.$maindomain.'/admin/dashboard');
     }
 
     /**
@@ -289,4 +292,20 @@ class UserController extends Controller
             'message' => __('admin.users.index.deleted-user'),
         ]);
     }
+
+    /**
+     * Specified resource to set for session.
+     *
+     * @param string $id
+     * @param string $clinic_id
+     *
+     * @return Response
+    */	
+	public function setsession(string $id,string $clinic_id)
+	{
+	
+		$this->clinicservice->switchToClinic($id,$clinic_id);
+	
+		return redirect('admin/dashboard');
+	}
 }
