@@ -8,6 +8,7 @@ use Config;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
 use Illuminate\Support\Facades\URL;
+
 /**
  * Middleware which attaches the user role to the user object so that it does
  * not have to be queried multiple times when doing permission checks.
@@ -38,6 +39,9 @@ class AttachRoleToUser
     { 
 		if (Config::get('subdomain') != '' && !$request->user()->isSuperAdmin()){
 			$UserAssignedClinic = array('Switch Clinic');
+			$url = parse_url(URL::current());
+			$domain = explode('.', $url['host']);
+			$subdomain = $domain[0];
 			$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 			$count = $clinic->users()->where('user_id',\Auth::user()->id)->count();
 			$assignedClinics = $this->userService->find(\Auth::user()->id);
@@ -46,7 +50,7 @@ class AttachRoleToUser
 			} else {
 				$UserClinic = $assignedClinics->clinics->pluck('name','id'); 
 				foreach($UserClinic as $k => $v){
-					if(Config::get('subdomain') != $v){
+					if($subdomain != strtolower($v)){
 						$UserAssignedClinic[$k] = $v;
 					}
 				}
