@@ -284,6 +284,7 @@ return [
             'users' => 'Users',
             'assign-clinic' => 'Assign Clinics',
 			'inactive-user' => 'User is inactive',
+			'active-user' => 'User is active',
         ],
         'show' => [
             'breadcrumb' => ':Role Profile',

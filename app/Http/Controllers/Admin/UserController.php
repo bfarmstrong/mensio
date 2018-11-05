@@ -351,7 +351,7 @@ class UserController extends Controller
             ['is_active'=>1]
         );
         return redirect('admin/users')->with([
-            'message' => __('admin.users.index.inactive-user'),
+            'message' => __('admin.users.index.active-user'),
         ]);
 	}
 }
