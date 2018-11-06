@@ -65,7 +65,7 @@ Route::get('sessionlogin/{id}/{clinic_id}','Admin\UserController@setsession');
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['auth', 'auth.role']], function () {
-	
+
     /*
     |--------------------------------------------------------------------------
     | General
@@ -107,6 +107,11 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
         Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
         Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
+
+        Route::group(['prefix' => '{user_id}/attachments'], function () {
+            Route::post('', 'AttachmentController@store');
+            Route::get('create', 'AttachmentController@create');
+        });
     });
 	/*
     |--------------------------------------------------------------------------
@@ -123,7 +128,7 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
 		Route::get('{group_id}/notes/create', 'GroupNoteController@create');
 		Route::get('{group_id}/notes/{note_id}', 'GroupNoteController@show');
 		Route::put('{group_id}/notes/{note_id}', 'GroupNoteController@update');
-		
+
 		Route::get('{group_id}/questionnaires', 'GroupQuestionnaireController@index');
         Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
         Route::post('{group_id}/questionnaires', 'GroupQuestionnaireController@store');
@@ -202,7 +207,7 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::get('users/{user_id}/groups', 'GroupController@index');
         Route::post('users/{user_id}/groups', 'GroupController@store');
         Route::delete('users/{user_id}/groups/{group_id}', 'GroupController@destroy');
-		
+
 		/*
         |--------------------------------------------------------------------------
         | Clinic Management
@@ -239,7 +244,7 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::resource('roles', 'RoleController', ['except' => ['show']]);
         Route::post('roles/search', 'RoleController@search');
         Route::get('roles/search', 'RoleController@index');
-		
+
         /*
         |--------------------------------------------------------------------------
         | Groups

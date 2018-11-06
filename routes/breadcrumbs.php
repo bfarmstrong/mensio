@@ -52,6 +52,15 @@ Breadcrumbs::for('clients.notes.show', function ($trail, $user, $note) {
     );
 });
 
+// Clients > Client Profile > Notes > Attachments
+Breadcrumbs::for('clients.attachments.create', function ($trail, $user) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.attachments.create.breadcrumb'),
+        url("clients/$user->id/attachments/create")
+    );
+});
+
 // Clients > Client Profile > Questionnaires
 Breadcrumbs::for('clients.questionnaires.index', function ($trail, $user) {
     $trail->parent('clients.show', $user);

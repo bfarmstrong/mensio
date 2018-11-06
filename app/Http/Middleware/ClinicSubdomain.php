@@ -26,15 +26,16 @@ class ClinicSubdomain
 		if($url['host'] == $exploddomain[1]){
 			$maindomain = 1;
 		}
-	
+
 		if (!empty($subdomain) || ($maindomain ==1) ) {
 			if(!empty($subdomain)) {
+                $request->attributes->add(['clinic' => $subdomain]);
 				Config::set('subdomain', $subdomain->subdomain);
 			}
 			return $next($request);
 		} else {
 			return response()->view('errors.404', [], 404);
 		}
-        
+
     }
 }

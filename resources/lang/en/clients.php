@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'attachments' => [
+        'create' => [
+            'breadcrumb' => 'Create Attachment',
+            'create-attachment' => 'Create Attachment',
+            'created-attachment' => 'The attachment has been successfully added to the client profile.',
+            'title' => 'Create Attachment',
+        ],
+        'form' => [
+            'file' => 'File',
+            'submit' => 'Submit',
+        ],
+    ],
     'form-search' => [
         'search' => 'Exact name required...',
         'submit' => 'Get Results',
