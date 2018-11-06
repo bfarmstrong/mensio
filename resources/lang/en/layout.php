@@ -27,6 +27,7 @@ return [
         'roles' => 'Roles',
         'groups' => 'Groups',
         'switch-back' => 'Switch Back',
+        'switch-clinic' => 'Switch Clinic',
         'users' => 'Users',
     ],
 ];

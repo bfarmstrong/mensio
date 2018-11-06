@@ -54,10 +54,18 @@ Route::group([
 
 /*
 |--------------------------------------------------------------------------
+| get session information when switch clinic
+|--------------------------------------------------------------------------
+ */
+Route::get('sessionlogin/{id}/{clinic_id}','Admin\UserController@setsession');
+
+/*
+|--------------------------------------------------------------------------
 | Authenticated Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['auth', 'auth.role']], function () {
+	
     /*
     |--------------------------------------------------------------------------
     | General
@@ -172,6 +180,8 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
         Route::get('users/activate/{id}', 'UserController@activateUser');
         Route::post('users/search', 'UserController@search');
         Route::get('users/switch/{id}', 'UserController@switchToUser');
+        Route::post('users/switch-clinic', 'UserController@switchToClinic');
+        Route::get('users/switch-clinic-back', 'UserController@switchClinicBack');
         Route::post('users/invite', 'UserController@postInvite');
         Route::resource('users', 'UserController', ['except' => ['create']]);
 

@@ -12,12 +12,14 @@ use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
+use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Impl\IClinicService;
 use App\Services\Criteria\General\WhereEqual;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use Config;
+
 /**
  * Manages administrative actions against users.
  */
@@ -43,7 +45,13 @@ class UserController extends Controller
      * @var IUserService
      */
     protected $userService;
-
+	    
+	/**
+     * The clinic service implementation.
+     *
+     * @var IClinicService
+     */
+	protected $clinicservice;
     /**
      * Creates an instance of `UserController`.
      *
@@ -61,6 +69,7 @@ class UserController extends Controller
         $this->roleService = $roleService;
         $this->userService = $userService;
 		$this->clinicservice = $clinicservice;
+
     }
 
     /**
@@ -92,7 +101,7 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-        if (! $request->search) {
+       if (! $request->search) {
             return redirect('admin/users');
         }
 		if (request()->user()->isSuperAdmin()) {
@@ -173,7 +182,26 @@ class UserController extends Controller
             ]),
         ]);
     }
-
+	
+    /**
+     * Switch to a different clinic.
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function switchToClinic(Request $request)
+    {
+		$explodehost = explode('://',env('APP_URL')); 
+		$host = $explodehost[0];
+		$maindomain = $explodehost[1];
+		$clinic = $this->clinicservice->find($request->clinic_id);
+		$current_clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+        $user = \Auth::id();
+		return redirect($host.'://'.$clinic->subdomain.'.'.$maindomain.'/sessionlogin/'.$user.'/'.$current_clinic->id);
+		
+    }
+	
     /**
      * Switch back to your original user.
      *
@@ -186,6 +214,20 @@ class UserController extends Controller
         return redirect('admin/dashboard')->with([
             'message' => __('admin.users.index.switched-back'),
         ]);
+    }
+	
+	/**
+     * Switch back to your original user.
+     *
+     * @return Response
+    */
+    public function switchClinicBack()
+    {
+		$explodehost = explode('://',env('APP_URL')); 
+		$host = $explodehost[0];
+		$maindomain = $explodehost[1];
+		$subdomainback = $this->clinicservice->switchBackClinic();
+        return redirect($host.'://'.$subdomainback.'.'.$maindomain.'/admin/dashboard');
     }
 
     /**
@@ -293,6 +335,8 @@ class UserController extends Controller
         ]);
 	}
 	
+=======
+>>>>>>> master
 	/**
      * assign a user to clinic.
      *
@@ -354,4 +398,21 @@ class UserController extends Controller
             'message' => __('admin.users.index.active-user'),
         ]);
 	}
+	
+	/**
+     * Specified resource to set for session.
+     *
+     * @param string $id
+     * @param string $clinic_id
+     *
+     * @return Response
+    */	
+	public function setsession(string $id,string $clinic_id)
+	{
+	
+		$this->clinicservice->switchToClinic($id,$clinic_id);
+	
+		return redirect('admin/dashboard');
+	}
+>>>>>>> master
 }
