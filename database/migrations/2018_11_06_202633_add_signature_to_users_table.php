@@ -17,7 +17,7 @@ class AddSignatureToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('written_signature')->nullable();
+            $table->text('written_signature')->nullable();
         });
     }
 
