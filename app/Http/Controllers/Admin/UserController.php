@@ -15,7 +15,6 @@ use App\Services\Impl\IUserService;
 use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\Impl\IClinicService;
 use App\Services\Criteria\General\WhereEqual;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use Config;
@@ -334,9 +333,7 @@ class UserController extends Controller
             'clinic' => $clinic,
         ]);
 	}
-	
-=======
->>>>>>> master
+
 	/**
      * assign a user to clinic.
      *
@@ -414,5 +411,5 @@ class UserController extends Controller
 	
 		return redirect('admin/dashboard');
 	}
->>>>>>> master
+
 }
