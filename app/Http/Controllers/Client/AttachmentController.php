@@ -75,9 +75,10 @@ class AttachmentController extends Controller
         $client = $this->userService->find($client);
         $file = $request->file('file');
 
+        $path = $file->store('attachments', config('filesystems.cloud'));
         $this->attachmentService->create([
             'clinic_id' => $request->attributes->get('clinic')->id,
-            'file_location' => 'test',
+            'file_location' => $path,
             'file_name' => $file->getClientOriginalName(),
             'file_size' => $file->getClientSize(),
             'mime_type' => $file->getClientMimeType(),
