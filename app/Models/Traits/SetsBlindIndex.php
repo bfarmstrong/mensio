@@ -29,9 +29,10 @@ trait SetsBlindIndex
     {
         static::saving(function ($instance) {
 			foreach($instance->getBlindIndexColumn()  as $key => $column){
-				$indexedColumn = $instance->getBlindIndexedColumn()[$key];
-				$instance[$column] =  $instance->getBlindIndex($instance[$indexedColumn]);
-			
+                $indexedColumn = $instance->getBlindIndexedColumn()[$key];
+                if (!is_null($instance[$indexedColumn])) {
+                    $instance[$column] =  $instance->getBlindIndex($instance[$indexedColumn]);
+                }
 			}
         });
     }
