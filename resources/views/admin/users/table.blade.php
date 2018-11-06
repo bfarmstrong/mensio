@@ -1,4 +1,4 @@
-<table class="table table-hover table-outline table-striped">
+<table class="datatable table table-hover table-outline table-striped dt-responsive nowrap w-100">
     <thead class="thead-light">
         <tr>
             <th>@lang('admin.users.table.name')</th>
@@ -37,7 +37,7 @@
 							<a
 								class="btn btn-primary btn-sm"
 								href="{{ url("admin/users/switch/$user->id") }}"
-							> 
+							>
 								<i class="fas fa-user mr-1"></i>
 								@lang('user.form-settings.switch-user')
 							</a>

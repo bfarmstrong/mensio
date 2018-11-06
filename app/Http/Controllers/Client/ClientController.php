@@ -66,7 +66,7 @@ class ClientController extends Controller
             ->pushCriteria(new WhereClient())
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
             ->pushCriteria(new WithRole())
-            ->paginate();
+            ->all();
 
         return view('clients.index')->with([
             'clients' => $clients,
