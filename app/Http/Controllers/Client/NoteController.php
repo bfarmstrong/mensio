@@ -7,12 +7,15 @@ use App\Http\Requests\Client\AddAdditionalNoteRequest;
 use App\Http\Requests\Client\CreateNoteRequest;
 use App\Http\Requests\Client\UpdateNoteRequest;
 use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\Note\WhereClient;
 use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithChildren;
 use App\Services\Criteria\Note\WithTherapist;
+use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\INoteService;
 use App\Services\Impl\IUserService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -20,6 +23,13 @@ use Illuminate\Http\Response;
  */
 class NoteController extends Controller
 {
+    /**
+     * The attachment service implementation.
+     *
+     * @var IAttachmentService
+     */
+    protected $attachmentService;
+
     /**
      * The note service implementation.
      *
@@ -37,13 +47,16 @@ class NoteController extends Controller
     /**
      * Creates an instance of `NoteController`.
      *
-     * @param INoteService $noteService
-     * @param IUserService $userService
+     * @param IAttachmentService $attachmentService
+     * @param INoteService       $noteService
+     * @param IUserService       $userService
      */
     public function __construct(
+        IAttachmentService $attachmentService,
         INoteService $noteService,
         IUserService $userService
     ) {
+        $this->attachmentService = $attachmentService;
         $this->noteService = $noteService;
         $this->userService = $userService;
     }
@@ -92,11 +105,12 @@ class NoteController extends Controller
     /**
      * Displays the page with the list of notes for a client.
      *
-     * @param string $client
+     * @param Request $request
+     * @param string  $client
      *
      * @return Response
      */
-    public function index(string $client)
+    public function index(Request $request, string $client)
     {
         $client = $this->userService->find($client);
         $this->authorize('viewNotes', $client);
@@ -106,9 +120,16 @@ class NoteController extends Controller
             ->pushCriteria(new WhereParent())
             ->pushCriteria(new WithTherapist())
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->paginate();
+            ->all();
+
+        $attachments = $this->attachmentService
+            ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
 
         return view('clients.notes.index')->with([
+            'attachments' => $attachments,
             'notes' => $notes,
             'user' => $client,
         ]);

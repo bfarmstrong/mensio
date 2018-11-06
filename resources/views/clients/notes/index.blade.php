@@ -11,19 +11,29 @@
                 @lang('clients.notes.index.notes')
             </span>
 
-            <a
-                class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("clients/$user->id/notes/create") }}"
-            >
-                @lang('clients.notes.index.create')
-            </a>
+            <div class="ml-auto">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/attachments/create") }}"
+                >
+                    @lang('clients.notes.index.create-attachment')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/notes/create") }}"
+                >
+                    @lang('clients.notes.index.create')
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($notes->isNotEmpty())
+                    @if ($attachments->isNotEmpty() || $notes->isNotEmpty())
                         @include('clients.notes.table', [
+                            'attachments' => $attachments,
                             'notes' => $notes,
                         ])
                     @else
@@ -31,8 +41,6 @@
                             @lang('clients.notes.index.no-results')
                         </p>
                     @endif
-
-                    {{ $notes->links() }}
                 </div>
             </div>
         </div>
