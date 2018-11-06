@@ -128,7 +128,15 @@
                             <td>{{ $attachment->file_name }}</td>
                             <td>{{ $attachment->mime_type }}</td>
                             <td>{{ $attachment->updated_at }}</td>
-                            <td></td>
+                            <td>
+                                <a
+                                    class="btn btn-primary btn-sm"
+                                    href="{{ url("clients/$user->id/attachments/$attachment->uuid") }}"
+                                >
+                                    <i class="fas fa-search mr-1"></i>
+                                    @lang('clients.notes.table.view')
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

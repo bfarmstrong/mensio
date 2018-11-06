@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateAttachmentRequest;
 use App\Models\Attachment;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IUserService;
 use Config;
@@ -62,6 +64,30 @@ class AttachmentController extends Controller
     }
 
     /**
+     * Returns a page to view an attachment.
+     *
+     * @param Request $request
+     * @param string $client
+     * @param string $attachment
+     *
+     * @return Response
+     */
+    public function show(Request $request, string $client, string $attachment)
+    {
+        $client = $this->userService->find($client);
+        $attachment = $this->attachmentService
+            ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->findBy('uuid', $attachment);
+        $this->authorize('view', $attachment);
+
+        return view('clients.attachments.show')->with([
+            'attachment' => $attachment,
+            'client' => $client,
+        ]);
+    }
+
+    /**
      * Saves an attachment to the database.
      *
      * @param CreateAttachmentRequest $request
@@ -69,10 +95,10 @@ class AttachmentController extends Controller
      *
      * @return Response
      */
-    public function store(CreateAttachmentRequest $request, string $client)
+    public function store(CreateAttachmentRequest $request, string $id)
     {
         $this->authorize('create', Attachment::class);
-        $client = $this->userService->find($client);
+        $client = $this->userService->find($id);
         $file = $request->file('file');
 
         $path = $file->store('attachments', config('filesystems.cloud'));

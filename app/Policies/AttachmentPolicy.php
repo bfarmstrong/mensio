@@ -16,9 +16,22 @@ class AttachmentPolicy
      * Returns whether a user is allowed to create an attachment.
      *
      * @param User $user
+     *
      * @return bool
      */
     public function create(User $user)
+    {
+        return $user->isTherapist() || $user->isAdmin();
+    }
+
+    /**
+     * Returns whether a user is allowed to view attachments.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function view(User $user)
     {
         return $user->isTherapist() || $user->isAdmin();
     }

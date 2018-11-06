@@ -12,6 +12,11 @@ return [
             'file' => 'File',
             'submit' => 'Submit',
         ],
+        'show' => [
+            'attachment' => 'Attachment',
+            'breadcrumb' => 'View Attachment',
+            'title' => 'Attachment',
+        ],
     ],
     'form-search' => [
         'search' => 'Exact name required...',
