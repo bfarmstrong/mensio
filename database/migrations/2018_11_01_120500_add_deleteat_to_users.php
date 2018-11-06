@@ -26,7 +26,7 @@ class AddDeleteatToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->dropSoftDeletes();
         });
     }
 }
