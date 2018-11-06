@@ -7,13 +7,18 @@ use App\Http\Requests\UserInviteRequest;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\User\WhereClient;
+use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
 use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Criteria\General\WhereEqual;
+use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use Config;
+
 /**
  * Manages administrative actions against users.
  */
@@ -72,8 +77,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->getByCriteria(new WithRole())->paginate();
-
+		if (request()->user()->isSuperAdmin()) {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->paginate();
+		} else {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->paginate();
+		}
         return view('admin.users.index')->with([
             'users' => $users,
         ]);
@@ -86,12 +99,20 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-        if (! $request->search) {
+       if (! $request->search) {
             return redirect('admin/users');
         }
-
-        $users = $this->userService->getByCriteria(new WithRole())->search($request->search);
-
+		if (request()->user()->isSuperAdmin()) {
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->search($request->search);
+		} else {
+ 
+			$users = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->search($request->search);
+		}
         if ($users->isNotEmpty()) {
             if (1 === $users->count()) {
                 $user = $users->first();
@@ -132,8 +153,10 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $this->userService->invite($request->except(['_token', '_method']));
-
+		$user = $this->userService->invite($request->except(['_token', '_method']));
+		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+		$this->userService->assignClinic($clinic->id,$user->id);
+	
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
         ]);
@@ -286,13 +309,75 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->userService->delete($id);
-
+		if (request()->user()->isSuperAdmin()) {
+			$this->userService->delete($id);
+		}
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.deleted-user'),
         ]);
     }
+	
+	/**
+     * assign a user to clinic.
+     *
+     * @return Response
+    */
+	public function postassignclinic(AdminAssignClinicRequest $request)
+	{
+		
+		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
 
+		$clients = $this->userService
+				->getByCriteria(new WithRole())
+				->getByCriteria(new WhereEqual('is_active', 1))
+				->searchencryptedcolumn($request->health_card_number,'health_card_number_bidx');
+	
+		foreach($clients as $client){
+			$this->userService->assignClinic($clinic->id,$client->id);
+		}
+		
+		return redirect('admin/users')->with([
+            'message' => __('clinic assigned'),
+        ]);
+	}
+	
+	/**
+     * inactivate a user.
+     *
+     * @return Response
+    */
+	public function inactivateUser(string $id){
+
+        if (is_null($id)) {
+            abort(404);
+        }
+		$this->userService->update(
+            $id,
+            ['is_active'=>0]
+        );
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.inactive-user'),
+        ]);
+	}
+	
+	/**
+     * inactivate a user.
+     *
+     * @return Response
+    */
+	public function activateUser(string $id){
+
+        if (is_null($id)) {
+            abort(404);
+        }
+		$this->userService->update(
+            $id,
+            ['is_active'=>1]
+        );
+        return redirect('admin/users')->with([
+            'message' => __('admin.users.index.active-user'),
+        ]);
+	}
     /**
      * Specified resource to set for session.
      *
