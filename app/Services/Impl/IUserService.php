@@ -13,6 +13,8 @@ interface IUserService extends IBaseService
 
     public function removeTherapist($therapist, $user);
 
+    public function updateSignature($id, $data);
+
     public function addPatient($patient, $user);
 
     public function removePatient($patient, $user);
@@ -28,10 +30,10 @@ interface IUserService extends IBaseService
     public function switchToUser(string $id);
 
     public function updateSupervisor($patient, $therapist, $supervisor);
-	
+
 	public function removeGroup($group, $user);
-	
+
 	public function removeClinic($clinic, $user);
-	
+
 	public function assignClinic($clinic, $user);
 }

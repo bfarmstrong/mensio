@@ -310,3 +310,9 @@ Breadcrumbs::for('user.password', function ($trail) {
     $trail->parent('user.settings');
     $trail->push(__('user.password.breadcrumb'), url('user/password'));
 });
+
+// User Settings > Change Signature
+Breadcrumbs::for('user.signature', function ($trail) {
+    $trail->parent('user.settings');
+    $trail->push(__('user.signature.breadcrumb'), url('user/signature'));
+});

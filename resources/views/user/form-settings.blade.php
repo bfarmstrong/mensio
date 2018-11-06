@@ -529,6 +529,15 @@
                 </a>
             @endif
 
+            @if ($features['change_signature'] ?? false)
+                <a
+                    class="btn btn-secondary"
+                    href="{{ url('user/signature') }}"
+                >
+                    @lang('user.form-settings.change-signature')
+                </a>
+            @endif
+
             @if ($features['therapists'] ?? false)
                 <a
                     class="btn btn-secondary"

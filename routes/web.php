@@ -81,6 +81,9 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
     Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         Route::get('settings', 'SettingsController@edit');
         Route::post('settings', 'SettingsController@update');
+        Route::get('signature', 'SignatureController@edit');
+        Route::get('signature/download', 'SignatureController@download');
+        Route::patch('signature', 'SignatureController@update');
         Route::get('password', 'PasswordController@edit');
         Route::post('password', 'PasswordController@update');
     });
