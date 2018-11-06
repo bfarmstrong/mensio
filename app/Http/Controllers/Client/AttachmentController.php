@@ -12,6 +12,7 @@ use App\Services\Impl\IUserService;
 use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Storage;
 
 /**
  * Manages attachments on a client resource.
@@ -64,6 +65,27 @@ class AttachmentController extends Controller
     }
 
     /**
+     * Sends the raw contents of the attachment file in the response.
+     *
+     * @param Request $request
+     * @param string $client
+     * @param string $attachment
+     *
+     * @return Response
+     */
+    public function download(Request $request, string $client, string $attachment)
+    {
+        $client = $this->userService->find($client);
+        $attachment = $this->attachmentService
+            ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->findBy('uuid', $attachment);
+        $this->authorize('view', $attachment);
+
+        return Storage::disk(config('filesystems.cloud'))->download($attachment->file_location);
+    }
+
+    /**
      * Returns a page to view an attachment.
      *
      * @param Request $request
@@ -80,6 +102,19 @@ class AttachmentController extends Controller
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->findBy('uuid', $attachment);
         $this->authorize('view', $attachment);
+
+        // Only images and text files are viewable on the website.  All other
+        // types of files are handled by the browser.
+        if (
+            !starts_with($attachment->mime_type, 'image/') &&
+            $attachment->mime_type !== 'text/plain'
+        ) {
+            $file = Storage::disk(config('filesystems.cloud'))->get($attachment->file_location);
+
+            return response($file)
+                ->header('Content-Type', $attachment->mime_type)
+                ->header('Content-Disposition', "inline; filename=\"$attachment->file_name\"");
+        }
 
         return view('clients.attachments.show')->with([
             'attachment' => $attachment,

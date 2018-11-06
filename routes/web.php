@@ -110,8 +110,9 @@ Route::group(['middleware' => ['auth', 'auth.role']], function () {
 
         Route::group(['prefix' => '{user_id}/attachments'], function () {
             Route::post('', 'AttachmentController@store');
-            Route::get('{attachment_id}', 'AttachmentController@show');
             Route::get('create', 'AttachmentController@create');
+            Route::get('{attachment_id}/download', 'AttachmentController@download');
+            Route::get('{attachment_id}', 'AttachmentController@show');
         });
     });
 	/*
