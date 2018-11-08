@@ -371,7 +371,7 @@ class UserController extends Controller
         }
 
         return redirect('admin/users')->with([
-            'message' => __('clinic assigned'),
+            'message' => __('admin.users.index.clinic-assigned'),
         ]);
     }
 

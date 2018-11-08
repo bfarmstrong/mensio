@@ -274,6 +274,7 @@ return [
         'index' => [
             'breadcrumb' => 'Users',
             'clients' => 'Clients',
+            'clinic-assigned' => 'The user(s) were assigned to the clinic successfully.',
             'create-user' => 'Invite User',
             'created-user' => 'User was successfully created.',
             'deleted-user' => 'User was successfully deleted.',
