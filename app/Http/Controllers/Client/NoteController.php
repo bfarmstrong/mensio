@@ -13,7 +13,9 @@ use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithChildren;
 use App\Services\Criteria\Note\WithTherapist;
 use App\Services\Impl\IAttachmentService;
+use App\Services\Impl\ICommunicationLogService;
 use App\Services\Impl\INoteService;
+use App\Services\Impl\IReceiptService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,11 +34,25 @@ class NoteController extends Controller
     protected $attachmentService;
 
     /**
+     * The communication log service implementation.
+     *
+     * @var ICommunicationLogService
+     */
+    protected $communicationLogService;
+
+    /**
      * The note service implementation.
      *
      * @var INoteService
      */
     protected $noteService;
+
+    /**
+     * The receipt service implementation.
+     *
+     * @var IReceiptService
+     */
+    protected $receiptService;
 
     /**
      * The user service implementation.
@@ -55,18 +71,23 @@ class NoteController extends Controller
     /**
      * Creates an instance of `NoteController`.
      *
-     * @param IAttachmentService $attachmentService
-     * @param INoteService       $noteService
-     * @param IUserService       $userService
+     * @param IAttachmentService       $attachmentService
+     * @param ICommunicationLogService $communicationLogService
+     * @param INoteService             $noteService
+     * @param IReceiptService          $receiptService
+     * @param IUserService             $userService
      */
     public function __construct(
         IAttachmentService $attachmentService,
+        ICommunicationLogService $communicationLogService,
         INoteService $noteService,
-        IUserService $userService,
-		IClinicService $clinicservice
+        IReceiptService $receiptService,
+        IUserService $userService
     ) {
         $this->attachmentService = $attachmentService;
+        $this->communicationLogService = $communicationLogService;
         $this->noteService = $noteService;
+        $this->receiptService = $receiptService;
         $this->userService = $userService;
 		$this->clinicservice = $clinicservice;
     }
@@ -138,9 +159,23 @@ class NoteController extends Controller
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->all();
 
+        $communication = $this->communicationLogService
+            ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
+
+        $receipts = $this->receiptService
+            ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
+
         return view('clients.notes.index')->with([
             'attachments' => $attachments,
+            'communication' => $communication,
             'notes' => $notes,
+            'receipts' => $receipts,
             'user' => $client,
         ]);
     }

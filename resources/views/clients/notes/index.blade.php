@@ -21,6 +21,20 @@
 
                 <a
                     class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/communication/create") }}"
+                >
+                    @lang('clients.notes.index.create-communication-log')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/receipts/create") }}"
+                >
+                    @lang('clients.notes.index.create-receipt')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/notes/create") }}"
                 >
                     @lang('clients.notes.index.create')
@@ -31,10 +45,17 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($attachments->isNotEmpty() || $notes->isNotEmpty())
+                    @if (
+                        $attachments->isNotEmpty() ||
+                        $communication->isNotEmpty() ||
+                        $notes->isNotEmpty() ||
+                        $receipts->isNotEmpty()
+                    )
                         @include('clients.notes.table', [
                             'attachments' => $attachments,
+                            'communication' => $communication,
                             'notes' => $notes,
+                            'receipts' => $receipts,
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">

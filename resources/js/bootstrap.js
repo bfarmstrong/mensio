@@ -15,6 +15,9 @@ try {
     require('@coreui/coreui');
     require('bootstrap-select');
 
+    // Initialize signature pads
+    require('./signature');
+
     // Initialize select boxes
     window.$('.selectpicker').selectpicker();
     require('./country-picker');

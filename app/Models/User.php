@@ -25,7 +25,7 @@ class User extends Authenticatable
     use Uuids;
     use UserPresenter;
 	use SoftDeletes;
-	
+
     protected $encrypts = [
         'address_line_1',
         'address_line_2',
@@ -42,6 +42,7 @@ class User extends Authenticatable
         'postal_code',
         'province',
         'work_phone',
+        'written_signature',
     ];
 
     /**
@@ -71,7 +72,7 @@ class User extends Authenticatable
      * @var string
      */
     protected $keyType = 'string';
-	
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -110,6 +111,7 @@ class User extends Authenticatable
         'role_id',
         'terms_and_cond',
         'work_phone',
+        'written_signature',
     ];
 
     /**
@@ -147,7 +149,7 @@ class User extends Authenticatable
 
         return $this->hasMany(Note::class, 'therapist_id');
     }
-	
+
     /**
      * A user has either group notes created for them or group notes created by them.
      *
@@ -157,7 +159,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(GroupNote::class, 'created_by');
     }
-	
+
     /**
      * Returns the list of patients associated to a user.
      *
@@ -266,7 +268,7 @@ class User extends Authenticatable
     {
         return $this->hasAtLeastRole(Roles::Super);
     }
-	
+
     /**
      * Returns if the user is a client.
      *
@@ -322,7 +324,7 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
-	
+
 	/**
     * return group if in user groups.
     *
@@ -332,7 +334,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Group','user_groups','user_id','group_id');
     }
-	
+
 	/**
     * return clinic if in user xlinix.
     *

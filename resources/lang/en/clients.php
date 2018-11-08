@@ -18,6 +18,30 @@ return [
             'title' => 'Attachment',
         ],
     ],
+    'communication' => [
+        'create' => [
+            'breadcrumb' => 'Create Communication Log',
+            'create-communication-log' => 'Create Communication Log',
+            'created-communication-log' => 'The communication log has been successfully created.',
+            'title' => 'Create Communication Log',
+        ],
+        'form' => [
+            'appointment-date' => 'Appointment Date',
+            'notes' => 'Notes',
+            'reason' => 'Reason For Meeting',
+            'submit' => 'Submit',
+        ],
+        'form-static' => [
+            'appointment-date' => 'Appointment Date',
+            'notes' => 'Notes',
+            'reason' => 'Reason For Meeting',
+        ],
+        'show' => [
+            'breadcrumb' => 'View Communication Log',
+            'communication-log' => 'Communication Log',
+            'title' => 'Communication Log',
+        ],
+    ],
     'form-search' => [
         'search' => 'Exact name required...',
         'submit' => 'Get Results',
@@ -51,6 +75,8 @@ return [
             'breadcrumb' => 'Notes',
             'create' => 'Create Note',
             'create-attachment' => 'Create Attachment',
+            'create-communication-log' => 'Create Communication Log',
+            'create-receipt' => 'Create Receipt',
             'no-results' => 'No notes were found...',
             'note-created' => 'Note was created successfully.',
             'note-updated' => 'Note was updated successfully.',
@@ -65,7 +91,9 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
+            'appointment-date' => 'Appointment Date',
             'attachments' => 'Attachments',
+            'communication-logs' => 'Communication Logs',
             'creator' => 'Therapist',
             'date' => 'Date',
             'draft' => 'Draft',
@@ -73,6 +101,7 @@ return [
             'final' => 'Final',
             'name' => 'Name',
             'notes' => 'Notes',
+            'receipts' => 'Receipts',
             'status' => 'Status',
             'type' => 'File Type',
             'view' => 'View',
@@ -110,6 +139,18 @@ return [
             'name' => 'Name',
             'status' => 'Status',
             'view' => 'View',
+        ],
+    ],
+    'receipts' => [
+        'create' => [
+            'breadcrumb' => 'Create Receipt',
+            'create-receipt' => 'Create Receipt',
+            'created-receipt' => 'The receipt has been successfully added to the client profile.',
+            'title' => 'Create Receipt',
+        ],
+        'form' => [
+            'appointment-date' => 'Appointment Date',
+            'submit' => 'Submit',
         ],
     ],
     'show' => [

@@ -8,23 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * An attachment is a file that is added to a user profile.
+ * A communication log is a representation of an encounter with a client.  It
+ * is a shorter note which contains the reason for the encounter and any extra
+ * notes that apply to that meeting.
  */
-class Attachment extends Model
+class CommunicationLog extends Model
 {
     use Encryptable;
     use SetsUuids;
 
     /**
-     * The fields that are encrypted in the database.
+     * The fields that should be encrypted.
      *
      * @var array
      */
     protected $encrypts = [
-        'file_location',
-        'file_name',
-        'file_size',
-        'mime_type',
+        'notes',
+        'reason',
     ];
 
     /**
@@ -33,11 +33,11 @@ class Attachment extends Model
      * @var array
      */
     protected $fillable = [
+        'appointment_date',
+        'notes',
+        'reason',
         'clinic_id',
-        'file_location',
-        'file_name',
-        'file_size',
-        'mime_type',
+        'therapist_id',
         'user_id',
     ];
 
@@ -49,7 +49,7 @@ class Attachment extends Model
     protected $uuids = ['uuid'];
 
     /**
-     * An attachment is for a user in a specific clinic.
+     * A communication log may be attached to a clinic.
      *
      * @return BelongsTo
      */
@@ -59,7 +59,17 @@ class Attachment extends Model
     }
 
     /**
-     * An attachment is for a specific user.
+     * A therapist creates a communication log.
+     *
+     * @return BelongsTo
+     */
+    public function therapist()
+    {
+        return $this->belongsTo(Therapist::class, 'therapist_id');
+    }
+
+    /**
+     * A communication log is created for a user.
      *
      * @return BelongsTo
      */

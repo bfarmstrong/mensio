@@ -36,7 +36,7 @@
 @push('scripts')
 <script type="text/javascript">
     window.$('.custom-file-input').change(function (event) {
-        $(this).next('.custom-file-label').html(event.target.files[0].name);
+        window.$(this).next('.custom-file-label').html(event.target.files[0].name);
     });
 </script>
 @endpush

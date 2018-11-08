@@ -70,6 +70,33 @@ Breadcrumbs::for('clients.attachments.show', function ($trail, $user, $attachmen
     );
 });
 
+// Clients > Client Profile > Notes > Create Communication Log
+Breadcrumbs::for('clients.communication.create', function ($trail, $user) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.communication.create.breadcrumb'),
+        url("clients/$user->id/communication/create")
+    );
+});
+
+// Clients > Client Profile > Notes > View Communication Log
+Breadcrumbs::for('clients.communication.show', function ($trail, $user, $communication) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.communication.show.breadcrumb'),
+        url("clients/$user->id/communication/$communication->uuid")
+    );
+});
+
+// Clients > Client Profile > Notes > Create Receipt
+Breadcrumbs::for('clients.receipts.create', function ($trail, $user) {
+    $trail->parent('clients.notes.index', $user);
+    $trail->push(
+        __('clients.receipts.create.breadcrumb'),
+        url("clients/$user->id/receipts/create")
+    );
+});
+
 // Clients > Client Profile > Questionnaires
 Breadcrumbs::for('clients.questionnaires.index', function ($trail, $user) {
     $trail->parent('clients.show', $user);
@@ -309,4 +336,10 @@ Breadcrumbs::for('user.settings', function ($trail) {
 Breadcrumbs::for('user.password', function ($trail) {
     $trail->parent('user.settings');
     $trail->push(__('user.password.breadcrumb'), url('user/password'));
+});
+
+// User Settings > Change Signature
+Breadcrumbs::for('user.signature', function ($trail) {
+    $trail->parent('user.settings');
+    $trail->push(__('user.signature.breadcrumb'), url('user/signature'));
 });

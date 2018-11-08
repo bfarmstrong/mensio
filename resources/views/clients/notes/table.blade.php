@@ -39,6 +39,30 @@
             </a>
         </li>
     @endif
+
+    @if ($communication->isNotEmpty())
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                data-toggle="tab"
+                href="#communication"
+            >
+                @lang('clients.notes.table.communication-logs')
+            </a>
+        </li>
+    @endif
+
+    @if ($receipts->isNotEmpty())
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                data-toggle="tab"
+                href="#receipts"
+            >
+                @lang('clients.notes.table.receipts')
+            </a>
+        </li>
+    @endif
 </ul>
 
 <div class="tab-content">
@@ -132,6 +156,67 @@
                                 <a
                                     class="btn btn-primary btn-sm"
                                     href="{{ url("clients/$user->id/attachments/$attachment->uuid") }}"
+                                >
+                                    <i class="fas fa-search mr-1"></i>
+                                    @lang('clients.notes.table.view')
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    @if ($communication->isNotEmpty())
+        <div id="communication" class="tab-pane fade">
+            <table class="table table-hover table-outline table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>@lang('clients.notes.table.appointment-date')</th>
+                        <th>@lang('clients.notes.table.actions')</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($communication as $log)
+                        <tr>
+                            <td>{{ $log->appointment_date }}</td>
+                            <td>
+                                <a
+                                    class="btn btn-primary btn-sm"
+                                    href="{{ url("clients/$user->id/communication/$log->uuid") }}"
+                                >
+                                    <i class="fas fa-search mr-1"></i>
+                                    @lang('clients.notes.table.view')
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    @if ($receipts->isNotEmpty())
+        <div id="receipts" class="tab-pane fade">
+            <table class="table table-hover table-outline table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>@lang('clients.notes.table.appointment-date')</th>
+                        <th>@lang('clients.notes.table.actions')</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($receipts as $receipt)
+                        <tr>
+                            <td>{{ $receipt->appointment_date }}</td>
+                            <td>
+                                <a
+                                    class="btn btn-primary btn-sm"
+                                    href="{{ url("clients/$user->id/receipts/$receipt->uuid/download") }}"
+                                    target="_blank"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
