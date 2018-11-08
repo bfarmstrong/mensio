@@ -15,18 +15,6 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    {!!
-                        Form::open([
-                            'url' => url('clients/search')
-                        ])
-                    !!}
-                    @include('clients.form-search')
-                    {!! Form::close() !!}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
                     @if ($clients->isNotEmpty())
                         @include('clients.table', [
                             'users' => $clients
@@ -36,8 +24,6 @@
                             @lang('clients.index.no-results')
                         </p>
                     @endif
-
-                    {{ $clients->links() }}
                 </div>
             </div>
         </div>

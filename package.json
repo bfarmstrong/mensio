@@ -24,6 +24,10 @@
         "@fortawesome/fontawesome-free": "5.3.1",
         "bootstrap-select": "1.13.3",
         "codemirror": "5.40.2",
+        "datatables.net": "1.10.19",
+        "datatables.net-bs4": "1.10.19",
+        "datatables.net-responsive": "2.2.3",
+        "datatables.net-responsive-bs4": "2.2.3",
         "perfect-scrollbar": "1.4.0",
         "summernote": "0.8.10",
         "survey-jquery": "1.0.45"

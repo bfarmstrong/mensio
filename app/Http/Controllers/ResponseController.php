@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Response\UpdateDataRequest;
 use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Impl\IClinicService;
 use App\Services\Impl\IResponseService;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Config;
 /**
  * Controller which handles unauthenticated access to questionnaires.
  */
@@ -23,14 +25,22 @@ class ResponseController extends Controller
      */
     protected $response;
 
+	/**
+     * The clinic service implementation.
+     *
+     * @var IClinicService
+     */
+	protected $clinicservice;
+
     /**
      * Creates an instance of `ResponseController`.
      *
      * @param IResponseService $response
      */
-    public function __construct(IResponseService $response)
+    public function __construct(IResponseService $response,IClinicService $clinicservice)
     {
         $this->response = $response;
+		$this->clinicservice = $clinicservice;
     }
 
     /**
@@ -41,9 +51,11 @@ class ResponseController extends Controller
     public function index()
     {
         $this->authorize('index', \App\Models\Response::class);
+		$clinic_id = request()->attributes->get('clinic')->id;
         $responses = $this->response
             ->pushCriteria(new WhereAssigned(Auth::id()))
             ->pushCriteria(new WithQuestionnaire())
+			->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
             ->paginate();
 
         return view('responses.index', [

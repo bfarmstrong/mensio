@@ -17,7 +17,8 @@ use App\Services\Impl\INoteService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\Services\Impl\IClinicService;
+use Config;
 /**
  * Handles actions related to notes against a client.
  */
@@ -44,6 +45,13 @@ class NoteController extends Controller
      */
     protected $userService;
 
+	/**
+     * The clinic service implementation.
+     *
+     * @var IClinicService
+     */
+	protected $clinicservice;
+
     /**
      * Creates an instance of `NoteController`.
      *
@@ -54,11 +62,13 @@ class NoteController extends Controller
     public function __construct(
         IAttachmentService $attachmentService,
         INoteService $noteService,
-        IUserService $userService
+        IUserService $userService,
+		IClinicService $clinicservice
     ) {
         $this->attachmentService = $attachmentService;
         $this->noteService = $noteService;
         $this->userService = $userService;
+		$this->clinicservice = $clinicservice;
     }
 
     /**
@@ -114,7 +124,7 @@ class NoteController extends Controller
     {
         $client = $this->userService->find($client);
         $this->authorize('viewNotes', $client);
-
+        $clinic_id = request()->attributes->get('clinic')->id;
         $notes = $this->noteService
             ->pushCriteria(new WhereClient($client->id))
             ->pushCriteria(new WhereParent())
@@ -172,9 +182,10 @@ class NoteController extends Controller
     {
         $client = $this->userService->find($request->user_id);
         $this->authorize('addNote', $client);
-
+        $clinic_id = request()->attributes->get('clinic')->id ?? null;
         $this->noteService->create(array_merge($request->all(), [
             'client_id' => $client->id,
+			'clinic_id' => $clinic_id,
         ]));
 
         return redirect()->to("clients/$client->id/notes")->with([

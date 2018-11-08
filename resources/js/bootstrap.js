@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
@@ -19,6 +18,9 @@ try {
     // Initialize select boxes
     window.$('.selectpicker').selectpicker();
     require('./country-picker');
+
+    // Initialize datatables
+    require('./datatables');
 
     // Initialize Summernote
     require('summernote/dist/summernote-bs4');

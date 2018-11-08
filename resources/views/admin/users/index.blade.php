@@ -30,18 +30,6 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    {!!
-                        Form::open([
-                            'url' => url('admin/users/search')
-                        ])
-                    !!}
-                    @include('admin.users.form-search')
-                    {!! Form::close() !!}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
                     @if ($users->isNotEmpty())
                         @include('admin.users.table', ['users' => $users])
                     @else
@@ -49,8 +37,6 @@
                             @lang('admin.users.index.no-results')
                         </p>
                     @endif
-
-                    {{ $users->links() }}
                 </div>
             </div>
         </div>
