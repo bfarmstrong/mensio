@@ -227,6 +227,12 @@ return [
             ],
     ],
     'users' => [
+        'add' => [
+            'breadcrumb' => 'Invite',
+            'form-title' => 'Invite User',
+            'health-card-help' => 'In order to add a user to your clinic, an exact match is required.',
+            'title' => 'Add User',
+        ],
         'create' => [
             'breadcrumb' => 'Invite',
             'form-title' => 'Invite User',
@@ -275,7 +281,7 @@ return [
             'breadcrumb' => 'Users',
             'clients' => 'Clients',
             'clinic-assigned' => 'The user(s) were assigned to the clinic successfully.',
-            'create-user' => 'Invite User',
+            'create-user' => 'Invite New User',
             'created-user' => 'User was successfully created.',
             'deleted-user' => 'User was successfully deleted.',
             'no-results' => 'No users were found...',
@@ -286,7 +292,7 @@ return [
             'title' => 'All Users',
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
-            'assign-clinic' => 'Assign Clinics',
+            'assign-clinic' => 'Invite Existing User',
             'inactive-user' => 'User was successfully deactivated.',
             'active-user' => 'User was successfully activated.',
         ],

@@ -308,6 +308,12 @@ Breadcrumbs::for('admin.users.invite', function ($trail) {
     $trail->push(__('admin.users.create.breadcrumb'), url('admin/users/invite'));
 });
 
+// Users > Invite
+Breadcrumbs::for('admin.users.add', function ($trail) {
+    $trail->parent('admin.users.index');
+    $trail->push(__('admin.users.add.breadcrumb'), url('admin/users/add'));
+});
+
 // Users > User Profile
 Breadcrumbs::for('admin.users.show', function ($trail, $user) {
     $trail->parent('admin.users.index');
