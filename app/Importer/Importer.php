@@ -435,7 +435,7 @@ class Importer implements IImporter
     {
         DB::transaction(function () {
             $clientRole = $this->roleService->findBy('level', Roles::Client);
-            $therapistRole = $this->roleService->findBy('level', Roles::JuniorTherapist);
+            $therapistRole = $this->roleService->findBy('level', Roles::SeniorTherapist);
 
             $therapists = $this->legacyApiService->getUserData();
             $numberOfOperations = $therapists->reduce(function ($carry, $item) {
