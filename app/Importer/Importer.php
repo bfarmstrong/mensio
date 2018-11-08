@@ -372,8 +372,10 @@ class Importer implements IImporter
         }
 
         // Client does not exist, create a new one and return it
+        $clientRole = $this->roleService->findBy('level', Roles::Client);
         $client['is_active'] = 1;
         $client['password'] = Hash::make(str_random(24));
+        $client['role_id'] = $clientRole->id;
         $user = $this->userService->create($client);
         if (! is_null($clinic)) {
             $this->userService->assignClinic($clinic, $user);
