@@ -24,6 +24,6 @@ class MakeHealthCardBlindIndexNullable extends Migration
      */
     public function down()
     {
-        DB::statement('ALTER TABLE users MODIFY health_card_number_bidx VARCHAR(191) NOT NULL;');
+        DB::statement('ALTER TABLE users MODIFY health_card_number_bidx VARCHAR(191) NOT NULL');
     }
 }

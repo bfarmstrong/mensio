@@ -39,6 +39,7 @@ class User extends Authenticatable
         'license',
         'name',
         'notes',
+        'phone',
         'postal_code',
         'province',
         'work_phone',
