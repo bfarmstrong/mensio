@@ -4,24 +4,24 @@ return [
     'dashboard' => [
         'breadcrumb' => 'Dashboard',
     ],
-	'clinics' => [
+    'clinics' => [
         'create' => [
             'breadcrumb' => 'Create',
             'form-title' => 'Create Clinic',
             'title' => 'Create Clinic',
         ],
-		'assignclinic' => [
+        'assignclinic' => [
             'assign' => 'Assign User',
-			'breadcrumb' => 'Assign User',
-			'users' => 'Users',
-			'assign-users' =>'Assign',
-			'no-results' => 'No users were found...',
-			'form-title' => 'Create Clinic',
-			'form-assign-button' => 'Assign',
-			'user-assigned' => "Clinic was successfully assigned",
-			'form-delete' => 'Unassign',
-			'on-submit' => 'Are you sure you want to unassign this user?',
-			'deleted-user-clinic' => 'User was unassigned successfully',
+            'breadcrumb' => 'Assign User',
+            'users' => 'Users',
+            'assign-users' =>'Assign',
+            'no-results' => 'No users were found...',
+            'form-title' => 'Create Clinic',
+            'form-assign-button' => 'Assign',
+            'user-assigned' => 'Clinic was successfully assigned',
+            'form-delete' => 'Unassign',
+            'on-submit' => 'Are you sure you want to unassign this user?',
+            'deleted-user-clinic' => 'User was unassigned successfully',
             'title' => 'All Users',
         ],
         'edit' => [
@@ -52,7 +52,7 @@ return [
             'no-results' => 'No clinics were found...',
             'title' => 'All Clinics',
             'updated-clinic' => 'Clinic was successfully updated.',
-			'switched-back' => 'You have restored your original session.',
+            'switched-back' => 'You have restored your original session.',
         ],
         'table' => [
             'actions' => 'Actions',
@@ -182,50 +182,50 @@ return [
             'name' => 'Name',
         ],
     ],
-	'groups' => [
-			'create' => [
-				'breadcrumb' => 'Create',
-				'form-title' => 'Create Group',
-				'title' => 'Create Group',
-			],
-			'edit' => [
-				'breadcrumb' => 'Edit',
-				'form-title' => 'Edit Group',
-				'title' => 'Edit Group',
-			],
-			'form' => [
-				'cancel' => 'Cancel',
-				'name' => 'Name',
-				'therapists' => 'Therapists',
-				'save' => 'Save',
-			],
-			'form-delete' => [
-				'delete' => 'Delete',
-				'on-submit' => 'Are you sure you want to delete this group?',
-			],
-			'form-search' => [
-				'search' => 'Search...',
-				'submit' => 'Get Results',
-			],
-			'index' => [
-				'breadcrumb' => 'Groups',
-				'create-groups' => 'Create Group',
-				'created-group' => 'Group was successfully created.',
-				'deleted-group' => 'Group was successfully deleted.',
-				'no-results' => 'No groups were found...',
-				'groups' => 'Groups',
-				'updated-group' => 'Group was successfully updated.',
-				'title' => 'All Groups',
-			],
-			'table' => [
-				'actions' => 'Actions',
-				'delete' => 'Delete',
-				'edit' => 'Edit',
+    'groups' => [
+            'create' => [
+                'breadcrumb' => 'Create',
+                'form-title' => 'Create Group',
+                'title' => 'Create Group',
+            ],
+            'edit' => [
+                'breadcrumb' => 'Edit',
+                'form-title' => 'Edit Group',
+                'title' => 'Edit Group',
+            ],
+            'form' => [
+                'cancel' => 'Cancel',
+                'name' => 'Name',
+                'therapists' => 'Therapists',
+                'save' => 'Save',
+            ],
+            'form-delete' => [
+                'delete' => 'Delete',
+                'on-submit' => 'Are you sure you want to delete this group?',
+            ],
+            'form-search' => [
+                'search' => 'Search...',
+                'submit' => 'Get Results',
+            ],
+            'index' => [
+                'breadcrumb' => 'Groups',
+                'create-groups' => 'Create Group',
+                'created-group' => 'Group was successfully created.',
+                'deleted-group' => 'Group was successfully deleted.',
+                'no-results' => 'No groups were found...',
+                'groups' => 'Groups',
+                'updated-group' => 'Group was successfully updated.',
+                'title' => 'All Groups',
+            ],
+            'table' => [
+                'actions' => 'Actions',
+                'delete' => 'Delete',
+                'edit' => 'Edit',
                 'label' => 'Label',
                 'members' => 'Members',
-				'name' => 'Name',
-			],
-	],
+                'name' => 'Name',
+            ],
+    ],
     'users' => [
         'create' => [
             'breadcrumb' => 'Invite',
@@ -284,8 +284,8 @@ return [
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
             'assign-clinic' => 'Assign Clinics',
-			'inactive-user' => 'User is inactive',
-			'active-user' => 'User is active',
+            'inactive-user' => 'User is inactive',
+            'active-user' => 'User is active',
         ],
         'show' => [
             'breadcrumb' => ':Role Profile',
@@ -348,7 +348,7 @@ return [
                 'removed-supervisor' => 'The supervisor was removed successfully.',
                 'removed-group' => 'The Group was removed successfully.',
                 'already-in-group' => 'The Group was already added',
-				'title' => 'Groups',
+                'title' => 'Groups',
             ],
             'table' => [
                 'actions' => 'Actions',

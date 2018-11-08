@@ -18,7 +18,7 @@ class UpdateSignatureRequest extends FormRequest
             'signature_base64' => [
                 'sometimes',
                 'required_without:signature_file',
-                new Base64,
+                new Base64(),
             ],
             'signature_file' => 'sometimes|required_without:signature_base64|file|mimetypes:image/*',
         ];

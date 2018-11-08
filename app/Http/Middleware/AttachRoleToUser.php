@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Models\Clinic;
-use Config;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
+use Closure;
+use Config;
 use Illuminate\Support\Facades\URL;
 
 /**
@@ -15,18 +15,19 @@ use Illuminate\Support\Facades\URL;
  */
 class AttachRoleToUser
 {
-	/**
+    /**
      * The clinic service implementation.
      *
      * @var IClinicService
-    */
-	public function __construct(
+     */
+    public function __construct(
         IClinicService $clinicservice,
-		IUserService $userService
+        IUserService $userService
     ) {
-		$this->clinicservice = $clinicservice;
-		$this->userService = $userService;
+        $this->clinicservice = $clinicservice;
+        $this->userService = $userService;
     }
+
     /**
      * Handle an incoming request.
      *
@@ -36,34 +37,34 @@ class AttachRoleToUser
      * @return mixed
      */
     public function handle($request, Closure $next)
-    { 
-		if (Config::get('subdomain') != '' && !$request->user()->isSuperAdmin()){
-			$UserAssignedClinic = array('Switch Clinic');
-			
-			$url = parse_url(URL::current());
-			$domain = explode('.', $url['host']);
-			$subdomain = $domain[0];
-			
-			$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
-			$count = $clinic->users()->where('user_id',\Auth::user()->id)->count();
-			$assignedClinics = $this->userService->find(\Auth::user()->id);
-			
-			if($count == 0 ){
-				return response()->view('errors.401', [], 401);
-			} else {
-				$UserClinic = $assignedClinics->clinics->pluck('name','id'); 
-				foreach($UserClinic as $k => $v){
-					if($subdomain != strtolower($v)){
-						$UserAssignedClinic[$k] = $v;
-					}
-				}
-				\View::share('totalClinicAssign',$assignedClinics->clinics->count());
-				\View::share('assignedClinics',$UserAssignedClinic);
-			}
-		}
-		
-			\Auth::user()->load('role');
-			return $next($request);
-		
+    {
+        if ('' != Config::get('subdomain') && ! $request->user()->isSuperAdmin()) {
+            $UserAssignedClinic = ['Switch Clinic'];
+
+            $url = parse_url(URL::current());
+            $domain = explode('.', $url['host']);
+            $subdomain = $domain[0];
+
+            $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
+            $count = $clinic->users()->where('user_id', \Auth::user()->id)->count();
+            $assignedClinics = $this->userService->find(\Auth::user()->id);
+
+            if (0 == $count) {
+                return response()->view('errors.401', [], 401);
+            } else {
+                $UserClinic = $assignedClinics->clinics->pluck('name', 'id');
+                foreach ($UserClinic as $k => $v) {
+                    if ($subdomain != strtolower($v)) {
+                        $UserAssignedClinic[$k] = $v;
+                    }
+                }
+                \View::share('totalClinicAssign', $assignedClinics->clinics->count());
+                \View::share('assignedClinics', $UserAssignedClinic);
+            }
+        }
+
+        \Auth::user()->load('role');
+
+        return $next($request);
     }
 }

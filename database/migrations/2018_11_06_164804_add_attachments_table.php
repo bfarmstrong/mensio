@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Adds the attachments table to the database.
@@ -24,7 +24,7 @@ class AddAttachmentsTable extends Migration
             $table->integer('file_size')->unsigned();
             $table->string('mime_type');
 
-			$table->string('user_id');
+            $table->string('user_id');
             $table->integer('clinic_id')->unsigned();
 
             $table->uuid('uuid');
@@ -37,7 +37,7 @@ class AddAttachmentsTable extends Migration
                 ->onUpdate('cascade');
             $table->index('user_id');
 
-			$table->foreign('clinic_id')
+            $table->foreign('clinic_id')
                 ->references('id')
                 ->on('clinics')
                 ->onDelete('cascade')

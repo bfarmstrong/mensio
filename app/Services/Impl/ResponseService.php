@@ -11,8 +11,7 @@ use App\Services\Criteria\Questionnaire\WithQuestionsAndItems;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Config;
-use App\Models\Clinic;
+
 /**
  * Implementation of the response service.
  */
@@ -109,7 +108,7 @@ class ResponseService extends BaseService implements IResponseService
      *
      * @return Model
      */
-    public function assignToClient($client, $questionnaire,$assignfromgroup = false)
+    public function assignToClient($client, $questionnaire, $assignfromgroup = false)
     {
         $assigned = $this
             ->optional()
@@ -117,27 +116,28 @@ class ResponseService extends BaseService implements IResponseService
                 ['questionnaire_id', $questionnaire],
                 ['user_id', $client],
             ]);
-		if ($assignfromgroup == true && ! is_null($assigned)) {
-				return false;
-		} else {
-			// Prevent assignment of a questionnaire if it is already assigned
-			if (! is_null($assigned)) {
-				throw new QuestionnaireAlreadyAssignedException();
-			}
-			if (!is_null(request()->attributes->get('clinic'))) {
-				$clinic_id = request()->attributes->get('clinic')->id;
-				return $this->create([
-					'questionnaire_id' => $questionnaire,
-					'user_id' => $client,
-					'clinic_id'=>$clinic_id
-				]);
-			} else {
-				return $this->create([
-					'questionnaire_id' => $questionnaire,
-					'user_id' => $client,
-				]);
-			}
-		}
+        if (true == $assignfromgroup && ! is_null($assigned)) {
+            return false;
+        } else {
+            // Prevent assignment of a questionnaire if it is already assigned
+            if (! is_null($assigned)) {
+                throw new QuestionnaireAlreadyAssignedException();
+            }
+            if (! is_null(request()->attributes->get('clinic'))) {
+                $clinic_id = request()->attributes->get('clinic')->id;
+
+                return $this->create([
+                    'questionnaire_id' => $questionnaire,
+                    'user_id' => $client,
+                    'clinic_id'=>$clinic_id,
+                ]);
+            } else {
+                return $this->create([
+                    'questionnaire_id' => $questionnaire,
+                    'user_id' => $client,
+                ]);
+            }
+        }
     }
 
     /**
@@ -250,20 +250,20 @@ class ResponseService extends BaseService implements IResponseService
      *
      * @return int
      */
-    public function unassignFromClient($client, $questionnaire,$assignfromgroup = false)
+    public function unassignFromClient($client, $questionnaire, $assignfromgroup = false)
     {
         $response = $this->findBy([
             ['questionnaire_id', $questionnaire],
             ['user_id', $client],
         ]);
-		if ($assignfromgroup == true && $response->complete) {
-				return false;
-		} else {
-			if ($response->complete) {
-				throw new QuestionnaireAlreadyCompletedException();
-			}
+        if (true == $assignfromgroup && $response->complete) {
+            return false;
+        } else {
+            if ($response->complete) {
+                throw new QuestionnaireAlreadyCompletedException();
+            }
 
-			return $this->delete($response->id);
-		}
+            return $this->delete($response->id);
+        }
     }
 }

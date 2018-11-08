@@ -80,7 +80,7 @@ trait Signable
      * @return bool
      */
     public function isSignatureValid(string $signee)
-    { 
+    {
         return $this->getHashedSignature($signee) === $this->getStoredSignatureHash();
     }
 

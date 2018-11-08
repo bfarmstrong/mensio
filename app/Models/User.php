@@ -12,9 +12,9 @@ use App\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -24,7 +24,7 @@ class User extends Authenticatable
     use SetsBlindIndex;
     use Uuids;
     use UserPresenter;
-	use SoftDeletes;
+    use SoftDeletes;
 
     protected $encrypts = [
         'address_line_1',
@@ -50,14 +50,14 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $blindIndex = ['name_bidx','health_card_number_bidx'];
+    protected $blindIndex = ['name_bidx', 'health_card_number_bidx'];
 
     /**
      * The name of the column being indexed.
      *
      * @var string
      */
-    protected $blindIndexed = ['name','health_card_number'];
+    protected $blindIndexed = ['name', 'health_card_number'];
 
     /**
      * The database table used by the model.
@@ -259,11 +259,11 @@ class User extends Authenticatable
         return $this->hasAtLeastRole(Roles::Administrator);
     }
 
-	/**
+    /**
      * Returns if the user is an admin.
      *
      * @return bool
-    */
+     */
     public function isSuperAdmin()
     {
         return $this->hasAtLeastRole(Roles::Super);
@@ -325,23 +325,23 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token));
     }
 
-	/**
-    * return group if in user groups.
-    *
-    * @param string group_id
-    */
-	public function groups()
+    /**
+     * return group if in user groups.
+     *
+     * @param string group_id
+     */
+    public function groups()
     {
-        return $this->belongsToMany('App\Models\Group','user_groups','user_id','group_id');
+        return $this->belongsToMany('App\Models\Group', 'user_groups', 'user_id', 'group_id');
     }
 
-	/**
-    * return clinic if in user xlinix.
-    *
-    * @param string clinic_id
-    */
-	public function clinics()
+    /**
+     * return clinic if in user xlinix.
+     *
+     * @param string clinic_id
+     */
+    public function clinics()
     {
-        return $this->belongsToMany('App\Models\Clinic','user_clinics','user_id','clinic_id');
+        return $this->belongsToMany('App\Models\Clinic', 'user_clinics', 'user_id', 'clinic_id');
     }
 }

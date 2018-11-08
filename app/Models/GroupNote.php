@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\Purifiable;
 use App\Models\Traits\SetsUuids;
+use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Traits\Signable;
+
 /**
  * A note is information that is created about a group in regard to an
  * encounter of some form.  Supports HTML format.
@@ -27,22 +28,22 @@ class GroupNote extends Model
      * @var array
      */
     protected $fillable = [
-		'contents',
+        'contents',
         'digital_signature',
         'is_draft',
-		'group_id',
-		'note_id',
-		'created_by',
-		'clinic_id',
+        'group_id',
+        'note_id',
+        'created_by',
+        'clinic_id',
     ];
-	
+
     /**
      * The columns that generate a UUID.
      *
      * @var array
      */
     protected $uuids = ['uuid'];
-	
+
     /**
      * The content that is cleaned of any unsafe HTML.
      *
@@ -51,7 +52,7 @@ class GroupNote extends Model
     protected $purifiable = [
         'contents',
     ];
-	
+
     /**
      * The attributes that are signed.
      *
@@ -60,6 +61,7 @@ class GroupNote extends Model
     protected $signable = [
         'contents',
     ];
+
     /**
      * A GroupNote may have many children notes under it.
      *
@@ -89,7 +91,7 @@ class GroupNote extends Model
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
-	
+
     /**
      * A GroupNote is created for a user.
      *

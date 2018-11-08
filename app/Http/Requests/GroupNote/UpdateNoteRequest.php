@@ -29,7 +29,7 @@ class UpdateNoteRequest extends FormRequest
         return [
             'contents' => 'required',
             'is_draft' => 'required|boolean',
-			'signature.license' => 'required_if:is_draft,0',
+            'signature.license' => 'required_if:is_draft,0',
             'signature.name' => 'required_if:is_draft,0',
         ];
     }

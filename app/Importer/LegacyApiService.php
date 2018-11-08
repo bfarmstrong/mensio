@@ -41,6 +41,7 @@ class LegacyApiService implements ILegacyApiService
             ->getContents();
 
         $data = collect(json_decode($data));
+
         return $data->map(function ($user) {
             $user->clients = collect($user->clients);
 

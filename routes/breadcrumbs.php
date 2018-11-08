@@ -160,14 +160,14 @@ Breadcrumbs::for('admin.clinics.index', function ($trail) {
 });
 
 // Clinics > assign
-Breadcrumbs::for('admin.clinics.assignclinic', function ($trail,$clinic) {
-	$trail->parent('admin.clinics.index');
+Breadcrumbs::for('admin.clinics.assignclinic', function ($trail, $clinic) {
+    $trail->parent('admin.clinics.index');
     $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics'));
 });
 
 // Clinics > assign >assign user
-Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail,$clinic) {
-	$trail->parent('admin.clinics.index');
+Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail, $clinic) {
+    $trail->parent('admin.clinics.index');
     $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics/assign'));
 });
 
@@ -277,7 +277,6 @@ Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
 
 // Groups > Group Profile > Questionnaires > Assign
 Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
-
     $trail->push(
         __('groups.questionnaires.create.breadcrumb'),
         url("groups/$group->uuid/questionnaires/create")

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Creates the communication logs table in the database.
@@ -23,7 +23,7 @@ class AddCommunicationLogsTable extends Migration
             $table->text('notes')->nullable();
             $table->text('reason');
             $table->string('therapist_id');
-			$table->string('user_id');
+            $table->string('user_id');
             $table->integer('clinic_id')->unsigned();
 
             $table->uuid('uuid');
@@ -43,7 +43,7 @@ class AddCommunicationLogsTable extends Migration
                 ->onUpdate('cascade');
             $table->index('user_id');
 
-			$table->foreign('clinic_id')
+            $table->foreign('clinic_id')
                 ->references('id')
                 ->on('clinics')
                 ->onDelete('cascade')

@@ -56,13 +56,14 @@ class Group extends Model
     {
         return Group::where('name', $name)->firstOrFail();
     }
-	/**
-    * return user if in user groups.
-    *
-    * @param string user_id
-    */
-	public function users()
+
+    /**
+     * return user if in user groups.
+     *
+     * @param string user_id
+     */
+    public function users()
     {
-        return $this->belongsToMany('App\Models\User','user_groups','group_id','user_id');
+        return $this->belongsToMany('App\Models\User', 'user_groups', 'group_id', 'user_id');
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateAttachmentRequest;
 use App\Models\Attachment;
 use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\General\WithRelation;
 use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IUserService;
 use Config;
@@ -68,8 +67,8 @@ class AttachmentController extends Controller
      * Sends the raw contents of the attachment file in the response.
      *
      * @param Request $request
-     * @param string $client
-     * @param string $attachment
+     * @param string  $client
+     * @param string  $attachment
      *
      * @return Response
      */
@@ -89,8 +88,8 @@ class AttachmentController extends Controller
      * Returns a page to view an attachment.
      *
      * @param Request $request
-     * @param string $client
-     * @param string $attachment
+     * @param string  $client
+     * @param string  $attachment
      *
      * @return Response
      */
@@ -106,8 +105,8 @@ class AttachmentController extends Controller
         // Only images and text files are viewable on the website.  All other
         // types of files are handled by the browser.
         if (
-            !starts_with($attachment->mime_type, 'image/') &&
-            $attachment->mime_type !== 'text/plain'
+            ! starts_with($attachment->mime_type, 'image/') &&
+            'text/plain' !== $attachment->mime_type
         ) {
             $file = Storage::disk(config('filesystems.cloud'))->get($attachment->file_location);
 
@@ -126,7 +125,7 @@ class AttachmentController extends Controller
      * Saves an attachment to the database.
      *
      * @param CreateAttachmentRequest $request
-     * @param string $client
+     * @param string                  $client
      *
      * @return Response
      */

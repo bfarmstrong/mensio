@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use App\Models\Traits\Loggable;
 use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +12,6 @@ class Clinic extends Model
     use Loggable;
     use Notifiable;
     use SetsUuids;
-
 
     /**
      * The database table used by the model.
@@ -32,27 +30,26 @@ class Clinic extends Model
         'address_line_2',
         'city',
         'country',
-		'postal_code',
+        'postal_code',
         'province',
         'name',
-		'subdomain',
-
+        'subdomain',
     ];
-	
-	/**
+
+    /**
      * The columns that generate a UUID.
      *
      * @var array
      */
     protected $uuids = ['uuid'];
-	
-	/**
-    * return user if in user groups.
-    *
-    * @param string user_id
-    */
-	public function users()
+
+    /**
+     * return user if in user groups.
+     *
+     * @param string user_id
+     */
+    public function users()
     {
-        return $this->belongsToMany('App\Models\User','user_clinics','clinic_id','user_id');
+        return $this->belongsToMany('App\Models\User', 'user_clinics', 'clinic_id', 'user_id');
     }
 }

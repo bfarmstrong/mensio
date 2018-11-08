@@ -13,14 +13,14 @@ use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithChildren;
 use App\Services\Criteria\Note\WithTherapist;
 use App\Services\Impl\IAttachmentService;
+use App\Services\Impl\IClinicService;
 use App\Services\Impl\ICommunicationLogService;
 use App\Services\Impl\INoteService;
 use App\Services\Impl\IReceiptService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\Impl\IClinicService;
-use Config;
+
 /**
  * Handles actions related to notes against a client.
  */
@@ -61,12 +61,12 @@ class NoteController extends Controller
      */
     protected $userService;
 
-	/**
+    /**
      * The clinic service implementation.
      *
      * @var IClinicService
      */
-	protected $clinicservice;
+    protected $clinicservice;
 
     /**
      * Creates an instance of `NoteController`.
@@ -89,7 +89,7 @@ class NoteController extends Controller
         $this->noteService = $noteService;
         $this->receiptService = $receiptService;
         $this->userService = $userService;
-		$this->clinicservice = $clinicservice;
+        $this->clinicservice = $clinicservice;
     }
 
     /**
@@ -220,7 +220,7 @@ class NoteController extends Controller
         $clinic_id = request()->attributes->get('clinic')->id ?? null;
         $this->noteService->create(array_merge($request->all(), [
             'client_id' => $client->id,
-			'clinic_id' => $clinic_id,
+            'clinic_id' => $clinic_id,
         ]));
 
         return redirect()->to("clients/$client->id/notes")->with([

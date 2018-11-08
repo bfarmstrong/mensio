@@ -2,8 +2,8 @@
 
 namespace App\Services\Impl;
 
-use App\Services\BaseService;
 use App\Models\User;
+use App\Services\BaseService;
 use Auth;
 use Session;
 
@@ -21,32 +21,33 @@ class ClinicService extends BaseService implements IClinicService
     {
         return \App\Models\Clinic::class;
     }
-	
-	/**
+
+    /**
      * Switches to the specified clinic.
      *
      * @param string $id
      *
      * @return void
      */
-    public function switchToClinic(string $id,string $clinic_id)
+    public function switchToClinic(string $id, string $clinic_id)
     {
         $user = User::find($id);
-		Auth::login($user);
+        Auth::login($user);
         Session::put('original_clinic', $clinic_id);
     }
-	
-	/**
+
+    /**
      * Switches back to the original clinic.
      *
      * @return void
-    */
+     */
     public function switchBackClinic()
     {
         $original = Session::pull('original_clinic');
         $clinic = $this->find($original);
-		$user = User::find(Auth::id());
+        $user = User::find(Auth::id());
         Auth::login($user);
-		return $clinic->subdomain;
+
+        return $clinic->subdomain;
     }
 }

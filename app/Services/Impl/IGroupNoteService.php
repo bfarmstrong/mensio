@@ -9,5 +9,5 @@ use App\Services\IBaseService;
  */
 interface IGroupNoteService extends IBaseService
 {
-	public function addAddition($note, string $addition);
+    public function addAddition($note, string $addition);
 }

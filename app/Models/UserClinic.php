@@ -18,14 +18,13 @@ class UserClinic extends Model
     use Loggable;
     use SetsUuids;
 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-		'user_id',
+        'user_id',
         'clinic_id',
     ];
 
@@ -49,7 +48,6 @@ class UserClinic extends Model
         return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 
-	
     /**
      * A UserClinic is created for a user.
      *

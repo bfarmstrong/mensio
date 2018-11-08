@@ -35,7 +35,7 @@ class ReceiptService extends BaseService implements IReceiptService
         $receipt = $this->find($receipt);
         $therapistSignature = Storage::disk(config('filesystems.cloud'))
             ->get($receipt->therapist->written_signature);
-        if (!is_null($receipt->supervisor)) {
+        if (! is_null($receipt->supervisor)) {
             $supervisorSignature = Storage::disk(config('filesystems.cloud'))
                 ->get($receipt->supervisor->written_signature);
         }
@@ -43,9 +43,9 @@ class ReceiptService extends BaseService implements IReceiptService
         return PDF::loadView('pdf.receipt', [
             'receipt' => $receipt,
             'supervisorSignature' => isset($supervisorSignature) ?
-                'data:image/png;base64,' . base64_encode($supervisorSignature) :
+                'data:image/png;base64,'.base64_encode($supervisorSignature) :
                 null,
-            'therapistSignature' => 'data:image/png;base64,' .
+            'therapistSignature' => 'data:image/png;base64,'.
                 base64_encode($therapistSignature),
         ]);
     }

@@ -3,23 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use App\Http\Requests\UserInviteRequest;
+use App\Models\UserClinic;
 use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WhereIn;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
-use App\Services\Criteria\User\WhereClient;
-use App\Services\Criteria\User\WhereTherapist;
+use App\Services\Impl\IClinicService;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
-use App\Services\Impl\IClinicService;
+use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\General\WhereIn;
-use App\Http\Requests\Admin\AdminAssignClinicRequest;
-use Config;
-use App\Models\UserClinic;
 
 /**
  * Manages administrative actions against users.
@@ -47,12 +45,13 @@ class UserController extends Controller
      */
     protected $userService;
 
-	/**
+    /**
      * The clinic service implementation.
      *
      * @var IClinicService
      */
-	protected $clinicservice;
+    protected $clinicservice;
+
     /**
      * Creates an instance of `UserController`.
      *
@@ -64,13 +63,12 @@ class UserController extends Controller
         IDoctorService $doctorService,
         IRoleService $roleService,
         IUserService $userService,
-		IClinicService $clinicservice
+        IClinicService $clinicservice
     ) {
         $this->doctorService = $doctorService;
         $this->roleService = $roleService;
         $this->userService = $userService;
-		$this->clinicservice = $clinicservice;
-
+        $this->clinicservice = $clinicservice;
     }
 
     /**
@@ -80,21 +78,21 @@ class UserController extends Controller
      */
     public function index()
     {
-		if (request()->user()->isSuperAdmin()) {
-			$users = $this->userService
+        if (request()->user()->isSuperAdmin()) {
+            $users = $this->userService
                 ->pushCriteria(new WithRole())
                 ->pushCriteria(new WhereEqual('is_active', 1))
-				->all();
-		}  else {
-			$user_id = UserClinic::where(
+                ->all();
+        } else {
+            $user_id = UserClinic::where(
                 'clinic_id',
                 request()->attributes->get('clinic')->id
             )->pluck('user_id');
-			$users = $this->userService
-				->pushCriteria(new WithRole())
-				->pushCriteria(new WhereEqual('is_active', 1))
-				->pushCriteria(new WhereIn('id', $user_id))
-				->all();
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+                ->pushCriteria(new WhereIn('id', $user_id))
+                ->all();
         }
 
         return view('admin.users.index')->with([
@@ -109,20 +107,19 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-       if (! $request->search) {
+        if (! $request->search) {
             return redirect('admin/users');
         }
-		if (request()->user()->isSuperAdmin()) {
-			$users = $this->userService
-				->getByCriteria(new WithRole())
-				->search($request->search);
-		} else {
-
-			$users = $this->userService
-				->pushCriteria(new WithRole())
-				->pushCriteria(new WhereEqual('is_active', 1))
-				->search($request->search);
-		}
+        if (request()->user()->isSuperAdmin()) {
+            $users = $this->userService
+                ->getByCriteria(new WithRole())
+                ->search($request->search);
+        } else {
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+                ->search($request->search);
+        }
         if ($users->isNotEmpty()) {
             if (1 === $users->count()) {
                 $user = $users->first();
@@ -163,9 +160,9 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-		$user = $this->userService->invite($request->except(['_token', '_method']));
-		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
-		$this->userService->assignClinic($clinic->id,$user->id);
+        $user = $this->userService->invite($request->except(['_token', '_method']));
+        $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
+        $this->userService->assignClinic($clinic->id, $user->id);
 
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
@@ -200,14 +197,14 @@ class UserController extends Controller
      */
     public function switchToClinic(Request $request)
     {
-		$explodehost = explode('://',env('APP_URL'));
-		$host = $explodehost[0];
-		$maindomain = $explodehost[1];
-		$clinic = $this->clinicservice->find($request->clinic_id);
-		$current_clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+        $explodehost = explode('://', env('APP_URL'));
+        $host = $explodehost[0];
+        $maindomain = $explodehost[1];
+        $clinic = $this->clinicservice->find($request->clinic_id);
+        $current_clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
         $user = \Auth::id();
-		return redirect($host.'://'.$clinic->subdomain.'.'.$maindomain.'/sessionlogin/'.$user.'/'.$current_clinic->id);
 
+        return redirect($host.'://'.$clinic->subdomain.'.'.$maindomain.'/sessionlogin/'.$user.'/'.$current_clinic->id);
     }
 
     /**
@@ -224,17 +221,18 @@ class UserController extends Controller
         ]);
     }
 
-	/**
+    /**
      * Switch back to your original user.
      *
      * @return Response
-    */
+     */
     public function switchClinicBack()
     {
-		$explodehost = explode('://',env('APP_URL'));
-		$host = $explodehost[0];
-		$maindomain = $explodehost[1];
-		$subdomainback = $this->clinicservice->switchBackClinic();
+        $explodehost = explode('://', env('APP_URL'));
+        $host = $explodehost[0];
+        $maindomain = $explodehost[1];
+        $subdomainback = $this->clinicservice->switchBackClinic();
+
         return redirect($host.'://'.$subdomainback.'.'.$maindomain.'/admin/dashboard');
     }
 
@@ -319,106 +317,104 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-		if (request()->user()->isSuperAdmin()) {
-			$this->userService->delete($id);
-		}
+        if (request()->user()->isSuperAdmin()) {
+            $this->userService->delete($id);
+        }
+
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.deleted-user'),
         ]);
     }
 
-
-	/**
+    /**
      * Show the form to assign a clinic.
      *
      * @return Response
-    */
-	public function getassignclinic()
-	{
-
-		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+     */
+    public function getassignclinic()
+    {
+        $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
 
         return view('admin.users.clinics.form-assignclinic', [
             'clinic' => $clinic,
         ]);
-	}
+    }
 
-	/**
+    /**
      * assign a user to clinic.
      *
      * @return Response
-    */
-	public function postassignclinic(AdminAssignClinicRequest $request)
-	{
+     */
+    public function postassignclinic(AdminAssignClinicRequest $request)
+    {
+        $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
 
-		$clinic = $this->clinicservice->findBy('subdomain',Config::get('subdomain'));
+        $clients = $this->userService
+                ->getByCriteria(new WithRole())
+                ->getByCriteria(new WhereEqual('is_active', 1))
+                ->searchencryptedcolumn($request->health_card_number, 'health_card_number_bidx');
 
-		$clients = $this->userService
-				->getByCriteria(new WithRole())
-				->getByCriteria(new WhereEqual('is_active', 1))
-				->searchencryptedcolumn($request->health_card_number,'health_card_number_bidx');
+        foreach ($clients as $client) {
+            $this->userService->assignClinic($clinic->id, $client->id);
+        }
 
-		foreach($clients as $client){
-			$this->userService->assignClinic($clinic->id,$client->id);
-		}
-
-		return redirect('admin/users')->with([
+        return redirect('admin/users')->with([
             'message' => __('clinic assigned'),
         ]);
-	}
+    }
 
-	/**
+    /**
      * inactivate a user.
      *
      * @return Response
-    */
-	public function inactivateUser(string $id){
-
+     */
+    public function inactivateUser(string $id)
+    {
         if (is_null($id)) {
             abort(404);
         }
-		$this->userService->update(
+        $this->userService->update(
             $id,
             ['is_active'=>0]
         );
+
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.inactive-user'),
         ]);
-	}
+    }
 
-	/**
+    /**
      * inactivate a user.
      *
      * @return Response
-    */
-	public function activateUser(string $id){
-
+     */
+    public function activateUser(string $id)
+    {
         if (is_null($id)) {
             abort(404);
         }
-		$this->userService->update(
+        $this->userService->update(
             $id,
             ['is_active'=>1]
         );
+
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.active-user'),
         ]);
-	}
+    }
 
-	/**
+    /**
      * Specified resource to set for session.
      *
      * @param string $id
      * @param string $clinic_id
      *
      * @return Response
-    */
-	public function setsession(string $id,string $clinic_id)
-	{
+     */
+    public function setsession(string $id, string $clinic_id)
+    {
+        $this->clinicservice->switchToClinic($id, $clinic_id);
 
-		$this->clinicservice->switchToClinic($id,$clinic_id);
-
-		return redirect('admin/dashboard');
-	}
-
+        return redirect('admin/dashboard');
+    }
 }

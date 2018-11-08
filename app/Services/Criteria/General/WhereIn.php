@@ -31,7 +31,7 @@ class WhereIn extends Criteria
      * @param string $column
      * @param string $value
      */
-    public function __construct(string $column,  $value)
+    public function __construct(string $column, $value)
     {
         $this->column = $column;
         $this->value = $value;

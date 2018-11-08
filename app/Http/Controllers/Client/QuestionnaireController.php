@@ -5,18 +5,17 @@ namespace App\Http\Controllers\Client;
 use App\Exceptions\NoAvailableQuestionnairesException;
 use App\Http\Controllers\Controller;
 use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\Questionnaire\WhereNotAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
-use App\Services\Criteria\General\WhereEqual;
+use App\Services\Impl\IClinicService;
 use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
-use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Config;
 
 /**
  * Handles actions related to the client questionnaire management.
@@ -44,12 +43,12 @@ class QuestionnaireController extends Controller
      */
     protected $user;
 
-	/**
+    /**
      * The clinic service implementation.
      *
      * @var IClinicService
      */
-	protected $clinicservice;
+    protected $clinicservice;
 
     /**
      * Creates an instance of `ClientController`.
@@ -62,12 +61,12 @@ class QuestionnaireController extends Controller
         IQuestionnaireService $questionnaire,
         IResponseService $response,
         IUserService $user,
-		IClinicService $clinicservice
+        IClinicService $clinicservice
     ) {
         $this->questionnaire = $questionnaire;
         $this->response = $response;
         $this->user = $user;
-		$this->clinicservice = $clinicservice;
+        $this->clinicservice = $clinicservice;
     }
 
     /**
@@ -130,12 +129,12 @@ class QuestionnaireController extends Controller
     {
         $user = $this->user->find($user);
         $this->authorize('viewQuestionnaires', $user);
-		$clinic_id = request()->attributes->get('clinic')->id;
+        $clinic_id = request()->attributes->get('clinic')->id;
         $responses = $this->response
             ->pushCriteria(new WithRelation('questionnaire'))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->pushCriteria(new WhereAssigned($user->id))
-			->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
+            ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
             ->paginate();
 
         return view('clients.questionnaires.index')->with([

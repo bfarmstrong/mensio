@@ -28,12 +28,12 @@ trait SetsBlindIndex
     protected static function bootSetsBlindIndex()
     {
         static::saving(function ($instance) {
-			foreach($instance->getBlindIndexColumn()  as $key => $column){
+            foreach ($instance->getBlindIndexColumn()  as $key => $column) {
                 $indexedColumn = $instance->getBlindIndexedColumn()[$key];
-                if (!is_null($instance[$indexedColumn])) {
-                    $instance[$column] =  $instance->getBlindIndex($instance[$indexedColumn]);
+                if (! is_null($instance[$indexedColumn])) {
+                    $instance[$column] = $instance->getBlindIndex($instance[$indexedColumn]);
                 }
-			}
+            }
         });
     }
 

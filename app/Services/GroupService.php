@@ -119,7 +119,6 @@ class GroupService
      */
     public function update($id, $input)
     {
-
         $group = $this->model->find($id);
         $group->update($input);
 

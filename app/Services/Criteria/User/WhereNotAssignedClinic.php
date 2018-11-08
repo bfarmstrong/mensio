@@ -41,22 +41,22 @@ class WhereNotAssignedClinic extends Criteria
      */
     public function apply($model, IBaseService $service)
     {
-        if (!Auth::user()->isSuperAdmin()) {
+        if (! Auth::user()->isSuperAdmin()) {
             $query = $model
                 ->whereHas('role', function ($query) {
                     $query->where('level', '<=', 3);
-				})
-				->whereDoesntHave('clinics', function ($query) {
-					$query->where('clinic_id', $this->id);
-				});
-		} else {
+                })
+                ->whereDoesntHave('clinics', function ($query) {
+                    $query->where('clinic_id', $this->id);
+                });
+        } else {
             $query = $model
                 ->whereHas('role', function ($query) {
-					$query->where('level', 4);
-				})
-				->whereDoesntHave('clinics', function ($query) {
-					$query->where('clinic_id', $this->id);
-				});
+                    $query->where('level', 4);
+                })
+                ->whereDoesntHave('clinics', function ($query) {
+                    $query->where('clinic_id', $this->id);
+                });
         }
 
         return $query;

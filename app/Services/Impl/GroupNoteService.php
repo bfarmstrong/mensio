@@ -18,7 +18,8 @@ class GroupNoteService extends BaseService implements IGroupNoteService
     {
         return \App\Models\GroupNote::class;
     }
-	/**
+
+    /**
      * Adds a new note as a child of an existing note.
      *
      * @param mixed  $note

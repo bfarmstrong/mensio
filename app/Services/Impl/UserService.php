@@ -73,11 +73,12 @@ class UserService extends BaseService implements IUserService
         if ($data instanceof UploadedFile) {
             $path = $data->store($bucket);
         } else {
-            $path = $bucket . '/' . uniqid() . '.png';
+            $path = $bucket.'/'.uniqid().'.png';
             Storage::put($path, base64_decode($data));
         }
 
         $user->written_signature = $path;
+
         return $user->save();
     }
 
@@ -257,19 +258,20 @@ class UserService extends BaseService implements IUserService
 
         $this->applyCriteria();
 
-		foreach($model->getBlindIndexColumn() as $key => $col) {
-			if ($key == 0 ){
-				$this->model->where($col, $searchIndex);
-			} else {
-				$this->model->orWhere($col, $searchIndex);
-			}
-		}
+        foreach ($model->getBlindIndexColumn() as $key => $col) {
+            if (0 == $key) {
+                $this->model->where($col, $searchIndex);
+            } else {
+                $this->model->orWhere($col, $searchIndex);
+            }
+        }
 
         $results = $this->model->paginate();
         $this->resetCriteria();
 
         return $results;
     }
+
     /**
      * Enables searching for a user by their encrupted column.
      * and so we must use a blind index.
@@ -278,53 +280,54 @@ class UserService extends BaseService implements IUserService
      *
      * @return LengthAwarePaginator
      */
-	public function searchencryptedcolumn(string $query, string $column)
+    public function searchencryptedcolumn(string $query, string $column)
     {
         $model = app($this->model());
         $searchIndex = $model->getSearchIndex($query);
 
         $this->applyCriteria();
 
-		foreach($model->getBlindIndexColumn() as $key => $col) {
-			if ($col == $column){
-				$this->model->where($col, $searchIndex);
-			}
-		}
+        foreach ($model->getBlindIndexColumn() as $key => $col) {
+            if ($col == $column) {
+                $this->model->where($col, $searchIndex);
+            }
+        }
 
         $results = $this->model->paginate();
         $this->resetCriteria();
 
         return $results;
     }
-	/**
+
+    /**
      * Removes a Group from a user.
      *
      * @param mixed $group
      * @param mixed $user
      *
      * @return void
-    */
+     */
     public function removeGroup($group, $user_id)
     {
         $user = $this->find($user_id);
         $user->groups()->detach($group);
     }
 
-	/**
+    /**
      * Removes a Clinic from a user.
      *
      * @param mixed $clinic
      * @param mixed $user
      *
      * @return void
-    */
+     */
     public function removeClinic($clinic, $user_id)
     {
         $user = $this->find($user_id);
         $user->clinics()->detach($clinic);
     }
 
-	/**
+    /**
      * Adds a clinic to a user.
      *
      * @param mixed $clinic
@@ -336,7 +339,6 @@ class UserService extends BaseService implements IUserService
     {
         $user = $this->find($user);
 
-		$user->clinics()->sync($clinic,false);
-
+        $user->clinics()->sync($clinic, false);
     }
 }

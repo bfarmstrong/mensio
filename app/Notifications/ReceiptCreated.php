@@ -5,9 +5,8 @@ namespace App\Notifications;
 use App\Models\Receipt;
 use App\Services\Impl\IReceiptService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 /**
  * When a receipt is created the PDF document is sent to the client.
@@ -54,7 +53,7 @@ class ReceiptCreated extends Notification
             ->line(__('notifications.ReceiptCreated.receipt-created'))
             ->attachData(
                 $pdf->output(),
-                __('notifications.ReceiptCreated.receipt') . '.pdf'
+                __('notifications.ReceiptCreated.receipt').'.pdf'
             );
     }
 }

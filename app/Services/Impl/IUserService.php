@@ -33,9 +33,9 @@ interface IUserService extends IBaseService
 
     public function updateSupervisor($patient, $therapist, $supervisor);
 
-	public function removeGroup($group, $user);
+    public function removeGroup($group, $user);
 
-	public function removeClinic($clinic, $user);
+    public function removeClinic($clinic, $user);
 
-	public function assignClinic($clinic, $user);
+    public function assignClinic($clinic, $user);
 }

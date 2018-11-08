@@ -65,7 +65,7 @@ class AddStaticFieldsToUsersTable extends Migration
 
             $table->dropColumn('preferred_contact_method');
 
-            $table->dropColumn('emergency_contact_name');
+            $table->dropColumn('emergency_name');
             $table->dropColumn('emergency_phone');
             $table->dropColumn('emergency_relationship');
 

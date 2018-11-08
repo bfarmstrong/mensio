@@ -19,12 +19,12 @@ class Base64 implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (!is_null($value)) {
+        if (! is_null($value)) {
             $image = base64_decode($value);
             $file = finfo_open();
             $result = finfo_buffer($file, $image, FILEINFO_MIME_TYPE);
 
-            return $result == 'image/png';
+            return 'image/png' == $result;
         }
 
         return true;
