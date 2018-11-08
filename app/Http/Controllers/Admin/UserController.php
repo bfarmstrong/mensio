@@ -171,8 +171,10 @@ class UserController extends Controller
     public function postInvite(UserInviteRequest $request)
     {
         $user = $this->userService->invite($request->except(['_token', '_method']));
-        $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
-        $this->userService->assignClinic($clinic->id, $user->id);
+        $clinic = $request->attributes->get('clinic');
+        if (! is_null($clinic)) {
+            $this->userService->assignClinic($clinic->id, $user->id);
+        }
 
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
@@ -374,18 +376,19 @@ class UserController extends Controller
     }
 
     /**
-     * inactivate a user.
+     * Deactivates a user account.  Makes it so that they can no longer use the
+     * system.
+     *
+     * @param string $id
      *
      * @return Response
      */
     public function inactivateUser(string $id)
     {
-        if (is_null($id)) {
-            abort(404);
-        }
+        $user = $this->userService->find($id);
         $this->userService->update(
-            $id,
-            ['is_active'=>0]
+            $user,
+            ['is_active' => 0]
         );
 
         return redirect('admin/users')->with([
@@ -394,18 +397,18 @@ class UserController extends Controller
     }
 
     /**
-     * inactivate a user.
+     * Activates a user, allowing them to once again use the system.
+     *
+     * @param string $id
      *
      * @return Response
      */
     public function activateUser(string $id)
     {
-        if (is_null($id)) {
-            abort(404);
-        }
+        $user = $this->userService->find($id);
         $this->userService->update(
-            $id,
-            ['is_active'=>1]
+            $user,
+            ['is_active' => 1]
         );
 
         return redirect('admin/users')->with([

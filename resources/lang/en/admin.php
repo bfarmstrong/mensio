@@ -286,8 +286,8 @@ return [
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
             'assign-clinic' => 'Assign Clinics',
-            'inactive-user' => 'User is inactive',
-            'active-user' => 'User is active',
+            'inactive-user' => 'User was successfully deactivated.',
+            'active-user' => 'User was successfully activated.',
         ],
         'show' => [
             'breadcrumb' => ':Role Profile',

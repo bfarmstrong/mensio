@@ -42,36 +42,19 @@
 								@lang('user.form-settings.switch-user')
 							</a>
 						@endif
-						@if ($user->is_active == 1)
-							<a
-								class="btn btn-danger btn-sm"
-								href="{{ url("admin/users/inactivate/$user->id") }}"
-							> 
-								
-								@lang('user.form-settings.inactive')
-							</a>
-						@else
-							<a
-								class="btn btn-danger btn-sm"
-								href="{{ url("admin/users/activate/$user->id") }}"
-							> 
-								
-								@lang('user.form-settings.active')
-							</a>
-						@endif
 						@if (Auth::user()->isSuperadmin())
-                        @can('delete', $user)
-                            {!!
-                                Form::open([
-                                    'class' => 'd-inline-block',
-                                    'method' => 'delete',
-                                    'onsubmit' => 'return confirm(\'' . __('admin.users.form-delete.on-submit') . '\')',
-                                    'url' => url("admin/users/$user->id"),
-                                ])
-                            !!}
-                            @include('admin.users.form-delete')
-                            {!! Form::close() !!}
-                        @endcan
+                            @can('delete', $user)
+                                {!!
+                                    Form::open([
+                                        'class' => 'd-inline-block',
+                                        'method' => 'delete',
+                                        'onsubmit' => 'return confirm(\'' . __('admin.users.form-delete.on-submit') . '\')',
+                                        'url' => url("admin/users/$user->id"),
+                                    ])
+                                !!}
+                                @include('admin.users.form-delete')
+                                {!! Form::close() !!}
+                            @endcan
 						@endif
                     </td>
                 </tr>
