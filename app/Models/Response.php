@@ -30,6 +30,7 @@ class Response extends Model
         'survey_id',
         'user_id',
         'uuid',
+		'clinic_id'
     ];
 
     /**
@@ -59,6 +60,16 @@ class Response extends Model
         return $this->belongsTo(Questionnaire::class, 'questionnaire_id');
     }
 
+	/**
+     * A response is part of a Clinic.
+     *
+     * @return BelongsTo
+    */
+    public function clinics()
+    {
+        return $this->belongsTo(Clinic::class, 'clinic_id');
+    }
+	
     /**
      * A response is part of a survey.
      *

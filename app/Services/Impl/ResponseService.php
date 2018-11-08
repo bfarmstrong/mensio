@@ -11,7 +11,8 @@ use App\Services\Criteria\Questionnaire\WithQuestionsAndItems;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-
+use Config;
+use App\Models\Clinic;
 /**
  * Implementation of the response service.
  */
@@ -123,11 +124,19 @@ class ResponseService extends BaseService implements IResponseService
 			if (! is_null($assigned)) {
 				throw new QuestionnaireAlreadyAssignedException();
 			}
-
-			return $this->create([
-				'questionnaire_id' => $questionnaire,
-				'user_id' => $client,
-			]);
+			if (!is_null(request()->attributes->get('clinic'))) {
+				$clinic_id = request()->attributes->get('clinic')->id;
+				return $this->create([
+					'questionnaire_id' => $questionnaire,
+					'user_id' => $client,
+					'clinic_id'=>$clinic_id
+				]);
+			} else {
+				return $this->create([
+					'questionnaire_id' => $questionnaire,
+					'user_id' => $client,
+				]);
+			}
 		}
     }
 

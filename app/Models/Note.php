@@ -34,7 +34,8 @@ class Note extends Model
         'is_draft',
         'note_id',
         'therapist_id',
-		'group_note_id'
+		'group_note_id',
+		'clinic_id'
     ];
 
     /**
@@ -73,6 +74,16 @@ class Note extends Model
         return $this->hasMany(Note::class, 'note_id');
     }
 
+	/**
+     * A note is created for a clinics.
+     *
+     * @return BelongsTo
+    */
+    public function clinics()
+    {
+        return $this->belongsTo(Clinic::class, 'clinic_id');
+    }
+	
     /**
      * A note is created for a client.
      *

@@ -16,8 +16,10 @@ use App\Services\Impl\IClinicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WhereIn;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use Config;
+use App\Models\UserClinic;
 
 /**
  * Manages administrative actions against users.
@@ -80,14 +82,21 @@ class UserController extends Controller
     {
 		if (request()->user()->isSuperAdmin()) {
 			$users = $this->userService
-				->getByCriteria(new WithRole())
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
 				->all();
-		} else {
+		}  else {
+			$user_id = UserClinic::where(
+                'clinic_id',
+                request()->attributes->get('clinic')->id
+            )->pluck('user_id');
 			$users = $this->userService
-				->getByCriteria(new WithRole())
-				->getByCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WithRole())
+				->pushCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WhereIn('id', $user_id))
 				->all();
-		}
+        }
+
         return view('admin.users.index')->with([
             'users' => $users,
         ]);
@@ -110,8 +119,8 @@ class UserController extends Controller
 		} else {
 
 			$users = $this->userService
-				->getByCriteria(new WithRole())
-				->getByCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WithRole())
+				->pushCriteria(new WhereEqual('is_active', 1))
 				->search($request->search);
 		}
         if ($users->isNotEmpty()) {

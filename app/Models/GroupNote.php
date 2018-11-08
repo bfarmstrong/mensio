@@ -33,6 +33,7 @@ class GroupNote extends Model
 		'group_id',
 		'note_id',
 		'created_by',
+		'clinic_id',
     ];
 	
     /**

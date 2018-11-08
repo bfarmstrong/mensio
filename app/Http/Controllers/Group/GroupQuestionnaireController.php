@@ -4,17 +4,14 @@ namespace App\Http\Controllers\Group;
 
 use App\Exceptions\NoAvailableQuestionnairesException;
 use App\Http\Controllers\Controller;
-
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
-
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Criteria\Questionnaire\GroupWhereNotAssigned;
-
 use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IGroupService;
