@@ -17,7 +17,7 @@
             >
                 @lang('admin.users.index.assign-clinic')
             </a>
-			
+
             <a
                 class="btn btn-primary btn-sm"
                 href="{{ url('admin/users/invite') }}"
@@ -31,7 +31,23 @@
             <div class="row">
                 <div class="col-12">
                     @if ($users->isNotEmpty())
-                        @include('admin.users.table', ['users' => $users])
+                        @if ($clients->isNotEmpty())
+                            <p class="h4">
+                                @lang('admin.users.index.clients')
+                            </p>
+                            @include('admin.users.table', ['users' => $clients])
+                        @endif
+
+                        @if ($therapists->isNotEmpty())
+                            @if ($clients->isNotEmpty())
+                                <hr class="mt-1">
+                            @endif
+
+                            <p class="h4">
+                                @lang('admin.users.index.therapists')
+                            </p>
+                            @include('admin.users.table', ['users' => $therapists])
+                        @endif
                     @else
                         <p class="lead text-center text-muted mt-3">
                             @lang('admin.users.index.no-results')

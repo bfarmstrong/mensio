@@ -273,6 +273,7 @@ return [
         ],
         'index' => [
             'breadcrumb' => 'Users',
+            'clients' => 'Clients',
             'create-user' => 'Invite User',
             'created-user' => 'User was successfully created.',
             'deleted-user' => 'User was successfully deleted.',
@@ -280,6 +281,7 @@ return [
             'no-search-results' => 'No user was found matching your query.',
             'switched-back' => 'You have restored your original session.',
             'switched-to' => 'You are now signed in as :User.',
+            'therapists' => 'Therapists',
             'title' => 'All Users',
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',

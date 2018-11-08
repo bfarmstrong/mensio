@@ -95,7 +95,17 @@ class UserController extends Controller
                 ->all();
         }
 
+        $clients = $users->filter(function ($user) {
+            return $user->isClient();
+        });
+
+        $therapists = $users->filter(function ($user) {
+            return $user->isTherapist() || $user->isAdmin();
+        });
+
         return view('admin.users.index')->with([
+            'clients' => $clients,
+            'therapists' => $therapists,
             'users' => $users,
         ]);
     }
