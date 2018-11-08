@@ -372,6 +372,7 @@ class Importer implements IImporter
         }
 
         // Client does not exist, create a new one and return it
+        $client['is_active'] = 1;
         $client['password'] = Hash::make(str_random(24));
         $user = $this->userService->create($client);
         if (! is_null($clinic)) {
@@ -486,6 +487,7 @@ class Importer implements IImporter
             foreach ($therapists as $therapist) {
                 $therapistData = [
                     'email' => strtolower($therapist->email),
+                    'is_active' => 1,
                     'name' => $therapist->name,
                     'password' => Hash::make(str_random(24)),
                     'role_id' => $therapistRole->id,
@@ -514,6 +516,7 @@ class Importer implements IImporter
                 $therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
                     $clientData = [
                         'email' => strtolower($client->email),
+                        'is_active' => 1,
                         'name' => $client->name,
                         'password' => Hash::make(str_random(24)),
                         'phone' => $client->phone,
