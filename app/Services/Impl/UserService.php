@@ -8,8 +8,10 @@ use App\Services\BaseService;
 use Auth;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Notification;
 use Session;
+use Storage;
 
 /**
  * Implementation of the user service.
@@ -52,6 +54,31 @@ class UserService extends BaseService implements IUserService
     {
         $user = $this->find($user);
         $user->patients()->detach($patient);
+    }
+
+    /**
+     * Given signature data, updates the signature for the user in the database.
+     * Currently supports both file and base64 upload.
+     *
+     * @param mixed $user
+     * @param mixed $data
+     *
+     * @return bool
+     */
+    public function updateSignature($id, $data)
+    {
+        $user = $this->find($id);
+        $bucket = 'signatures';
+
+        if ($data instanceof UploadedFile) {
+            $path = $data->store($bucket);
+        } else {
+            $path = $bucket . '/' . uniqid() . '.png';
+            Storage::put($path, base64_decode($data));
+        }
+
+        $user->written_signature = $path;
+        return $user->save();
     }
 
     /**
@@ -206,12 +233,12 @@ class UserService extends BaseService implements IUserService
      * @return LengthAwarePaginator
      */
     public function search(string $query)
-    { 
+    {
         $model = app($this->model());
         $searchIndex = $model->getSearchIndex($query);
 
         $this->applyCriteria();
-		
+
 		foreach($model->getBlindIndexColumn() as $key => $col) {
 			if ($key == 0 ){
 				$this->model->where($col, $searchIndex);
@@ -219,7 +246,7 @@ class UserService extends BaseService implements IUserService
 				$this->model->orWhere($col, $searchIndex);
 			}
 		}
-		
+
         $results = $this->model->paginate();
         $this->resetCriteria();
 
@@ -232,20 +259,20 @@ class UserService extends BaseService implements IUserService
      * @param string $query
      *
      * @return LengthAwarePaginator
-     */	
+     */
 	public function searchencryptedcolumn(string $query, string $column)
-    { 
+    {
         $model = app($this->model());
         $searchIndex = $model->getSearchIndex($query);
 
         $this->applyCriteria();
-		
+
 		foreach($model->getBlindIndexColumn() as $key => $col) {
 			if ($col == $column){
 				$this->model->where($col, $searchIndex);
-			} 
+			}
 		}
-		
+
         $results = $this->model->paginate();
         $this->resetCriteria();
 
@@ -264,7 +291,7 @@ class UserService extends BaseService implements IUserService
         $user = $this->find($user_id);
         $user->groups()->detach($group);
     }
-	
+
 	/**
      * Removes a Clinic from a user.
      *
@@ -278,7 +305,7 @@ class UserService extends BaseService implements IUserService
         $user = $this->find($user_id);
         $user->clinics()->detach($clinic);
     }
-	
+
 	/**
      * Adds a clinic to a user.
      *
@@ -290,8 +317,8 @@ class UserService extends BaseService implements IUserService
     public function assignClinic($clinic, $user)
     {
         $user = $this->find($user);
-		
+
 		$user->clinics()->sync($clinic,false);
-		
+
     }
 }

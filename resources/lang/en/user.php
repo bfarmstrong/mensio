@@ -16,6 +16,7 @@ return [
         'agree-terms' => 'I agree to the Terms &amp; Conditions',
         'basic-information' => 'Basic Information',
         'change-password' => 'Change Password',
+        'change-signature' => 'Change Signature',
         'city' => 'City',
         'contact-email' => 'Email',
         'contact-phone' => 'Phone',
@@ -45,6 +46,12 @@ return [
         'inactive' => 'Inactive',
         'active' => 'Active',
     ],
+    'form-signature' => [
+        'current-signature' => 'Current Signature',
+        'save' => 'Save',
+        'signature-base64' => 'Written Signature',
+        'signature-file' => 'Signature Image',
+    ],
     'password' => [
         'breadcrumb' => 'Change Password',
         'form-title' => 'Change Password',
@@ -64,5 +71,11 @@ return [
         'form-title' => 'Edit Profile',
         'profile-updated' => 'Your profile has been updated successfully.',
         'title' => 'User Settings',
+    ],
+    'signature' => [
+        'breadcrumb' => 'Change Signature',
+        'form-title' => 'Change Signature',
+        'signature-updated' => 'Your signature was updated successfully.',
+        'title' => 'Change Signature',
     ],
 ];

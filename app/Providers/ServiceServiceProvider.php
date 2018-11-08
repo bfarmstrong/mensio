@@ -23,6 +23,7 @@ class ServiceServiceProvider extends ServiceProvider
         \App\Services\Impl\IQuestionItemService::class => \App\Services\Impl\QuestionItemService::class,
         \App\Services\Impl\IQuestionnaireService::class => \App\Services\Impl\QuestionnaireService::class,
         \App\Services\Impl\IQuestionService::class => \App\Services\Impl\QuestionService::class,
+        \App\Services\Impl\IReceiptService::class => \App\Services\Impl\ReceiptService::class,
         \App\Services\Impl\IResponseService::class => \App\Services\Impl\ResponseService::class,
         \App\Services\Impl\IRoleService::class => \App\Services\Impl\RoleService::class,
         \App\Services\Impl\IGroupService::class => \App\Services\Impl\GroupService::class,

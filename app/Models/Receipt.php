@@ -2,30 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Encryptable;
 use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * An attachment is a file that is added to a user profile.
+ * A receipt is an acknowledgement of an appointment.
  */
-class Attachment extends Model
+class Receipt extends Model
 {
-    use Encryptable;
     use SetsUuids;
-
-    /**
-     * The fields that are encrypted in the database.
-     *
-     * @var array
-     */
-    protected $encrypts = [
-        'file_location',
-        'file_name',
-        'file_size',
-        'mime_type',
-    ];
 
     /**
      * The attributes that are mass assignable.
@@ -33,11 +19,10 @@ class Attachment extends Model
      * @var array
      */
     protected $fillable = [
+        'appointment_date',
         'clinic_id',
-        'file_location',
-        'file_name',
-        'file_size',
-        'mime_type',
+        'supervisor_id',
+        'therapist_id',
         'user_id',
     ];
 
@@ -49,7 +34,7 @@ class Attachment extends Model
     protected $uuids = ['uuid'];
 
     /**
-     * An attachment is for a user in a specific clinic.
+     * A receipt is created for a client within a clinic.
      *
      * @return BelongsTo
      */
@@ -59,7 +44,27 @@ class Attachment extends Model
     }
 
     /**
-     * An attachment is for a specific user.
+     * A receipt may be signed by a supervisor.
+     *
+     * @return BelongsTo
+     */
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    /**
+     * A receipt is created by a therapist.
+     *
+     * @return BelongsTo
+     */
+    public function therapist()
+    {
+        return $this->belongsTo(User::class, 'therapist_id');
+    }
+
+    /**
+     * A receipt is attached to a user (client).
      *
      * @return BelongsTo
      */

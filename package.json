@@ -29,6 +29,7 @@
         "datatables.net-responsive": "2.2.3",
         "datatables.net-responsive-bs4": "2.2.3",
         "perfect-scrollbar": "1.4.0",
+        "signature_pad": "3.0.0-beta.3",
         "summernote": "0.8.10",
         "survey-jquery": "1.0.45"
     }
