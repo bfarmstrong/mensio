@@ -73,7 +73,7 @@ class ClinicController extends Controller
         $this->clinicservice->create($request->all());
 
         return redirect('admin/clinics')->with([
-            'message' => __('admin.clinics.index.created-clinics'),
+            'message' => __('admin.clinics.index.created-clinic'),
         ]);
     }
 

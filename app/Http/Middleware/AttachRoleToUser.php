@@ -5,9 +5,9 @@ namespace App\Http\Middleware;
 use App\Models\Clinic;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
+use Auth;
 use Closure;
-use Config;
-use Illuminate\Support\Facades\URL;
+use View;
 
 /**
  * Middleware which attaches the user role to the user object so that it does
@@ -38,32 +38,22 @@ class AttachRoleToUser
      */
     public function handle($request, Closure $next)
     {
-        if ('' != Config::get('subdomain') && ! $request->user()->isSuperAdmin()) {
-            $UserAssignedClinic = ['Switch Clinic'];
+        if (
+            ! is_null($request->attributes->get('clinic')) &&
+            ! $request->user()->isSuperAdmin()
+        ) {
+            $clinics = Auth::user()->clinics;
+            $currentClinic = $request->attributes->get('clinic');
 
-            $url = parse_url(URL::current());
-            $domain = explode('.', $url['host']);
-            $subdomain = $domain[0];
-
-            $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
-            $count = $clinic->users()->where('user_id', \Auth::user()->id)->count();
-            $assignedClinics = $this->userService->find(\Auth::user()->id);
-
-            if (0 == $count) {
+            if (! $clinics->contains($currentClinic)) {
                 return response()->view('errors.401', [], 401);
             } else {
-                $UserClinic = $assignedClinics->clinics->pluck('name', 'id');
-                foreach ($UserClinic as $k => $v) {
-                    if ($subdomain != strtolower($v)) {
-                        $UserAssignedClinic[$k] = $v;
-                    }
-                }
-                \View::share('totalClinicAssign', $assignedClinics->clinics->count());
-                \View::share('assignedClinics', $UserAssignedClinic);
+                View::share('currentClinic', $currentClinic);
+                View::share('availableClinics', $clinics);
             }
         }
 
-        \Auth::user()->load('role');
+        Auth::user()->load('role');
 
         return $next($request);
     }
