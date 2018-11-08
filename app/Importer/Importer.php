@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Criteria\General\WhereCaseInsensitive;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Impl\IAnswerService;
+use App\Services\Impl\IClinicService;
 use App\Services\Impl\IQuestionGridService;
 use App\Services\Impl\IQuestionItemService;
 use App\Services\Impl\IQuestionnaireService;
@@ -34,6 +35,13 @@ class Importer implements IImporter
      * @var IAnswerService
      */
     protected $answerService;
+
+    /**
+     * The clinic service implementation.
+     *
+     * @var IClinicService
+     */
+    protected $clinicService;
 
     /**
      * The legacy API service implementation.
@@ -102,6 +110,7 @@ class Importer implements IImporter
      * Creates an instance of `Importer`.
      *
      * @param IAnswerService        $answerService
+     * @param IClinicService        $clinicService
      * @param ILegacyApiService     $legacyApiService
      * @param IQuestionnaireService $questionnaireService
      * @param IQuestionService      $questionService
@@ -114,6 +123,7 @@ class Importer implements IImporter
      */
     public function __construct(
         IAnswerService $answerService,
+        IClinicService $clinicService,
         ILegacyApiService $legacyApiService,
         IQuestionnaireService $questionnaireService,
         IQuestionService $questionService,
@@ -125,6 +135,7 @@ class Importer implements IImporter
         IUserService $userService
     ) {
         $this->answerService = $answerService;
+        $this->clinicService = $clinicService;
         $this->legacyApiService = $legacyApiService;
         $this->questionnaireService = $questionnaireService;
         $this->questionService = $questionService;
@@ -332,10 +343,11 @@ class Importer implements IImporter
      * Processes a client, returns the client if it exists.
      *
      * @param array $client
+     * @param mixed $clinic
      *
      * @return User
      */
-    protected function processClientData(array $client)
+    protected function processClientData(array $client, $clinic)
     {
         // Validate client data
         $validator = Validator::make($client, [
@@ -362,6 +374,9 @@ class Importer implements IImporter
         // Client does not exist, create a new one and return it
         $client['password'] = Hash::make(str_random(24));
         $user = $this->userService->create($client);
+        if (! is_null($clinic)) {
+            $this->userService->assignClinic($clinic, $user);
+        }
 
         return $user;
     }
@@ -372,12 +387,18 @@ class Importer implements IImporter
      * @param Collection $headers
      * @param Collection $data
      * @param array      $mapping
+     * @param mixed      $clinic
      *
      * @return void
      */
-    protected function import(Collection $headers, Collection $data, array $mapping)
+    protected function import(Collection $headers, Collection $data, array $mapping, $clinic = null)
     {
-        DB::transaction(function () use ($headers, $data, $mapping) {
+        DB::transaction(function () use ($clinic, $headers, $data, $mapping) {
+            // If a clinic is provided, attempt to load it from the database
+            if (! is_null($clinic)) {
+                $clinic = $this->clinicService->findBy('uuid', $clinic);
+            }
+
             // Displays a progress bar in the console
             $output = new ConsoleOutput();
             $progress = new ProgressBar($output, $data->count());
@@ -385,7 +406,10 @@ class Importer implements IImporter
 
             foreach ($data as $index => $row) {
                 // Import or retrieve the existing client
-                $user = $this->processClientData($this->getClientData($row, $mapping));
+                $user = $this->processClientData(
+                    $this->getClientData($row, $mapping),
+                    $clinic
+                );
                 if (is_null($user)) {
                     logger('Importer: failed to import user', [
                         'index' => $index,
@@ -396,6 +420,12 @@ class Importer implements IImporter
 
                 // Save the questionnaire data to the database
                 foreach ($mapping as $question => $index) {
+                    if (
+                        is_null($row->get($mapping[$question])) ||
+                        is_null($headers->get($mapping[$question]))
+                    ) {
+                        continue;
+                    }
                     $this->processAnswer(
                         $user,
                         $question,
@@ -413,6 +443,7 @@ class Importer implements IImporter
                 foreach ($responses as $response) {
                     $data = $this->responseService->getJson($response);
                     $this->responseService->update($response, [
+                        'clinic_id' => $clinic->id ?? null,
                         'data' => json_encode($data),
                     ]);
                 }
@@ -429,13 +460,20 @@ class Importer implements IImporter
      * Processes users from the legacy API to ensure that the user list is up
      * to date before processing questionnaires from the Sheets API.
      *
+     * @param mixed $clinic
+     *
      * @return void
      */
-    public function importLegacyUserData()
+    public function importLegacyUserData($clinic = null)
     {
-        DB::transaction(function () {
+        DB::transaction(function () use ($clinic) {
             $clientRole = $this->roleService->findBy('level', Roles::Client);
             $therapistRole = $this->roleService->findBy('level', Roles::SeniorTherapist);
+
+            // If a clinic is provided, attempt to load it from the database
+            if (! is_null($clinic)) {
+                $clinic = $this->clinicService->findBy('uuid', $clinic);
+            }
 
             $therapists = $this->legacyApiService->getUserData();
             $numberOfOperations = $therapists->reduce(function ($carry, $item) {
@@ -468,9 +506,12 @@ class Importer implements IImporter
                     ->findBy('email', $therapistData['email']);
                 if (is_null($therapistUser)) {
                     $therapistUser = $this->userService->create($therapistData);
+                    if (! is_null($clinic)) {
+                        $this->userService->assignClinic($clinic, $therapistUser);
+                    }
                 }
 
-                $therapist->clients->each(function ($client) use ($clientRole, $progress, $therapistUser) {
+                $therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
                     $clientData = [
                         'email' => strtolower($client->email),
                         'name' => $client->name,
@@ -494,6 +535,9 @@ class Importer implements IImporter
                         ->findBy('email', $clientData['email']);
                     if (is_null($clientUser)) {
                         $clientUser = $this->userService->create($clientData);
+                        if (! is_null($clinic)) {
+                            $this->userService->assignClinic($clinic, $clientUser);
+                        }
                     }
                     $this->userService->addTherapist($therapistUser, $clientUser);
                     $progress->advance();
@@ -511,44 +555,47 @@ class Importer implements IImporter
      * Imports the `assess` sheet.
      *
      * @param string $language
+     * @param mixed  $clinic
      *
      * @return void
      */
-    public function importAssess(string $language)
+    public function importAssess(string $language, $clinic = null)
     {
         $data = $this->getRawCsvData(Sheets::Assess[$language]);
         $mapping = SheetsMapping::Assess[$language];
 
-        return $this->import($data->first(), $data->slice(1), $mapping);
+        return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
 
     /**
      * Imports the `mbct` sheet.
      *
      * @param string $language
+     * @param mixed  $clinic
      *
      * @return void
      */
-    public function importMbct(string $language)
+    public function importMbct(string $language, $clinic = null)
     {
         $data = $this->getRawCsvData(Sheets::Mbct[$language]);
         $mapping = SheetsMapping::Mbct[$language];
 
-        return $this->import($data->first(), $data->slice(1), $mapping);
+        return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
 
     /**
      * Imports the `mbsr` sheet.
      *
      * @param string $language
+     * @param mixed  $clinic
      *
      * @return void
      */
-    public function importMbsr(string $language)
+    public function importMbsr(string $language, $clinic = null)
     {
         $data = $this->getRawCsvData(Sheets::Mbsr[$language]);
         $mapping = SheetsMapping::Mbsr[$language];
 
-        return $this->import($data->first(), $data->slice(1), $mapping);
+        return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
 }
