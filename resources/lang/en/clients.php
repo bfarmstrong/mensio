@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'attachments' => [
+        'create' => [
+            'breadcrumb' => 'Create Attachment',
+            'create-attachment' => 'Create Attachment',
+            'created-attachment' => 'The attachment has been successfully added to the client profile.',
+            'title' => 'Create Attachment',
+        ],
+        'form' => [
+            'file' => 'File',
+            'submit' => 'Submit',
+        ],
+        'show' => [
+            'attachment' => 'Attachment',
+            'breadcrumb' => 'View Attachment',
+            'title' => 'Attachment',
+        ],
+    ],
     'form-search' => [
         'search' => 'Exact name required...',
         'submit' => 'Get Results',
@@ -33,6 +50,7 @@ return [
         'index' => [
             'breadcrumb' => 'Notes',
             'create' => 'Create Note',
+            'create-attachment' => 'Create Attachment',
             'no-results' => 'No notes were found...',
             'note-created' => 'Note was created successfully.',
             'note-updated' => 'Note was updated successfully.',
@@ -47,11 +65,16 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
+            'attachments' => 'Attachments',
             'creator' => 'Therapist',
             'date' => 'Date',
             'draft' => 'Draft',
+            'drafts' => 'Drafts',
             'final' => 'Final',
+            'name' => 'Name',
+            'notes' => 'Notes',
             'status' => 'Status',
+            'type' => 'File Type',
             'view' => 'View',
         ],
     ],
