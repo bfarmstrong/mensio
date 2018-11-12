@@ -2,9 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Clinic;
-use App\Services\Impl\IClinicService;
-use App\Services\Impl\IUserService;
+use App\Exceptions\NoSelectedClinicException;
 use Auth;
 use Closure;
 use View;
@@ -16,19 +14,6 @@ use View;
 class AttachRoleToUser
 {
     /**
-     * The clinic service implementation.
-     *
-     * @var IClinicService
-     */
-    public function __construct(
-        IClinicService $clinicservice,
-        IUserService $userService
-    ) {
-        $this->clinicservice = $clinicservice;
-        $this->userService = $userService;
-    }
-
-    /**
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
@@ -38,22 +23,32 @@ class AttachRoleToUser
      */
     public function handle($request, Closure $next)
     {
+        Auth::user()->load('role');
+
+        if (! $request->user()->isSuperAdmin()) {
+            $clinics = Auth::user()->clinics;
+            View::share('availableClinics', $clinics);
+        }
+
+        if (
+            is_null($request->attributes->get('clinic')) &&
+            ! $request->user()->isSuperAdmin()
+        ) {
+            throw new NoSelectedClinicException();
+        }
+
         if (
             ! is_null($request->attributes->get('clinic')) &&
             ! $request->user()->isSuperAdmin()
         ) {
-            $clinics = Auth::user()->clinics;
             $currentClinic = $request->attributes->get('clinic');
 
             if (! $clinics->contains($currentClinic)) {
                 return response()->view('errors.401', [], 401);
             } else {
                 View::share('currentClinic', $currentClinic);
-                View::share('availableClinics', $clinics);
             }
         }
-
-        Auth::user()->load('role');
 
         return $next($request);
     }

@@ -29,4 +29,11 @@ return [
         'subheadline' => 'Site currently down.',
         'title' => '503 Service Not Available',
     ],
+    'no-selected-clinic' => [
+        'contents' => 'You must have a clinic selected to perform this action.',
+        'headline' => 'Error',
+        'select' => 'Redirect to...',
+        'subheadline' => 'No Selected Clinic Exception',
+        'title' => 'No Selected Clinic Exception',
+    ],
 ];
