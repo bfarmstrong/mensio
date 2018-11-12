@@ -98,38 +98,41 @@ Route::group(['middleware' => ['domain']], function () {
             Route::post('search', 'ClientController@search');
             Route::get('{user_id}', 'ClientController@show');
 
-            Route::get('{user_id}/notes', 'NoteController@index');
-            Route::post('{user_id}/notes', 'NoteController@store');
-            Route::post('{user_id}/notes/{note_id}/addition', 'NoteController@addAddition');
-            Route::get('{user_id}/notes/create', 'NoteController@create');
-            Route::get('{user_id}/notes/{note_id}', 'NoteController@show');
-            Route::put('{user_id}/notes/{note_id}', 'NoteController@update');
+            Route::group(['middleware' => 'requires-clinic'], function () {
+                Route::get('{user_id}/notes', 'NoteController@index');
+                Route::post('{user_id}/notes', 'NoteController@store');
+                Route::post('{user_id}/notes/{note_id}/addition', 'NoteController@addAddition');
+                Route::get('{user_id}/notes/create', 'NoteController@create');
+                Route::get('{user_id}/notes/{note_id}', 'NoteController@show');
+                Route::put('{user_id}/notes/{note_id}', 'NoteController@update');
 
-            Route::get('{user_id}/questionnaires', 'QuestionnaireController@index');
-            Route::get('{user_id}/questionnaires/create', 'QuestionnaireController@create');
-            Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
-            Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
-            Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
+                Route::get('{user_id}/questionnaires', 'QuestionnaireController@index');
+                Route::get('{user_id}/questionnaires/create', 'QuestionnaireController@create');
+                Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
+                Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
+                Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
 
-            Route::group(['prefix' => '{user_id}/attachments'], function () {
-                Route::post('', 'AttachmentController@store');
-                Route::get('create', 'AttachmentController@create');
-                Route::get('{attachment_id}/download', 'AttachmentController@download');
-                Route::get('{attachment_id}', 'AttachmentController@show');
-            });
+                Route::group(['prefix' => '{user_id}/attachments'], function () {
+                    Route::post('', 'AttachmentController@store');
+                    Route::get('create', 'AttachmentController@create');
+                    Route::get('{attachment_id}/download', 'AttachmentController@download');
+                    Route::get('{attachment_id}', 'AttachmentController@show');
+                });
 
-            Route::group(['prefix' => '{user_id}/communication'], function () {
-                Route::post('', 'CommunicationLogController@store');
-                Route::get('create', 'CommunicationLogController@create');
-                Route::get('{communication_log_id}', 'CommunicationLogController@show');
-            });
+                Route::group(['prefix' => '{user_id}/communication'], function () {
+                    Route::post('', 'CommunicationLogController@store');
+                    Route::get('create', 'CommunicationLogController@create');
+                    Route::get('{communication_log_id}', 'CommunicationLogController@show');
+                });
 
-            Route::group(['prefix' => '{user_id}/receipts'], function () {
-                Route::post('', 'ReceiptController@store');
-                Route::get('create', 'ReceiptController@create');
-                Route::get('{receipt_id}/download', 'ReceiptController@download');
+                Route::group(['prefix' => '{user_id}/receipts'], function () {
+                    Route::post('', 'ReceiptController@store');
+                    Route::get('create', 'ReceiptController@create');
+                    Route::get('{receipt_id}/download', 'ReceiptController@download');
+                });
             });
         });
+
         /*
         |--------------------------------------------------------------------------
         | Notes and Questionnaire for Group
@@ -150,6 +153,7 @@ Route::group(['middleware' => ['domain']], function () {
             Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
             Route::post('{group_id}/questionnaires', 'GroupQuestionnaireController@store');
         });
+
         /*
         |--------------------------------------------------------------------------
         | Responses
