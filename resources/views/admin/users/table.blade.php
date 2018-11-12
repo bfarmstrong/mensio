@@ -11,7 +11,7 @@
     <tbody></tbody>
 </table>
 
-<div class="hidden" id="user-actions-template">
+<div class="d-none" id="user-actions-template">
     <a
         class="btn btn-primary btn-sm"
         href="{{ url("admin/users/USER_ID") }}"

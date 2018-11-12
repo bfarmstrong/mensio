@@ -87,7 +87,7 @@ class UserController extends Controller
             $query = $query->pushCriteria(
                 new WhereRelationEqual(
                     'clinics',
-                    'id',
+                    'clinics.id',
                     request()->attributes->get('clinic')->id
                 )
             );

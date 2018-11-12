@@ -29,29 +29,64 @@
 		</div>
 
         <div class="card-body">
+            @if ($clients->isNotEmpty() && $therapists->isNotEmpty())
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link active"
+                                    data-toggle="tab"
+                                    href="#clients"
+                                >
+                                    @lang('admin.users.index.clients')
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    data-toggle="tab"
+                                    href="#therapists"
+                                >
+                                    @lang('admin.users.index.therapists')
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     @if ($users->isNotEmpty())
+                        @if ($clients->isNotEmpty() && $therapists->isNotEmpty())
+                            <div class="tab-content">
+                        @endif
                         @if ($clients->isNotEmpty())
-                            <p class="h4">
-                                @lang('admin.users.index.clients')
-                            </p>
+                            @if ($therapists->isNotEmpty())
+                                <div id="clients" class="tab-pane active">
+                            @endif
                             @include('admin.users.table', [
                                 'type' => 'client',
                             ])
+                            @if ($therapists->isNotEmpty())
+                                </div>
+                            @endif
                         @endif
 
                         @if ($therapists->isNotEmpty())
                             @if ($clients->isNotEmpty())
-                                <hr class="mt-1">
+                                <div id="therapists" class="tab-pane">
                             @endif
-
-                            <p class="h4">
-                                @lang('admin.users.index.therapists')
-                            </p>
                             @include('admin.users.table', [
                                 'type' => 'therapist',
                             ])
+                            @if ($clients->isNotEmpty())
+                                </div>
+                            @endif
+                        @endif
+                        @if ($clients->isNotEmpty() && $therapists->isNotEmpty())
+                            </div>
                         @endif
                     @else
                         <p class="lead text-center text-muted mt-3">

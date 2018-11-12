@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\SearchClientRequest;
 use App\Models\User;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WithRole;
@@ -63,9 +66,9 @@ class ClientController extends Controller
     {
         $this->authorize('viewClients', User::class);
         $clients = $this->user
-            ->pushCriteria(new WhereClient())
+            ->pushCriteria(new WhereRelationEqual('role', 'level', Roles::Client))
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-            ->pushCriteria(new WithRole())
+            ->pushCriteria(new WithRelation('role'))
             ->all();
 
         return view('clients.index')->with([
