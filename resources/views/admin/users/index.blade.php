@@ -5,28 +5,45 @@
 @section('content.breadcrumbs', Breadcrumbs::render('admin.users.index'))
 @section('content.dashboard')
     <div class="card">
-        <div class="card-header align-items-center">
+        <div class="card-header d-flex align-items-center">
             <span>
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('admin.users.index.users')
             </span>
 
-			<div class="float-right">
-                @isset($currentClinic)
+			<div class="ml-auto">
+                <div class="btn-group">
                     <a
                         class="btn btn-primary btn-sm"
-                        href="{{ url('admin/users/add') }}"
+                        href="{{ url('admin/users/invite') }}"
                     >
-                        @lang('admin.users.index.assign-clinic')
+                        <i class="fas fa-user-plus mr-1"></i>
+                        @lang('admin.users.index.create-user')
                     </a>
-                @endisset
 
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url('admin/users/invite') }}"
-                >
-                    @lang('admin.users.index.create-user')
-                </a>
+                    @isset($currentClinic)
+                        <button
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown"
+                            type="button"
+                        >
+                            <span class="sr-only">
+                                @lang('admin.users.index.toggle-dropdown')
+                            </span>
+                        </button>
+
+                        <div class="dropdown-menu">
+                            <a
+                                class="dropdown-item"
+                                href="{{ url('admin/users/add') }}"
+                            >
+                                @lang('admin.users.index.assign-clinic')
+                            </a>
+                        </div>
+                    @endisset
+                </div>
             </div>
 		</div>
 
