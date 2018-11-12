@@ -14,11 +14,11 @@
     <tbody>
         @foreach($logs as $log)
             <tr>
-                <td>{{ $log->causer_type }}</td>
-                <td>{{ $log->causer_id }}</td>
-                <td>{{ $log->description }}</td>
-                <td>{{ $log->subject_type }}</td>
-                <td>{{ $log->subject_id }}</td>
+                <td>{{ $log->causer_type ?? 'N/A' }}</td>
+                <td>{{ $log->causer->uuid ?? $log->causer->id ?? 'N/A' }}</td>
+                <td>{{ $log->description ?? 'N/A' }}</td>
+                <td>{{ $log->subject_type ?? 'N/A' }}</td>
+                <td>{{ $log->subject->uuid ?? $log->subject->id ?? 'N/A' }}</td>
                 <td>{{ $log->created_at }}</td>
                 <td>
                     <a

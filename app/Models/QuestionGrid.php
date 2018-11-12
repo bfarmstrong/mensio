@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -11,12 +13,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class QuestionGrid extends Model
 {
+    // Log all changes to the question grid model.
+    use Loggable;
+    use SetsUuids;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = ['index', 'question_id', 'type', 'value'];
+
+    /**
+     * The columns that generate a UUID.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * A question grid belongs to a question.
