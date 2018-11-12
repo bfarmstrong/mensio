@@ -20,6 +20,16 @@
                     @lang('admin.users.show.edit')
                 </a>
 
+                @if ($user->isClient())
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("admin/users/$user->id/groups") }}"
+                    >
+                        <i class="fas fa-user-plus mr-1"></i>
+                        @lang('admin.users.show.groups')
+                    </a>
+                @endif
+
                 <a
                     class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/notes") }}"
@@ -47,16 +57,6 @@
                     >
                         <i class="fas fa-redo mr-1"></i>
                         @lang('admin.users.show.switch-user')
-                    </a>
-                @endif
-
-                @if ($user->isClient())
-                    <a
-                        class="btn btn-primary btn-sm"
-                        href="{{ url("admin/users/$user->id/groups") }}"
-                    >
-                        <i class="fas fa-user-plus mr-1"></i>
-                        @lang('admin.users.show.groups')
                     </a>
                 @endif
 
