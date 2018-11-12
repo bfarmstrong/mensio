@@ -11,8 +11,8 @@ return [
             'title' => 'Create Clinic',
         ],
         'assignclinic' => [
-            'assign' => 'Assign User',
-            'breadcrumb' => 'Assign User',
+            'assign' => 'Add Admin',
+            'breadcrumb' => 'Add Admin',
             'users' => 'Users',
             'assign-users' =>'Assign',
             'no-results' => 'No users were found...',
@@ -22,6 +22,7 @@ return [
             'form-delete' => 'Unassign',
             'on-submit' => 'Are you sure you want to unassign this user?',
             'deleted-user-clinic' => 'User was unassigned successfully',
+            'toggle-dropdown' => 'Toggle dropdown',
             'title' => 'All Users',
         ],
         'edit' => [

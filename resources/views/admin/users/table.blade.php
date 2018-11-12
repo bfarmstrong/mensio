@@ -39,6 +39,7 @@
                     class="dropdown-item"
                     href="{{ url("admin/users/USER_ID/edit") }}"
                 >
+                    <i class="fas fa-edit mr-1"></i>
                     @lang('admin.users.table.edit')
                 </a>
             @endif
