@@ -233,7 +233,12 @@ Breadcrumbs::for('admin.roles.create', function ($trail) {
 
 // Groups
 Breadcrumbs::for('admin.groups.index', function ($trail) {
-    $trail->push(__('admin.groups.index.breadcrumb'), url('admin/groups'));
+    $trail->push(
+        __('admin.groups.index.breadcrumb'),
+        request()->user()->isAdmin() ?
+            url('admin/groups') :
+            url('groups')
+    );
 });
 
 // Groups > Create
@@ -259,7 +264,7 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
 
 // Admin > Groups > Notes
 Breadcrumbs::for('groups.notes.index', function ($trail, $group) {
-    // $trail->parent('groups.index');
+    $trail->parent('admin.groups.index');
     $trail->push(
         __('groups.notes.index.breadcrumb'),
         url("groups/$group->uuid/notes")
@@ -294,6 +299,7 @@ Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
 
 // Groups > Group Profile > Questionnaires > Assign
 Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
+    $trail->parent('admin.groups.index');
     $trail->push(
         __('groups.questionnaires.create.breadcrumb'),
         url("groups/$group->uuid/questionnaires/create")
