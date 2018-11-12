@@ -36,7 +36,9 @@
                             <p class="h4">
                                 @lang('admin.users.index.clients')
                             </p>
-                            @include('admin.users.table', ['users' => $clients])
+                            @include('admin.users.table', [
+                                'type' => 'client',
+                            ])
                         @endif
 
                         @if ($therapists->isNotEmpty())
@@ -47,7 +49,9 @@
                             <p class="h4">
                                 @lang('admin.users.index.therapists')
                             </p>
-                            @include('admin.users.table', ['users' => $therapists])
+                            @include('admin.users.table', [
+                                'type' => 'therapist',
+                            ])
                         @endif
                     @else
                         <p class="lead text-center text-muted mt-3">
