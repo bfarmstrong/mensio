@@ -18,6 +18,47 @@
                 >
                     @lang('admin.users.show.edit')
                 </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("admin/users/switch/$user->id") }}"
+                >
+                    @lang('user.form-settings.switch-user')
+                </a>
+
+                @if ($user->isClient())
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("admin/users/$user->id/groups") }}"
+                    >
+                        @lang('user.form-settings.groups')
+                    </a>
+                @endif
+
+                @if ($user->isClient())
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("admin/users/$user->id/therapists") }}"
+                    >
+                        @lang('user.form-settings.therapists')
+                    </a>
+                @endif
+
+                @if ($user->is_active == 1)
+                    <a
+                        class="btn btn-danger btn-sm"
+                        href="{{ url("admin/users/inactivate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.inactive')
+                    </a>
+                @else
+                    <a
+                        class="btn btn-success btn-sm"
+                        href="{{ url("admin/users/activate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.active')
+                    </a>
+                @endif
             </div>
         </div>
 
