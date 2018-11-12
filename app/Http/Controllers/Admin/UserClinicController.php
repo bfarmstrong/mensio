@@ -109,9 +109,10 @@ class UserClinicController extends Controller
      */
     public function store(AssignClinicRequest $request)
     {
+        $clinic = $this->clinicservice->find($request->clinic_id);
         $this->user->assignClinic($request->clinic_id, $request->user_id);
 
-        return redirect("admin/clinics/$request->clinic_id/assignclinic")->with([
+        return redirect("admin/clinics/$clinic->uuid/assignclinic")->with([
             'message' => __('admin.clinics.assignclinic.user-assigned'),
         ]);
     }
@@ -126,9 +127,10 @@ class UserClinicController extends Controller
     public function destroy(string $id, Request $request)
     {
         $user = $this->user->find($id);
+        $clinic = $this->clinicservice->find($request->clinic_id);
         $this->user->removeClinic($request->clinic_id, $user->id);
 
-        return redirect("admin/clinics/$request->clinic_id/assignclinic")->with([
+        return redirect("admin/clinics/$clinic->uuid/assignclinic")->with([
             'message' => __('admin.clinics.assignclinic.deleted-user-clinic'),
         ]);
     }
