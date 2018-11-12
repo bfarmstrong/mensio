@@ -1,4 +1,4 @@
-<table class="datatable table table-hover table-outline table-striped dt-responsive nowrap w-100">
+<table class="ajax-datatable table table-hover table-outline table-striped dt-responsive nowrap w-100">
     <thead class="thead-light">
         <tr>
             <th>@lang('admin.users.table.name')</th>
@@ -9,7 +9,7 @@
     </thead>
 
     <tbody>
-        @foreach ($users as $user)
+        {{-- @foreach ($users as $user)
             @if ($user->id !== Auth::id())
                 <tr>
                     <td>{{ $user->name }}</td>
@@ -59,6 +59,25 @@
                     </td>
                 </tr>
             @endif
-        @endforeach
+        @endforeach --}}
     </tbody>
 </table>
+
+@push('scripts')
+<script type="text/javascript">
+    window.$('.ajax-datatable').DataTable({
+        ajax: {
+            dataSrc: '',
+            url: '/admin/users{{ isset($type) ? "?type=$type" : '' }}',
+        },
+        columns: [
+            { data: 'name' },
+            { data: 'email' },
+            { data: 'role.name' },
+            { data: 'name' },
+        ],
+        deferRender: true,
+        responsive: true,
+    });
+</script>
+@endpush

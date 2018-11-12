@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use App\Http\Requests\UserInviteRequest;
-use App\Models\UserClinic;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\General\WhereIn;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Criteria\General\WhereRelationNotEqual;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IClinicService;
@@ -78,22 +79,42 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (request()->user()->isSuperAdmin()) {
-            $users = $this->userService
-                ->pushCriteria(new WithRole())
-                ->pushCriteria(new WhereEqual('is_active', 1))
-                ->all();
-        } else {
-            $user_id = UserClinic::where(
-                'clinic_id',
-                request()->attributes->get('clinic')->id
-            )->pluck('user_id');
-            $users = $this->userService
-                ->pushCriteria(new WithRole())
-                ->pushCriteria(new WhereEqual('is_active', 1))
-                ->pushCriteria(new WhereIn('id', $user_id))
-                ->all();
+        $query = $this->userService
+            ->pushCriteria(new WithRelation('role'))
+            ->pushCriteria(new WhereEqual('is_active', 1));
+
+        if (! request()->user()->isSuperAdmin()) {
+            $query = $query->pushCriteria(
+                new WhereRelationEqual(
+                    'clinics',
+                    'id',
+                    request()->attributes->get('clinic')->id
+                )
+            );
         }
+
+        $type = request()->query('type');
+        if (! is_null($type)) {
+            if ('client' === $type) {
+                $query = $query->pushCriteria(
+                    new WhereRelationEqual(
+                        'role',
+                        'level',
+                        Roles::Client
+                    )
+                );
+            } elseif ('therapist' === $type) {
+                $query = $query->pushCriteria(
+                    new WhereRelationNotEqual(
+                        'role',
+                        'level',
+                        Roles::Client
+                    )
+                );
+            }
+        }
+
+        $users = $query->all();
 
         $clients = $users->filter(function ($user) {
             return $user->isClient();
@@ -103,9 +124,14 @@ class UserController extends Controller
             return $user->isTherapist() || $user->isAdmin();
         });
 
+        if (request()->expectsJson()) {
+            return $users;
+        }
+
         return view('admin.users.index')->with([
             'clients' => $clients,
             'therapists' => $therapists,
+            'type' => $type,
             'users' => $users,
         ]);
     }
