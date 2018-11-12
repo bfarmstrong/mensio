@@ -10,21 +10,22 @@
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('admin.users.index.users')
             </span>
-			<div class="float-right">
-            <a
-                class="btn btn-primary btn-sm"
-                href="{{ url('admin/users/add') }}"
-            >
-                @lang('admin.users.index.assign-clinic')
-            </a>
 
-            <a
-                class="btn btn-primary btn-sm"
-                href="{{ url('admin/users/invite') }}"
-            >
-                @lang('admin.users.index.create-user')
-            </a>
-        </div>
+			<div class="float-right">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url('admin/users/add') }}"
+                >
+                    @lang('admin.users.index.assign-clinic')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url('admin/users/invite') }}"
+                >
+                    @lang('admin.users.index.create-user')
+                </a>
+            </div>
 		</div>
 
         <div class="card-body">
