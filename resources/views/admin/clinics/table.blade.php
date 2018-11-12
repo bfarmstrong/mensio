@@ -20,20 +20,20 @@
                             @lang('admin.clinics.table.users')
                         </a>
 
-                        <button
-                            aria-expanded="false"
-                            aria-haspopup="true"
-                            class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown"
-                            type="button"
-                        >
-                            <span class="sr-only">
-                                @lang('admin.clinics.table.toggle-dropdown')
-                            </span>
-                        </button>
+                        @if (Auth::user()->isSuperAdmin())
+                            <button
+                                aria-expanded="false"
+                                aria-haspopup="true"
+                                class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown"
+                                type="button"
+                            >
+                                <span class="sr-only">
+                                    @lang('admin.clinics.table.toggle-dropdown')
+                                </span>
+                            </button>
 
-                        <div class="dropdown-menu">
-                            @if (Auth::user()->isSuperAdmin())
+                            <div class="dropdown-menu">
                                 <a
                                     class="dropdown-item"
                                     href="{{ url("admin/clinics/$clinic->uuid/edit") }}"
@@ -41,9 +41,7 @@
                                     <i class="fas fa-edit mr-1"></i>
                                     @lang('admin.clinics.table.edit')
                                 </a>
-                            @endif
 
-                            @if (Auth::user()->isSuperAdmin())
                                 {!!
                                     Form::open([
                                         'class' => 'd-inline-block w-100',
@@ -54,8 +52,8 @@
                                 !!}
                                 @include('admin.clinics.form-delete')
                                 {!! Form::close() !!}
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                 </td>
             </tr>

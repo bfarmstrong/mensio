@@ -49,12 +49,12 @@ class UserClinicController extends Controller
                 ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
                 ->pushCriteria(new WhereRelationEqual('role', 'level', 4))
                 ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
-                ->paginate();
+                ->all();
         } else {
             $users = $this->user
                 ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
                 ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
-                ->paginate();
+                ->all();
         }
 
         return view('admin.clinics.assignclinics.index')->with([
@@ -81,7 +81,7 @@ class UserClinicController extends Controller
                 )
             )
             ->pushCriteria(new WithRelation('clinics'))
-            ->paginate();
+            ->all();
         $clinic = $this->clinicservice->findBy('uuid', $clinic);
 
         $users = $users->reject(function ($user) use ($clinic) {

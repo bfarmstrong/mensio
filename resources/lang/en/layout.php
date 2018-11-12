@@ -26,6 +26,7 @@ return [
         'group-management' => 'Group Management',
         'groups' => 'Groups',
         'menu' => 'Main Menu',
+        'my-clinics' => 'My Clinics',
         'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',
         'switch-back' => 'Switch Back',

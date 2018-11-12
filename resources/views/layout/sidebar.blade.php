@@ -156,7 +156,7 @@
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#">
                             <i class="nav-icon fas fa-hospital"></i>
-                            @lang('layout.sidebar.clinics')
+                            @lang('layout.sidebar.my-clinics')
                         </a>
 
                         <ul class="nav-dropdown-items">

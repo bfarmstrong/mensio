@@ -13,7 +13,11 @@
 
             <a
                 class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("admin/clinics/$clinic->uuid/assignclinic/create") }}"
+                @if (Auth::user()->isSuperAdmin())
+                    href="{{ url("admin/clinics/$clinic->uuid/assignclinic/create") }}"
+                @else
+                    href="{{ url('admin/users/add') }}"
+                @endif
             >
                 <i class="fas fa-user-plus mr-1"></i>
                 @lang('admin.clinics.assignclinic.assign-users')
@@ -30,8 +34,6 @@
                             @lang('admin.clinics.assignclinic.no-results')
                         </p>
                     @endif
-
-                    {{ $users->links() }}
                 </div>
             </div>
         </div>
