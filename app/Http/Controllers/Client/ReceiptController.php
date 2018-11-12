@@ -100,7 +100,7 @@ class ReceiptController extends Controller
         $client = $this->userService->find($id);
         $supervisor = $this->userService->findSupervisor($client, $request->user());
 
-        $this->receiptService->create([
+        $receipt = $this->receiptService->create([
             'appointment_date' => $request->get('appointment_date'),
             'clinic_id' => $request->attributes->get('clinic')->id,
             'supervisor_id' => $supervisor->id ?? null,

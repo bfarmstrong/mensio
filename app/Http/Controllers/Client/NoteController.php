@@ -66,12 +66,13 @@ class NoteController extends Controller
      *
      * @var IClinicService
      */
-    protected $clinicservice;
+    protected $clinicService;
 
     /**
      * Creates an instance of `NoteController`.
      *
      * @param IAttachmentService       $attachmentService
+     * @param IClinicService           $clinicService
      * @param ICommunicationLogService $communicationLogService
      * @param INoteService             $noteService
      * @param IReceiptService          $receiptService
@@ -79,6 +80,7 @@ class NoteController extends Controller
      */
     public function __construct(
         IAttachmentService $attachmentService,
+        IClinicService $clinicService,
         ICommunicationLogService $communicationLogService,
         INoteService $noteService,
         IReceiptService $receiptService,
@@ -89,7 +91,7 @@ class NoteController extends Controller
         $this->noteService = $noteService;
         $this->receiptService = $receiptService;
         $this->userService = $userService;
-        $this->clinicservice = $clinicservice;
+        $this->clinicService = $clinicService;
     }
 
     /**
