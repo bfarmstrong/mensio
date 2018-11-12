@@ -38,20 +38,20 @@ Route::group(['middleware' => ['domain']], function () {
     Route::patch('responses/{response_id}/data', 'ResponseController@updateData')->name('responses.update-data');
 
     Route::group([
-    'middleware' => ['auth', 'auth.role'],
-    'namespace' => 'Api',
-    'prefix' => 'api',
-], function () {
-    /*
-    |--------------------------------------------------------------------------
-    | Country
-    |--------------------------------------------------------------------------
-    */
-    Route::group(['prefix' => 'countries'], function () {
-        Route::get('', 'CountryController@index');
-        Route::get('{country}', 'CountryController@states');
+        'middleware' => ['auth', 'auth.role'],
+        'namespace' => 'Api',
+        'prefix' => 'api',
+    ], function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Country
+        |--------------------------------------------------------------------------
+        */
+        Route::group(['prefix' => 'countries'], function () {
+            Route::get('', 'CountryController@index');
+            Route::get('{country}', 'CountryController@states');
+        });
     });
-});
 
     /*
     |--------------------------------------------------------------------------
@@ -196,8 +196,10 @@ Route::group(['middleware' => ['domain']], function () {
             */
             Route::get('users/search', 'UserController@index');
             Route::get('users/invite', 'UserController@getInvite');
-            Route::get('users/add', 'UserController@getassignclinic');
-            Route::post('users/assign', 'UserController@postassignclinic');
+            Route::group(['middleware' => 'requires-clinic'], function () {
+                Route::get('users/add', 'UserController@getassignclinic');
+                Route::post('users/assign', 'UserController@postassignclinic');
+            });
             Route::get('users/inactivate/{id}', 'UserController@inactivateUser');
             Route::get('users/activate/{id}', 'UserController@activateUser');
             Route::post('users/search', 'UserController@search');

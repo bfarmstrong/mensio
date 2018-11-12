@@ -16,27 +16,38 @@
             @lang('errors.no-selected-clinic.contents')
         </p>
 
-        {!!
-            Form::select(
-                'clinic',
-                [null => __('errors.no-selected-clinic.select')] + $availableClinics->pluck('name', 'subdomain')->all(),
-                null,
-                ['class' => 'form-control selectpicker']
-            )
-        !!}
+        @isset($availableClinics)
+            {!!
+                Form::select(
+                    'clinic',
+                    [null => __('errors.no-selected-clinic.select')] + $availableClinics->pluck('name', 'subdomain')->all(),
+                    null,
+                    ['class' => 'form-control selectpicker']
+                )
+            !!}
+        @else
+            <a
+                class="btn btn-primary"
+                href="{{ url('/') }}"
+            >
+                @lang('errors.no-selected-clinic.return-home')
+            </a>
+        @endisset
     </div>
 
-    @push('scripts')
-        <script type="text/javascript">
-            window.$('select[name="clinic"]').change(function (event) {
-                if (event.target.value) {
-                    var subdomain = '{{ config('app.url') }}'.replace(
-                        '//',
-                        '//' + event.target.value + '.'
-                    );
-                    window.location.href = subdomain;
-                }
-            });
-        </script>
-    @endpush
+    @isset($availableClinics)
+        @push('scripts')
+            <script type="text/javascript">
+                window.$('select[name="clinic"]').change(function (event) {
+                    if (event.target.value) {
+                        var subdomain = '{{ config('app.url') }}'.replace(
+                            '//',
+                            '//' + event.target.value + '.'
+                        );
+                        window.location.href = subdomain;
+                    }
+                });
+            </script>
+        @endpush
+    @endisset
 @endsection
