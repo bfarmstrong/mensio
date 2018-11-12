@@ -80,6 +80,7 @@ class UserController extends Controller
     public function index()
     {
         $query = $this->userService
+            ->pushCriteria(new WithRelation('clinics'))
             ->pushCriteria(new WithRelation('role'))
             ->pushCriteria(new WhereEqual('is_active', 1));
 
@@ -312,6 +313,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = $this->userService
+            ->pushCriteria(new WithRelation('clinics'))
             ->pushCriteria(new WithRelation('doctor'))
             ->pushCriteria(new WithRelation('referrer'))
             ->pushCriteria(new WithRelation('role'))

@@ -33,12 +33,18 @@
                     @lang('admin.users.show.questionnaires')
                 </a>
 
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url("admin/users/switch/$user->id") }}"
-                >
-                    @lang('admin.users.show.switch-user')
-                </a>
+                @if (
+                    isset($currentClinic) &&
+                    $user->clinics->contains($currentClinic) &&
+                    !Session::get('original_user')
+                )
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("admin/users/switch/$user->id") }}"
+                    >
+                        @lang('admin.users.show.switch-user')
+                    </a>
+                @endif
 
                 @if ($user->isClient())
                     <a

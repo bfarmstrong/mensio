@@ -30,17 +30,7 @@
         </a>
     @endif
 
-    @if (!Session::get('original_user'))
-        <a
-            class="btn btn-primary btn-sm"
-            href="{{ url("admin/users/switch/USER_ID") }}"
-        >
-            <i class="fas fa-user mr-1"></i>
-            @lang('user.form-settings.switch-user')
-        </a>
-    @endif
-
-    @if (Auth::user()->isSuperadmin())
+    @if (Auth::user()->isSuperAdmin())
         {!!
             Form::open([
                 'class' => 'd-inline-block',
