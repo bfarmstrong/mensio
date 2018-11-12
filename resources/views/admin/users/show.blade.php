@@ -21,9 +21,23 @@
 
                 <a
                     class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/notes") }}"
+                >
+                    @lang('admin.users.show.notes')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/questionnaires") }}"
+                >
+                    @lang('admin.users.show.questionnaires')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
                     href="{{ url("admin/users/switch/$user->id") }}"
                 >
-                    @lang('user.form-settings.switch-user')
+                    @lang('admin.users.show.switch-user')
                 </a>
 
                 @if ($user->isClient())
@@ -31,7 +45,7 @@
                         class="btn btn-primary btn-sm"
                         href="{{ url("admin/users/$user->id/groups") }}"
                     >
-                        @lang('user.form-settings.groups')
+                        @lang('admin.users.show.groups')
                     </a>
                 @endif
 
@@ -40,7 +54,7 @@
                         class="btn btn-primary btn-sm"
                         href="{{ url("admin/users/$user->id/therapists") }}"
                     >
-                        @lang('user.form-settings.therapists')
+                        @lang('admin.users.show.therapists')
                     </a>
                 @endif
 
@@ -49,14 +63,14 @@
                         class="btn btn-danger btn-sm"
                         href="{{ url("admin/users/inactivate/$user->id") }}"
                     >
-                        @lang('user.form-settings.inactive')
+                        @lang('admin.users.show.inactive')
                     </a>
                 @else
                     <a
                         class="btn btn-success btn-sm"
                         href="{{ url("admin/users/activate/$user->id") }}"
                     >
-                        @lang('user.form-settings.active')
+                        @lang('admin.users.show.active')
                     </a>
                 @endif
             </div>

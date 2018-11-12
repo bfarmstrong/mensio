@@ -13,16 +13,27 @@ Breadcrumbs::for('admin.logs.show', function ($trail, $log) {
 
 // Clients
 Breadcrumbs::for('clients.index', function ($trail) {
-    $trail->push(__('clients.index.breadcrumb'), url('clients'));
+    if (request()->user()->isAdmin()) {
+        $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));
+    } else {
+        $trail->push(__('clients.index.breadcrumb'), url('clients'));
+    }
 });
 
 // Clients > Client Profile
 Breadcrumbs::for('clients.show', function ($trail, $user) {
     $trail->parent('clients.index');
-    $trail->push(
-        __('clients.show.breadcrumb'),
-        url("clients/$user->id")
-    );
+    if (request()->user()->isAdmin()) {
+        $trail->push(
+            __('admin.users.show.breadcrumb', ['role' => $user->roleName()]),
+            url("admin/users/$user->id")
+        );
+    } else {
+        $trail->push(
+            __('clients.show.breadcrumb'),
+            url("clients/$user->id")
+        );
+    }
 });
 
 // Clients > Client Profile > Notes

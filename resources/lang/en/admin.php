@@ -297,9 +297,16 @@ return [
             'active-user' => 'User was successfully activated.',
         ],
         'show' => [
+            'active' => 'Active',
             'breadcrumb' => ':Role Profile',
             'edit' => 'Edit',
             'form-title' => ':Role Profile',
+            'groups' => 'Groups',
+            'inactive' => 'Inactive',
+            'notes' => 'Notes',
+            'questionnaires' => 'Questionnaires',
+            'switch-user' => 'Switch User',
+            'therapists' => 'Therapists',
             'title' => ':Role Profile',
         ],
         'table' => [
