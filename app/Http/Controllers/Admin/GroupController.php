@@ -108,6 +108,8 @@ class GroupController extends Controller
             ->pushCriteria(new WithRole())
             ->all();
 
+        $therapists = $therapists->sortBy('name');
+
         return view('admin.groups.create')->with([
             'therapists' => $therapists,
         ]);
@@ -163,6 +165,8 @@ class GroupController extends Controller
             ->pushCriteria(new WhereTherapist())
             ->pushCriteria(new WithRole())
             ->all();
+
+        $therapists = $therapists->sortBy('name');
 
         return view('admin.groups.edit')->with([
             'group' => $group,
