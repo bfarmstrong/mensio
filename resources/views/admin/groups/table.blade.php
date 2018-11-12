@@ -27,7 +27,7 @@
                     </table>
                 </td>
                 <td>
-                    @if (Auth::user()->isTherapist())
+                    @if (Auth::user()->isTherapist() || Auth::user()->isAdmin())
                         <a
                             class="btn btn-primary btn-sm"
                             href="{{ url("groups/$group->uuid/notes") }}"

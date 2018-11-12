@@ -9,14 +9,15 @@
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('groups.notes.index.notes')
             </span>
-			@if (!Auth::user()->isAdmin() && !Auth::user()->isClient())
-            <a
-                class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("groups/$group->uuid/notes/create") }}"
-            >
-                @lang('groups.notes.index.create')
-            </a>
-			@endif
+
+            <div class="ml-auto">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/notes/create") }}"
+                >
+                    @lang('groups.notes.index.create')
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
