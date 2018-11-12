@@ -173,13 +173,19 @@ Breadcrumbs::for('admin.clinics.index', function ($trail) {
 // Clinics > assign
 Breadcrumbs::for('admin.clinics.assignclinic', function ($trail, $clinic) {
     $trail->parent('admin.clinics.index');
-    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics'));
+    $trail->push(
+        __('admin.clinics.assignclinic.breadcrumb'),
+        url("admin/clinics/$clinic->uuid/assignclinic")
+    );
 });
 
 // Clinics > assign >assign user
 Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail, $clinic) {
-    $trail->parent('admin.clinics.index');
-    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics/assign'));
+    $trail->parent('admin.clinics.assignclinic', $clinic);
+    $trail->push(
+        __('admin.clinics.assignclinic.breadcrumb-add-user'),
+        url("admin/clinics/$clinic->uuid/assignclinic/assign")
+    );
 });
 
 // Clinics > Create

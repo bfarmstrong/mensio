@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignClinicRequest;
 use App\Services\Criteria\General\WhereNotEqual;
 use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WhereCurrentUserClinic;
-use App\Services\Criteria\User\WhereNotAssignedClinic;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class UserClinicController extends Controller
      */
     public function index(string $clinic)
     {
-        $clinic = $this->clinicservice->find($clinic);
+        $clinic = $this->clinicservice->findBy('uuid', $clinic);
 
         if (request()->user()->isSuperAdmin()) {
             $users = $this->user
@@ -72,14 +72,31 @@ class UserClinicController extends Controller
      */
     public function create(string $clinic)
     {
-        $clients = $this->user
-            ->getByCriteria(new WhereNotAssignedClinic($clinic))
+        $users = $this->user
+            ->pushCriteria(
+                new WhereRelationEqual(
+                    'role',
+                    'roles.level',
+                    Roles::Administrator
+                )
+            )
+            ->pushCriteria(new WithRelation('clinics'))
             ->paginate();
-        $clinic = $this->clinicservice->find($clinic);
+        $clinic = $this->clinicservice->findBy('uuid', $clinic);
+
+        $users = $users->reject(function ($user) use ($clinic) {
+            return $user->clinics->contains($clinic);
+        });
+
+        if ($users->isEmpty()) {
+            return redirect()->back()->withErrors([
+                __('admin.clinics.assignclinic.no-users'),
+            ]);
+        }
 
         return view('admin.clinics.assignclinics.create')->with([
             'clinic' => $clinic,
-            'clients' =>$clients,
+            'clients' => $users,
         ]);
     }
 

@@ -14,10 +14,10 @@
                     <div class="btn-group">
                         <a
                             class="btn btn-primary btn-sm"
-                            href="{{ url("admin/clinics/$clinic->id/assignclinic") }}"
+                            href="{{ url("admin/clinics/$clinic->uuid/assignclinic") }}"
                         >
-                            <i class="fas fa-user-plus mr-1"></i>
-                            @lang('admin.clinics.assignclinic.assign')
+                            <i class="fas fa-user mr-1"></i>
+                            @lang('admin.clinics.table.users')
                         </a>
 
                         <button
