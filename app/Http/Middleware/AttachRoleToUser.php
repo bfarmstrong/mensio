@@ -46,7 +46,7 @@ class AttachRoleToUser
             ! $request->user()->isSuperAdmin() &&
             ! $clinics->contains($currentClinic)
         ) {
-            return response()->view('errors.401', [], 401);
+            throw new NoSelectedClinicException();
         }
 
         return $next($request);
