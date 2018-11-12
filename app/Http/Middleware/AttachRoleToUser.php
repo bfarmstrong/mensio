@@ -37,17 +37,16 @@ class AttachRoleToUser
             throw new NoSelectedClinicException();
         }
 
-        if (
-            ! is_null($request->attributes->get('clinic')) &&
-            ! $request->user()->isSuperAdmin()
-        ) {
+        if (! is_null($request->attributes->get('clinic'))) {
             $currentClinic = $request->attributes->get('clinic');
+            View::share('currentClinic', $currentClinic);
+        }
 
-            if (! $clinics->contains($currentClinic)) {
-                return response()->view('errors.401', [], 401);
-            } else {
-                View::share('currentClinic', $currentClinic);
-            }
+        if (
+            ! $request->user()->isSuperAdmin() &&
+            ! $clinics->contains($currentClinic)
+        ) {
+            return response()->view('errors.401', [], 401);
         }
 
         return $next($request);

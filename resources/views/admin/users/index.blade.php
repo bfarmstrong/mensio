@@ -12,12 +12,14 @@
             </span>
 
 			<div class="float-right">
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url('admin/users/add') }}"
-                >
-                    @lang('admin.users.index.assign-clinic')
-                </a>
+                @isset($currentClinic)
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url('admin/users/add') }}"
+                    >
+                        @lang('admin.users.index.assign-clinic')
+                    </a>
+                @endisset
 
                 <a
                     class="btn btn-primary btn-sm"
