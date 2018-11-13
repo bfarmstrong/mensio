@@ -24,19 +24,30 @@
                 >
                     @lang('groups.notes.index.create')
                 </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/receipts/create") }}"
+                >
+                    @lang('clients.notes.index.create-receipt')
+                </a>
             </div>
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($attachments->isNotEmpty() || $notes->isNotEmpty())
+                    @if (
+                        $attachments->isNotEmpty() ||
+                        $notes->isNotEmpty() ||
+                        $receipts->isNotEmpty()
+                    )
                         @include('clients.notes.table', [
                             'attachments' => $attachments,
                             'communication' => collect(),
                             'notes' => $notes,
                             'prefix' => "groups/$group->uuid",
-                            'receipts' => collect(),
+                            'receipts' => $receipts,
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">

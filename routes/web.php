@@ -159,6 +159,12 @@ Route::group(['middleware' => ['domain']], function () {
                 Route::get('{attachment_id}/download', 'AttachmentController@download');
                 Route::get('{attachment_id}', 'AttachmentController@show');
             });
+
+            Route::group(['prefix' => '{group_id}/receipts'], function () {
+                Route::post('', 'ReceiptController@store');
+                Route::get('create', 'ReceiptController@create');
+                Route::get('{receipt_id}/download', 'ReceiptController@download');
+            });
         });
 
         /*

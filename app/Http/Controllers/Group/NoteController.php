@@ -14,6 +14,7 @@ use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\INoteService;
+use App\Services\Impl\IReceiptService;
 use App\Services\Impl\IUserService;
 use DB;
 use Illuminate\Http\Response;
@@ -45,6 +46,13 @@ class NoteController extends Controller
     protected $noteService;
 
     /**
+     * The receipt service implementation.
+     *
+     * @var IReceiptService
+     */
+    protected $receiptService;
+
+    /**
      * The user service implementation.
      *
      * @var IUserService
@@ -65,6 +73,7 @@ class NoteController extends Controller
      * @param IClinicService     $clinicService
      * @param IGroupService      $groupService
      * @param INoteService       $noteService
+     * @param IReceiptService    $receiptService
      * @param IUserService       $userService
      */
     public function __construct(
@@ -72,13 +81,15 @@ class NoteController extends Controller
         IClinicService $clinicService,
         IGroupService $groupService,
         INoteService $noteService,
+        IReceiptService $receiptService,
         IUserService $userService
     ) {
         $this->attachmentService = $attachmentService;
+        $this->clinicService = $clinicService;
         $this->groupService = $groupService;
         $this->noteService = $noteService;
+        $this->receiptService = $receiptService;
         $this->userService = $userService;
-        $this->clinicService = $clinicService;
     }
 
     /**
@@ -105,10 +116,17 @@ class NoteController extends Controller
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->all();
 
+        $receipts = $this->receiptService
+            ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
+            ->pushCriteria(new WhereEqual('group_id', $group->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
+
         return view('admin.groups.notes.index')->with([
             'attachments' => $attachments,
             'group' => $group,
             'notes' => $notes,
+            'receipts' => $receipts,
         ]);
     }
 

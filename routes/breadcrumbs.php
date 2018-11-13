@@ -307,6 +307,15 @@ Breadcrumbs::for('groups.attachments.show', function ($trail, $group, $attachmen
     );
 });
 
+// Admin > Groups > Receipts > Create
+Breadcrumbs::for('groups.receipts.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.receipts.create.breadcrumb'),
+        url("groups/$group->uuid/receipts/create")
+    );
+});
+
 // Groups > Group Profile > Questionnaires
 Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
     $trail->push(
