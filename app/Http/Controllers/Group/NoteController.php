@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Group;
 
-use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupNote\AddAdditionalNoteRequest;
 use App\Http\Requests\GroupNote\CreateGroupNoteRequest;
 use App\Http\Requests\GroupNote\UpdateNoteRequest;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\ICommunicationLogService;
@@ -190,23 +188,7 @@ class NoteController extends Controller
             );
 
             if (! $note->is_draft) {
-                $clients = $this->userService
-                    ->pushCriteria(
-                        new WhereRelationEqual(
-                            'role',
-                            'roles.level',
-                            Roles::Client
-                        )
-                    )
-                    ->pushCriteria(
-                        new WhereRelationEqual(
-                            'groups',
-                            'groups.id',
-                            $group->id
-                        )
-                    )
-                    ->all();
-
+                $clients = $this->groupService->findClients($group);
                 foreach ($clients as $client) {
                     $this->noteService->create(
                         array_merge(
@@ -221,6 +203,7 @@ class NoteController extends Controller
                     );
                 }
 
+                // The draft note is deleted after saving the final copy
                 $this->noteService->delete($note);
             }
         });
@@ -270,23 +253,7 @@ class NoteController extends Controller
             );
 
             if (! $request->get('is_draft')) {
-                $clients = $this->userService
-                    ->pushCriteria(
-                        new WhereRelationEqual(
-                            'role',
-                            'roles.level',
-                            Roles::Client
-                        )
-                    )
-                    ->pushCriteria(
-                        new WhereRelationEqual(
-                            'groups',
-                            'groups.id',
-                            $group->id
-                        )
-                    )
-                    ->all();
-
+                $clients = $this->groupService->findClients($group);
                 foreach ($clients as $client) {
                     $this->noteService->create(
                         array_merge(
@@ -301,6 +268,7 @@ class NoteController extends Controller
                     );
                 }
 
+                // The draft note is deleted after saving the final copy
                 $this->noteService->delete($note);
             }
         });
