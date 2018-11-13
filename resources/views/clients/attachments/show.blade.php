@@ -29,6 +29,18 @@
 
                 <pre>{{ $contents }}</pre>
             @endif
+
+            @if ($attachment->isSignatureValid($attachment->therapist_id))
+                <i class="fas fa-lock text-success pull-right"></i>
+            @else
+                <i
+                    class="fas fa-exclamation-triangle text-danger pull-right"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="{{ __('clients.attachments.show.signature-invalid') }}"
+                >
+                </i>
+            @endif
         </div>
     </div>
 @endsection

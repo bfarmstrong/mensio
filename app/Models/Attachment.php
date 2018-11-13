@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\Encryptable;
 use App\Models\Traits\SetsUuids;
+use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,7 @@ class Attachment extends Model
 {
     use Encryptable;
     use SetsUuids;
+    use Signable;
 
     /**
      * The fields that are encrypted in the database.
@@ -33,6 +35,22 @@ class Attachment extends Model
      * @var array
      */
     protected $fillable = [
+        'clinic_id',
+        'file_location',
+        'file_name',
+        'file_size',
+        'group_id',
+        'mime_type',
+        'therapist_id',
+        'user_id',
+    ];
+
+    /**
+     * The attributes that are signed.
+     *
+     * @var array
+     */
+    protected $signable = [
         'clinic_id',
         'file_location',
         'file_name',
@@ -67,5 +85,15 @@ class Attachment extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Returns the value that is used to sign the attachment.
+     *
+     * @return string
+     */
+    public function getSignee()
+    {
+        return $this->therapist_id;
     }
 }

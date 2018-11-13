@@ -15,6 +15,7 @@ return [
         'show' => [
             'attachment' => 'Attachment',
             'breadcrumb' => 'View Attachment',
+            'signature-invalid' => 'This attachment has been unexpectedly modified.',
             'title' => 'Attachment',
         ],
     ],
@@ -35,6 +36,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'notes' => 'Notes',
             'reason' => 'Reason For Meeting',
+            'signature-invalid' => 'This communication log has been unexpectedly modified.',
         ],
         'show' => [
             'breadcrumb' => 'View Communication Log',
