@@ -12,6 +12,7 @@ use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IClinicService;
+use App\Services\Impl\ICommunicationLogService;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\INoteService;
 use App\Services\Impl\IReceiptService;
@@ -30,6 +31,13 @@ class NoteController extends Controller
      * @var IAttachmentService
      */
     protected $attachmentService;
+
+    /**
+     * The communication log service implementation.
+     *
+     * @var ICommunicationLogService
+     */
+    protected $communicationLogController;
 
     /**
      * The group service implementation.
@@ -69,16 +77,18 @@ class NoteController extends Controller
     /**
      * Creates an instance of `GroupNotController`.
      *
-     * @param IAttachmentService $attachmentService
-     * @param IClinicService     $clinicService
-     * @param IGroupService      $groupService
-     * @param INoteService       $noteService
-     * @param IReceiptService    $receiptService
-     * @param IUserService       $userService
+     * @param IAttachmentService       $attachmentService
+     * @param IClinicService           $clinicService
+     * @param ICommunicationLogService $communicationLogService
+     * @param IGroupService            $groupService
+     * @param INoteService             $noteService
+     * @param IReceiptService          $receiptService
+     * @param IUserService             $userService
      */
     public function __construct(
         IAttachmentService $attachmentService,
         IClinicService $clinicService,
+        ICommunicationLogService $communicationLogService,
         IGroupService $groupService,
         INoteService $noteService,
         IReceiptService $receiptService,
@@ -86,6 +96,7 @@ class NoteController extends Controller
     ) {
         $this->attachmentService = $attachmentService;
         $this->clinicService = $clinicService;
+        $this->communicationLogService = $communicationLogService;
         $this->groupService = $groupService;
         $this->noteService = $noteService;
         $this->receiptService = $receiptService;
@@ -116,6 +127,12 @@ class NoteController extends Controller
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->all();
 
+        $communication = $this->communicationLogService
+            ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
+            ->pushCriteria(new WhereEqual('group_id', $group->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
+
         $receipts = $this->receiptService
             ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
             ->pushCriteria(new WhereEqual('group_id', $group->id))
@@ -124,6 +141,7 @@ class NoteController extends Controller
 
         return view('admin.groups.notes.index')->with([
             'attachments' => $attachments,
+            'communication' => $communication,
             'group' => $group,
             'notes' => $notes,
             'receipts' => $receipts,

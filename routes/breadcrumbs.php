@@ -307,6 +307,24 @@ Breadcrumbs::for('groups.attachments.show', function ($trail, $group, $attachmen
     );
 });
 
+// Admin > Groups > Communication Log > Create
+Breadcrumbs::for('groups.communication.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.communication.create.breadcrumb'),
+        url("groups/$group->uuid/communication/create")
+    );
+});
+
+// Admin > Groups > Communication Log > View
+Breadcrumbs::for('groups.communication.show', function ($trail, $group, $communication) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.communication.show.breadcrumb'),
+        url("groups/$group->uuid/communication/$communication->uuid")
+    );
+});
+
 // Admin > Groups > Receipts > Create
 Breadcrumbs::for('groups.receipts.create', function ($trail, $group) {
     $trail->parent('groups.notes.index', $group);

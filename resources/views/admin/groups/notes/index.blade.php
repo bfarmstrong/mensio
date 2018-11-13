@@ -20,6 +20,13 @@
 
                 <a
                     class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/communication/create") }}"
+                >
+                    @lang('clients.notes.index.create-communication-log')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/notes/create") }}"
                 >
                     @lang('groups.notes.index.create')
@@ -39,12 +46,13 @@
                 <div class="col-12">
                     @if (
                         $attachments->isNotEmpty() ||
+                        $communication->isNotEmpty() ||
                         $notes->isNotEmpty() ||
                         $receipts->isNotEmpty()
                     )
                         @include('clients.notes.table', [
                             'attachments' => $attachments,
-                            'communication' => collect(),
+                            'communication' => $communication,
                             'notes' => $notes,
                             'prefix' => "groups/$group->uuid",
                             'receipts' => $receipts,

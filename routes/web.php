@@ -160,6 +160,12 @@ Route::group(['middleware' => ['domain']], function () {
                 Route::get('{attachment_id}', 'AttachmentController@show');
             });
 
+            Route::group(['prefix' => '{group_id}/communication'], function () {
+                Route::post('', 'CommunicationLogController@store');
+                Route::get('create', 'CommunicationLogController@create');
+                Route::get('{communication_log_id}', 'CommunicationLogController@show');
+            });
+
             Route::group(['prefix' => '{group_id}/receipts'], function () {
                 Route::post('', 'ReceiptController@store');
                 Route::get('create', 'ReceiptController@create');
