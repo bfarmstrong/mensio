@@ -94,6 +94,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'attachments' => 'Attachments',
             'communication-logs' => 'Communication Logs',
+            'client' => 'Client',
             'creator' => 'Therapist',
             'date' => 'Date',
             'draft' => 'Draft',

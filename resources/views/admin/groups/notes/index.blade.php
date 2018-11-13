@@ -53,6 +53,7 @@
                         @include('clients.notes.table', [
                             'attachments' => $attachments,
                             'communication' => $communication,
+                            'group' => $group,
                             'notes' => $notes,
                             'prefix' => "groups/$group->uuid",
                             'receipts' => $receipts,

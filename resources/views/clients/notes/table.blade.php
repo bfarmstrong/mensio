@@ -68,10 +68,13 @@
 <div class="tab-content">
     @if ($finals->isNotEmpty())
         <div id="final-notes" class="tab-pane active">
-            <table class="table table-hover table-outline table-striped">
+            <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.creator')</th>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.date')</th>
                         <th>@lang('clients.notes.table.status')</th>
                         <th>@lang('clients.notes.table.actions')</th>
@@ -82,6 +85,9 @@
                     @foreach ($finals as $note)
                         <tr>
                             <td>{{ $note->therapist->name }}</td>
+                            @isset ($group)
+                                <td>{{ $note->client->name }}</td>
+                            @endisset
                             <td>{{ $note->updated_at }}</td>
                             <td>@lang('clients.notes.table.final')</td>
                             <td>
@@ -102,7 +108,7 @@
 
     @if ($drafts->isNotEmpty())
         <div id="drafts" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+            <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.creator')</th>
@@ -136,10 +142,13 @@
 
     @if ($attachments->isNotEmpty())
         <div id="attachments" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+            <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.name')</th>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.type')</th>
                         <th>@lang('clients.notes.table.date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
@@ -150,6 +159,9 @@
                     @foreach ($attachments as $attachment)
                         <tr>
                             <td>{{ $attachment->file_name }}</td>
+                            @isset ($group)
+                                <td>{{ $attachment->user->name }}</td>
+                            @endisset
                             <td>{{ $attachment->mime_type }}</td>
                             <td>{{ $attachment->updated_at }}</td>
                             <td>
@@ -170,9 +182,12 @@
 
     @if ($communication->isNotEmpty())
         <div id="communication" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+            <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.appointment-date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
                     </tr>
@@ -181,6 +196,9 @@
                 <tbody>
                     @foreach ($communication as $log)
                         <tr>
+                            @isset ($group)
+                                <td>{{ $log->user->name }}</td>
+                            @endisset
                             <td>{{ $log->appointment_date }}</td>
                             <td>
                                 <a
@@ -200,9 +218,12 @@
 
     @if ($receipts->isNotEmpty())
         <div id="receipts" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+            <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.appointment-date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
                     </tr>
@@ -211,6 +232,9 @@
                 <tbody>
                     @foreach ($receipts as $receipt)
                         <tr>
+                            @isset ($group)
+                                <td>{{ $receipt->user->name }}</td>
+                            @endisset
                             <td>{{ $receipt->appointment_date }}</td>
                             <td>
                                 <a
