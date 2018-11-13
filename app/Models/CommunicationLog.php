@@ -34,9 +34,10 @@ class CommunicationLog extends Model
      */
     protected $fillable = [
         'appointment_date',
+        'clinic_id',
+        'group_id',
         'notes',
         'reason',
-        'clinic_id',
         'therapist_id',
         'user_id',
     ];

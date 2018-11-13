@@ -37,6 +37,7 @@ class Attachment extends Model
         'file_location',
         'file_name',
         'file_size',
+        'group_id',
         'mime_type',
         'user_id',
     ];
