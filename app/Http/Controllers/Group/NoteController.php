@@ -7,9 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupNote\AddAdditionalNoteRequest;
 use App\Http\Requests\GroupNote\CreateGroupNoteRequest;
 use App\Http\Requests\GroupNote\UpdateNoteRequest;
-use App\Models\Group;
-use App\Models\Note;
-use App\Models\User;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\General\WhereRelationEqual;
@@ -23,7 +20,7 @@ use Illuminate\Http\Response;
 /**
  * Handles actions related to notes against a group.
  */
-class GroupNoteController extends Controller
+class NoteController extends Controller
 {
     /**
      * The group service implementation.

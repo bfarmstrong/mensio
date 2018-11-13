@@ -142,12 +142,12 @@ Route::group(['middleware' => ['domain']], function () {
         Route::post('groups/search', 'admin\GroupController@search');
         Route::get('groups/search', 'admin\GroupController@index');
         Route::group(['prefix' => 'groups', 'namespace' => 'Group'], function () {
-            Route::get('{group_id}/notes', 'GroupNoteController@index');
-            Route::post('{group_id}/notes', 'GroupNoteController@store');
-            Route::post('{group_id}/notes/{note_id}/addition', 'GroupNoteController@addAddition');
-            Route::get('{group_id}/notes/create', 'GroupNoteController@create');
-            Route::get('{group_id}/notes/{note_id}', 'GroupNoteController@show');
-            Route::put('{group_id}/notes/{note_id}', 'GroupNoteController@update');
+            Route::get('{group_id}/notes', 'NoteController@index');
+            Route::post('{group_id}/notes', 'NoteController@store');
+            Route::post('{group_id}/notes/{note_id}/addition', 'NoteController@addAddition');
+            Route::get('{group_id}/notes/create', 'NoteController@create');
+            Route::get('{group_id}/notes/{note_id}', 'NoteController@show');
+            Route::put('{group_id}/notes/{note_id}', 'NoteController@update');
 
             Route::get('{group_id}/questionnaires', 'GroupQuestionnaireController@index');
             Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
