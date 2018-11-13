@@ -15,8 +15,8 @@
                     'url' => url("groups/$group->uuid/notes"),
                 ])
             !!}
-            @include('admin.groups.notes.form', [
-                'group' => $group,
+            @include('clients.notes.form', [
+                'therapist' => Auth::user(),
             ])
             {!! Form::close() !!}
         </div>
