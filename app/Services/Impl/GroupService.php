@@ -2,7 +2,9 @@
 
 namespace App\Services\Impl;
 
+use App\Enums\Roles;
 use App\Services\BaseService;
+use Illuminate\Support\Collection;
 
 /**
  * Implementation of the Group service.
@@ -17,5 +19,21 @@ class GroupService extends BaseService implements IGroupService
     public function model()
     {
         return \App\Models\Group::class;
+    }
+
+    /**
+     * Returns the list of clients in a group.
+     *
+     * @param mixed $group
+     *
+     * @return Collection
+     */
+    public function findClients($group)
+    {
+        $group = $this->find($group);
+
+        return $group->users()->whereHas('role', function ($query) {
+            $query->where('level', Roles::Client);
+        })->get();
     }
 }

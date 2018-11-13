@@ -10,6 +10,7 @@ use App\Http\Requests\GroupNote\UpdateNoteRequest;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Impl\IAttachmentService;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\INoteService;
@@ -22,6 +23,13 @@ use Illuminate\Http\Response;
  */
 class NoteController extends Controller
 {
+    /**
+     * The attachment service implementation.
+     *
+     * @var IAttachmentService
+     */
+    protected $attachmentService;
+
     /**
      * The group service implementation.
      *
@@ -53,17 +61,20 @@ class NoteController extends Controller
     /**
      * Creates an instance of `GroupNotController`.
      *
-     * @param IClinicService $clinicService
-     * @param IGroupService  $groupService
-     * @param INoteService   $noteService
-     * @param IUserService   $userService
+     * @param IAttachmentService $attachmentService
+     * @param IClinicService     $clinicService
+     * @param IGroupService      $groupService
+     * @param INoteService       $noteService
+     * @param IUserService       $userService
      */
     public function __construct(
+        IAttachmentService $attachmentService,
         IClinicService $clinicService,
         IGroupService $groupService,
         INoteService $noteService,
         IUserService $userService
     ) {
+        $this->attachmentService = $attachmentService;
         $this->groupService = $groupService;
         $this->noteService = $noteService;
         $this->userService = $userService;
@@ -86,9 +97,16 @@ class NoteController extends Controller
             ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
             ->pushCriteria(new WhereEqual('group_id', $group->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->paginate();
+            ->all();
+
+        $attachments = $this->attachmentService
+            ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
+            ->pushCriteria(new WhereEqual('group_id', $group->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
 
         return view('admin.groups.notes.index')->with([
+            'attachments' => $attachments,
             'group' => $group,
             'notes' => $notes,
         ]);

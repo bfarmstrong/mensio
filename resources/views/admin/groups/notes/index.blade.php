@@ -13,6 +13,13 @@
             <div class="ml-auto">
                 <a
                     class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/attachments/create") }}"
+                >
+                    @lang('clients.notes.index.create-attachment')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/notes/create") }}"
                 >
                     @lang('groups.notes.index.create')
@@ -23,9 +30,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($notes->isNotEmpty())
+                    @if ($attachments->isNotEmpty() || $notes->isNotEmpty())
                         @include('clients.notes.table', [
-                            'attachments' => collect(),
+                            'attachments' => $attachments,
                             'communication' => collect(),
                             'notes' => $notes,
                             'prefix' => "groups/$group->uuid",
@@ -36,8 +43,6 @@
                             @lang('groups.notes.index.no-results')
                         </p>
                     @endif
-
-                    {{ $notes->links() }}
                 </div>
             </div>
         </div>

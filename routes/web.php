@@ -152,6 +152,13 @@ Route::group(['middleware' => ['domain']], function () {
             Route::get('{group_id}/questionnaires', 'GroupQuestionnaireController@index');
             Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
             Route::post('{group_id}/questionnaires', 'GroupQuestionnaireController@store');
+
+            Route::group(['prefix' => '{group_id}/attachments'], function () {
+                Route::post('', 'AttachmentController@store');
+                Route::get('create', 'AttachmentController@create');
+                Route::get('{attachment_id}/download', 'AttachmentController@download');
+                Route::get('{attachment_id}', 'AttachmentController@show');
+            });
         });
 
         /*

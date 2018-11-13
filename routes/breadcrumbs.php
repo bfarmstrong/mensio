@@ -289,6 +289,24 @@ Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
     );
 });
 
+// Admin > Groups > Attachments > Create
+Breadcrumbs::for('groups.attachments.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.attachments.create.breadcrumb'),
+        url("groups/$group->uuid/attachments/create")
+    );
+});
+
+// Admin > Groups > Attachments > View
+Breadcrumbs::for('groups.attachments.show', function ($trail, $group, $attachment) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.attachments.show.breadcrumb'),
+        url("groups/$group->uuid/attachments/$attachment->uuid")
+    );
+});
+
 // Groups > Group Profile > Questionnaires
 Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
     $trail->push(
