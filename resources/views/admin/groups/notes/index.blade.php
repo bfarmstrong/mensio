@@ -15,6 +15,7 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/attachments/create") }}"
                 >
+                    <i class="fas fa-paperclip mr-1"></i>
                     @lang('clients.notes.index.create-attachment')
                 </a>
 
@@ -22,6 +23,7 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/communication/create") }}"
                 >
+                    <i class="fas fa-comment-alt mr-1"></i>
                     @lang('clients.notes.index.create-communication-log')
                 </a>
 
@@ -29,6 +31,7 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/notes/create") }}"
                 >
+                    <i class="fas fa-sticky-note mr-1"></i>
                     @lang('groups.notes.index.create')
                 </a>
 
@@ -36,6 +39,7 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("groups/$group->uuid/receipts/create") }}"
                 >
+                    <i class="fas fa-receipt mr-1"></i>
                     @lang('clients.notes.index.create-receipt')
                 </a>
             </div>

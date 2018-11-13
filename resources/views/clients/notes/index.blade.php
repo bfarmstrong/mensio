@@ -16,6 +16,7 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/attachments/create") }}"
                 >
+                    <i class="fas fa-paperclip mr-1"></i>
                     @lang('clients.notes.index.create-attachment')
                 </a>
 
@@ -23,21 +24,24 @@
                     class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/communication/create") }}"
                 >
+                    <i class="fas fa-comment-alt mr-1"></i>
                     @lang('clients.notes.index.create-communication-log')
-                </a>
-
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url("clients/$user->id/receipts/create") }}"
-                >
-                    @lang('clients.notes.index.create-receipt')
                 </a>
 
                 <a
                     class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/notes/create") }}"
                 >
+                    <i class="fas fa-sticky-note mr-1"></i>
                     @lang('clients.notes.index.create')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/receipts/create") }}"
+                >
+                    <i class="fas fa-receipt mr-1"></i>
+                    @lang('clients.notes.index.create-receipt')
                 </a>
             </div>
         </div>
