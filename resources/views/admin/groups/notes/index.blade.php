@@ -24,8 +24,12 @@
             <div class="row">
                 <div class="col-12">
                     @if ($notes->isNotEmpty())
-                        @include('admin.groups.notes.table', [
+                        @include('clients.notes.table', [
+                            'attachments' => collect(),
+                            'communication' => collect(),
                             'notes' => $notes,
+                            'prefix' => "groups/$group->uuid",
+                            'receipts' => collect(),
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">

@@ -87,7 +87,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/notes/$note->uuid") }}"
+                                    href="{{ url("$prefix/notes/$note->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -121,7 +121,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/notes/$note->uuid") }}"
+                                    href="{{ url("$prefix/notes/$note->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -155,7 +155,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/attachments/$attachment->uuid") }}"
+                                    href="{{ url("$prefix/attachments/$attachment->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -185,7 +185,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/communication/$log->uuid") }}"
+                                    href="{{ url("$prefix/communication/$log->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -215,7 +215,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/receipts/$receipt->uuid/download") }}"
+                                    href="{{ url("$prefix/receipts/$receipt->uuid/download") }}"
                                     target="_blank"
                                 >
                                     <i class="fas fa-search mr-1"></i>

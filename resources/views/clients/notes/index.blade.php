@@ -55,6 +55,7 @@
                             'attachments' => $attachments,
                             'communication' => $communication,
                             'notes' => $notes,
+                            'prefix' => "clients/$user->id",
                             'receipts' => $receipts,
                         ])
                     @else

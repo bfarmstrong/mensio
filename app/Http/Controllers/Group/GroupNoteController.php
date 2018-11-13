@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers\Group;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupNote\AddAdditionalNoteRequest;
 use App\Http\Requests\GroupNote\CreateGroupNoteRequest;
 use App\Http\Requests\GroupNote\UpdateNoteRequest;
 use App\Models\Group;
-use App\Models\GroupNote;
 use App\Models\Note;
 use App\Models\User;
+use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\User\WhereClient;
-use App\Services\Criteria\User\WhereCurrentClient;
-use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Impl\IClinicService;
-use App\Services\Impl\IGroupNoteService;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\INoteService;
 use App\Services\Impl\IUserService;
+use DB;
 use Illuminate\Http\Response;
 
 /**
@@ -36,13 +35,6 @@ class GroupNoteController extends Controller
     /**
      * The note service implementation.
      *
-     * @var IGroupNoteService
-     */
-    protected $groupnoteService;
-
-    /**
-     * The note service implementation.
-     *
      * @var INoteService
      */
     protected $noteService;
@@ -52,33 +44,33 @@ class GroupNoteController extends Controller
      *
      * @var IUserService
      */
-    protected $user;
+    protected $userService;
 
     /**
      * The clinic service implementation.
      *
      * @var IClinicService
      */
-    protected $clinicservice;
+    protected $clinicService;
 
     /**
-     * Creates an instance of `IGroupNoteService`.
+     * Creates an instance of `GroupNotController`.
      *
-     * @param IGroupService     $groupService
-     * @param IGroupNoteService $groupnoteService
+     * @param IClinicService $clinicService
+     * @param IGroupService  $groupService
+     * @param INoteService   $noteService
+     * @param IUserService   $userService
      */
     public function __construct(
+        IClinicService $clinicService,
         IGroupService $groupService,
-        IGroupNoteService $groupnoteService,
         INoteService $noteService,
-        IUserService $user,
-        IClinicService $clinicservice
+        IUserService $userService
     ) {
         $this->groupService = $groupService;
-        $this->groupnoteService = $groupnoteService;
         $this->noteService = $noteService;
-        $this->user = $user;
-        $this->clinicservice = $clinicservice;
+        $this->userService = $userService;
+        $this->clinicService = $clinicService;
     }
 
     /**
@@ -91,23 +83,17 @@ class GroupNoteController extends Controller
     public function index(string $uuid)
     {
         $group = $this->groupService->findBy('uuid', $uuid);
-        $clinic_id = request()->attributes->get('clinic')->id;
-        if (request()->user()->isAdmin()) {
-            $notes = $this->groupnoteService
-                ->getByCriteria(new WhereEqual('group_id', $group->id))
-                ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
-                ->paginate();
-        } else {
-            $notes = $this->groupnoteService
-                ->getByCriteria(new WhereEqual('group_id', $group->id))
-                ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
-                ->getByCriteria(new WhereEqual('created_by', request()->user()->id))
-                ->paginate();
-        }
+        $clinic = request()->attributes->get('clinic');
+
+        $notes = $this->noteService
+            ->pushCriteria(new WhereEqual('clinic_id', $clinic->id))
+            ->pushCriteria(new WhereEqual('group_id', $group->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->paginate();
 
         return view('admin.groups.notes.index')->with([
-            'notes' => $notes,
             'group' => $group,
+            'notes' => $notes,
         ]);
     }
 
@@ -131,34 +117,62 @@ class GroupNoteController extends Controller
      * Creates a new note attached to a group.
      *
      * @param CreateGroupNoteRequest $request
+     * @param string                 $uuid
      *
      * @return Response
      */
-    public function store(CreateGroupNoteRequest $request)
+    public function store(CreateGroupNoteRequest $request, string $uuid)
     {
-        $group = Group::find($request->group_id);
-        $clinic_id = null;
-        $clinic_id = request()->attributes->get('clinic')->id;
-        $id = GroupNote::create(array_merge($request->all(), [
-                'group_id' => $group->id,
-                'clinic_id'=>$clinic_id,
-            ]));
-        if (0 == $request->is_draft) {
-            $clients = $this->user
-                ->pushCriteria(new WhereClient())
-                ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-                ->pushCriteria(new WithRole())
-                ->all();
+        $group = $this->groupService->findBy('uuid', $uuid);
+        $clinic = $request->attributes->get('clinic');
 
-            foreach ($clients as $client) {
-                $this->noteService->create(array_merge($request->all(), [
-                    'client_id' => $client->id,
-                    'therapist_id'=>\Auth::user()->id,
-                    'group_note_id'=>$id->id,
-                    'clinic_id'=>$clinic_id,
-                ]));
+        DB::transaction(function () use ($clinic, $group, $request) {
+            $note = $this->noteService->create(
+                array_merge(
+                    $request->all(),
+                    [
+                        'clinic_id' => $clinic->id,
+                        'group_id' => $group->id,
+                        'therapist_id' => $request->user()->id,
+                    ]
+                )
+            );
+
+            if (! $note->is_draft) {
+                $clients = $this->userService
+                    ->pushCriteria(
+                        new WhereRelationEqual(
+                            'role',
+                            'roles.level',
+                            Roles::Client
+                        )
+                    )
+                    ->pushCriteria(
+                        new WhereRelationEqual(
+                            'groups',
+                            'groups.id',
+                            $group->id
+                        )
+                    )
+                    ->all();
+
+                foreach ($clients as $client) {
+                    $this->noteService->create(
+                        array_merge(
+                            $request->all(),
+                            [
+                                'client_id' => $client->id,
+                                'clinic_id' => $clinic->id,
+                                'group_id' => $group->id,
+                                'therapist_id' => $request->user()->id,
+                            ]
+                        )
+                    );
+                }
+
+                $this->noteService->delete($note);
             }
-        }
+        });
 
         return redirect()->to("groups/$group->uuid/notes")->with([
             'message' => __('groups.notes.index.note-created'),
@@ -176,7 +190,7 @@ class GroupNoteController extends Controller
     public function show(string $group, string $note)
     {
         $group = $this->groupService->findBy('uuid', $group);
-        $note = $this->groupnoteService->findBy('uuid', $note);
+        $note = $this->noteService->findBy('uuid', $note);
 
         return view('admin.groups.notes.show')->with([
             'note' => $note,
@@ -188,30 +202,57 @@ class GroupNoteController extends Controller
      * Updates a note attached to a group.
      *
      * @param UpdateNoteRequest $request
+     * @param string            $group
+     * @param string            $note
      *
      * @return Response
      */
-    public function update(UpdateNoteRequest $request)
+    public function update(UpdateNoteRequest $request, string $group, string $note)
     {
-        $group = Group::find($request->group_id);
-        $note = GroupNote::find($request->note_id);
-        $note_check = Note::where('group_note_id', $request->note_id)->count();
-        if (0 == $request->is_draft && 0 == $note_check) {
-            $clients = $this->user
-                ->pushCriteria(new WhereClient())
-                ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-                ->pushCriteria(new WithRole())
-                ->all();
+        $group = $this->groupService->findBy('uuid', $group);
+        $note = $this->noteService->findBy('uuid', $note);
 
-            foreach ($clients as $client) {
-                $this->noteService->create(array_merge($request->all(), [
-                    'client_id' => $client->id,
-                    'therapist_id'=>\Auth::user()->id,
-                    'group_note_id'=>$request->note_id,
-                ]));
+        DB::transaction(function () use ($group, $note, $request) {
+            $this->noteService->update(
+                $note,
+                $request->except(['files', 'signature'])
+            );
+
+            if (! $request->get('is_draft')) {
+                $clients = $this->userService
+                    ->pushCriteria(
+                        new WhereRelationEqual(
+                            'role',
+                            'roles.level',
+                            Roles::Client
+                        )
+                    )
+                    ->pushCriteria(
+                        new WhereRelationEqual(
+                            'groups',
+                            'groups.id',
+                            $group->id
+                        )
+                    )
+                    ->all();
+
+                foreach ($clients as $client) {
+                    $this->noteService->create(
+                        array_merge(
+                            $request->all(),
+                            [
+                                'client_id' => $client->id,
+                                'clinic_id' => $note->clinic_id,
+                                'group_id' => $group->id,
+                                'therapist_id' => $request->user()->id,
+                            ]
+                        )
+                    );
+                }
+
+                $this->noteService->delete($note);
             }
-        }
-        GroupNote::whereId($request->note_id)->update($request->except(['_token', '_method', 'files', 'signature']));
+        });
 
         return redirect()->to("groups/$group->uuid/notes")->with([
             'message' => __('groups.notes.index.note-updated'),
@@ -222,15 +263,20 @@ class GroupNoteController extends Controller
      * Adds additional information to an existing note.
      *
      * @param AddAdditionalNoteRequest $request
+     * @param string                   $group
+     * @param string                   $note
      *
      * @return Response
      */
-    public function addAddition(AddAdditionalNoteRequest $request)
-    {
-        $group = Group::find($request->group_id);
-        $note = GroupNote::find($request->note_id);
+    public function addAddition(
+        AddAdditionalNoteRequest $request,
+        string $group,
+        string $note
+    ) {
+        $group = $this->groupService->findBy('uuid', $group);
+        $note = $this->noteService->findBy('uuid', $note);
 
-        $this->groupnoteService->addAddition($note, $request->get('addition'));
+        $this->noteService->addAddition($note, $request->get('addition'));
 
         return redirect()->back()->with([
             'message' => __('groups.notes.show.additional-added'),

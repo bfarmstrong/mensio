@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupCreateRequest;
 use App\Models\Group;
-use App\Models\GroupNote;
 use App\Models\User;
 use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WithRole;
@@ -224,7 +223,6 @@ class GroupController extends Controller
         } else {
             $group = $this->group->findBy('uuid', $uuid);
 
-            GroupNote::where('group_id', $group->id)->delete();
             $users = $group->users()->get();
             foreach ($users as $user) {
                 $group->users()->detach($user->user_id);

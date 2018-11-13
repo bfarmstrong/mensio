@@ -17,17 +17,6 @@ class FixForeignKeyForResponseClinic extends Migration
      */
     public function up()
     {
-        Schema::table('group_notes', function (Blueprint $table) {
-            $table->dropForeign(['clinic_id']);
-            $table->dropIndex(['clinic_id']);
-            $table->foreign('clinic_id')
-                ->references('id')
-                ->on('clinics')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->index('clinic_id');
-        });
-
         Schema::table('notes', function (Blueprint $table) {
             $table->dropForeign(['clinic_id']);
             $table->dropIndex(['clinic_id']);

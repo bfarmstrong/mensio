@@ -11,7 +11,7 @@
         <tbody>
             @foreach ($notes as $note)
                 <tr>
-                    <td>{{ $note->users->name }}</td>
+                    <td>{{ $note->therapist->name }}</td>
                     <td>{{ $note->updated_at }}</td>
                     <td>
                         @if ($note->is_draft)
