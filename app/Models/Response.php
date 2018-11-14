@@ -25,12 +25,13 @@ class Response extends Model
      */
     protected $fillable = [
         'complete',
+        'clinic_id',
         'data',
+        'group_id',
         'questionnaire_id',
         'survey_id',
         'user_id',
         'uuid',
-        'clinic_id',
     ];
 
     /**

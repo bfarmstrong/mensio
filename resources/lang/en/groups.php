@@ -58,9 +58,9 @@ return [
 
     'questionnaires' => [
         'create' => [
-            'assign-questionnaire' => 'Assign Questionnaire',
+            'assign-questionnaire' => 'Manage Questionnaires',
             'breadcrumb' => 'Questionnaire',
-            'title' => 'Assign Questionnaire',
+            'title' => 'Manage Questionnaires',
         ],
         'form-assign' => [
             'assign' => 'Assign',

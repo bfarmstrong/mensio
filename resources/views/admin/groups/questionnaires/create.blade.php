@@ -14,18 +14,29 @@
         </div>
 
         <div class="card-body">
-            {!!
-                Form::open([
-                    'method' => 'post',
-                    'url' => url("groups/$group->id/questionnaires"),
-                ])
-            !!}
-            @include('admin.groups.questionnaires.form-assign', [
-                'questionnaires' => $questionnaires,
-                'group' => $group,
-            ])
-            {!! Form::close() !!}
+            <div class="row mb-3">
+                <div class="col-12">
+                    {!!
+                        Form::open([
+                            'method' => 'post',
+                            'url' => url("groups/$group->uuid/questionnaires"),
+                        ])
+                    !!}
+                    @include('admin.groups.questionnaires.form-assign', [
+                        'questionnaires' => $questionnaires,
+                        'group' => $group,
+                    ])
+                    {!! Form::close() !!}
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-12">
+                    @include('admin.groups.questionnaires.table', [
+                        'responses' => $responses,
+                    ])
+                </div>
+            </div>
         </div>
     </div>
 @endsection

@@ -149,9 +149,9 @@ Route::group(['middleware' => ['domain']], function () {
             Route::get('{group_id}/notes/{note_id}', 'NoteController@show');
             Route::put('{group_id}/notes/{note_id}', 'NoteController@update');
 
-            Route::get('{group_id}/questionnaires', 'GroupQuestionnaireController@index');
-            Route::get('{group_id}/questionnaires/create', 'GroupQuestionnaireController@create');
-            Route::post('{group_id}/questionnaires', 'GroupQuestionnaireController@store');
+            Route::get('{group_id}/questionnaires', 'QuestionnaireController@index');
+            Route::get('{group_id}/questionnaires/create', 'QuestionnaireController@create');
+            Route::post('{group_id}/questionnaires', 'QuestionnaireController@store');
 
             Route::group(['prefix' => '{group_id}/attachments'], function () {
                 Route::post('', 'AttachmentController@store');

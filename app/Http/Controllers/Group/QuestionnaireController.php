@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Group;
 
-use App\Exceptions\NoAvailableQuestionnairesException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Group\ManageQuestionnairesRequest;
 use App\Models\Group;
-use App\Services\Criteria\User\WhereClient;
-use App\Services\Criteria\User\WhereCurrentClient;
-use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\General\WhereEqual;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
@@ -18,7 +16,7 @@ use Illuminate\Http\Response;
 /**
  * Handles actions related to the group questionnaire management.
  */
-class GroupQuestionnaireController extends Controller
+class QuestionnaireController extends Controller
 {
     /**
      * The questionnaire service implementation.
@@ -35,17 +33,25 @@ class GroupQuestionnaireController extends Controller
     protected $response;
 
     /**
+     * The group service implementation.
+     *
+     * @var IGroupService
+     */
+    protected $group;
+
+    /**
      * The user service implementation.
      *
      * @var IUserService
      */
-    protected $group;
+    protected $user;
 
     /**
      * Creates an instance of `ClientController`.
      *
      * @param IQuestionnaireService $questionnaire
      * @param IResponseService      $response
+     * @param IGroupService         $group
      * @param IUserService          $user
      */
     public function __construct(
@@ -70,65 +76,56 @@ class GroupQuestionnaireController extends Controller
     public function create(string $uuid)
     {
         $group = $this->group->findBy('uuid', $uuid);
-
         $questionnaires = $this->questionnaire->all();
-
-        if ($questionnaires->isEmpty()) {
-            throw new NoAvailableQuestionnairesException();
-        }
+        $responses = $this->response
+            ->getByCriteria(new WhereEqual('group_id', $group->id))
+            ->all();
 
         return view('admin.groups.questionnaires.create')->with([
-            'questionnaires' => $questionnaires,
             'group' => $group,
+            'questionnaires' => $questionnaires,
+            'responses' => $responses,
         ]);
     }
 
     /**
      * Assigns a questionnaire to a group.
      *
-     * @param Request $request
+     * @param ManageQuestionnairesRequest $request
+     * @param string                      $uuid
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(ManageQuestionnairesRequest $request, string $uuid)
     {
-        if (0 == $request->is_submit) {
-            $clients = $this->user
-                ->pushCriteria(new WhereClient())
-                ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-                ->pushCriteria(new WithRole())
-                ->all();
+        $group = $this->group->findBy('uuid', $uuid);
+        $clients = $this->group->findClients($group);
+        $submit = (bool) $request->is_submit;
 
-            foreach ($clients as $client) {
-                $this->response->assignToClient(
-                    $client->id,
-                    $request->get('questionnaire_id'),
-                    true
-                );
+        foreach ($clients as $client) {
+            $response = $this->response->optional()->findBy([
+                'group_id' => $group->id,
+                'questionnaire_id' => $request->get('questionnaire_id'),
+            ]);
+
+            if (is_null($response) && $submit) {
+                $this->response->create([
+                    'clinic_id' => $request->attributes->get('clinic')->id,
+                    'group_id' => $group->id,
+                    'questionnaire_id' => $request->get('questionnaire_id'),
+                    'user_id' => $client->id,
+                ]);
+            } elseif (! is_null($response) && ! $submit) {
+                $this->response->delete($response);
             }
-
-            return redirect()
-            ->back()
-            ->with('message', __('groups.show.questionnaire-assigned'));
         }
-        if (1 == $request->is_submit) {
-            $clients = $this->user
-                ->pushCriteria(new WhereClient())
-                ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-                ->pushCriteria(new WithRole())
-                ->all();
 
-            foreach ($clients as $client) {
-                $this->response->unassignFromClient(
-                    $client->id,
-                    $request->get('questionnaire_id'),
-                    true
-                );
-            }
+        $message = $submit ?
+            __('groups.show.questionnaire-assigned') :
+            __('groups.show.questionnaire-unassigned');
 
-            return redirect()
+        return redirect()
             ->back()
-            ->with('message', __('groups.show.questionnaire-unassigned'));
-        }
+            ->with('message', $message);
     }
 }

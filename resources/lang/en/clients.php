@@ -139,6 +139,7 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
+            'client' => 'Client',
             'name' => 'Name',
             'status' => 'Status',
             'view' => 'View',
