@@ -172,6 +172,7 @@ return [
         'actions' => 'Actions',
         'edit' => 'Edit',
         'email' => 'Email',
+        'insurance' => 'Insurance',
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',

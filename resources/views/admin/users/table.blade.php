@@ -3,6 +3,9 @@
         <tr>
             <th>@lang('admin.users.table.name')</th>
             <th>@lang('admin.users.table.email')</th>
+            @isset ($insurance)
+                <th>@lang('admin.users.table.insurance')</th>
+            @endisset
             <th>@lang('admin.users.table.role')</th>
             <th>@lang('admin.users.table.actions')</th>
         </tr>
@@ -70,6 +73,9 @@
         columns: [
             { data: 'name' },
             { data: 'email' },
+            @isset ($insurance)
+                { data: 'health_card_number' },
+            @endisset
             { data: 'role.name' },
             {
                 data: 'id',

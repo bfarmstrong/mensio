@@ -3,6 +3,7 @@
         <tr>
             <th>@lang('clients.table.name')</th>
             <th>@lang('clients.table.email')</th>
+            <th>@lang('clients.table.insurance')</th>
             <th>@lang('clients.table.actions')</th>
         </tr>
     </thead>
@@ -12,6 +13,7 @@
             <tr>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->health_card_number }}</td>
                 <td>
                     <div class="btn-group">
                         <a

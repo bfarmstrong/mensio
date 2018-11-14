@@ -320,6 +320,7 @@ return [
             'actions' => 'Actions',
             'edit' => 'Edit',
             'email' => 'Email',
+            'insurance' => 'Insurance',
             'name' => 'Name',
             'role' => 'Role',
             'toggle-dropdown' => 'Toggle dropdown',

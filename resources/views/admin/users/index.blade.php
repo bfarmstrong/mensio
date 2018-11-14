@@ -86,6 +86,7 @@
                                 <div id="clients" class="tab-pane active">
                             @endif
                             @include('admin.users.table', [
+                                'insurance' => true,
                                 'type' => 'clients',
                             ])
                             @if ($therapists->isNotEmpty())
