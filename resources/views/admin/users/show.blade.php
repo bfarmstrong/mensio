@@ -74,7 +74,11 @@
                     </a>
                 @endif
 
-                @if ($user->is_active == 1)
+                @if (
+                    $user->is_active === 1 &&
+                    !$user->isSuperAdmin() &&
+                    $user->id !== Auth::id()
+                )
                     <a
                         class="btn btn-danger btn-sm"
                         href="{{ url("admin/users/inactivate/$user->id") }}"
@@ -82,7 +86,7 @@
                         <i class="fas fa-toggle-off mr-1"></i>
                         @lang('admin.users.show.inactive')
                     </a>
-                @else
+                @elseif ($user->is_active === 0)
                     <a
                         class="btn btn-success btn-sm"
                         href="{{ url("admin/users/activate/$user->id") }}"
