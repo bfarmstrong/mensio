@@ -1,13 +1,19 @@
 @php
     $finals = $notes->where('is_draft', 0);
     $drafts = $notes->where('is_draft', 1);
+
+    ($finals->isNotEmpty() && $active = 'finals') ||
+        ($drafts->isNotEmpty() && $active = 'drafts') ||
+        ($attachments->isNotEmpty() && $active = 'attachments') ||
+        ($communication->isNotEmpty() && $active = 'communication') ||
+        ($receipts->isNotEmpty() && $active = 'receipts');
 @endphp
 
 <ul class="nav nav-tabs">
     @if ($finals->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link active"
+                class="nav-link {{ $active === 'finals' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#final-notes"
             >
@@ -19,7 +25,7 @@
     @if ($drafts->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'drafts' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#drafts"
             >
@@ -31,7 +37,7 @@
     @if ($attachments->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'attachments' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#attachments"
             >
@@ -43,7 +49,7 @@
     @if ($communication->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'communication' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#communication"
             >
@@ -55,7 +61,7 @@
     @if ($receipts->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'receipts' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#receipts"
             >
@@ -67,7 +73,7 @@
 
 <div class="tab-content">
     @if ($finals->isNotEmpty())
-        <div id="final-notes" class="tab-pane active">
+        <div id="final-notes" class="tab-pane {{ $active === 'finals' ? 'active' : 'fade' }}">
             <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
@@ -107,7 +113,7 @@
     @endif
 
     @if ($drafts->isNotEmpty())
-        <div id="drafts" class="tab-pane fade">
+        <div id="drafts" class="tab-pane {{ $active === 'drafts' ? 'active' : 'fade' }}">
             <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
@@ -141,7 +147,7 @@
     @endif
 
     @if ($attachments->isNotEmpty())
-        <div id="attachments" class="tab-pane fade">
+        <div id="attachments" class="tab-pane {{ $active === 'attachments' ? 'active' : 'fade' }}">
             <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
@@ -181,7 +187,7 @@
     @endif
 
     @if ($communication->isNotEmpty())
-        <div id="communication" class="tab-pane fade">
+        <div id="communication" class="tab-pane {{ $active === 'communication' ? 'active' : 'fade' }}">
             <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
@@ -217,7 +223,7 @@
     @endif
 
     @if ($receipts->isNotEmpty())
-        <div id="receipts" class="tab-pane fade">
+        <div id="receipts" class="tab-pane {{ $active === 'receipts' ? 'active' : 'fade' }}">
             <table class="datatable table table-hover table-outline table-striped dt-responsive w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
