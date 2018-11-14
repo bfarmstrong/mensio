@@ -19,6 +19,7 @@ use App\Services\Impl\IUserService;
 use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Route;
 
 /**
  * Manages administrative actions against users.
@@ -94,25 +95,25 @@ class UserController extends Controller
             );
         }
 
-        $type = request()->query('type');
-        if (! is_null($type)) {
-            if ('client' === $type) {
-                $query = $query->pushCriteria(
-                    new WhereRelationEqual(
-                        'role',
-                        'level',
-                        Roles::Client
-                    )
-                );
-            } elseif ('therapist' === $type) {
-                $query = $query->pushCriteria(
-                    new WhereRelationNotEqual(
-                        'role',
-                        'level',
-                        Roles::Client
-                    )
-                );
-            }
+        $type = Route::currentRouteName();
+        if ('admin.clients' === $type) {
+            $type = 'clients';
+            $query = $query->pushCriteria(
+                new WhereRelationEqual(
+                    'role',
+                    'level',
+                    Roles::Client
+                )
+            );
+        } elseif ('admin.therapists' === $type) {
+            $type = 'therapists';
+            $query = $query->pushCriteria(
+                new WhereRelationNotEqual(
+                    'role',
+                    'level',
+                    Roles::Client
+                )
+            );
         }
 
         $users = $query->all();

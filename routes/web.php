@@ -231,6 +231,8 @@ Route::group(['middleware' => ['domain']], function () {
             Route::post('users/switch-clinic', 'UserController@switchToClinic');
             Route::get('users/switch-clinic-back', 'UserController@switchClinicBack');
             Route::post('users/invite', 'UserController@postInvite');
+            Route::get('clients', 'UserController@index')->name('admin.clients');
+            Route::get('therapists', 'UserController@index')->name('admin.therapists');
             Route::resource('users', 'UserController', ['except' => ['create']]);
 
             /*

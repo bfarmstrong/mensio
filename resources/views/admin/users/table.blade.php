@@ -65,7 +65,7 @@
     window.$('.{{ $type }}-datatable').DataTable({
         ajax: {
             dataSrc: '',
-            url: '/admin/users?type={{ $type }}',
+            url: '/admin/{{ $type ?? 'users' }}',
         },
         columns: [
             { data: 'name' },

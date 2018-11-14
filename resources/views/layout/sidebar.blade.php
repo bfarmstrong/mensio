@@ -21,7 +21,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link"
-                        href="{{ url('admin/users?type=client') }}"
+                        href="{{ url('admin/clients') }}"
                     >
                         <i class="nav-icon fas fa-user-friends"></i>
                         @lang('layout.sidebar.all-clients')
@@ -33,7 +33,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link"
-                        href="{{ url('admin/users?type=therapist') }}"
+                        href="{{ url('admin/therapists') }}"
                     >
                         <i class="nav-icon fas fa-user-friends"></i>
                         @lang('layout.sidebar.all-therapists')

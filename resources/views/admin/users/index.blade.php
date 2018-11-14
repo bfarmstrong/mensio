@@ -86,7 +86,7 @@
                                 <div id="clients" class="tab-pane active">
                             @endif
                             @include('admin.users.table', [
-                                'type' => 'client',
+                                'type' => 'clients',
                             ])
                             @if ($therapists->isNotEmpty())
                                 </div>
@@ -98,7 +98,7 @@
                                 <div id="therapists" class="tab-pane">
                             @endif
                             @include('admin.users.table', [
-                                'type' => 'therapist',
+                                'type' => 'therapists',
                             ])
                             @if ($clients->isNotEmpty())
                                 </div>
