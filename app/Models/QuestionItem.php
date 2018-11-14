@@ -27,6 +27,7 @@ class QuestionItem extends Model
         'name',
         'question_id',
         'question_item_group_id',
+        'score',
         'value',
     ];
 

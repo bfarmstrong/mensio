@@ -22,7 +22,13 @@ class QuestionGrid extends Model
      *
      * @var array
      */
-    protected $fillable = ['index', 'question_id', 'type', 'value'];
+    protected $fillable = [
+        'index',
+        'question_id',
+        'score',
+        'type',
+        'value',
+    ];
 
     /**
      * The columns that generate a UUID.
