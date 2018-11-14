@@ -353,6 +353,7 @@ Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
 
 // Groups > Group Profile > Questionnaires > View
 Breadcrumbs::for('groups.questionnaires.show', function ($trail, $group, $response) {
+    $trail->parent('groups.questionnaires.create', $group);
     $trail->push(
         __('groups.questionnaires.show.breadcrumb'),
         url("groups/$group->uuid/questionnaires/$response->uuid")

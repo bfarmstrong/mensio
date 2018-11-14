@@ -22,7 +22,7 @@
                 <td>
                     <a
                         class="btn btn-primary btn-sm"
-                        href="{{ url('clients/' . $response->user->id . '/questionnaires/' . $response->uuid) }}"
+                        href="{{ url('groups/' . $response->group->uuid . '/questionnaires/' . $response->uuid) }}"
                     >
                         <i class="fas fa-search mr-1"></i>
                         @lang('clients.questionnaires.table.view')

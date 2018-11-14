@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\ManageQuestionnairesRequest;
 use App\Models\Group;
 use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
@@ -85,6 +86,29 @@ class QuestionnaireController extends Controller
             'group' => $group,
             'questionnaires' => $questionnaires,
             'responses' => $responses,
+        ]);
+    }
+
+    /**
+     * Returns the view with the questionnaire for a specific client.
+     *
+     * @param string $group
+     * @param string $response
+     *
+     * @return Response
+     */
+    public function show(string $group, string $response)
+    {
+        $group = $this->group->findBy('uuid', $group);
+        $response = $this->response
+            ->getByCriteria(new WithRelation('questionnaire'))
+            ->findBy('uuid', $response);
+        $score = $this->response->getScore($response);
+
+        return view('admin.groups.questionnaires.show', [
+            'group' => $group,
+            'response' => $response,
+            'score' => $score,
         ]);
     }
 

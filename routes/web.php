@@ -151,6 +151,7 @@ Route::group(['middleware' => ['domain']], function () {
 
             Route::get('{group_id}/questionnaires', 'QuestionnaireController@index');
             Route::get('{group_id}/questionnaires/create', 'QuestionnaireController@create');
+            Route::get('{group_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
             Route::post('{group_id}/questionnaires', 'QuestionnaireController@store');
 
             Route::group(['prefix' => '{group_id}/attachments'], function () {

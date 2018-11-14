@@ -72,6 +72,16 @@ class Response extends Model
     }
 
     /**
+     * A response may be assigned to a group.
+     *
+     * @return BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
+
+    /**
      * A response is part of a survey.
      *
      * @return BelongsTo
