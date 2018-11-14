@@ -10,6 +10,7 @@ use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\IUserService;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -175,7 +176,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Updates a group in the database.  Syncs the list of therapists.
      *
      * @param Request $request
      * @param string  $uuid
@@ -184,25 +185,29 @@ class GroupController extends Controller
      */
     public function update(Request $request, string $uuid)
     {
-        $group = $this->group->findBy('uuid', $uuid);
+        return DB::transaction(function () use ($request, $uuid) {
+            $group = $this->group->findBy('uuid', $uuid);
 
-        $this->group->update(
-            $group->id,
-            $request->except(['_token', '_method'])
-        );
-        $users = $group->users()->get();
-        foreach ($users as $user) {
-            $group->users()->detach($user->user_id);
-        }
+            $this->group->update(
+                $group,
+                $request->except(['_token', '_method'])
+            );
 
-        foreach ($request->therapist_id as $userid) {
-            $user = User::find($userid);
-            $user->groups()->attach($group->id);
-        }
+            $therapists = $this->group->findTherapists($group);
+            $users = $group->users();
+            foreach ($therapists as $therapist) {
+                $users->detach($therapist->id);
+            }
 
-        return back()->with([
-            'message' => __('admin.groups.index.updated-group'),
-        ]);
+            foreach ($request->therapist_id as $therapist) {
+                $therapist = $this->user->find($therapist);
+                $users->attach($therapist->id);
+            }
+
+            return back()->with([
+                'message' => __('admin.groups.index.updated-group'),
+            ]);
+        });
     }
 
     /**

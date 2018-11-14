@@ -12,6 +12,7 @@ return [
         'sign-out' => 'Sign Out',
     ],
     'navigation' => [
+        'signature-required' => 'This action requires a signature be added to your account.',
         'toggle-sidebar' => 'Toggle sidebar',
     ],
     'sidebar' => [

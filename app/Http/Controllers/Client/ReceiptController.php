@@ -60,6 +60,7 @@ class ReceiptController extends Controller
 
         return view('clients.receipts.create')->with([
             'client' => $client,
+            'requiresSignature' => is_null(request()->user()->written_signature),
         ]);
     }
 

@@ -72,6 +72,7 @@ class ReceiptController extends Controller
 
         return view('admin.groups.receipts.create')->with([
             'group' => $group,
+            'requiresSignature' => is_null(request()->user()->written_signature),
         ]);
     }
 

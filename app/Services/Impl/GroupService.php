@@ -36,4 +36,21 @@ class GroupService extends BaseService implements IGroupService
             $query->where('level', Roles::Client);
         })->get();
     }
+
+    /**
+     * Returns the list of therapists in a group.
+     *
+     * @param mixed $group
+     *
+     * @return Collection
+     */
+    public function findTherapists($group)
+    {
+        $group = $this->find($group);
+
+        return $group->users()->whereHas('role', function ($query) {
+            $query->where('level', Roles::JuniorTherapist)
+                ->orWhere('level', Roles::SeniorTherapist);
+        })->get();
+    }
 }
