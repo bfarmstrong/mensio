@@ -35,6 +35,7 @@ return [
         ],
         'form' => [
             'address' => 'Address',
+            'logo' => 'Logo',
             'name' => 'Name',
             'save' => 'Save',
             'subdomain' => 'Subdomain',

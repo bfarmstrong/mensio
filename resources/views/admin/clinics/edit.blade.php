@@ -14,7 +14,10 @@
             {!!
                 Form::model(
                     $clinic,
-                    ['url' => url("admin/clinics/$clinic->uuid")]
+                    [
+                        'files' => true,
+                        'url' => url("admin/clinics/$clinic->uuid"),
+                    ]
                 )
             !!}
             @method('patch')

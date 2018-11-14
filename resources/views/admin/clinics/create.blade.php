@@ -13,6 +13,7 @@
         <div class="card-body">
             {!!
                 Form::open([
+                    'files' => true,
                     'url' => url('admin/clinics')
                 ])
             !!}

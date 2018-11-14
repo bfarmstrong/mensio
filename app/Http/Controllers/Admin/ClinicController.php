@@ -70,7 +70,18 @@ class ClinicController extends Controller
     public function store(CreateClinicRequest $request)
     {
         $this->authorize('create', Clinic::class);
-        $this->clinicservice->create($request->all());
+
+        $file = $request->file('file');
+        if (! is_null($file)) {
+            $path = $file->store('clinics', config('filesystems.cloud'));
+        }
+
+        $this->clinicservice->create(
+            array_merge(
+                $request->all(),
+                ['logo' => $path ?? null]
+            )
+        );
 
         return redirect('admin/clinics')->with([
             'message' => __('admin.clinics.index.created-clinic'),
@@ -106,7 +117,19 @@ class ClinicController extends Controller
     {
         $clinic = $this->clinicservice->findBy('uuid', $clinic);
         $this->authorize('update', $clinic);
-        $this->clinicservice->update($clinic, $request->all());
+
+        $file = $request->file('file');
+        if (! is_null($file)) {
+            $path = $file->store('clinics', config('filesystems.cloud'));
+        }
+
+        $this->clinicservice->update(
+            $clinic,
+            array_merge(
+                $request->all(),
+                ['logo' => $path ?? $clinic->logo ?? null]
+            )
+        );
 
         return back()->with([
             'message' => __('admin.clinics.index.updated-clinic'),
