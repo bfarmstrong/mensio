@@ -30,21 +30,25 @@
                     </a>
                 @endif
 
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url("clients/$user->id/notes") }}"
-                >
-                    <i class="fas fa-sticky-note mr-1"></i>
-                    @lang('admin.users.show.notes')
-                </a>
+                @if ($user->isClient())
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("clients/$user->id/notes") }}"
+                    >
+                        <i class="fas fa-sticky-note mr-1"></i>
+                        @lang('admin.users.show.notes')
+                    </a>
+                @endif
 
-                <a
-                    class="btn btn-primary btn-sm"
-                    href="{{ url("clients/$user->id/questionnaires") }}"
-                >
-                    <i class="fas fa-question mr-1"></i>
-                    @lang('admin.users.show.questionnaires')
-                </a>
+                @if ($user->isClient())
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{{ url("clients/$user->id/questionnaires") }}"
+                    >
+                        <i class="fas fa-question mr-1"></i>
+                        @lang('admin.users.show.questionnaires')
+                    </a>
+                @endif
 
                 @if (
                     isset($currentClinic) &&
