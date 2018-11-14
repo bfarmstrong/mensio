@@ -43,19 +43,10 @@ class UserClinicController extends Controller
     public function index(string $clinic)
     {
         $clinic = $this->clinicservice->findBy('uuid', $clinic);
-
-        if (request()->user()->isSuperAdmin()) {
-            $users = $this->user
-                ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
-                ->pushCriteria(new WhereRelationEqual('role', 'level', 4))
-                ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
-                ->all();
-        } else {
-            $users = $this->user
-                ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
-                ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
-                ->all();
-        }
+        $users = $this->user
+            ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
+            ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
+            ->all();
 
         return view('admin.clinics.assignclinics.index')->with([
                 'users' => $users,
