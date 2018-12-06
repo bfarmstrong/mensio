@@ -34,7 +34,7 @@ class PagesController extends Controller
 		if (\Auth::user()->first_time_login == 0) {
 			\Auth::user()->first_time_login = 1; 
 			\Auth::user()->save();
-			Notification::send(\Auth::user(), new ConsentEmail($password));
+			Notification::send(\Auth::user(), new ConsentEmail());
 		}
 	}
 }
