@@ -9,12 +9,15 @@
         <title>@yield('title') - @lang('layout.app.title')</title>
 
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+		        <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
+        @stack('scripts')
     </head>
 
     <body class="app header-fixed sidebar-fixed sidebar-show">
         @yield('content.main')
 
-        <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
-        @stack('scripts')
+
+	
     </body>
+
 </html>

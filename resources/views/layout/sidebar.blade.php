@@ -170,6 +170,7 @@
         type="button"
     ></button>
 </div>
+
 <script>
 
 	function switch_domain(selval) {
