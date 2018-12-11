@@ -1,10 +1,11 @@
 {!! Form::hidden('clinic_id', $clinic->id) !!}
+
 <div class="form-row">
     <div class="form-group col-12">
         {!!
             Form::label(
                 'user_id',
-                __('admin.clinics.assignclinic.users')
+                __('admin.clinics.assignclinic.user')
             )
         !!}
 
@@ -52,7 +53,7 @@
 </div>
 <script>
          function getMessage(thisval){
-			 
+
 			$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -66,6 +67,6 @@
 				}
             });
          }
-		
-		
+
+
 </script>

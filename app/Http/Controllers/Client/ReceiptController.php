@@ -60,6 +60,7 @@ class ReceiptController extends Controller
 
         return view('clients.receipts.create')->with([
             'client' => $client,
+            'requiresSignature' => is_null(request()->user()->written_signature),
         ]);
     }
 
@@ -100,7 +101,7 @@ class ReceiptController extends Controller
         $client = $this->userService->find($id);
         $supervisor = $this->userService->findSupervisor($client, $request->user());
 
-        $this->receiptService->create([
+        $receipt = $this->receiptService->create([
             'appointment_date' => $request->get('appointment_date'),
             'clinic_id' => $request->attributes->get('clinic')->id,
             'supervisor_id' => $supervisor->id ?? null,

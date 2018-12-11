@@ -147,7 +147,10 @@ class UserService extends BaseService implements IUserService
     {
         $therapist = $this->find($therapist);
 
-        return $therapist->patients()->where('patient_id', $client)->exists();
+        return
+            $therapist->isAdmin() ||
+            $therapist->patients()->where('patient_id', $client)->exists()
+        ;
     }
 
     /**

@@ -3,6 +3,7 @@
         <tr>
             <th>@lang('clients.table.name')</th>
             <th>@lang('clients.table.email')</th>
+            <th>@lang('clients.table.insurance')</th>
             <th>@lang('clients.table.actions')</th>
         </tr>
     </thead>
@@ -12,6 +13,7 @@
             <tr>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->health_card_number }}</td>
                 <td>
                     <div class="btn-group">
                         <a
@@ -39,6 +41,7 @@
                                 class="dropdown-item"
                                 href="{{ url("clients/$user->id/notes") }}"
                             >
+                                <i class="fas fa-sticky-note mr-1"></i>
                                 @lang('clients.table.notes')
                             </a>
 
@@ -46,6 +49,7 @@
                                 class="dropdown-item"
                                 href="{{ url("clients/$user->id/questionnaires") }}"
                             >
+                                <i class="fas fa-question mr-1"></i>
                                 @lang('clients.table.questionnaires')
                             </a>
                         </div>

@@ -30,6 +30,7 @@ class Clinic extends Model
         'address_line_2',
         'city',
         'country',
+        'logo',
         'postal_code',
         'province',
         'name',

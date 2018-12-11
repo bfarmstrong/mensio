@@ -19,26 +19,25 @@
 </div>
 
 <div class="form-row">
-
 	<div class="form-group col-12 mb-0">
         <button
             class="btn btn-primary"
             name="is_submit"
             type="submit"
-            value="0"
+            value="1"
         >
+            <i class="fas fa-plus mr-1"></i>
             @lang('groups.questionnaires.form-assign.assign')
         </button>
 
-        
-            <button
-                class="btn btn-danger"
-                name="is_submit"
-                type="submit"
-                value="1"
-            >
-                @lang('groups.questionnaires.form-unassign.unassign')
-            </button>
-        
+        <button
+            class="btn btn-danger"
+            name="is_submit"
+            type="submit"
+            value="0"
+        >
+            <i class="fas fa-minus mr-1"></i>
+            @lang('groups.questionnaires.form-unassign.unassign')
+        </button>
     </div>
 </div>

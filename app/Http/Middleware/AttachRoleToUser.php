@@ -2,12 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Clinic;
-use App\Services\Impl\IClinicService;
-use App\Services\Impl\IUserService;
+use App\Exceptions\NoSelectedClinicException;
+use Auth;
 use Closure;
-use Config;
-use Illuminate\Support\Facades\URL;
+use View;
 
 /**
  * Middleware which attaches the user role to the user object so that it does
@@ -15,19 +13,6 @@ use Illuminate\Support\Facades\URL;
  */
 class AttachRoleToUser
 {
-    /**
-     * The clinic service implementation.
-     *
-     * @var IClinicService
-     */
-    public function __construct(
-        IClinicService $clinicservice,
-        IUserService $userService
-    ) {
-        $this->clinicservice = $clinicservice;
-        $this->userService = $userService;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -38,32 +23,31 @@ class AttachRoleToUser
      */
     public function handle($request, Closure $next)
     {
-        if ('' != Config::get('subdomain') && ! $request->user()->isSuperAdmin()) {
-            $UserAssignedClinic = ['Switch Clinic'];
+        Auth::user()->load('role');
 
-            $url = parse_url(URL::current());
-            $domain = explode('.', $url['host']);
-            $subdomain = $domain[0];
-
-            $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
-            $count = $clinic->users()->where('user_id', \Auth::user()->id)->count();
-            $assignedClinics = $this->userService->find(\Auth::user()->id);
-
-            if (0 == $count) {
-                return response()->view('errors.401', [], 401);
-            } else {
-                $UserClinic = $assignedClinics->clinics->pluck('subdomain', 'id');
-                foreach ($UserClinic as $k => $v) { 
-                    if ($subdomain != strtolower($v)) {
-                        $UserAssignedClinic[$k] = $v;
-                    }
-                } 
-                \View::share('totalClinicAssign', $assignedClinics->clinics->count());
-                \View::share('assignedClinics', $UserAssignedClinic);
-            }
+        if (! $request->user()->isSuperAdmin()) {
+            $clinics = Auth::user()->clinics;
+            View::share('availableClinics', $clinics);
         }
 
-        \Auth::user()->load('role');
+        if (
+            is_null($request->attributes->get('clinic')) &&
+            ! $request->user()->isSuperAdmin()
+        ) {
+            throw new NoSelectedClinicException();
+        }
+
+        if (! is_null($request->attributes->get('clinic'))) {
+            $currentClinic = $request->attributes->get('clinic');
+            View::share('currentClinic', $currentClinic);
+        }
+
+        if (
+            ! $request->user()->isSuperAdmin() &&
+            ! $clinics->contains($currentClinic)
+        ) {
+            throw new NoSelectedClinicException();
+        }
 
         return $next($request);
     }

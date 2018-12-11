@@ -19,7 +19,7 @@ interface IBaseService
 
     public function findBy($field, $value = null);
 
-    public function paginate(int $limit = 15);
+    public function paginate(int $limit = 15, string $page = 'page');
 
     public function search(string $query);
 

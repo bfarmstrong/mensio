@@ -15,6 +15,7 @@ return [
         'show' => [
             'attachment' => 'Attachment',
             'breadcrumb' => 'View Attachment',
+            'signature-invalid' => 'This attachment has been unexpectedly modified.',
             'title' => 'Attachment',
         ],
     ],
@@ -35,6 +36,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'notes' => 'Notes',
             'reason' => 'Reason For Meeting',
+            'signature-invalid' => 'This communication log has been unexpectedly modified.',
         ],
         'show' => [
             'breadcrumb' => 'View Communication Log',
@@ -94,6 +96,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'attachments' => 'Attachments',
             'communication-logs' => 'Communication Logs',
+            'client' => 'Client',
             'creator' => 'Therapist',
             'date' => 'Date',
             'draft' => 'Draft',
@@ -136,6 +139,7 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
+            'client' => 'Client',
             'name' => 'Name',
             'status' => 'Status',
             'view' => 'View',
@@ -168,6 +172,7 @@ return [
         'actions' => 'Actions',
         'edit' => 'Edit',
         'email' => 'Email',
+        'insurance' => 'Insurance',
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\Encryptable;
 use App\Models\Traits\SetsUuids;
+use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,6 +17,7 @@ class CommunicationLog extends Model
 {
     use Encryptable;
     use SetsUuids;
+    use Signable;
 
     /**
      * The fields that should be encrypted.
@@ -34,10 +36,25 @@ class CommunicationLog extends Model
      */
     protected $fillable = [
         'appointment_date',
+        'clinic_id',
+        'group_id',
         'notes',
         'reason',
-        'clinic_id',
         'therapist_id',
+        'user_id',
+    ];
+
+    /**
+     * The attributes that are signed.
+     *
+     * @var array
+     */
+    protected $signable = [
+        'appointment_date',
+        'clinic_id',
+        'group_id',
+        'notes',
+        'reason',
         'user_id',
     ];
 
@@ -76,5 +93,15 @@ class CommunicationLog extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Returns the value that is used to sign the log.
+     *
+     * @return string
+     */
+    public function getSignee()
+    {
+        return $this->therapist_id;
     }
 }

@@ -79,12 +79,14 @@ class TherapistController extends Controller
             ->pushCriteria(new WhereTherapist())
             ->pushCriteria(new WithRole())
             ->pushCriteria(new WhereNotCurrentTherapist($user->id))
-            ->all();
+            ->all()
+            ->sortBy('name');
 
         $supervisors = $this->user
             ->pushCriteria(new WhereRole(Roles::SeniorTherapist))
             ->pushCriteria(new WhereNotCurrentTherapist($user->id))
-            ->all();
+            ->all()
+            ->sortBy('name');
 
         return view('admin.users.therapists.index')->with([
             'supervisors' => $supervisors,

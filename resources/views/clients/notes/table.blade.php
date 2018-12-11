@@ -1,13 +1,21 @@
 @php
-    $finals = $notes->where('is_draft', 0);
-    $drafts = $notes->where('is_draft', 1);
+    ($finals->isNotEmpty() && $active = 'finals') ||
+        ($drafts->isNotEmpty() && $active = 'drafts') ||
+        ($attachments->isNotEmpty() && $active = 'attachments') ||
+        ($communication->isNotEmpty() && $active = 'communication') ||
+        ($receipts->isNotEmpty() && $active = 'receipts');
+
+    (Request::query('drafts_page') && $active = 'drafts') ||
+        (Request::query('attachments_page') && $active = 'attachments') ||
+        (Request::query('communication_page') && $active = 'communication') ||
+        (Request::query('receipts_page') && $active = 'receipts');
 @endphp
 
 <ul class="nav nav-tabs">
     @if ($finals->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link active"
+                class="nav-link {{ $active === 'finals' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#final-notes"
             >
@@ -19,7 +27,7 @@
     @if ($drafts->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'drafts' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#drafts"
             >
@@ -31,7 +39,7 @@
     @if ($attachments->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'attachments' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#attachments"
             >
@@ -43,7 +51,7 @@
     @if ($communication->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'communication' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#communication"
             >
@@ -55,7 +63,7 @@
     @if ($receipts->isNotEmpty())
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ $active === 'receipts' ? 'active' : '' }}"
                 data-toggle="tab"
                 href="#receipts"
             >
@@ -67,11 +75,14 @@
 
 <div class="tab-content">
     @if ($finals->isNotEmpty())
-        <div id="final-notes" class="tab-pane active">
-            <table class="table table-hover table-outline table-striped">
+        <div id="final-notes" class="tab-pane {{ $active === 'finals' ? 'active' : 'fade' }}">
+            <table class="table table-hover table-outline table-striped w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.creator')</th>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.date')</th>
                         <th>@lang('clients.notes.table.status')</th>
                         <th>@lang('clients.notes.table.actions')</th>
@@ -82,12 +93,15 @@
                     @foreach ($finals as $note)
                         <tr>
                             <td>{{ $note->therapist->name }}</td>
+                            @isset ($group)
+                                <td>{{ $note->client->name }}</td>
+                            @endisset
                             <td>{{ $note->updated_at }}</td>
                             <td>@lang('clients.notes.table.final')</td>
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/notes/$note->uuid") }}"
+                                    href="{{ url("$prefix/notes/$note->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -97,12 +111,14 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $finals->appends('finals_page')->links() }}
         </div>
     @endif
 
     @if ($drafts->isNotEmpty())
-        <div id="drafts" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+        <div id="drafts" class="tab-pane {{ $active === 'drafts' ? 'active' : 'fade' }}">
+            <table class="table table-hover table-outline table-striped w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.creator')</th>
@@ -121,7 +137,7 @@
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/notes/$note->uuid") }}"
+                                    href="{{ url("$prefix/notes/$note->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -131,15 +147,20 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $drafts->appends('drafts_page')->links() }}
         </div>
     @endif
 
     @if ($attachments->isNotEmpty())
-        <div id="attachments" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+        <div id="attachments" class="tab-pane {{ $active === 'attachments' ? 'active' : 'fade' }}">
+            <table class="table table-hover table-outline table-striped w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
                         <th>@lang('clients.notes.table.name')</th>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.type')</th>
                         <th>@lang('clients.notes.table.date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
@@ -150,12 +171,15 @@
                     @foreach ($attachments as $attachment)
                         <tr>
                             <td>{{ $attachment->file_name }}</td>
+                            @isset ($group)
+                                <td>{{ $attachment->user->name }}</td>
+                            @endisset
                             <td>{{ $attachment->mime_type }}</td>
                             <td>{{ $attachment->updated_at }}</td>
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/attachments/$attachment->uuid") }}"
+                                    href="{{ url("$prefix/attachments/$attachment->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -165,14 +189,19 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $attachments->appends('attachments_page')->links() }}
         </div>
     @endif
 
     @if ($communication->isNotEmpty())
-        <div id="communication" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+        <div id="communication" class="tab-pane {{ $active === 'communication' ? 'active' : 'fade' }}">
+            <table class="table table-hover table-outline table-striped w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.appointment-date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
                     </tr>
@@ -181,11 +210,14 @@
                 <tbody>
                     @foreach ($communication as $log)
                         <tr>
+                            @isset ($group)
+                                <td>{{ $log->user->name }}</td>
+                            @endisset
                             <td>{{ $log->appointment_date }}</td>
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/communication/$log->uuid") }}"
+                                    href="{{ url("$prefix/communication/$log->uuid") }}"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     @lang('clients.notes.table.view')
@@ -195,14 +227,19 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $communication->appends('communication_page')->links() }}
         </div>
     @endif
 
     @if ($receipts->isNotEmpty())
-        <div id="receipts" class="tab-pane fade">
-            <table class="table table-hover table-outline table-striped">
+        <div id="receipts" class="tab-pane {{ $active === 'receipts' ? 'active' : 'fade' }}">
+            <table class="table table-hover table-outline table-striped w-100 nowrap">
                 <thead class="thead-light">
                     <tr>
+                        @isset ($group)
+                            <th>@lang('clients.notes.table.client')</th>
+                        @endisset
                         <th>@lang('clients.notes.table.appointment-date')</th>
                         <th>@lang('clients.notes.table.actions')</th>
                     </tr>
@@ -211,11 +248,14 @@
                 <tbody>
                     @foreach ($receipts as $receipt)
                         <tr>
+                            @isset ($group)
+                                <td>{{ $receipt->user->name }}</td>
+                            @endisset
                             <td>{{ $receipt->appointment_date }}</td>
                             <td>
                                 <a
                                     class="btn btn-primary btn-sm"
-                                    href="{{ url("clients/$user->id/receipts/$receipt->uuid/download") }}"
+                                    href="{{ url("$prefix/receipts/$receipt->uuid/download") }}"
                                     target="_blank"
                                 >
                                     <i class="fas fa-search mr-1"></i>
@@ -226,6 +266,8 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $receipts->appends('receipts_page')->links() }}
         </div>
     @endif
 </div>

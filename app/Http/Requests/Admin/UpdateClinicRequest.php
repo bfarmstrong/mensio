@@ -26,6 +26,9 @@ class UpdateClinicRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'logo' => 'sometimes|file',
+            'name' => 'sometimes',
+        ];
     }
 }

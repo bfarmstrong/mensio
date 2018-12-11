@@ -1,878 +1,1024 @@
 {
- "pages": [
-   {
-    "elements": [
-     {
-      "type": "matrix",
-      "columns": [
-       "not at all",
-       "several days",
-       "more than half the days",
-       "nearly every day"
-      ],
-      "name": "phq9>>>main",
-      "rows": [
-        "Little interest or pleasure in doing things.",
-  			"Feeling down, depressed, or hopeless.",
-  			"Trouble falling/staying asleep, sleeping too much.",
-  			"Feeling tired or having little energy.",
-  			"Poor appetite or overeating.",
-  			"Feeling bad about yourself, or that you are a failure, or have let yourself or your family down.",
-  			"Trouble concentrating on things, such as reading the newspaper or watching TV.",
-  			"Moving or speaking so slowly that other people could have noticed. Or the opposite; being so fidgety or restless that you have been moving around more than usual.",
-  			"Thoughts that you would be better off dead or of hurting yourself in some way."
-      ],
-      "title": "During the PAST 2 WEEKS, how often have you been bothered by any of the following problems?"
-     },
-     {
-      "type": "radiogroup",
-      "choices": [
-       "Not at all difficult",
-       "Somewhat difficult",
-       "Very difficult",
-       "Extremely difficult"
-      ],
-      "colCount": 4,
-      "name": "phq9>>>difficulty",
-      "title": "If you have been bothered by any of the 9 problems listed above: How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
-     },
-     {
-      "type": "radiogroup",
-      "choices": [
-       "yes",
-       "no"
-      ],
-      "colCount": 4,
-      "name": "phq9>>>ideation",
-      "title": "Have you ever thought about ending your life?"
-     },
-     {
-      "type": "text",
-      "name": "phq9>>>ideation_explain",
-      "title": "If yes, when:"
-     },
-     {
-      "type": "radiogroup",
-      "choices": [
-       "yes",
-       "no"
-      ],
-      "colCount": 4,
-      "name": "phq9>>>attempt",
-      "title": "Have you ever attempted to end your life?"
-     },
-     {
-      "type": "text",
-      "name": "phq9>>>attempt_explain",
-      "title": "If yes, when:"
-     }
-    ],
-    "name": "phq9"
-   },
-   {
-    "name": "general_info",
-    "elements": [
-     {
-      "type": "multipletext",
-      "name": "general_info>>>full_name",
-      "startWithNewLine": false,
-      "title": "Enter your name",
-      "items": [
-       {
-        "name": "general_info>>>full_name>>>first_name",
-        "title": "First:"
-       },
-       {
-        "name": "general_info>>>full_name>>>last_name",
-        "title": "Last:"
-       }
-      ],
-      "colCount": 2
-     },
-     {
-      "type": "multipletext",
-      "name": "general_info>>>phone",
-      "title": "Enter your phone number",
-      "items": [
-       {
-        "name": "general_info>>>phone>>>personal",
-        "title": "Personal:"
-       },
-       {
-         "name": "general_info>>>phone>>>work",
-         "title": "Work:"
-       }
-      ],
-      "colCount": 2
-     },
-     {
-      "type": "multipletext",
-      "name": "general_info>>>address",
-      "title": "Enter your address",
-      "items": [
-       {
-         "name": "general_info>>>address>>>line1",
-         "title": "Address Line 1:"
-       },
-       {
-         "name": "general_info>>>address>>>line2",
-         "title": "Address Line 2:"
-       }
-      ],
-      "colCount": 2
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>city",
-      "title": "City"
-     },
-     {
-      "type": "dropdown",
-      "name": "general_info>>>state",
-      "startWithNewLine": false,
-      "title": "State / Province / Region",
-      "choices": [
-       {
-        "value": "AB",
-        "text": "Alberta"
-       },
-       {
-        "value": "BC",
-        "text": "British Columbia"
-       },
-       {
-        "value": "MB",
-        "text": "Manitoba"
-       },
-       {
-        "value": "NB",
-        "text": "New Brunswick"
-       },
-       {
-        "value": "NL",
-        "text": "Newfoundland and Labrador"
-       },
-       {
-        "value": "NS",
-        "text": "Nova Scotia"
-       },
-       {
-        "value": "ON",
-        "text": "Ontario"
-       },
-       {
-        "value": "PE",
-        "text": "Prince Edward Island"
-       },
-       {
-        "value": "QC",
-        "text": "Quebec"
-       },
-       {
-        "value": "SK",
-        "text": "Saskatchewan"
-       },
-       {
-        "value": "NT",
-        "text": "Northwest Territories"
-       },
-       {
-        "value": "NU",
-        "text": "Nunavut"
-       },
-       {
-        "value": "YT",
-        "text": "Yukon"
-       },
-       {
-        "value": "OTHER",
-        "text": "Other"
-       }
-      ]
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>zip",
-      "title": "Zip / Postal Code"
-     },
-     {
-      "type": "dropdown",
-      "name": "general_info>>>country",
-      "startWithNewLine": false,
-      "title": "Country",
-      "choices": [
-       "Canada",
-       "Other"
-      ]
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>email",
-      "title": "Email:",
-      "inputType": "email"
-     },
-     {
-      "type": "dropdown",
-      "choices": [
-       "Male",
-       "Female",
-       "Other",
-       "Prefer not to answer"
-      ],
-      "name": "general_info>>>gender",
-      "title": "Please select your gender"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>birthdate",
-      "title": "Date of Birth:",
-      "inputType": "datetime"
-     },
-     {
-      "type": "dropdown",
-      "name": "general_info>>>relationship_status",
-      "title": "What is your relationship status?",
-      "choices": [
-       "Single",
-       "In a relationship",
-       "Married/Common Law",
-       "Divorced",
-       "Other"
-      ]
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>children_number",
-      "title": "How many children do you have?"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>children_ages",
-      "title": "What are their ages?"
-     },
-     {
-      "type": "radiogroup",
-      "choices": [
-       "Yes",
-       "No"
-      ],
-      "colCount": 2,
-      "name": "general_info>>>employed",
-      "title": "Are you employed?"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>occupation",
-      "title": "What is your occupation?"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>physician_name",
-      "title": "Who is your family physician?"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>physician_contact",
-      "title": "Family physician: contact info:"
-     },
-     {
-      "type": "text",
-      "name": "general_info>>>emergency_contact",
-      "title": "Please list an emergency contact:"
-     },
-     {
-      "type": "checkbox",
-      "choices": [
-       "Mindspace newsletter",
-       "Online search",
-       "Social media",
-       "Friend, family or colleague",
-       "Physician referral",
-       "Referral from other health care professional",
-       "Other"
-      ],
-      "name": "general_info>>>referrer",
-      "title": "How did you hear about the clinic?"
-     }
+    "pages": [
+        {
+            "elements": [
+                {
+                    "type": "matrix",
+                    "columns": [
+                        "not at all",
+                        "several days",
+                        "more than half the days",
+                        "nearly every day"
+                    ],
+                    "name": "phq9>>>main",
+                    "rows": [
+                        "Little interest or pleasure in doing things.",
+                        "Feeling down, depressed, or hopeless.",
+                        "Trouble falling/staying asleep, sleeping too much.",
+                        "Feeling tired or having little energy.",
+                        "Poor appetite or overeating.",
+                        "Feeling bad about yourself, or that you are a failure, or have let yourself or your family down.",
+                        "Trouble concentrating on things, such as reading the newspaper or watching TV.",
+                        "Moving or speaking so slowly that other people could have noticed. Or the opposite; being so fidgety or restless that you have been moving around more than usual.",
+                        "Thoughts that you would be better off dead or of hurting yourself in some way."
+                    ],
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
+                    "title": "During the PAST 2 WEEKS, how often have you been bothered by any of the following problems?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Not at all difficult",
+                        "Somewhat difficult",
+                        "Very difficult",
+                        "Extremely difficult"
+                    ],
+                    "colCount": 4,
+                    "name": "phq9>>>difficulty",
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
+                    "title": "If you have been bothered by any of the 9 problems listed above: How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "colCount": 4,
+                    "name": "phq9>>>ideation",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever thought about ending your life?"
+                },
+                {
+                    "type": "text",
+                    "name": "phq9>>>ideation_explain",
+                    "title": "If yes, when:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "colCount": 4,
+                    "name": "phq9>>>attempt",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever attempted to end your life?"
+                },
+                {
+                    "type": "text",
+                    "name": "phq9>>>attempt_explain",
+                    "title": "If yes, when:"
+                }
+            ],
+            "name": "phq9"
+        },
+        {
+            "name": "general_info",
+            "elements": [
+                {
+                    "type": "multipletext",
+                    "name": "general_info>>>full_name",
+                    "startWithNewLine": false,
+                    "title": "Enter your name",
+                    "items": [
+                        {
+                            "name": "general_info>>>full_name>>>first_name",
+                            "title": "First:"
+                        },
+                        {
+                            "name": "general_info>>>full_name>>>last_name",
+                            "title": "Last:"
+                        }
+                    ],
+                    "colCount": 2
+                },
+                {
+                    "type": "multipletext",
+                    "name": "general_info>>>phone",
+                    "title": "Enter your phone number",
+                    "items": [
+                        {
+                            "name": "general_info>>>phone>>>personal",
+                            "title": "Personal:"
+                        },
+                        {
+                            "name": "general_info>>>phone>>>work",
+                            "title": "Work:"
+                        }
+                    ],
+                    "colCount": 2
+                },
+                {
+                    "type": "multipletext",
+                    "name": "general_info>>>address",
+                    "title": "Enter your address",
+                    "items": [
+                        {
+                            "name": "general_info>>>address>>>line1",
+                            "title": "Address Line 1:"
+                        },
+                        {
+                            "name": "general_info>>>address>>>line2",
+                            "title": "Address Line 2:"
+                        }
+                    ],
+                    "colCount": 2
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>city",
+                    "title": "City"
+                },
+                {
+                    "type": "dropdown",
+                    "name": "general_info>>>state",
+                    "startWithNewLine": false,
+                    "title": "State / Province / Region",
+                    "choices": [
+                        {
+                            "value": "AB",
+                            "text": "Alberta"
+                        },
+                        {
+                            "value": "BC",
+                            "text": "British Columbia"
+                        },
+                        {
+                            "value": "MB",
+                            "text": "Manitoba"
+                        },
+                        {
+                            "value": "NB",
+                            "text": "New Brunswick"
+                        },
+                        {
+                            "value": "NL",
+                            "text": "Newfoundland and Labrador"
+                        },
+                        {
+                            "value": "NS",
+                            "text": "Nova Scotia"
+                        },
+                        {
+                            "value": "ON",
+                            "text": "Ontario"
+                        },
+                        {
+                            "value": "PE",
+                            "text": "Prince Edward Island"
+                        },
+                        {
+                            "value": "QC",
+                            "text": "Quebec"
+                        },
+                        {
+                            "value": "SK",
+                            "text": "Saskatchewan"
+                        },
+                        {
+                            "value": "NT",
+                            "text": "Northwest Territories"
+                        },
+                        {
+                            "value": "NU",
+                            "text": "Nunavut"
+                        },
+                        {
+                            "value": "YT",
+                            "text": "Yukon"
+                        },
+                        {
+                            "value": "OTHER",
+                            "text": "Other"
+                        }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>zip",
+                    "title": "Zip / Postal Code"
+                },
+                {
+                    "type": "dropdown",
+                    "name": "general_info>>>country",
+                    "startWithNewLine": false,
+                    "title": "Country",
+                    "choices": [
+                        "Canada",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>email",
+                    "title": "Email:",
+                    "inputType": "email"
+                },
+                {
+                    "type": "dropdown",
+                    "choices": [
+                        "Male",
+                        "Female",
+                        "Other",
+                        "Prefer not to answer"
+                    ],
+                    "name": "general_info>>>gender",
+                    "title": "Please select your gender"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>birthdate",
+                    "title": "Date of Birth:",
+                    "inputType": "datetime"
+                },
+                {
+                    "type": "dropdown",
+                    "name": "general_info>>>relationship_status",
+                    "title": "What is your relationship status?",
+                    "choices": [
+                        "Single",
+                        "In a relationship",
+                        "Married/Common Law",
+                        "Divorced",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>children_number",
+                    "title": "How many children do you have?"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>children_ages",
+                    "title": "What are their ages?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "colCount": 2,
+                    "name": "general_info>>>employed",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Are you employed?"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>occupation",
+                    "title": "What is your occupation?"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>physician_name",
+                    "title": "Who is your family physician?"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>physician_contact",
+                    "title": "Family physician: contact info:"
+                },
+                {
+                    "type": "text",
+                    "name": "general_info>>>emergency_contact",
+                    "title": "Please list an emergency contact:"
+                },
+                {
+                    "type": "checkbox",
+                    "choices": [
+                        "Mindspace newsletter",
+                        "Online search",
+                        "Social media",
+                        "Friend, family or colleague",
+                        "Physician referral",
+                        "Referral from other health care professional",
+                        "Other"
+                    ],
+                    "name": "general_info>>>referrer",
+                    "title": "How did you hear about the clinic?"
+                }
+            ]
+        },
+        {
+            "name": "gad7",
+            "elements": [
+                {
+                    "type": "matrix",
+                    "name": "gad7>>>main",
+                    "title": "During the PAST 2 WEEKS, how often have you been bothered by any of the following problems?",
+                    "columns": [
+                        "not at all",
+                        "several days",
+                        "more than half the days",
+                        "nearly every day"
+                    ],
+                    "rows": [
+                        "Feeling nervous, anxious, or on edge",
+                        "Not being able to stop or control worrying",
+                        "Worrying too much about different things",
+                        "Trouble relaxing",
+                        "Being so restless that it's hard to sit still",
+                        "Becoming easily annoyed or irritable",
+                        "Feeling afraid as if something awful might happen"
+                    ],
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Not at all difficult",
+                        "Somewhat difficult",
+                        "Very difficult",
+                        "Extremely difficult"
+                    ],
+                    "colCount": 4,
+                    "name": "gad7>>>difficulty",
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
+                    "title": "If you have been bothered by any of the problems listed above: How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
+                }
+            ]
+        },
+        {
+            "name": "psychosis_abuse",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>psychosis",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever experienced symptoms of psychosis (e.g., hearing voices that other people could not hear; feeling that others could read your thoughts or that thoughts were being stolen from your mind; thinking there was a plot against you)?"
+                },
+                {
+                    "type": "text",
+                    "name": "psychosis_abuse>>>psychosis_explain",
+                    "title": "If yes, please elaborate: "
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>drugs",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Are you currently or have you ever abused alcohol, street drugs, or prescription drugs?"
+                },
+                {
+                    "type": "text",
+                    "name": "psychosis_abuse>>>drugs_explain",
+                    "title": "If yes, please elaborate: "
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>trauma",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever experienced severe psychological trauma such as being assaulted or abused?"
+                },
+                {
+                    "type": "text",
+                    "name": "psychosis_abuse>>>trauma_explain",
+                    "title": "If yes, please elaborate: "
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>trauma_interference",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "If yes, does this event/trauma currently interfere with your life?"
+                },
+                {
+                    "type": "text",
+                    "name": "psychosis_abuse>>>trauma_flashbacks",
+                    "title": "If so, do you experience flashbacks or nightmares?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>read_mind",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever felt that others could read your thoughts or that thoughts were being stolen from your mind?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "psychosis_abuse>>>paranoid",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever felt that there was a plot to harm you or that people were following you (that was not validated by friends or family members)?"
+                }
+            ]
+        },
+        {
+            "elements": [
+                {
+                    "type": "html",
+                    "html": "<h2>Reason for Consultation</h2>",
+                    "name": "therapy_consult>>>header"
+                },
+                {
+                    "type": "checkbox",
+                    "choices": [
+                        "Stress",
+                        "Anxiety",
+                        "Depressed mood",
+                        "Relationship problems",
+                        "Work/career concerns",
+                        "Attention deficit",
+                        "Burnout",
+                        "Anger management",
+                        "Issues related to food/eating",
+                        "Alcohol or substance use",
+                        "Coping with physical illness",
+                        "Post-traumatic stress",
+                        "Other"
+                    ],
+                    "name": "therapy_consult>>>targets",
+                    "title": "Which of the following problems would you like help with?"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>targets_other",
+                    "title": "Please describe the issue:"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>targets_time",
+                    "title": "When did these difficulties begin?"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>goals",
+                    "title": "What would you like to achieve in therapy?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "yes",
+                        "no"
+                    ],
+                    "name": "therapy_consult>>>prev_consult",
+                    "title": "Have you ever consulted with a mental health professional before?"
+                },
+                {
+                    "type": "multipletext",
+                    "items": [
+                        {
+                            "name": "therapy_consult>>>prev_consult>>>dates",
+                            "title": "Approximate dates:"
+                        },
+                        {
+                            "name": "therapy_consult>>>prev_consult>>>length",
+                            "title": "Length of treatment:"
+                        },
+                        {
+                            "name": "therapy_consult>>>prev_consult>>>type",
+                            "title": "Type of professional:"
+                        },
+                        {
+                            "name": "therapy_consult>>>prev_consult>>>issue",
+                            "title": "Description of issue:"
+                        },
+                        {
+                            "name": "therapy_consult>>>prev_consult>>>treatment",
+                            "title": "Nature of treatment"
+                        }
+                    ],
+                    "name": "therapy_consult>>>prev_consult_details",
+                    "title": "If you selected 'yes' to having seen a mental health professional before:"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>medical_issues",
+                    "title": "Please list any current medical issues:"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>medications",
+                    "title": "Please list any current medications"
+                },
+                {
+                    "type": "dropdown",
+                    "choices": [
+                        "Never",
+                        "1-2 days",
+                        "3-4 days",
+                        "5-7 days",
+                        "Between 8 days and 1 month",
+                        "Over 1 month"
+                    ],
+                    "name": "therapy_consult>>>employed_absent_stress",
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                    ],
+                    "title": "Approximately how many days were you absent from work in the last 6 months due to stress?"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>stressors",
+                    "title": "Please describe your current primary stressors."
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "colCount": "2",
+                    "name": "therapy_consult>>>formal_dx",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you received a formal medical or psychiatric diagnosis for a current problem?"
+                },
+                {
+                    "type": "text",
+                    "name": "therapy_consult>>>formal_dx_explain",
+                    "title": "If yes, please indicate the diagnosis."
+                }
+            ],
+            "name": "therapy_consult"
+        },
+        {
+            "name": "extended_consult",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "extended_consult>>>prev_therapy",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever had any counselling or psychotherapy?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "extended_consult>>>current_therapy",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Are you currently receiving counselling or psychotherapy?"
+                },
+                {
+                    "type": "text",
+                    "name": "extended_consult>>>current_therapy_explain",
+                    "title": "If yes, please indicate with whom and type of therapy:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "extended_consult>>>cbt_experience",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you had any experience with cognitive-behaviour therapy?"
+                },
+                {
+                    "type": "text",
+                    "name": "extended_consult>>>cbt_experience_explain",
+                    "title": "If yes, please indicate with whom and when:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "extended_consult>>>family_hx",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Is there any history of psychiatric problems in your family?"
+                },
+                {
+                    "type": "text",
+                    "name": "extended_consult>>>family_hx_explain",
+                    "title": "If yes, please specify:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "extended_consult>>>hospitalized",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever been hospitalized for medical/surgical/psychiatric reasons?"
+                },
+                {
+                    "type": "text",
+                    "name": "extended_consult>>>hospitalized_explain",
+                    "title": "If yes, please specify (when; where and for what):"
+                }
+            ]
+        },
+        {
+            "name": "mindfulness_groups",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mindfulness_groups>>>meditation_exp",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Do you have any experience with meditation?"
+                },
+                {
+                    "type": "text",
+                    "name": "mindfulness_groups>>>meditation_exp_explain",
+                    "title": "If yes, please elaborate:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mindfulness_groups>>>prev_group_exp",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you participated in therapy or meditation group(s) in the past?"
+                },
+                {
+                    "type": "text",
+                    "name": "mindfulness_groups>>>group_motivation",
+                    "title": "What is your primary motivation for participating in this mindfulness program?"
+                },
+                {
+                    "type": "text",
+                    "name": "mindfulness_groups>>>comments",
+                    "title": "Please add any further information or additional comments that could help us determine whether or not MBCT is for you."
+                },
+                {
+                    "type": "checkbox",
+                    "choices": [
+                        {
+                            "value": "verified",
+                            "text": "I verify that the above information, which I have provided for the purpose of enrollment in the Mindfulness-Based CognitiveTherapy Program, is accurate and true to the best of my knowledge. I am aware that this information will be used to evaluate my eligibility for the MBCT program and that my responses are confidential and will be viewed only by MBCT teachers (and administrative support staff as needed)."
+                        }
+                    ],
+                    "name": "mindfulness_groups>>>verify",
+                    "title": "You must have a family physician and/or therapist while participating in the MBCT program. Please note that this workshop is not a substitute for individual therapy and we cannot assume responsibility for your care on an ongoing basis. Workshop facilitators are available by appointment outside of workshop hours, but are unable to provide emergency care. Participants are encouraged to have emergency psychosocial/medical care in place during the 8-week program. "
+                }
+            ]
+        },
+        {
+            "name": "msi10",
+            "elements": [
+                {
+                    "type": "matrix",
+                    "name": "msi10>>>main",
+                    "title": "Please answer the following 10 yes or no questions 'in general':",
+                    "columns": [
+                        "yes",
+                        "no"
+                    ],
+                    "rows": [
+                        "Have any of your closest relationships been troubled by a lot of arguments or repeated breakups?s",
+                        "Have you deliberately hurt yourself physically (e.g., punched yourself, cut yourself, burned yourself) or made a suicide attempt?",
+                        "Have you had at least two other problems with impulsivity (e.g., eating binges and spending sprees, drinking too much and verbal outbursts)?",
+                        "Have you been extremely moody?",
+                        "Have you felt very angry a lot of the time. How about often acted in an angry or sarcastic manner?",
+                        "Have you often been distrustful of other people?",
+                        "Have you frequently felt unreal or as if things around you were unreal?",
+                        "Have you chronically felt empty?",
+                        "Have you often felt that you had no idea of who you are or that you have no identity?",
+                        "Have you made desperate efforts to avoid feeling abandoned or being abandoned (e.g., repeatedly called someone to reassure yourself that he or she still cared, begged then not to leave you, clung to them physically)?"
+                    ],
+                    "scores": [
+                        1,
+                        2
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "mbsr",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "colCount": 2,
+                    "name": "mbsr>>>meditation_exp",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Do you have any experience with meditation?"
+                },
+                {
+                    "type": "text",
+                    "name": "mbsr>>>meditation_exp_explain",
+                    "title": "If yes, please elaborate:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "colCount": 2,
+                    "name": "mbsr>>>prev_group_exp",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you participated in meditation group(s) in the past?"
+                },
+                {
+                    "type": "text",
+                    "name": "mbsr>>>mbsr_motivation",
+                    "title": "What is your primary motivation for participating in the MBSR program?"
+                }
+            ]
+        },
+        {
+            "name": "pss10",
+            "elements": [
+                {
+                    "type": "matrix",
+                    "name": "pss10>>>main",
+                    "title": "Please indicate the extent to which you have had the following experiences <u>in the past month</u>:",
+                    "columns": [
+                        "0 Never",
+                        "1 Almost Never",
+                        "2 Sometimes",
+                        "3 Fairly Often",
+                        "4 Very Often"
+                    ],
+                    "rows": [
+                        "In the last month, how often have you been upset because of something that happened unexpectedly?",
+                        "In the last month, how often have you felt that you were unable to control the important things in your life?",
+                        "In the last month, how often have you felt nervous and â€œstressedâ€?",
+                        "In the last month, how often have you felt confident about your ability to handle your personal problems?",
+                        "In the last month, how often have you felt that things were going your way?",
+                        "In the last month, how often have you found that you could not cope with all the things that you had to do?",
+                        "In the last month, how often have you been ableto control irritations in your life?",
+                        "In the last month, how often have you felt that you were on top of things?",
+                        "In the last month, how often have you been angered because of things that were outside of your control?",
+                        "In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?"
+                    ],
+                    "scores": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "mood",
+            "elements": [
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>panic",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever had any panic attacks (sudden episodes of intense fear associated with feeling of impending doom)?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>social",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Do you experience significant social anxiety (intense fear/avoidance of social interaction) that interferes with your functioning?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>social_explain",
+                    "title": "If yes, please describe:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>specific_phobias",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Do you have any specific phobias that interfere with your life?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>specific_phobias_explain",
+                    "title": "If yes, please describe:"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>worry",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Do you worry excessively?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>worry_explain",
+                    "title": "If yes, about what?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>depression_mood",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever had episodes of feeling down, depressed or hopeless?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>depression_anhedonia",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever had episodes of losing interest or pleasure in doing things you typically enjoy?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>depression_times",
+                    "title": "If yes, how many times?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>depression_duration",
+                    "title": "How long, on average did the episodes last?"
+                },
+                {
+                    "type": "radiogroup",
+                    "choices": [
+                        "Yes",
+                        "No"
+                    ],
+                    "name": "mood>>>depression_hospitalized",
+                    "scores": [
+                        1,
+                        2
+                    ],
+                    "title": "Have you ever been hospitalized due to such an episode?"
+                },
+                {
+                    "type": "text",
+                    "name": "mood>>>depression_hospitalized_explain",
+                    "title": "If yes, where and when?"
+                }
+            ]
+        },
+        {
+            "name": "big_picture",
+            "elements": [
+                {
+                    "type": "text",
+                    "name": "big_picture>>>worries",
+                    "title": "What are your greatest worries or concerns?"
+                },
+                {
+                    "type": "text",
+                    "name": "big_picture>>>care_about",
+                    "title": "What do you care about?"
+                },
+                {
+                    "type": "text",
+                    "name": "big_picture>>>pleasure",
+                    "title": "What gives you the most pleasure in your life?"
+                },
+                {
+                    "type": "text",
+                    "name": "big_picture>>>achievements",
+                    "title": "What kinds of successes or achievements have you had?"
+                },
+                {
+                    "type": "text",
+                    "name": "big_picture>>>strengths",
+                    "title": "What do you see as your strengths or positive qualities?"
+                }
+            ]
+        }
     ]
-   },
-   {
-   "name": "gad7",
-   "elements": [
-    {
-     "type": "matrix",
-     "name": "gad7>>>main",
-     "title": "During the PAST 2 WEEKS, how often have you been bothered by any of the following problems?",
-     "columns": [
-      "not at all",
-      "several days",
-      "more than half the days",
-      "nearly every day"
-     ],
-     "rows": [
-      "Feeling nervous, anxious, or on edge",
-      "Not being able to stop or control worrying",
-      "Worrying too much about different things",
-      "Trouble relaxing",
-      "Being so restless that it's hard to sit still",
-      "Becoming easily annoyed or irritable",
-      "Feeling afraid as if something awful might happen"
-     ]
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Not at all difficult",
-      "Somewhat difficult",
-      "Very difficult",
-      "Extremely difficult"
-     ],
-     "colCount": 4,
-     "name": "gad7>>>difficulty",
-     "title": "If you have been bothered by any of the problems listed above: How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
-    }
-   ]
-  },
-  {
-   "name": "psychosis_abuse",
-   "elements": [
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>psychosis",
-     "title": "Have you ever experienced symptoms of psychosis (e.g., hearing voices that other people could not hear; feeling that others could read your thoughts or that thoughts were being stolen from your mind; thinking there was a plot against you)?"
-    },
-    {
-     "type": "text",
-     "name": "psychosis_abuse>>>psychosis_explain",
-     "title": "If yes, please elaborate: "
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>drugs",
-     "title": "Are you currently or have you ever abused alcohol, street drugs, or prescription drugs?"
-    },
-    {
-     "type": "text",
-     "name": "psychosis_abuse>>>drugs_explain",
-     "title": "If yes, please elaborate: "
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>trauma",
-     "title": "Have you ever experienced severe psychological trauma such as being assaulted or abused?"
-    },
-    {
-     "type": "text",
-     "name": "psychosis_abuse>>>trauma_explain",
-     "title": "If yes, please elaborate: "
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>trauma_interference",
-     "title": "If yes, does this event/trauma currently interfere with your life?"
-    },
-    {
-     "type": "text",
-     "name": "psychosis_abuse>>>trauma_flashbacks",
-     "title": "If so, do you experience flashbacks or nightmares?"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>read_mind",
-     "title": "Have you ever felt that others could read your thoughts or that thoughts were being stolen from your mind?"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "psychosis_abuse>>>paranoid",
-     "title": "Have you ever felt that there was a plot to harm you or that people were following you (that was not validated by friends or family members)?"
-    }
-   ]
-  },
-  {
-   "elements": [
-    {
-     "type": "html",
-     "html": "<h2>Reason for Consultation</h2>",
-     "name": "therapy_consult>>>header"
-    },
-    {
-     "type": "checkbox",
-     "choices": [
-      "Stress",
-      "Anxiety",
-      "Depressed mood",
-      "Relationship problems",
-      "Work/career concerns",
-      "Attention deficit",
-      "Burnout",
-      "Anger management",
-      "Issues related to food/eating",
-      "Alcohol or substance use",
-      "Coping with physical illness",
-      "Post-traumatic stress",
-      "Other"
-     ],
-     "name": "therapy_consult>>>targets",
-     "title": "Which of the following problems would you like help with?"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>targets_other",
-     "title": "Please describe the issue:"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>targets_time",
-     "title": "When did these difficulties begin?"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>goals",
-     "title": "What would you like to achieve in therapy?"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     "name": "therapy_consult>>>prev_consult",
-     "title": "Have you ever consulted with a mental health professional before?"
-    },
-    {
-     "type": "multipletext",
-     "items": [
-      {
-       "name": "therapy_consult>>>prev_consult>>>dates",
-       "title": "Approximate dates:"
-      },
-      {
-       "name": "therapy_consult>>>prev_consult>>>length",
-       "title": "Length of treatment:"
-      },
-      {
-       "name": "therapy_consult>>>prev_consult>>>type",
-       "title": "Type of professional:"
-      },
-      {
-       "name": "therapy_consult>>>prev_consult>>>issue",
-       "title": "Description of issue:"
-      },
-      {
-       "name": "therapy_consult>>>prev_consult>>>treatment",
-       "title": "Nature of treatment"
-      }
-     ],
-     "name": "therapy_consult>>>prev_consult_details",
-     "title": "If you selected 'yes' to having seen a mental health professional before:"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>medical_issues",
-     "title": "Please list any current medical issues:"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>medications",
-     "title": "Please list any current medications"
-    },
-    {
-     "type": "dropdown",
-     "choices": [
-      "Never",
-      "1-2 days",
-      "3-4 days",
-      "5-7 days",
-      "Between 8 days and 1 month",
-      "Over 1 month"
-     ],
-     "name": "therapy_consult>>>employed_absent_stress",
-     "title": "Approximately how many days were you absent from work in the last 6 months due to stress?"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>stressors",
-     "title": "Please describe your current primary stressors."
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "colCount": "2",
-     "name": "therapy_consult>>>formal_dx",
-     "title": "Have you received a formal medical or psychiatric diagnosis for a current problem?"
-    },
-    {
-     "type": "text",
-     "name": "therapy_consult>>>formal_dx_explain",
-     "title": "If yes, please indicate the diagnosis."
-    }
-   ],
-   "name": "therapy_consult"
-  },
-  {
-   "name": "extended_consult",
-   "elements": [
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "extended_consult>>>prev_therapy",
-     "title": "Have you ever had any counselling or psychotherapy?"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "extended_consult>>>current_therapy",
-     "title": "Are you currently receiving counselling or psychotherapy?"
-    },
-    {
-     "type": "text",
-     "name": "extended_consult>>>current_therapy_explain",
-     "title": "If yes, please indicate with whom and type of therapy:"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "extended_consult>>>cbt_experience",
-     "title": "Have you had any experience with cognitive-behaviour therapy?"
-    },
-    {
-     "type": "text",
-     "name": "extended_consult>>>cbt_experience_explain",
-     "title": "If yes, please indicate with whom and when:"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "extended_consult>>>family_hx",
-     "title": "Is there any history of psychiatric problems in your family?"
-    },
-    {
-     "type": "text",
-     "name": "extended_consult>>>family_hx_explain",
-     "title": "If yes, please specify:"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "extended_consult>>>hospitalized",
-     "title": "Have you ever been hospitalized for medical/surgical/psychiatric reasons?"
-    },
-    {
-     "type": "text",
-     "name": "extended_consult>>>hospitalized_explain",
-     "title": "If yes, please specify (when; where and for what):"
-    }
-   ]
-  },
-  {
-   "name": "mindfulness_groups",
-   "elements": [
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "mindfulness_groups>>>meditation_exp",
-     "title": "Do you have any experience with meditation?"
-    },
-    {
-     "type": "text",
-     "name": "mindfulness_groups>>>meditation_exp_explain",
-     "title": "If yes, please elaborate:"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "name": "mindfulness_groups>>>prev_group_exp",
-     "title": "Have you participated in therapy or meditation group(s) in the past?"
-    },
-    {
-     "type": "text",
-     "name": "mindfulness_groups>>>group_motivation",
-     "title": "What is your primary motivation for participating in this mindfulness program?"
-    },
-    {
-      "type": "text",
-      "name": "mindfulness_groups>>>comments",
-      "title": "Please add any further information or additional comments that could help us determine whether or not MBCT is for you."
-    },
-    {
-    "type": "checkbox",
-    "choices": [
-     {
-      "value": "verified",
-      "text": "I verify that the above information, which I have provided for the purpose of enrollment in the Mindfulness-Based CognitiveTherapy Program, is accurate and true to the best of my knowledge. I am aware that this information will be used to evaluate my eligibility for the MBCT program and that my responses are confidential and will be viewed only by MBCT teachers (and administrative support staff as needed)."
-     }
-    ],
-    "name": "mindfulness_groups>>>verify",
-    "title": "You must have a family physician and/or therapist while participating in the MBCT program. Please note that this workshop is not a substitute for individual therapy and we cannot assume responsibility for your care on an ongoing basis. Workshop facilitators are available by appointment outside of workshop hours, but are unable to provide emergency care. Participants are encouraged to have emergency psychosocial/medical care in place during the 8-week program. "
-   }
-
-   ]
-  },
-  {
-   "name": "msi10",
-   "elements": [
-    {
-     "type": "matrix",
-     "name": "msi10>>>main",
-     "title": "Please answer the following 10 yes or no questions 'in general':",
-     "columns": [
-      "yes",
-      "no"
-     ],
-     "rows": [
-        "Have any of your closest relationships been troubled by a lot of arguments or repeated breakups?s",
-        "Have you deliberately hurt yourself physically (e.g., punched yourself, cut yourself, burned yourself) or made a suicide attempt?",
-        "Have you had at least two other problems with impulsivity (e.g., eating binges and spending sprees, drinking too much and verbal outbursts)?",
-        "Have you been extremely moody?",
-        "Have you felt very angry a lot of the time. How about often acted in an angry or sarcastic manner?",
-        "Have you often been distrustful of other people?",
-        "Have you frequently felt unreal or as if things around you were unreal?",
-        "Have you chronically felt empty?",
-        "Have you often felt that you had no idea of who you are or that you have no identity?",
-        "Have you made desperate efforts to avoid feeling abandoned or being abandoned (e.g., repeatedly called someone to reassure yourself that he or she still cared, begged then not to leave you, clung to them physically)?"
-     ]
-    }
-    ]
-  },
-  {
-   "name": "mbsr",
-   "elements": [
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "colCount": 2,
-     "name": "mbsr>>>meditation_exp",
-     "title": "Do you have any experience with meditation?"
-    },
-    {
-     "type": "text",
-     "name": "mbsr>>>meditation_exp_explain",
-     "title": "If yes, please elaborate:"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Yes",
-      "No"
-     ],
-     "colCount": 2,
-     "name": "mbsr>>>prev_group_exp",
-     "title": "Have you participated in meditation group(s) in the past?"
-    },
-    {
-     "type": "text",
-     "name": "mbsr>>>mbsr_motivation",
-     "title": "What is your primary motivation for participating in the MBSR program?"
-    }
-   ]
- },
- {
-   "name": "pss10",
-   "elements": [
-    {
-     "type": "matrix",
-     "name": "pss10>>>main",
-     "title": "Please indicate the extent to which you have had the following experiences <u>in the past month</u>:",
-     "columns": [
-      "0 Never",
-      "1 Almost Never",
-      "2 Sometimes",
-      "3 Fairly Often",
-      "4 Very Often"
-     ],
-     "rows": [
-      "In the last month, how often have you been upset because of something that happened unexpectedly?",
-      "In the last month, how often have you felt that you were unable to control the important things in your life?",
-      "In the last month, how often have you felt nervous and â€œstressedâ€?",
-      "In the last month, how often have you felt confident about your ability to handle your personal problems?",
-      "In the last month, how often have you felt that things were going your way?",
-      "In the last month, how often have you found that you could not cope with all the things that you had to do?",
-      "In the last month, how often have you been ableto control irritations in your life?",
-      "In the last month, how often have you felt that you were on top of things?",
-      "In the last month, how often have you been angered because of things that were outside of your control?",
-      "In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?"
-     ]
-    }
-   ]
- },
-{
-  "name": "mood",
-  "elements": [
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>panic",
-    "title": "Have you ever had any panic attacks (sudden episodes of intense fear associated with feeling of impending doom)?"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>social",
-    "title": "Do you experience significant social anxiety (intense fear/avoidance of social interaction) that interferes with your functioning?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>social_explain",
-    "title": "If yes, please describe:"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>specific_phobias",
-    "title": "Do you have any specific phobias that interfere with your life?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>specific_phobias_explain",
-    "title": "If yes, please describe:"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>worry",
-    "title": "Do you worry excessively?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>worry_explain",
-    "title": "If yes, about what?"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>depression_mood",
-    "title": "Have you ever had episodes of feeling down, depressed or hopeless?"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>depression_anhedonia",
-    "title": "Have you ever had episodes of losing interest or pleasure in doing things you typically enjoy?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>depression_times",
-    "title": "If yes, how many times?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>depression_duration",
-    "title": "How long, on average did the episodes last?"
-   },
-   {
-    "type": "radiogroup",
-    "choices": [
-     "Yes",
-     "No"
-    ],
-    "name": "mood>>>depression_hospitalized",
-    "title": "Have you ever been hospitalized due to such an episode?"
-   },
-   {
-    "type": "text",
-    "name": "mood>>>depression_hospitalized_explain",
-    "title": "If yes, where and when?"
-   }
-  ]
-},
-{
-  "name": "big_picture",
-  "elements": [
-   {
-    "type": "text",
-    "name": "big_picture>>>worries",
-    "title": "What are your greatest worries or concerns?"
-   },
-   {
-    "type": "text",
-    "name": "big_picture>>>care_about",
-    "title": "What do you care about?"
-   },
-   {
-    "type": "text",
-    "name": "big_picture>>>pleasure",
-    "title": "What gives you the most pleasure in your life?"
-   },
-   {
-    "type": "text",
-    "name": "big_picture>>>achievements",
-    "title": "What kinds of successes or achievements have you had?"
-   },
-   {
-    "type": "text",
-    "name": "big_picture>>>strengths",
-    "title": "What do you see as your strengths or positive qualities?"
-   }
-  ]
- }
-]
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,6 +14,7 @@ class Answer extends Model
 {
     // Log all changes to the answer model.
     use Loggable;
+    use SetsUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +29,13 @@ class Answer extends Model
         'row_id',
         'value',
     ];
+
+    /**
+     * The columns that generate a UUID.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * An answer may be tied to a column in the question.

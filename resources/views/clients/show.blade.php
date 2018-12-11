@@ -14,16 +14,18 @@
             <div class="ml-auto">
                 <a
                     class="btn btn-primary btn-sm"
-                    href="{{ url("clients/$user->id/questionnaires") }}"
+                    href="{{ url("clients/$user->id/notes") }}"
                 >
-                    @lang('clients.show.questionnaires')
+                    <i class="fas fa-sticky-note mr-1"></i>
+                    @lang('clients.show.notes')
                 </a>
 
                 <a
                     class="btn btn-primary btn-sm"
-                    href="{{ url("clients/$user->id/notes") }}"
+                    href="{{ url("clients/$user->id/questionnaires") }}"
                 >
-                    @lang('clients.show.notes')
+                    <i class="fas fa-question mr-1"></i>
+                    @lang('clients.show.questionnaires')
                 </a>
             </div>
         </div>

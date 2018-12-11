@@ -27,7 +27,17 @@
                     </table>
                 </td>
                 <td>
-                    @if (Auth::user()->isTherapist())
+                    @if (Auth::user()->isAdmin())
+                        <a
+                            class="btn btn-primary btn-sm"
+                            href="{{ url("admin/groups/$group->uuid/edit") }}"
+                        >
+                            <i class="fas fa-edit mr-1"></i>
+                            @lang('admin.groups.table.edit')
+                        </a>
+                    @endif
+
+                    @if (Auth::user()->isTherapist() || Auth::user()->isAdmin())
                         <a
                             class="btn btn-primary btn-sm"
                             href="{{ url("groups/$group->uuid/notes") }}"
@@ -46,14 +56,6 @@
                     @endif
 
                     @if (Auth::user()->isAdmin())
-                        <a
-                            class="btn btn-primary btn-sm"
-                            href="{{ url("admin/groups/$group->uuid/edit") }}"
-                        >
-                            <i class="fas fa-edit mr-1"></i>
-                            @lang('admin.groups.table.edit')
-                        </a>
-
                         {!!
                             Form::open([
                                 'class' => 'd-inline-block',

@@ -48,7 +48,7 @@
 								<li >
 									<a
 										class="nav-link "
-										href="{{ url('admin/therapist') }}"
+										href="{{ url('admin/therapists') }}"
 									>
 									<i class="nav-icon fas fa-user-friends"></i>
 									 @lang('layout.sidebar.all-therapist') </a>
@@ -139,10 +139,6 @@
                 </li>
 			@endcan
 
-
-
-
-
             @if (Auth::user()->isClient())
 			<li class="nav-item nav-dropdown open">
                 <a class="nav-link nav-dropdown-toggle" href="#">
@@ -171,6 +167,32 @@
 				</ul>
 			</li>
             @endif
+
+            @if (!Auth::user()->isSuperAdmin())
+                @if (isset($availableClinics) && $availableClinics->isNotEmpty() )
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon fas fa-hospital"></i>
+                            @lang('layout.sidebar.my-clinics')
+                        </a>
+
+                        <ul class="nav-dropdown-items">
+                            @foreach ($availableClinics as $clinic)
+                                <li class="nav-item">
+                                    <a
+                                        class="nav-link {{ ($currentClinic->id ?? null) === $clinic->id ? 'active' : '' }}"
+                                        href="{{ str_replace_first('//', '//' . $clinic->subdomain . '.', config('app.url')) }}"
+                                        target="_blank"
+                                    >
+                                        {{ $clinic->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
+            @endif
+
             @if (Session::get('original_user'))
                 <li class="nav-item mt-auto">
                     <a
@@ -182,36 +204,6 @@
                     </a>
                 </li>
             @endif
-			@if (!Auth::user()->isSuperAdmin())
-				@if (isset($totalClinicAssign) && $totalClinicAssign > 1 )
-					<li class="nav-item mt-auto">
-
-						{!!  Form::select('switch_clinic',$assignedClinics, '', ['onchange'=>'switch_domain(this.value);','class' => 'form-control','id' => 'switch_clinic' ]) !!}
-
-					</li>
-				@endif
-				{!!
-                                Form::open([
-                                    'class' => 'd-inline-block',
-                                    'method' => 'POST',
-									'id' => 'switchclinic',
-                                    'url' => url("admin/users/switch-clinic/"),
-                                ])
-                            !!}
-                            {{ Form::hidden('clinic_id', '',['id'=>'clinic_id']) }}
-                {!! Form::close() !!}
-				@if (Session::get('original_clinic'))
-					<li class="nav-item mt-auto">
-						<a
-							class="nav-link nav-link-primary bg-primary"
-							href="{{ url('admin/users/switch-clinic-back') }}"
-						>
-							<i class="nav-icon fas fa-undo"></i>
-							@lang('layout.sidebar.switch-clinic')
-						</a>
-					</li>
-				@endif
-			@endif
         </ul>
     </nav>
 
@@ -220,11 +212,3 @@
         type="button"
     ></button>
 </div>
-<script>
-
-	function switch_domain(selval) {
-		$('#clinic_id').val(selval);
-		document.getElementById("switchclinic").submit();
-	}
-
-</script>

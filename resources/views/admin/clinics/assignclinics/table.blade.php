@@ -1,4 +1,4 @@
-<table class="table table-hover table-outline table-striped">
+<table class="datatable table table-hover table-outline table-striped dt-responsive nowrap w-100">
     <thead class="thead-light">
         <tr>
             <th>@lang('admin.clinics.table.name')</th>

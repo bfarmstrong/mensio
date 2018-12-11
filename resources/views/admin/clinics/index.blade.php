@@ -10,13 +10,15 @@
                 <i class="fas fa-hospital mr-1"></i>
                 @lang('admin.clinics.index.clinics')
             </span>
+
 			@if (Auth::user()->isSuperAdmin())
-            <a
-                class="btn btn-primary btn-sm ml-auto"
-                href="{{ url('admin/clinics/create') }}"
-            >
-                @lang('admin.clinics.index.create-clinic')
-            </a>
+                <a
+                    class="btn btn-primary btn-sm ml-auto"
+                    href="{{ url('admin/clinics/create') }}"
+                >
+                    <i class="fas fa-plus mr-1"></i>
+                    @lang('admin.clinics.index.create-clinic')
+                </a>
 			@endif
         </div>
 

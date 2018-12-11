@@ -9,7 +9,7 @@ if (canvas[0]) {
     }
 
     window.$(window).resize(onResize);
-    onResize();
+    setTimeout(onResize, 150);
 
     canvas.parents('form').on('submit', function () {
         const input = window.$('input[name="signature_base64"]');

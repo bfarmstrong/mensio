@@ -16,7 +16,7 @@ class ImportQuestionnaire extends Command
      *
      * @var string
      */
-    protected $signature = 'import:questionnaire {data}';
+    protected $signature = 'import:questionnaire {--name=} {--scoring-method=} {data}';
 
     /**
      * The console command description.
@@ -67,7 +67,13 @@ class ImportQuestionnaire extends Command
 
         // Pass the object representation of the data to the service
         $decoded = json_decode($this->argument('data'));
-        $this->service->importFromJson($decoded);
+        $this->service->importFromJson(
+            $decoded,
+            [
+                'name' => $this->option('name'),
+                'scoring_method' => $this->option('scoring-method'),
+            ]
+        );
         $this->info('Questionnaire was imported successfully.');
     }
 }

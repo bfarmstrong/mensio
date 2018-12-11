@@ -4,7 +4,7 @@
 
 @section(
     'content.breadcrumbs',
-    Breadcrumbs::render('clients.questionnaires.show', $user, $response)
+    Breadcrumbs::render('groups.questionnaires.show', $group, $response)
 )
 @section('content.dashboard')
     <div class="card">

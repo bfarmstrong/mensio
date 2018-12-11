@@ -9,4 +9,9 @@ use App\Services\IBaseService;
  */
 interface IGroupService extends IBaseService
 {
+    public function findByClient($user);
+
+    public function findClients($group);
+
+    public function findTherapists($group);
 }

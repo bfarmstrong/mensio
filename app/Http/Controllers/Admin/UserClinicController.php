@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignClinicRequest;
 use App\Services\Criteria\General\WhereNotEqual;
@@ -9,7 +10,6 @@ use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Criteria\User\WhereCurrentUserClinic;
-use App\Services\Criteria\User\WhereNotAssignedClinic;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
 use App\Services\Impl\IRoleService;
@@ -32,7 +32,7 @@ class UserClinicController extends Controller
      * @var IRoleService
      */
     protected $roleService;
-	
+
     public function __construct(
         IUserService $user,
         IClinicService $clinicservice,
@@ -52,7 +52,7 @@ class UserClinicController extends Controller
      */
     public function index(string $clinic)
     {
-        $clinic = $this->clinicservice->find($clinic);
+        $clinic = $this->clinicservice->findBy('uuid', $clinic);
 
         if (request()->user()->isSuperAdmin()) {
             $users = $this->user
@@ -86,15 +86,15 @@ class UserClinicController extends Controller
 			$clients = $this->user
 				->getByCriteria(new WhereNotAssignedClinic($clinic))
 				->all();
-		} else { 
+		} else {
 		    $clients = $this->user
 				->all();
 		}
-        $clinic = $this->clinicservice->find($clinic);
+        $clinic = $this->clinicservice->findBy('uuid', $clinic);
 
         return view('admin.clinics.assignclinics.create')->with([
             'clinic' => $clinic,
-            'clients' =>$clients,
+            'clients' => $clients,
         ]);
     }
 
@@ -106,15 +106,15 @@ class UserClinicController extends Controller
      * @return Response
      */
     public function store(AssignClinicRequest $request)
-    {	
-		
-		$this->user->assignClinic($request->clinic_id, $request->user_id, $request->role_id);
-		
-        return redirect("admin/clinics/$request->clinic_id/assignclinic")->with([
+    {
+        $clinic = $this->clinicservice->find($request->clinic_id);
+        $this->user->assignClinic($request->clinic_id, $request->user_id, $request->role_id);
+
+        return redirect("admin/clinics/$clinic->uuid/assignclinic")->with([
             'message' => __('admin.clinics.assignclinic.user-assigned'),
         ]);
     }
-	
+
 	/**
      * Assign a new role to a clinic.
      *
@@ -129,7 +129,7 @@ class UserClinicController extends Controller
 								<div class="form-group col-12">
 									<label for="role_id">Roles</label>
 									<select class="form-control" name="role_id[]" multiple="multiple">';
-				
+
 				foreach($user->roles()->pluck('label','roles.id')->toArray() as $key => $roles){
 					$html .='<option value="'.$key.'">'.$roles.'</option>';
 				}
@@ -137,12 +137,12 @@ class UserClinicController extends Controller
 								</div>
 						</div>';
 			} else {
-			
+
 				$html  = '<div class="form-row">
 							<div class="form-group col-12">
 								<label for="role_id">Roles</label>
 								<select class="form-control" name="role_id[]" multiple="multiple">';
-				
+
 				foreach($this->roleService->all()->toArray() as $key => $roles){
 					$html .='<option value="'.$roles['id'].'">'.$roles['label'].'</option>';
 				}
@@ -162,9 +162,10 @@ class UserClinicController extends Controller
     public function destroy(string $id, Request $request)
     {
         $user = $this->user->find($id);
+        $clinic = $this->clinicservice->find($request->clinic_id);
         $this->user->removeClinic($request->clinic_id, $user->id);
 
-        return redirect("admin/clinics/$request->clinic_id/assignclinic")->with([
+        return redirect("admin/clinics/$clinic->uuid/assignclinic")->with([
             'message' => __('admin.clinics.assignclinic.deleted-user-clinic'),
         ]);
     }

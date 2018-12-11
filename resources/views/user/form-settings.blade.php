@@ -564,7 +564,25 @@
                 >
                     @lang('user.form-settings.groups')
                 </a>
-			@endif
+            @endif
+
+            @if ($features['active'] ?? false)
+                @if ($user->is_active == 1)
+                    <a
+                        class="btn btn-danger"
+                        href="{{ url("admin/users/inactivate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.inactive')
+                    </a>
+                @else
+                    <a
+                        class="btn btn-success"
+                        href="{{ url("admin/users/activate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.active')
+                    </a>
+                @endif
+            @endif
         </div>
     </div>
 </div>

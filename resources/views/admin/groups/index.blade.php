@@ -17,6 +17,7 @@
                 class="btn btn-primary btn-sm ml-auto"
                 href="{{ url('admin/groups/create') }}"
             >
+                <i class="fas fa-plus mr-1"></i>
                 @lang('admin.groups.index.create-groups')
             </a>
 

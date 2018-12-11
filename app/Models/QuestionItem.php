@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +15,7 @@ class QuestionItem extends Model
 {
     // Log all changes to the question item model.
     use Loggable;
+    use SetsUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -25,8 +27,16 @@ class QuestionItem extends Model
         'name',
         'question_id',
         'question_item_group_id',
+        'score',
         'value',
     ];
+
+    /**
+     * The columns that generate a UUID.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * A question item is used in many answers.

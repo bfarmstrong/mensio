@@ -1,106 +1,119 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# MeasureMyClinic
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Requirements
 
-## Measurement Clinic Develeopment Environemnt
+The only software required to be installed on your local machine is Docker with the `docker-compose` command line tool.
 
-### Start the containers required
-Initialize submodules for laradock
+## Getting Started
 
-```
-~/measuremyclinic# git submodule init
-~/measuremyclinic# git submodule update
-```
+For development purposes, the following steps will get the system setup on your machine:
 
-Navigate to laradock submodule folder
-```
-~/measuremyclinic# cd laradock/
-```
+```bash
+# Setup the Docker environment
+git submodule init
+git submodule update
+cd laradock
+cp env-example .env
+docker-compose up -d nginx mysql
+docker-compose exec workspace bash
 
-Copy .env var
-```
-~/measuremyclinic/laradock# cp env-example .env
-````
+# Setup the project inside of the container
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan db:seed --class="DefaultRolesSeeder"
+php artisan db:seed --class="AdminSeeder"
+php artisan db:seed --class="DefaultClinicSeeder"
+php artisan import:default-questionnaires
+exit
 
-Start initial containers
-```
-~/measuremyclinic/laradock# docker-compose up -d nginx mysql
-```
-
-ssh to worksapce
-```
-~/measuremyclinic/laradock# docker-compose exec workspace bash
-```
-```
-$ root@workspace:/var/www# composer install
-$ root@workspace:/var/www# cp .env.example .env
-$ root@workspace:/var/www# php artisan key:generate
-$ root@workspace:/var/www# exit
-~/measuremyclinic/laradock# cd ..
-~/measuremyclinic# sudo chmod -R 777 storage bootstrap/cache
+# Fix permissions outside of the container
+cd ..
+sudo chmod -R 777 storage bootstrap/cache
 ```
 
-You should now be able to visit your `localhost` or if you're edited your dns to point to localhost:80 you may use that as well.
+After doing all of this, you should be able to access your localhost URL, `http://localhost` or the default Mindspace clinic, `http://mindspace.localhost`.  You should be able to sign into both websites with the default administrator credentials, `admin@example.com:secret`.
 
+## Extras
 
-## About Laravel
+### Importing Legacy Users
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+To import users from the legacy system, run the included Artisan command.  This command must be run inside of the Docker container.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+php artisan import:legacy-users
+```
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+To import the users into a specific clinic, provide the UUID of the clinic as an option.
 
-## Learning Laravel
+```bash
+php artisan import:legacy-users --clinic="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+### Importing Legacy Questionnaires
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+To import questionnaire responses from the legacy system, run the included Artisan command.  This command must be run inside of the Docker container.
 
-## Laravel Sponsors
+```bash
+php artisan import:sheet-data assess
+php artisan import:sheet-data --language="fr" assess
+php artisan import:sheet-data mbct
+php artisan import:sheet-data --language="fr" mbct
+php artisan import:sheet-data mbsr
+php artisan import:sheet-data --language="fr" mbsr
+```
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+You may also provide a clinic that the responses would be created for.  Typically you want the response to be created for the same clinic as the legacy users.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+```bash
+php artisan import:sheet-data --clinic="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" assess
+```
 
-## Contributing
+### Importing Questionnaires
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+New questionnaires may be created at any time by using the editor [here](https://surveyjs.io/Survey/Builder/).  The system can parse JSON files from the builder and transform them into questionnaires that may be used in the system.  This command must be run inside of the Docker container.
 
-## Security Vulnerabilities
+```bash
+php artisan import:questionnaire "$(cat /path/to/survey.json)"
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+You may provide a name and scoring mechanism for the questionnaires in this command as well.  By default the questionnaire is named after the name of the first page of the survey.
 
-## License
+```bash
+php artisan import:questionnaire \
+    --name="survey" \
+    --scoring-method="sum" \
+    "$(cat /path/to/survey.json)"
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+You may also provide a score for individual answers.  Doing so will require you to manually edit the survey JSON file.  An example can be seen below.  A "scores" key is added to each individual question that faciliates scoring.  This key is not standard for the survey builder and has to be added manually.
+
+```json
+{
+    "pages": [
+        {
+            "elements": [
+                {
+                    "type": "matrix",
+                    "columns": [
+                        "Column 1",
+                        "Column 2",
+                        "Column 3"
+                    ],
+                    "name": "survey>>>main",
+                    "rows": [
+                        "Row 1",
+                        "Row 2"
+                    ],
+                    "scores": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "title": "Title"
+                }
+            ]
+        }
+    ]
+}
+```

@@ -4,7 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCreatedByToGroupNotes extends Migration
+/**
+ * Adds a group identifier column to the responses table.
+ */
+class AddGroupIdToResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +16,14 @@ class AddCreatedByToGroupNotes extends Migration
      */
     public function up()
     {
-        Schema::table('group_notes', function (Blueprint $table) {
-            $table->string('created_by');
-            $table->foreign('created_by')
+        Schema::table('responses', function (Blueprint $table) {
+            $table->integer('group_id')->unsigned()->nullable();
+            $table->foreign('group_id')
                 ->references('id')
-                ->on('users')
+                ->on('groups')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->index('created_by');
+            $table->index('group_id');
         });
     }
 
@@ -31,10 +34,8 @@ class AddCreatedByToGroupNotes extends Migration
      */
     public function down()
     {
-        Schema::table('group_notes', function (Blueprint $table) {
-            $table->dropForeign(['created_by']);
-            $table->dropIndex(['created_by']);
-            $table->dropColumn('created_by');
+        Schema::table('responses', function (Blueprint $table) {
+            Schema::dropColumn('group_id');
         });
     }
 }
