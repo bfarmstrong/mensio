@@ -7,7 +7,14 @@
     </thead>
 
     <tbody>
+	@php 
+		$unique_clinic=[];
+	@endphp
+	
+	
         @foreach($clinics as $clinic)
+		@if(!in_array($clinic->name,$unique_clinic))
+		@php array_push($unique_clinic,$clinic->name); @endphp
             <tr>
                 <td>{{ $clinic->name }}</td>
                 <td>
@@ -41,6 +48,7 @@
 					@endif
                 </td>
             </tr>
+		@endif
         @endforeach
     </tbody>
 </table>

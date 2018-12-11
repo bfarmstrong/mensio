@@ -223,15 +223,25 @@
                     __('user.form-settings.role')
                 )
             !!}
-
-            {!!
+	@if(isset($user))
+			{!!
                 Form::select(
-                    'role_id',
+                    'role_id[]',
                     $roles->pluck('label', 'id'),
-                    old('role_id'),
-                    ['class' => 'form-control selectpicker']
+                    $user->roles()->pluck('roles.id')->toArray(),
+                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
                 )
             !!}
+	@else
+            {!!
+                Form::select(
+                    'role_id[]',
+                    $roles->pluck('label', 'id'),
+                    old('role_id'),
+                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
+                )
+            !!}
+	@endif
         </div>
     </div>
 @endif

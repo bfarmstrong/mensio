@@ -14,6 +14,7 @@ return [
             'assign' => 'Assign User',
             'breadcrumb' => 'Assign User',
             'users' => 'Users',
+            'roles' => 'Roles',
             'assign-users' =>'Assign',
             'no-results' => 'No users were found...',
             'form-title' => 'Create Clinic',
@@ -59,6 +60,7 @@ return [
             'edit' => 'Edit',
             'name' => 'Name',
             'email' => 'Email',
+            'roles' => 'Roles',
         ],
     ],
     'doctors' => [

@@ -52,12 +52,12 @@ class AttachRoleToUser
             if (0 == $count) {
                 return response()->view('errors.401', [], 401);
             } else {
-                $UserClinic = $assignedClinics->clinics->pluck('name', 'id');
-                foreach ($UserClinic as $k => $v) {
+                $UserClinic = $assignedClinics->clinics->pluck('subdomain', 'id');
+                foreach ($UserClinic as $k => $v) { 
                     if ($subdomain != strtolower($v)) {
                         $UserAssignedClinic[$k] = $v;
                     }
-                }
+                } 
                 \View::share('totalClinicAssign', $assignedClinics->clinics->count());
                 \View::share('assignedClinics', $UserAssignedClinic);
             }

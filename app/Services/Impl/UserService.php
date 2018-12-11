@@ -335,10 +335,16 @@ class UserService extends BaseService implements IUserService
      *
      * @return void
      */
-    public function assignClinic($clinic, $user)
+    public function assignClinic($clinic, $user, $role_id=false)
     {
         $user = $this->find($user);
+		if($role_id == false){
+			$role_id = $user->roles()->pluck('role_id');
+		}
+			$user->clinics()->detach($clinic);
+			foreach($role_id as $role){
+				$user->clinics()->attach($clinic, ['role_id' => $role]);
+			}
 
-        $user->clinics()->sync($clinic, false);
     }
 }

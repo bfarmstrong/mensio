@@ -43,7 +43,7 @@ class WhereNotAssignedClinic extends Criteria
     {
         if (! Auth::user()->isSuperAdmin()) {
             $query = $model
-                ->whereHas('role', function ($query) {
+                ->whereHas('roles', function ($query) {
                     $query->where('level', '<=', 3);
                 })
                 ->whereDoesntHave('clinics', function ($query) {
@@ -51,12 +51,13 @@ class WhereNotAssignedClinic extends Criteria
                 });
         } else {
             $query = $model
-                ->whereHas('role', function ($query) {
+                ->whereHas('roles', function ($query) {
                     $query->where('level', 4);
                 })
                 ->whereDoesntHave('clinics', function ($query) {
                     $query->where('clinic_id', $this->id);
                 });
+
         }
 
         return $query;

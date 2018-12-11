@@ -36,7 +36,7 @@ class Admin
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    { 
         if (Gate::allows('admin', $this->auth->user())) {
             return $next($request);
         }

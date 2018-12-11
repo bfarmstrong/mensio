@@ -245,8 +245,12 @@ class User extends Authenticatable
      * @return bool
      */
     public function hasRole(int $level)
-    {
-        return $this->role->level == $level;
+    {   
+		
+		if ($this->roles()->where('level', $level)->first()) {
+			return true;
+		}
+			return false;
     }
 
     /**
@@ -255,7 +259,7 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin()
-    {
+    { 
         return $this->hasAtLeastRole(Roles::Administrator);
     }
 
@@ -298,7 +302,12 @@ class User extends Authenticatable
      */
     public function hasAtLeastRole(int $level)
     {
-        return $this->role->level >= $level;
+		foreach($this->roles()->pluck('roles.id') as $roles){
+			if($roles >= $level){
+				return true;
+			}
+		}
+		return false;
     }
 
     /**
@@ -343,5 +352,15 @@ class User extends Authenticatable
     public function clinics()
     {
         return $this->belongsToMany('App\Models\Clinic', 'user_clinics', 'user_id', 'clinic_id');
+    }
+	
+	/**
+     * return roles if in user xlinix.
+     *
+     * @param string role_id
+    */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'user_clinics', 'user_id', 'role_id');
     }
 }

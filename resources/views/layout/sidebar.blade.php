@@ -4,28 +4,6 @@
             <li class="nav-title">
                 @lang('layout.sidebar.menu')
             </li>
-
-            @can('viewClients', \App\Models\User::class)
-                <li class="nav-item">
-                    <a
-                        class="nav-link"
-                        href="{{ url('clients') }}"
-                    >
-                        <i class="nav-icon fas fa-users"></i>
-                        @lang('layout.sidebar.clients')
-                    </a>
-                </li>
-				<li class="nav-item">
-                    <a
-                        class="nav-link"
-                        href="{{ url('groups') }}"
-                    >
-                        <i class="nav-icon fas fa-user-plus"></i>
-                        @lang('layout.sidebar.groups')
-                    </a>
-                </li>
-            @endcan
-
             <li class="nav-item">
                 <a
                     class="nav-link"
@@ -39,56 +17,13 @@
                     @lang('layout.sidebar.dashboard')
                 </a>
             </li>
-
-            @if (Auth::user()->isClient())
-                <li class="nav-item">
-                    <a
-                        class="nav-link"
-                        href="{{ url('responses') }}"
-                    >
-                        <i class="nav-icon fas fa-question"></i>
-                        @lang('layout.sidebar.questionnaires')
-                    </a>
-                </li>
-            @endif
-
-            @if (Auth::user()->isAdmin())
-                <li class="nav-item nav-dropdown open">
+			@if (Auth::user()->isSuperAdmin())
+				 <li class="nav-item nav-dropdown open">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="nav-icon fas fa-user-tie"></i>
-                        @lang('layout.sidebar.admin')
+                        @lang('layout.sidebar.superadmin')
                     </a>
-
-                    <ul class="nav-dropdown-items">
-                        <li class="nav-item">
-                            <a
-                                class="nav-link"
-                                href="{{ url('admin/users') }}"
-                            >
-                                <i class="nav-icon fas fa-user-friends"></i>
-                                @lang('layout.sidebar.users')
-                            </a>
-                        </li>
-
-						<li class="nav-item">
-                            <a
-                                class="nav-link"
-                                href="{{ url('admin/groups') }}"
-                            >
-                                <i class="nav-icon fas fa-user-plus"></i>
-                                @lang('layout.sidebar.groups')
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a
-                                class="nav-link"
-                                href="{{ url('admin/doctors') }}"
-                            >
-                                <i class="nav-icon fas fa-user-md"></i>
-                                @lang('layout.sidebar.doctors')
-                            </a>
-                        </li>
+					<ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
                         <li class="nav-item">
                             <a
                                 class="nav-link"
@@ -97,6 +32,36 @@
                                 <i class="nav-icon fas fa-hospital"></i>
                                 @lang('layout.sidebar.clinics')
                             </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item nav-dropdown open">
+                            <a
+                                class="nav-link nav-dropdown-toggle"
+                                href="{{ url('admin/users') }}"
+                            >
+                                <i class="nav-icon fas fa-user-friends"></i>
+                                @lang('layout.sidebar.all-users')
+							</a>
+							<ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
+								<li >
+									<a
+										class="nav-link "
+										href="{{ url('admin/therapist') }}"
+									>
+									<i class="nav-icon fas fa-user-friends"></i>
+									 @lang('layout.sidebar.all-therapist') </a>
+								</li>
+								<li >
+								<a
+										class="nav-link "
+										href="{{ url('admin/clients') }}"
+									>
+									<i class="nav-icon fas fa-users"></i>
+									 @lang('layout.sidebar.all-clients') </a>
+								</li>
+							</ul>
                         </li>
                         <li class="nav-item">
                             <a
@@ -120,7 +85,92 @@
                     </ul>
                 </li>
             @endif
+            @if (Auth::user()->isAdmin())
+                <li class="nav-item nav-dropdown open">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="nav-icon fas fa-user-tie"></i>
+                        @lang('layout.sidebar.admin')
+                    </a>
 
+                    <ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/users') }}"
+                            >
+                                <i class="nav-icon fas fa-user-friends"></i>
+                                @lang('layout.sidebar.users')
+                            </a>
+                        </li>
+
+						<li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/groups') }}"
+                            >
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                @lang('layout.sidebar.group-management')
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/doctors') }}"
+                            >
+                                <i class="nav-icon fas fa-user-md"></i>
+                                @lang('layout.sidebar.doctors')
+                            </a>
+                        </li>
+					</ul>
+				</li>
+				@endif
+
+
+            @can('viewClients', \App\Models\User::class)
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url('clients') }}"
+                    >
+                        <i class="nav-icon fas fa-users"></i>
+                        @lang('layout.sidebar.clients')
+                    </a>
+                </li>
+			@endcan
+
+
+
+
+
+            @if (Auth::user()->isClient())
+			<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-user-tie"></i>
+                        @lang('layout.sidebar.client')
+                </a>
+				<ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
+					<li class="nav-item">
+						<a
+							class="nav-link"
+							href="{{ url('responses') }}"
+						>
+							<i class="nav-icon fas fa-question"></i>
+							@lang('layout.sidebar.questionnaires')
+						</a>
+					</li>
+				<li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url('groups') }}"
+                    >
+                        <i class="nav-icon fas fa-user-plus"></i>
+                        @lang('layout.sidebar.groups')
+                    </a>
+                </li>
+				</ul>
+			</li>
+            @endif
             @if (Session::get('original_user'))
                 <li class="nav-item mt-auto">
                     <a
@@ -135,9 +185,9 @@
 			@if (!Auth::user()->isSuperAdmin())
 				@if (isset($totalClinicAssign) && $totalClinicAssign > 1 )
 					<li class="nav-item mt-auto">
-						
+
 						{!!  Form::select('switch_clinic',$assignedClinics, '', ['onchange'=>'switch_domain(this.value);','class' => 'form-control','id' => 'switch_clinic' ]) !!}
-						
+
 					</li>
 				@endif
 				{!!
@@ -174,7 +224,7 @@
 
 	function switch_domain(selval) {
 		$('#clinic_id').val(selval);
-		document.getElementById("switchclinic").submit(); 
+		document.getElementById("switchclinic").submit();
 	}
 
 </script>

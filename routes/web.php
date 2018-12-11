@@ -206,7 +206,8 @@ Route::group(['middleware' => ['domain']], function () {
             Route::get('users/switch-clinic-back', 'UserController@switchClinicBack');
             Route::post('users/invite', 'UserController@postInvite');
             Route::resource('users', 'UserController', ['except' => ['create']]);
-
+			Route::get('therapist', 'UserController@gettherapists');
+			Route::get('clients', 'UserController@getclients');
             /*
             |--------------------------------------------------------------------------
             | Therapist Management
@@ -241,6 +242,7 @@ Route::group(['middleware' => ['domain']], function () {
             Route::group(['prefix' => 'clinics'], function () {
                 Route::get('{clinic_id}/assignclinic', 'UserClinicController@index');
                 Route::get('{clinic_id}/assignclinic/create', 'UserClinicController@create');
+                Route::post('{clinic_id}/assignRoletoClinic/{user_id}', 'UserClinicController@assignRoletoClinic');
                 Route::post('{clinic_id}/assignclinic', 'UserClinicController@store');
                 Route::delete('{user_id}/assignclinic', 'UserClinicController@destroy');
                 Route::post('{clinic_id}/assignclinic/search', 'UserClinicController@search');

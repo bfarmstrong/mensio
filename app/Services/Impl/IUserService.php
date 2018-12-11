@@ -37,5 +37,5 @@ interface IUserService extends IBaseService
 
     public function removeClinic($clinic, $user);
 
-    public function assignClinic($clinic, $user);
+    public function assignClinic($clinic, $user, $role_id);
 }

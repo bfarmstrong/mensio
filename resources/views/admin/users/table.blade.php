@@ -14,7 +14,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->roleName() }}</td>
+                    <td>{!! implode(',',$user->roleName()) !!}</td>
                     <td>
                         <a
                             class="btn btn-primary btn-sm"

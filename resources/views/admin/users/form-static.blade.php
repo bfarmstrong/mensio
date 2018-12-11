@@ -58,7 +58,7 @@
         <tr>
             <td class="font-weight-bold">
                 @lang('admin.users.form-static.user-since', [
-                    'name' => $user->roleName()
+                    'name' => implode(',',$user->roleName())
                 ])
             </td>
             <td>{{ $user->created_at->toDateString() }}</td>

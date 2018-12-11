@@ -10,6 +10,8 @@ use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\General\WhereIn;
 use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IDoctorService;
@@ -99,7 +101,66 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+	/**
+     * Display a listing of the therapist.
+     *
+     * @return Response
+     */
+    public function gettherapists()
+    {
+        if (request()->user()->isSuperAdmin()) {
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+				->pushCriteria(new WhereTherapist())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+                ->all();
+        } else {
+            $user_id = UserClinic::where(
+                'clinic_id',
+                request()->attributes->get('clinic')->id
+            )->pluck('user_id');
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WhereTherapist())
+                ->pushCriteria(new WhereIn('id', $user_id))
+                ->all();
+        }
 
+        return view('admin.users.index')->with([
+            'users' => $users,
+        ]);
+    }
+	/**
+     * Display a listing of the clients.
+     *
+     * @return Response
+     */
+    public function getclients()
+    {
+        if (request()->user()->isSuperAdmin()) {
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+				->pushCriteria(new WhereRelationEqual('roles', 'level', 1))
+                ->pushCriteria(new WhereEqual('is_active', 1))
+                ->all();
+        } else {
+            $user_id = UserClinic::where(
+                'clinic_id',
+                request()->attributes->get('clinic')->id
+            )->pluck('user_id');
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WhereRelationEqual('roles', 'level', 1))
+                ->pushCriteria(new WhereIn('id', $user_id))
+                ->all();
+        }
+
+        return view('admin.users.index')->with([
+            'users' => $users,
+        ]);
+    }
     /**
      * Display a listing of the resource searched.
      *
@@ -160,9 +221,9 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $user = $this->userService->invite($request->except(['_token', '_method']));
+        $user = $this->userService->invite($request->except(['_token', '_method','role_id']));
         $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
-        $this->userService->assignClinic($clinic->id, $user->id);
+		$this->userService->assignClinic($clinic->id, $user->id, $request->role_id);
 
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
@@ -300,9 +361,15 @@ class UserController extends Controller
     {
         $this->userService->update(
             $id,
-            $request->except(['_token', '_method'])
+            $request->except(['_token', '_method','role_id'])
         );
+		if (Config::get('subdomain') != ''){
+			$clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
+			$this->userService->assignClinic($clinic->id, $id, $request->role_id);
 
+		} else {
+			$this->userService->assignClinic(false, $id, $request->role_id);
+		}
         return back()->with([
             'message' => __('admin.users.index.updated-user'),
         ]);

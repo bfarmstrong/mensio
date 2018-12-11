@@ -7,10 +7,12 @@ use App\Http\Requests\Admin\AssignClinicRequest;
 use App\Services\Criteria\General\WhereNotEqual;
 use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\User\WithRole;
 use App\Services\Criteria\User\WhereCurrentUserClinic;
 use App\Services\Criteria\User\WhereNotAssignedClinic;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IUserService;
+use App\Services\Impl\IRoleService;
 use Illuminate\Http\Request;
 
 /**
@@ -24,13 +26,21 @@ class UserClinicController extends Controller
      * @var IUserService
      */
     protected $user;
-
+    /**
+     * The role service implementation.
+     *
+     * @var IRoleService
+     */
+    protected $roleService;
+	
     public function __construct(
         IUserService $user,
-        IClinicService $clinicservice
+        IClinicService $clinicservice,
+		IRoleService $roleService
     ) {
         $this->user = $user;
         $this->clinicservice = $clinicservice;
+		$this->roleService = $roleService;
     }
 
     /**
@@ -47,7 +57,7 @@ class UserClinicController extends Controller
         if (request()->user()->isSuperAdmin()) {
             $users = $this->user
                 ->pushCriteria(new WhereNotEqual('id', request()->user()->id))
-                ->pushCriteria(new WhereRelationEqual('role', 'level', 4))
+                ->pushCriteria(new WhereRelationEqual('roles', 'level', 4))
                 ->pushCriteria(new WhereRelationEqual('clinics', 'clinics.id', $clinic->id))
                 ->paginate();
         } else {
@@ -72,9 +82,14 @@ class UserClinicController extends Controller
      */
     public function create(string $clinic)
     {
-        $clients = $this->user
-            ->getByCriteria(new WhereNotAssignedClinic($clinic))
-            ->paginate();
+		if (!request()->user()->isSuperAdmin()) {
+			$clients = $this->user
+				->getByCriteria(new WhereNotAssignedClinic($clinic))
+				->all();
+		} else { 
+		    $clients = $this->user
+				->all();
+		}
         $clinic = $this->clinicservice->find($clinic);
 
         return view('admin.clinics.assignclinics.create')->with([
@@ -84,21 +99,59 @@ class UserClinicController extends Controller
     }
 
     /**
-     * Creates a new note attached to a group.
+     * Assign a new clinic  to a users.
      *
-     * @param CreateGroupNoteRequest $request
+     * @param UserClinicController $request
      *
      * @return Response
      */
     public function store(AssignClinicRequest $request)
-    {
-        $this->user->assignClinic($request->clinic_id, $request->user_id);
-
+    {	
+		
+		$this->user->assignClinic($request->clinic_id, $request->user_id, $request->role_id);
+		
         return redirect("admin/clinics/$request->clinic_id/assignclinic")->with([
             'message' => __('admin.clinics.assignclinic.user-assigned'),
         ]);
     }
-
+	
+	/**
+     * Assign a new role to a clinic.
+     *
+     * @param assignRoletoClinic $request
+     *
+     * @return Response
+     */
+	public function assignRoletoClinic(string $clinic_id,string $id){
+			$user = $this->user->getByCriteria(new WithRole())->find($id);
+			if(!empty($user->roles()->pluck('label','roles.id')->toArray())){
+				$html  = '<div class="form-row">
+								<div class="form-group col-12">
+									<label for="role_id">Roles</label>
+									<select class="form-control" name="role_id[]" multiple="multiple">';
+				
+				foreach($user->roles()->pluck('label','roles.id')->toArray() as $key => $roles){
+					$html .='<option value="'.$key.'">'.$roles.'</option>';
+				}
+				$html .= '</select>
+								</div>
+						</div>';
+			} else {
+			
+				$html  = '<div class="form-row">
+							<div class="form-group col-12">
+								<label for="role_id">Roles</label>
+								<select class="form-control" name="role_id[]" multiple="multiple">';
+				
+				foreach($this->roleService->all()->toArray() as $key => $roles){
+					$html .='<option value="'.$roles['id'].'">'.$roles['label'].'</option>';
+				}
+				$html .= '</select>
+								</div>
+						</div>';
+			}
+		return  $html;
+	}
     /**
      * Remove the specified resource from storage.
      *

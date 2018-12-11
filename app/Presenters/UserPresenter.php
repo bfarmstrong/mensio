@@ -73,12 +73,26 @@ trait UserPresenter
      */
     public function roleName()
     {
+		$rolesnames = [];
         if ($this->isClient()) {
-            return __('user.presenter.client');
-        } elseif ($this->isTherapist()) {
-            return __('user.presenter.therapist');
-        }
-
-        return __('user.presenter.admin');
+            array_push($rolesnames, __('user.presenter.client'));
+        } 
+		if ($this->isTherapist()) {
+			array_push($rolesnames,__('user.presenter.therapist'));
+        } 
+		if ($this->isAdmin()) {
+			array_push($rolesnames,__('user.presenter.admin'));
+		}
+	   return $rolesnames;
+    }
+	
+	/**
+     * Returns the name of the role of the clinic assigned user.
+     *
+     * @return string
+     */
+    public function assignClinicRoleName()
+    { 
+	   return implode(',',$this->roles()->wherePivot('clinic_id', '=',request()->segment(3))->pluck('label')->toArray());
     }
 }

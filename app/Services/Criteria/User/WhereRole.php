@@ -38,7 +38,7 @@ class WhereRole extends Criteria
      */
     public function apply($model, IBaseService $service)
     {
-        $query = $model->whereHas('role', function ($query) {
+        $query = $model->whereHas('roles', function ($query) {
             $query->where('level', $this->level);
         });
 

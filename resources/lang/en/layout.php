@@ -17,6 +17,8 @@ return [
     'sidebar' => [
         'activity' => 'Activity',
         'admin' => 'Admin',
+        'client' => 'Client',
+        'superadmin' => 'Super Admin',
         'clients' => 'Clients',
         'groups' => 'Groups',
         'dashboard' => 'Dashboard',
@@ -26,8 +28,12 @@ return [
         'questionnaires' => 'Questionnaires',
         'roles' => 'Roles',
         'groups' => 'Groups',
+        'group-management' => 'Group Management',
         'switch-back' => 'Switch Back',
         'switch-clinic' => 'Switch Clinic',
         'users' => 'Users',
+        'all-therapist' => 'All Therapists',
+        'all-clients' => 'All Clients',
+        'all-users' => 'All Users',
     ],
 ];
