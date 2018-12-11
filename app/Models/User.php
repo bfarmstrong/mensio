@@ -344,4 +344,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Clinic', 'user_clinics', 'user_id', 'clinic_id');
     }
+	
+	/**
+     * return clinic if in user xlinix.
+     *
+     * @param string clinic_id
+     */
+    public function surveys()
+    {
+		return $this->hasMany(Survey::class, 'user_id');
+    }
 }

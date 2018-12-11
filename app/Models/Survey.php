@@ -20,7 +20,7 @@ class Survey extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'name'];
+    protected $fillable = ['description', 'name','user_id'];
 
     /**
      * A survey may have many questionnaires attached to it.
@@ -37,6 +37,17 @@ class Survey extends Model
         );
     }
 
+	/**
+     * A survey may have many users attached to it.
+     *
+     * @return BelongsTo
+     */
+    public function users()
+    {
+
+		return $this->belongsTo(User::class, 'user_id');
+    }
+	
     /**
      * A survey may have many responses.
      *

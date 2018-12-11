@@ -174,7 +174,14 @@ Route::group(['middleware' => ['domain']], function () {
         */
         Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
             Route::get('dashboard', 'DashboardController@index');
-
+            /*
+            |--------------------------------------------------------------------------
+            | Surveys
+            |--------------------------------------------------------------------------
+            */
+			Route::resource('surveys', 'SurveyController', ['except' => ['show']]);
+            Route::post('surveys/search', 'SurveyController@search');
+            Route::get('surveys/search', 'SurveyController@index');
             /*
             |--------------------------------------------------------------------------
             | Doctors
