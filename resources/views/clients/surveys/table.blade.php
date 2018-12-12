@@ -21,7 +21,7 @@
 					}
 					
 				@endphp
-				<td> {{ $final_questionnaire }}</td>
+				<td> {{ ltrim($final_questionnaire,',') }}</td>
 				<td><a href="{{ url('/') }}/multipleresponse/{{ $survey->uuid }}">{{ url('/') }}/multipleresponse/{{ $survey->uuid }}</a></td>
             </tr>
         @endforeach

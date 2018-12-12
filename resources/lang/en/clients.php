@@ -23,7 +23,7 @@ return [
             'name' => 'Name',
             'description' => 'Description',
             'questionnaire' => 'Questionnaire',
-            'create' => 'Create',
+            'create' => 'Assign',
             'link' => 'Survey',
         ],
 		'index' => [
@@ -184,7 +184,7 @@ return [
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',
-        'survey' => 'Survey',
+        'surveys' => 'Surveys',
         'toggle-dropdown' => 'Toggle dropdown',
         'view' => 'View',
     ],

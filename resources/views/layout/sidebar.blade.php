@@ -98,6 +98,15 @@
                                 @lang('layout.sidebar.clinics')
                             </a>
                         </li>
+						<li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/surveys') }}"
+                            >
+                                <i class="nav-icon fas fa-user-friends"></i>
+                                @lang('layout.sidebar.surveys')
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a
                                 class="nav-link"

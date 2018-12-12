@@ -29,5 +29,6 @@ return [
         'switch-back' => 'Switch Back',
         'switch-clinic' => 'Switch Clinic',
         'users' => 'Users',
+		'surveys' => 'Surveys'
     ],
 ];
