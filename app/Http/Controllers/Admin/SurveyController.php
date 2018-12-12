@@ -187,4 +187,18 @@ class SurveyController extends Controller
             'message' => __('admin.surveys.index.deleted-survey'),
 		]);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param string $uuid
+     *
+     * @return Response
+     */
+	public function MultipleResponse(string $uuid)
+	{
+		$survey = $this->survey->findBy('uuid', $uuid);
+		$questionnaires = $survey->questionnaires()->get();
+		dd($questionnaires);
+	}
 }

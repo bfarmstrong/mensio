@@ -9,6 +9,13 @@ Route::group(['middleware' => ['domain']], function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/', 'PagesController@home');
+	
+	/*
+    |--------------------------------------------------------------------------
+    | multiple response
+    |--------------------------------------------------------------------------
+    */
+    Route::get('multipleresponse/{uuid}', 'Admin\SurveyController@MultipleResponse');
 
     /*
     |--------------------------------------------------------------------------
@@ -110,6 +117,9 @@ Route::group(['middleware' => ['domain']], function () {
             Route::post('{user_id}/questionnaires', 'QuestionnaireController@store');
             Route::delete('{user_id}/questionnaires/{questionnaire_id}', 'QuestionnaireController@destroy');
             Route::get('{user_id}/questionnaires/{response_id}', 'QuestionnaireController@show');
+
+			Route::get('{user_id}/surveys/assign', 'AssignSurveyController@assign');
+			Route::post('{user_id}/surveys/assign', 'AssignSurveyController@postassign');
 
             Route::group(['prefix' => '{user_id}/attachments'], function () {
                 Route::post('', 'AttachmentController@store');

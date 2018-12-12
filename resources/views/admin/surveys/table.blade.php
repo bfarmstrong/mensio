@@ -2,6 +2,7 @@
     <thead class="thead-light">
         <tr>
             <th>@lang('admin.surveys.table.name')</th>
+            <th>@lang('admin.surveys.table.link')</th>
             <th>@lang('admin.surveys.table.actions')</th>
         </tr>
     </thead>
@@ -10,6 +11,7 @@
         @foreach($surveys as $survey)
             <tr>
                 <td>{{ $survey->name }}</td>
+                <td>{{ url('/') }}/multipleresponse/{{ $survey->uuid }}</td>
                 <td>
 
                     @if (Auth::user()->isAdmin())

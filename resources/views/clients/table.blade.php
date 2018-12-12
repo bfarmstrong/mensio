@@ -41,7 +41,12 @@
                             >
                                 @lang('clients.table.notes')
                             </a>
-
+                            <a
+                                class="dropdown-item"
+                                href="{{ url("clients/$user->id/surveys/assign") }}"
+                            >
+                                @lang('clients.table.survey')
+                            </a>
                             <a
                                 class="dropdown-item"
                                 href="{{ url("clients/$user->id/questionnaires") }}"

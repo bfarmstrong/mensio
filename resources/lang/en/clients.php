@@ -171,6 +171,7 @@ return [
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',
+        'survey' => 'Survey',
         'toggle-dropdown' => 'Toggle dropdown',
         'view' => 'View',
     ],

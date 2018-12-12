@@ -225,6 +225,7 @@ return [
                 'label' => 'Label',
                 'members' => 'Members',
                 'name' => 'Name',
+                'link' => 'Link',
             ],
     ],
     'groups' => [
