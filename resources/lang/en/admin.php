@@ -183,6 +183,9 @@ return [
         ],
     ],
 	'surveys' => [
+			'assignsurvey' => [
+				'user-assigned' => 'Survey assigned sucessfully.',
+			],
             'create' => [
                 'breadcrumb' => 'Create',
                 'form-title' => 'Create Survey',

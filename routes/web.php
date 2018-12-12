@@ -120,6 +120,7 @@ Route::group(['middleware' => ['domain']], function () {
 
 			Route::get('{user_id}/surveys/assign', 'AssignSurveyController@assign');
 			Route::post('{user_id}/surveys/assign', 'AssignSurveyController@postassign');
+			Route::get('{user_id}/surveys', 'AssignSurveyController@index');
 
             Route::group(['prefix' => '{user_id}/attachments'], function () {
                 Route::post('', 'AttachmentController@store');

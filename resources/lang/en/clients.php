@@ -18,6 +18,18 @@ return [
             'title' => 'Attachment',
         ],
     ],
+	'surveys' => [
+        'table' => [
+            'name' => 'Name',
+            'description' => 'Description',
+            'questionnaire' => 'Questionnaire',
+            'create' => 'Create',
+        ],
+		'index' => [
+			'title' => 'Survey',
+			'card-title' => 'Survey'
+		]
+    ],
     'communication' => [
         'create' => [
             'breadcrumb' => 'Create Communication Log',

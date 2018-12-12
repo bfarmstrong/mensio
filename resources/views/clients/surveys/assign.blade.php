@@ -12,6 +12,7 @@
         <div class="card-body">
             {!!
                 Form::open([
+					'method' => 'post',
                     'url' => url("clients/$user->id/surveys/assign"),
                 ])
             !!}

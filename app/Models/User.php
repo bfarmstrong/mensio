@@ -354,4 +354,9 @@ class User extends Authenticatable
     {
 		return $this->hasMany(Survey::class, 'user_id');
     }
+	
+	public function user_surveys()
+    {
+        return $this->belongsToMany('App\Models\Survey', 'user_surveys', 'user_id', 'survey_id');
+    }
 }

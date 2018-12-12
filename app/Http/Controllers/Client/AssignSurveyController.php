@@ -50,7 +50,16 @@ class AssignSurveyController extends Controller
         $this->user = $user;
 		$this->questionnaire = $questionnaire;
     }
-
+	
+	public function index(Request $request, string $client)
+	{
+		$client = $this->user->find($client);
+		$surveys = $client->user_surveys()->paginate();
+		return view('clients.surveys.index')->with([
+                'surveys' => $surveys,
+				'client' => $client
+            ]);
+	}
 	public function assign(string $client,Request $request)
 	{
 		$client = $this->user->find($client);
@@ -61,9 +70,13 @@ class AssignSurveyController extends Controller
         ]);
 	}
 	
-	public function postassign()
-	{
-	
+	public function postassign(string $client,Request $request)
+	{ 
+		$client = $this->user->find($client);
+		$client->user_surveys()->sync($request->survey_id, false);
+		return redirect("clients/$client->id/surveys/assign")->with([
+            'message' => __('admin.surveys.assignsurvey.user-assigned'),
+        ]);
 	}
 
 }
