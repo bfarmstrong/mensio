@@ -39,6 +39,7 @@
             @endunless
             model: survey,
             onComplete: function(sender, options) {
+				alert(345);
                 dataInput.val(JSON.stringify(sender.data));
                 dataForm.submit();
             },

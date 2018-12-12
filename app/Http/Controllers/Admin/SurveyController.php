@@ -214,16 +214,16 @@ class SurveyController extends Controller
 		foreach($questionnaires  as $questionnaire) {
 			$ques[] = $questionnaire->id;
 		}
-		/* $responses = $this->response
+/* 		$responses = $this->response
             ->pushCriteria(new WithQuestionnaire())
 			->getByCriteria(new WhereIn('questionnaire_id', $ques))
-            ->paginate(); */
-		
-		$questionnaire = $this->questionnaire
-            ->getByCriteria(new WithQuestionsAndItems())
-			->getByCriteria(new WhereIn('id', $ques))
-			->paginate();
-			//dd($questionnaire);
-		return view('responses.show-multiple', ['responses' => $questionnaire]);
+            ->paginate();
+		if(empty($responses)) { */
+			$responses = $this->questionnaire
+				->getByCriteria(new WithQuestionsAndItems())
+				->getByCriteria(new WhereIn('id', $ques))
+				->paginate();
+		//}	
+		return view('responses.show-multiple', ['responses' => $responses]);
 	}
 }
