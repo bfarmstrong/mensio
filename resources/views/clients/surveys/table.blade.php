@@ -4,6 +4,7 @@
             <th>@lang('clients.surveys.table.name')</th>
             <th>@lang('clients.surveys.table.description')</th>
             <th>@lang('clients.surveys.table.questionnaire')</th>
+            <th>@lang('clients.surveys.table.link')</th>
         </tr>
     </thead>
 
@@ -21,6 +22,7 @@
 					
 				@endphp
 				<td> {{ $final_questionnaire }}</td>
+				<td><a href="{{ url('/') }}/multipleresponse/{{ $survey->uuid }}">{{ url('/') }}/multipleresponse/{{ $survey->uuid }}</a></td>
             </tr>
         @endforeach
     </tbody>

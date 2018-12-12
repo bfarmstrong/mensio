@@ -24,6 +24,7 @@ return [
             'description' => 'Description',
             'questionnaire' => 'Questionnaire',
             'create' => 'Create',
+            'link' => 'Survey',
         ],
 		'index' => [
 			'title' => 'Survey',
