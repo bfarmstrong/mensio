@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\SurveyCreateRequest;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
-use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WhereIn;
+use App\Services\Criteria\Questionnaire\WithQuestionsAndItems;
 /**
  * Manages administrative actions against survey.
  */
@@ -209,13 +210,20 @@ class SurveyController extends Controller
 	{
 		$survey = $this->survey->findBy('uuid', $uuid);
 		$questionnaires = $survey->questionnaires()->get();
+		$ques = array();
 		foreach($questionnaires  as $questionnaire) {
-
-		$responses = $this->response
-            ->pushCriteria(new WithQuestionnaire())
-			->getByCriteria(new WhereEqual('questionnaire_id', $questionnaire->id))
-            ->paginate();
+			$ques[] = $questionnaire->id;
 		}
-		return view('responses.show-multiple', ['responses' => $responses]);
+		/* $responses = $this->response
+            ->pushCriteria(new WithQuestionnaire())
+			->getByCriteria(new WhereIn('questionnaire_id', $ques))
+            ->paginate(); */
+		
+		$questionnaire = $this->questionnaire
+            ->getByCriteria(new WithQuestionsAndItems())
+			->getByCriteria(new WhereIn('id', $ques))
+			->paginate();
+			//dd($questionnaire);
+		return view('responses.show-multiple', ['responses' => $questionnaire]);
 	}
 }

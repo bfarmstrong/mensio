@@ -4,8 +4,8 @@
 
 @section('content.questionnaire')
 @foreach($responses  as $response)
- @include('partials.questionnaire', [
-        'questionnaire' => $response->questionnaire,
+ @include('partials.multiplequestionnaire', [
+        'questionnaire' => $response,
         'response' => $response,
     ])
 @endforeach
