@@ -1,8 +1,8 @@
-@extends('layout.questionnaire')
+@extends('layout.dashboard')
 
 @section('title', __('responses.show-external.title'))
 
-@section('content.questionnaire')
+@section('content.dashboard')
 @foreach($responses  as $response)
  @include('partials.multiplequestionnaire', [
         'questionnaire' => $response,
