@@ -89,19 +89,21 @@ class ResponseService extends BaseService implements IResponseService
             ->find($response->questionnaire_id);
 
         foreach (json_decode($answers) as $name => $answer) {
-            $question = $questionnaire->questions
-                ->where('name', $name)
-                ->first();
-
-            $this->answerService->updateOrCreate(
-                $response->id,
-                $question->id,
-                $question->questionItems
-                    ->where('value', $answer)
-                    ->first()
-                    ->id ?? null,
-                $answer
-            );
+			
+				$question = $questionnaire->questions
+					->where('name', $name)
+					->first();
+			if (!is_null($question)) {
+				$this->answerService->updateOrCreate(
+					$response->id,
+					$question->id,
+					$question->questionItems
+						->where('value', $answer)
+						->first()
+						->id ?? null,
+					$answer
+				);
+			}
         }
 
         return $response;

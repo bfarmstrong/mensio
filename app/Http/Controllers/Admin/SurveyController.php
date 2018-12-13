@@ -217,7 +217,7 @@ class SurveyController extends Controller
 		$responses = $this->response
             ->pushCriteria(new WithQuestionnaire())
 			->getByCriteria(new WhereIn('questionnaire_id', $ques))
-            ->paginate(); 
+            ->all(); 
 		//if(empty($responses)) {
 		/* 	$responses = $this->questionnaire
 				->getByCriteria(new WithQuestionsAndItems())
