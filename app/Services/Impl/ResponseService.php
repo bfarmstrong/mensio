@@ -11,7 +11,7 @@ use App\Services\Criteria\Questionnaire\WithQuestionsAndItems;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-
+use App\Services\Impl\ISurveyService;
 /**
  * Implementation of the response service.
  */
@@ -30,7 +30,12 @@ class ResponseService extends BaseService implements IResponseService
      * @var IQuestionnaireService
      */
     protected $questionnaireService;
-
+    /**
+     * The service implementation for survey.
+     *
+     * @var ISurveyService
+     */
+    protected $survey;
     /**
      * Creates an instance of `ResponseService`.
      *
@@ -43,12 +48,14 @@ class ResponseService extends BaseService implements IResponseService
         Container $container,
         Collection $criteria,
         IAnswerService $answerService,
-        IQuestionnaireService $questionnaireService
+        IQuestionnaireService $questionnaireService,
+		ISurveyService $survey
     ) {
         parent::__construct($container, $criteria);
 
         $this->answerService = $answerService;
         $this->questionnaireService = $questionnaireService;
+		$this->survey = $survey;
     }
 
     /**
@@ -139,7 +146,45 @@ class ResponseService extends BaseService implements IResponseService
             }
         }
     }
+	/**
+     * Assigns a questionnaire survey to a client.
+     *
+     * @param mixed $client
+     * @param mixed $questionnaire
+     *
+     * @return Model
+     */
+    public function assignSurveyToClient($client, $survey , $assignfromgroup = false)
+    {
+		$all_surveys = $this->survey->find($survey);
+		foreach ($all_surveys->questionnaires()->get() as $all_survey) {
+			$questionnaire = $all_survey->pivot->questionnaire_id;
+			$assigned = $this
+				->optional()
+				->findBy([
+					['questionnaire_id', $questionnaire],
+					['user_id', $client],
+				]);
+			if (is_null($assigned)) {
+				if (! is_null(request()->attributes->get('clinic'))) {
+					$clinic_id = request()->attributes->get('clinic')->id;
 
+					return $this->create([
+						'questionnaire_id' => $questionnaire,
+						'user_id' => $client,
+						'survey_id' => $survey,
+						'clinic_id'=>$clinic_id,
+					]);
+				} else {
+					return $this->create([
+						'questionnaire_id' => $questionnaire,
+						'user_id' => $client,
+						'survey_id' => $survey,
+					]);
+				}
+			}
+		}
+    }
     /**
      * Converts a response into its array equivalent.
      *

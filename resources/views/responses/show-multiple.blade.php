@@ -5,7 +5,7 @@
 @section('content.dashboard')
 @foreach($responses  as $response)
  @include('partials.multiplequestionnaire', [
-        'questionnaire' => $response,
+        'questionnaire' => $response->questionnaire,
         'response' => $response,
     ])
 @endforeach

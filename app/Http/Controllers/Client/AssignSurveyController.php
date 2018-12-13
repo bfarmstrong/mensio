@@ -10,14 +10,24 @@ use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\ISurveyService;
 use App\Services\Impl\IUserService;
 use App\Services\Impl\IQuestionnaireService;
+use App\Services\Impl\IResponseService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\SurveyCreateRequest;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WithRelation;
 /**
  * Manages administrative actions against survey.
  */
 class AssignSurveyController extends Controller
 {
+	/**
+     * The response service implementation.
+     *
+     * @var IResponseService
+     */
+    protected $response;
+	
 	/**
      * The questionnaire service implementation.
      *
@@ -44,11 +54,12 @@ class AssignSurveyController extends Controller
      *
      * @param ISurveyService $service
      */
-    public function __construct(ISurveyService $survey, IUserService $user,IQuestionnaireService $questionnaire)
+    public function __construct(ISurveyService $survey, IUserService $user,IQuestionnaireService $questionnaire,IResponseService $response)
     {
         $this->survey = $survey;
         $this->user = $user;
 		$this->questionnaire = $questionnaire;
+		$this->response = $response;
     }
 	
 	public function index(Request $request, string $client)
@@ -74,6 +85,13 @@ class AssignSurveyController extends Controller
 	{ 
 		$client = $this->user->find($client);
 		$client->user_surveys()->sync($request->survey_id, false);
+
+		$this->response->assignSurveyToClient(
+			$client->id,
+			$request->survey_id
+				
+		);
+
 		return redirect("clients/$client->id/surveys/assign")->with([
             'message' => __('admin.surveys.assignsurvey.user-assigned'),
         ]);

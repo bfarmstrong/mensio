@@ -38,7 +38,7 @@ class Survey extends Model
     public function questionnaires()
     {
         return $this->belongsToMany(
-            Questionnaire::class,
+            'App\Models\Questionnaire',
             'questionnaire_survey',
             'survey_id',
             'questionnaire_id'
