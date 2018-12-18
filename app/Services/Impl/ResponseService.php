@@ -108,7 +108,43 @@ class ResponseService extends BaseService implements IResponseService
 
         return $response;
     }
+	
+    public function answersurvey($survey, string $answers)
+    {
+		$model = app($this->model());
+		
 
+        $response = $this->model->where([['survey_id','=',$survey],['user_id','=',\Auth::user()->id]])->get();  
+		foreach($response as $r){
+			$this->model->update($r,[
+				'complete' => true,
+				//'data' => $answers,
+			]);
+
+			$questionnaire = $this->questionnaireService
+				->getByCriteria(new WithQuestionsAndItems())
+				->find($r->questionnaire_id);
+			dd($questionnaire);
+			foreach (json_decode($answers) as $name => $answer) {
+				
+					$question = $questionnaire->questions
+						->where('name', $name)
+						->first();
+				if (!is_null($question)) {
+					$this->answerService->updateOrCreate(
+						$r->id,
+						$question->id,
+						$question->questionItems
+							->where('value', $answer)
+							->first()
+							->id ?? null,
+						$answer
+					);
+				}
+			}
+		}
+        return $response;
+    }
     /**
      * Assigns a questionnaire to a client.
      *
@@ -171,14 +207,14 @@ class ResponseService extends BaseService implements IResponseService
 				if (! is_null(request()->attributes->get('clinic'))) {
 					$clinic_id = request()->attributes->get('clinic')->id;
 
-					return $this->create([
+					$this->create([
 						'questionnaire_id' => $questionnaire,
 						'user_id' => $client,
 						'survey_id' => $survey,
 						'clinic_id'=>$clinic_id,
 					]);
 				} else {
-					return $this->create([
+					$this->create([
 						'questionnaire_id' => $questionnaire,
 						'user_id' => $client,
 						'survey_id' => $survey,
@@ -186,6 +222,7 @@ class ResponseService extends BaseService implements IResponseService
 				}
 			}
 		}
+		return true;
     }
     /**
      * Converts a response into its array equivalent.

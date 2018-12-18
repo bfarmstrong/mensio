@@ -15,7 +15,7 @@ Route::group(['middleware' => ['domain']], function () {
     | multiple response
     |--------------------------------------------------------------------------
     */
-    Route::get('multipleresponse/{uuid}', 'Admin\SurveyController@MultipleResponse');
+    Route::get('multipleresponse/{survey_uuid}', 'Admin\SurveyController@MultipleResponse');
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +43,7 @@ Route::group(['middleware' => ['domain']], function () {
     */
     Route::get('responses/{response_id}/external', 'ResponseController@showExternal')->name('responses.show-external');
     Route::patch('responses/{response_id}/data', 'ResponseController@updateData')->name('responses.update-data');
+    Route::patch('responses/{survey_id}', 'ResponseController@updateDataSurvey')->name('responses.update-data-survey');
 
     Route::group([
     'middleware' => ['auth', 'auth.role'],
