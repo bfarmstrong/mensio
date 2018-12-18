@@ -12,6 +12,7 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use App\Services\Impl\ISurveyService;
+
 /**
  * Implementation of the response service.
  */
@@ -89,7 +90,7 @@ class ResponseService extends BaseService implements IResponseService
             ->find($response->questionnaire_id);
 
         foreach (json_decode($answers) as $name => $answer) {
-			
+		
 				$question = $questionnaire->questions
 					->where('name', $name)
 					->first();
@@ -114,23 +115,24 @@ class ResponseService extends BaseService implements IResponseService
 		$model = app($this->model());
 		
 
-        $response = $this->model->where([['survey_id','=',$survey],['user_id','=',\Auth::user()->id]])->get();  
+        $response = $this->model->where([['survey_id','=',$survey],['user_id','=',\Auth::user()->id]])->get();
+		
 		foreach($response as $r){
-			$this->model->update($r,[
-				'complete' => true,
-				//'data' => $answers,
-			]);
-
+			$this->model->where('questionnaire_id',$r->questionnaire_id)->update([
+					'complete' => true,
+					'data' => $answers,
+				]);
 			$questionnaire = $this->questionnaireService
 				->getByCriteria(new WithQuestionsAndItems())
 				->find($r->questionnaire_id);
-			dd($questionnaire);
+		
 			foreach (json_decode($answers) as $name => $answer) {
 				
 					$question = $questionnaire->questions
 						->where('name', $name)
 						->first();
 				if (!is_null($question)) {
+				
 					$this->answerService->updateOrCreate(
 						$r->id,
 						$question->id,

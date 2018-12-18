@@ -159,6 +159,6 @@ class ResponseController extends Controller
 
         return redirect()
             ->back()
-            ->with('message', __('responses.index.questionnaire-complete'));
+            ->with('message', __('complete'));
     }
 }
