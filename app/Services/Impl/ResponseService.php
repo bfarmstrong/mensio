@@ -78,7 +78,7 @@ class ResponseService extends BaseService implements IResponseService
      * @return Model
      */
     public function answer($response, string $answers)
-    {
+    { 
         $this->update($response, [
             'complete' => true,
             'data' => $answers,
@@ -112,11 +112,14 @@ class ResponseService extends BaseService implements IResponseService
 	
     public function answersurvey($survey, string $answers)
     {
-		$model = app($this->model());
-		
+		$model = app($this->model()); 
 
-        $response = $this->model->where([['survey_id','=',$survey],['user_id','=',\Auth::user()->id]])->get();
-		
+		foreach (json_decode($answers) as $key => $answer) {
+			$response = $this->model->where([['survey_id','=',$survey],['user_id','=',\Auth::user()->id],['uuid','=',$key]])->first();
+			$response = $this->answer($response->id,$answer);
+		} 
+        /* 
+		dd(json_decode($answers));
 		foreach($response as $r){
 			$this->model->where('questionnaire_id',$r->questionnaire_id)->update([
 					'complete' => true,
@@ -145,7 +148,7 @@ class ResponseService extends BaseService implements IResponseService
 				}
 			}
 		}
-        return $response;
+        return $response; */
     }
     /**
      * Assigns a questionnaire to a client.

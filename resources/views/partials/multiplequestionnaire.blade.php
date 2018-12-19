@@ -16,6 +16,7 @@
             ])
         !!}
 		{!! Form::hidden('data', null) !!}
+		{!! Form::hidden('response', null) !!}
         {!! Form::close() !!}
    
 @endisset
@@ -27,7 +28,11 @@
         var survey = new window.Survey.Model(questionnaire);
         var dataForm = window.$('#form-{{ $id }}');
         var dataInput = window.$('#form-{{ $id }} input[name="data"]');
-		var dataput = [];
+        var dataResponse = window.$('#form-{{ $id }} input[name="response"]');
+		var dataput = {};
+		var dataresp = {};
+		var i = 0;
+		var response = @json(json_decode($response));
 		
         window.Survey.StylesManager.applyTheme('bootstrap');
         window.$('#questionnaire-{{ $id }}').Survey({
@@ -37,17 +42,28 @@
             @endunless
             model: survey,
 			onCurrentPageChanging : function(sender, options) { 
-				dataput.push(JSON.stringify(sender.data));
-			},
-            onComplete: function(sender, options) {
-				dataInput.val(JSON.stringify(dataput));
+			
+				dataput[response[i]] = JSON.stringify(sender.data);
+				//dataresp[i] = response[i];
+				i = i+1;
 				
-             	dataForm.submit();
+			},
+
+			onComplete: function(sender, options) {
+				// var fina =  $([JSON.stringify(sender.data)]).not(dataput).get();
+				//dataput[response[i]] = JSON.stringify(sender.data);
+				dataInput.val(JSON.stringify(dataput));
+				//dataresp[i] = response[i];	
+				
+				//dataInput.val(JSON.stringify(sender.data));				
+				//dataResponse.val(JSON.stringify(dataresp));				
+			   	dataForm.submit();
             },
             showCompletedPage: false,
 			//showProgressBar : 'bottom',
 			//goNextPageAutomatic: true,
 			showNavigationButtons: true,
         });
+
     </script>
 @endpush
