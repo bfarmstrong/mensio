@@ -1,4 +1,4 @@
-@php $id = str_random(24);  @endphp
+@php $id = str_random(24);   @endphp
 
 <div
     class="questionnaire-container"
@@ -36,7 +36,9 @@
 		
         window.Survey.StylesManager.applyTheme('bootstrap');
         window.$('#questionnaire-{{ $id }}').Survey({
-
+			@if ($answerss)
+                data: @json(json_decode($answerss)),
+            @endif
             @unless (Auth::user()->isClient())
                 mode: 'display',
             @endunless
