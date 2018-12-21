@@ -264,7 +264,7 @@ class UserController extends Controller
         $user = $this->userService->invite($request->except(['_token', '_method','role_id']));
         $clinic = $request->attributes->get('clinic');
         if (! is_null($clinic)) {
-            $this->userService->assignClinic($clinic->id, $user->id);
+            $this->userService->assignClinic($clinic->id, $user->id,$request->role_id);
         }
 
         return redirect('admin/users')->with([
