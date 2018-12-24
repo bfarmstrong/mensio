@@ -9,12 +9,14 @@
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('clients.surveys.index.card-title')
             </span>
+			@if (!Auth::user()->isClient())
 			<a
                 class="btn btn-primary btn-sm ml-auto"
                 href="{{ url("clients/$client->id/surveys/assign") }}"
 			>
-                 @lang('clients.surveys.table.create')
+                 @lang('clients.surveys.table.create') 
              </a>
+			@endif
         </div>
 
         <div class="card-body">

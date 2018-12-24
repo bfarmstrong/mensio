@@ -25,10 +25,12 @@ return [
             'questionnaire' => 'Questionnaire',
             'create' => 'Assign',
             'link' => 'Survey',
+			'response_multiple' => 'Response Multiple'
         ],
 		'index' => [
 			'title' => 'Survey',
-			'card-title' => 'Survey'
+			'card-title' => 'Survey',
+			'no-results' => 'no-results'
 		]
     ],
     'communication' => [
