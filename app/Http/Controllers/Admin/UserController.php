@@ -265,7 +265,9 @@ class UserController extends Controller
         $clinic = $request->attributes->get('clinic');
         if (! is_null($clinic)) {
             $this->userService->assignClinic($clinic->id, $user->id,$request->role_id);
-        }
+        } else {
+			$this->userService->assignClinic(false, $user->id,$request->role_id);
+		}
 
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
