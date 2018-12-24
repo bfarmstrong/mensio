@@ -46,7 +46,6 @@
 			onCurrentPageChanging : function(sender, options) { 
 		
 				dataput[response[i]] = JSON.stringify(sender.data);
-				//dataresp[i] = response[i];
 				i = i+1;
 				
 			},
@@ -55,20 +54,11 @@
 				var obj = JSON.parse(JSON.stringify(sender.data));
 				var lastobj = Object.keys(obj);
 				var last_key =lastobj[lastobj.length-1];
-				//alert('{"'+last_key+'":'+JSON.stringify(obj[last_key])+'}');
-				// var fina =  $([JSON.stringify(sender.data)]).not(dataput).get();
-				//dataput[response[i]] = JSON.stringify(sender.data);
 				dataput[response[i]] = '{"'+last_key+'":'+JSON.stringify(obj[last_key])+'}';
-				dataInput.val(JSON.stringify(dataput));
-				//dataresp[i] = response[i];	
-				
-				//dataInput.val(JSON.stringify(sender.data));				
-				//dataResponse.val(JSON.stringify(dataresp));				
+				dataInput.val(JSON.stringify(dataput));			
 			   	dataForm.submit();
             },
             showCompletedPage: false,
-			//showProgressBar : 'bottom',
-			//goNextPageAutomatic: true,
 			showNavigationButtons: true,
         });
 
