@@ -74,7 +74,10 @@ class AssignSurveyController extends Controller
 	public function assign(string $client,Request $request)
 	{
 		$client = $this->user->find($client);
-		$all_surveys = $request->user()->surveys()->pluck('name','id');
+		$surveys = $this->survey->all();
+		foreach($surveys as $survey){
+			$all_surveys[$survey->id] = $survey->name;
+		}
 		return view('clients.surveys.assign')->with([
             'user' => $client,
             'all_surveys' => $all_surveys,

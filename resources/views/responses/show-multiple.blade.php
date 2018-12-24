@@ -11,8 +11,9 @@
 		//array_push($en_questionnaire, json_decode($response->questionnaire->data)->pages);
 		$en_questionnaire[] = json_decode($response->questionnaire->data)->pages;
 		$response1[] = $response->uuid; 
-		$answerss[]= json_decode($response->data);
-
+		if($response->data != null){
+			$answerss[]= json_decode($response->data);
+		}
 	@endphp
 @endforeach 
 @php 
@@ -22,10 +23,12 @@ foreach($en_questionnaire as $en_questionnair){
 	foreach($en_questionnair as $en_quest){ 
 		$temp[]=$en_quest; 
 	}
-}
-foreach($answerss as $answers){ 
-	foreach($answers as $key => $val){ 
-		$temp1[$key]=$val; 
+} 
+if(!empty($answerss)){
+	foreach($answerss as $answers){ 
+		foreach($answers as $key => $val){ 
+			$temp1[$key]=$val; 
+		}
 	}
 }
 @endphp
