@@ -103,7 +103,7 @@
                                 class="nav-link"
                                 href="{{ url('admin/surveys') }}"
                             >
-                                <i class="nav-icon fas fa-user-friends"></i>
+                                <i class="nav-icon fas fa-poll"></i>
                                 @lang('layout.sidebar.surveys')
                             </a>
                         </li>

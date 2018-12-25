@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-header d-flex align-items-center">
             <span>
-                <i class="fas fa-list-ul mr-1"></i>
+                <i class="fas fa-poll"></i>
                 @lang('admin.surveys.index.surveys')
             </span>
 

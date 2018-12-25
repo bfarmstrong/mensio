@@ -17,7 +17,7 @@
 					$final_questionnaire = '';
 					$questionnaires = $survey->questionnaires()->pluck('questionnaires.name');
 					foreach($questionnaires as $questionnaire){
-						$final_questionnaire .= ','.$questionnaire;
+						$final_questionnaire .= ', '.$questionnaire;
 					}
 					
 				@endphp
