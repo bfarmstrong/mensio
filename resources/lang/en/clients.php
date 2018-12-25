@@ -31,6 +31,10 @@ return [
 			'title' => 'Survey',
 			'card-title' => 'Survey',
 			'no-results' => 'no-results'
+		],
+		'create' => [
+			'title' => 'Survey',
+			'form-title' => 'Assign Survey'
 		]
     ],
     'communication' => [
