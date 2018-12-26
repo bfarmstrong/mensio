@@ -15,6 +15,7 @@ use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Response;
+use Yajra\Datatables\Datatables;
 
 /**
  * Manages a list of clients.
@@ -65,14 +66,20 @@ class ClientController extends Controller
     public function index()
     {
         $this->authorize('viewClients', User::class);
-        $clients = $this->user
-            ->pushCriteria(new WhereRelationEqual('role', 'level', Roles::Client))
+        $query = $this->user
+            ->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-            ->pushCriteria(new WithRelation('role'))
-            ->all();
+            ->pushCriteria(new WithRelation('roles'));
+
+        // Data tables support.  Utilizes the existing query.
+        if (request()->expectsJson()) {
+            $query->applyCriteria();
+
+            return DataTables::of($query->getModel())->toJson();
+        }
 
         return view('clients.index')->with([
-            'clients' => $clients,
+            'clients' => $query->paginate(),
         ]);
     }
 

@@ -6,7 +6,6 @@
             @isset ($insurance)
                 <th>@lang('admin.users.table.insurance')</th>
             @endisset
-            <th>@lang('admin.users.table.role')</th>
             <th>@lang('admin.users.table.actions')</th>
         </tr>
     </thead>
@@ -66,17 +65,15 @@
 @push('scripts')
 <script type="text/javascript">
     window.$('.{{ $type }}-datatable').DataTable({
-        ajax: {
-            dataSrc: '',
-            url: '/admin/{{ $type ?? 'users' }}',
-        },
+        ajax: '/admin/{{ $type ?? 'users' }}',
+        processing: true,
+        serverSide: true,
         columns: [
             { data: 'name' },
             { data: 'email' },
             @isset ($insurance)
                 { data: 'health_card_number' },
             @endisset
-            { data: 'role.name' },
             {
                 data: 'id',
                 render: function (data) {

@@ -375,10 +375,11 @@ class Importer implements IImporter
         $clientRole = $this->roleService->findBy('level', Roles::Client);
         $client['is_active'] = 1;
         $client['password'] = Hash::make(str_random(24));
-        $client['role_id'] = $clientRole->id;
-        $user = $this->userService->create($client);
+        $user = retry(5, function () use ($client) {
+            return $this->userService->create($client);
+        });
         if (! is_null($clinic)) {
-            $this->userService->assignClinic($clinic, $user);
+            $this->userService->assignClinic($clinic, $user, [$clientRole->id]);
         }
 
         return $user;
@@ -492,7 +493,6 @@ class Importer implements IImporter
                     'is_active' => 1,
                     'name' => $therapist->name,
                     'password' => Hash::make(str_random(24)),
-                    'role_id' => $therapistRole->id,
                 ];
 
                 // Validate therapist data
@@ -509,9 +509,15 @@ class Importer implements IImporter
                     ->optional()
                     ->findBy('email', $therapistData['email']);
                 if (is_null($therapistUser)) {
-                    $therapistUser = $this->userService->create($therapistData);
+                    $therapistUser = retry(5, function () use ($therapistData) {
+                        return $this->userService->create($therapistData);
+                    }, 100);
                     if (! is_null($clinic)) {
-                        $this->userService->assignClinic($clinic, $therapistUser);
+                        $this->userService->assignClinic(
+                            $clinic,
+                            $therapistUser,
+                            [$therapistRole->id]
+                        );
                     }
                 }
 
@@ -522,7 +528,6 @@ class Importer implements IImporter
                         'name' => $client->name,
                         'password' => Hash::make(str_random(24)),
                         'phone' => $client->phone,
-                        'role_id' => $clientRole->id,
                     ];
 
                     // Validate client data
@@ -539,9 +544,15 @@ class Importer implements IImporter
                         ->optional()
                         ->findBy('email', $clientData['email']);
                     if (is_null($clientUser)) {
-                        $clientUser = $this->userService->create($clientData);
+                        $clientUser = retry(5, function () use ($clientData) {
+                            return $this->userService->create($clientData);
+                        }, 100);
                         if (! is_null($clinic)) {
-                            $this->userService->assignClinic($clinic, $clientUser);
+                            $this->userService->assignClinic(
+                                $clinic,
+                                $clientUser,
+                                [$clientRole->id]
+                            );
                         }
                     }
                     $this->userService->addTherapist($therapistUser, $clientUser);

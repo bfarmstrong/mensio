@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Encryptable;
 use App\Models\Traits\SetsUuids;
 use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,21 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Attachment extends Model
 {
-    use Encryptable;
     use SetsUuids;
     use Signable;
-
-    /**
-     * The fields that are encrypted in the database.
-     *
-     * @var array
-     */
-    protected $encrypts = [
-        'file_location',
-        'file_name',
-        'file_size',
-        'mime_type',
-    ];
 
     /**
      * The attributes that are mass assignable.

@@ -202,6 +202,16 @@ abstract class BaseService implements IBaseService, ICriteria
     }
 
     /**
+     * Returns the current model object.  Useful for retrieving the current
+     * query outside the scope of the service.
+     *
+     * @return Model
+     */
+    public function getModel() {
+        return $this->model;
+    }
+
+    /**
      * Sets the optional parameter.
      *
      * @param bool $optional

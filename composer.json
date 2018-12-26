@@ -19,7 +19,8 @@
         "pragmarx/countries-laravel": "^0.6.2",
         "spatie/laravel-activitylog": "^2.8",
         "stevebauman/purify": "2.0.*",
-        "webpatser/laravel-uuid": "^3.0"
+        "webpatser/laravel-uuid": "^3.0",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "ajthinking/tinx": "^2.1",

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Encryptable;
 use App\Models\Traits\SetsUuids;
 use App\Models\Traits\Signable;
 use Illuminate\Database\Eloquent\Model;
@@ -15,19 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CommunicationLog extends Model
 {
-    use Encryptable;
     use SetsUuids;
     use Signable;
-
-    /**
-     * The fields that should be encrypted.
-     *
-     * @var array
-     */
-    protected $encrypts = [
-        'notes',
-        'reason',
-    ];
 
     /**
      * The attributes that are mass assignable.

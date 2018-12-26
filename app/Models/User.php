@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Roles;
-use App\Models\Traits\Encryptable;
+use App\Models\Traits\Anonymize;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\SetsBlindIndex;
 use App\Models\Traits\Uuids;
@@ -18,32 +18,31 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Anonymize;
     use Loggable;
     use Notifiable;
-    use Encryptable;
     use SetsBlindIndex;
     use Uuids;
     use UserPresenter;
     use SoftDeletes;
 
-    protected $encrypts = [
-        'address_line_1',
-        'address_line_2',
-        'city',
-        'country',
-        'emergency_name',
-        'emergency_phone',
-        'emergency_relationship',
-        'health_card_number',
-        'home_phone',
-        'license',
-        'name',
-        'notes',
-        'phone',
-        'postal_code',
-        'province',
-        'work_phone',
-        'written_signature',
+    /**
+     * The columns that should be anonymized.
+     *
+     * @var array
+     */
+    protected $anonymize = [
+        'address_line_1' => 'streetAddress',
+        'city' => 'city',
+        'email' => 'safeEmail',
+        'emergency_name' => 'name',
+        'emergency_phone' => 'phoneNumber',
+        'health_card_number' => 'randomNumber',
+        'home_phone' => 'phoneNumber',
+        'license' => 'randomNumber',
+        'name' => 'name',
+        'postal_code' => 'postcode',
+        'work_phone' => 'phoneNumber',
     ];
 
     /**
@@ -236,8 +235,8 @@ class User extends Authenticatable
      * @return bool
      */
     public function hasRole(int $level)
-    {   
-		
+    {
+
 		if ($this->roles()->where('level', $level)->first()) {
 			return true;
 		}
@@ -250,7 +249,7 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin()
-    { 
+    {
         return $this->hasAtLeastRole(Roles::Administrator);
     }
 
@@ -344,7 +343,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Clinic', 'user_clinics', 'user_id', 'clinic_id');
     }
-	
+
 	/**
      * return roles if in user xlinix.
      *

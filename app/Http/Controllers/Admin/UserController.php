@@ -21,6 +21,7 @@ use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Route;
+use Yajra\Datatables\Datatables;
 
 /**
  * Manages administrative actions against users.
@@ -83,7 +84,7 @@ class UserController extends Controller
     {
         $query = $this->userService
             ->pushCriteria(new WithRelation('clinics'))
-            ->pushCriteria(new WithRelation('role'))
+            ->pushCriteria(new WithRelation('roles'))
             ->pushCriteria(new WhereEqual('is_active', 1));
 
         if (
@@ -120,7 +121,14 @@ class UserController extends Controller
             );
         }
 
-        $users = $query->all();
+        // Data tables support.  Utilizes the existing query.
+        if (request()->expectsJson()) {
+            $query->applyCriteria();
+
+            return DataTables::of($query->getModel())->toJson();
+        }
+
+        $users = $query->paginate();
 
         $clients = $users->filter(function ($user) {
             return $user->isClient();
@@ -129,10 +137,6 @@ class UserController extends Controller
         $therapists = $users->filter(function ($user) {
             return $user->isTherapist() || $user->isAdmin();
         });
-
-        if (request()->expectsJson()) {
-            return $users;
-        }
 
         return view('admin.users.index')->with([
             'clients' => $clients,
