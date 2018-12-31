@@ -102,8 +102,17 @@
                                 @lang('layout.sidebar.users')
                             </a>
                         </li>
-
 						<li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url('admin/surveys') }}"
+                            >
+                                <i class="nav-icon fas fa-poll"></i>
+                                @lang('layout.sidebar.surveys')
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
                             <a
                                 class="nav-link"
                                 href="{{ url('admin/groups') }}"

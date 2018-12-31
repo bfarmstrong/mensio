@@ -9,6 +9,13 @@ Route::group(['middleware' => ['domain']], function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/', 'PagesController@home');
+	
+	/*
+    |--------------------------------------------------------------------------
+    | multiple response
+    |--------------------------------------------------------------------------
+    */
+    Route::get('multipleresponse/{survey_uuid}', 'Admin\SurveyController@MultipleResponse');
 
     /*
     |--------------------------------------------------------------------------
@@ -36,6 +43,7 @@ Route::group(['middleware' => ['domain']], function () {
     */
     Route::get('responses/{response_id}/external', 'ResponseController@showExternal')->name('responses.show-external');
     Route::patch('responses/{response_id}/data', 'ResponseController@updateData')->name('responses.update-data');
+    Route::patch('responses/{survey_id}', 'ResponseController@updateDataSurvey')->name('responses.update-data-survey');
 
     Route::group([
         'middleware' => ['auth', 'auth.role'],
@@ -125,6 +133,10 @@ Route::group(['middleware' => ['domain']], function () {
                     Route::get('{communication_log_id}', 'CommunicationLogController@show');
                 });
 
+			Route::get('{user_id}/surveys/assign', 'AssignSurveyController@assign');
+			Route::post('{user_id}/surveys/assign', 'AssignSurveyController@postassign');
+			Route::get('{user_id}/surveys', 'AssignSurveyController@index');
+
                 Route::group(['prefix' => '{user_id}/receipts'], function () {
                     Route::post('', 'ReceiptController@store');
                     Route::get('create', 'ReceiptController@create');
@@ -205,7 +217,14 @@ Route::group(['middleware' => ['domain']], function () {
         */
         Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
             Route::get('dashboard', 'DashboardController@index');
-
+            /*
+            |--------------------------------------------------------------------------
+            | Surveys
+            |--------------------------------------------------------------------------
+            */
+			Route::resource('surveys', 'SurveyController', ['except' => ['show']]);
+            Route::post('surveys/search', 'SurveyController@search');
+            Route::get('surveys/search', 'SurveyController@index');
             /*
             |--------------------------------------------------------------------------
             | Doctors

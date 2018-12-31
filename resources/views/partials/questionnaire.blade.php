@@ -1,4 +1,4 @@
-@php $id = str_random(24); @endphp
+@php $id = str_random(24);  @endphp
 
 <div
     class="questionnaire-container"

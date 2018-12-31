@@ -39,7 +39,14 @@
                 <i class="fas fa-sticky-note mr-1"></i>
                 @lang('clients.table.notes')
             </a>
-
+            
+            <a
+                class="dropdown-item"
+                href="{{ url("clients/$user->id/surveys") }}"
+            >
+                @lang('clients.table.surveys')
+            </a>
+            
             <a
                 class="dropdown-item"
                 href="{{ url('clients/USER_ID/questionnaires') }}"
@@ -84,4 +91,3 @@
     });
 </script>
 @endpush
-

@@ -37,8 +37,9 @@ return [
         'switch-back' => 'Switch Back',
         'switch-clinic' => 'Switch Clinic',
         'users' => 'Users',
+    		'surveys' => 'Surveys',
         'all-therapist' => 'All Therapists',
         'all-clients' => 'All Clients',
-        'all-users' => 'All Users',
+        'all-users' => 'All Users'
     ],
 ];

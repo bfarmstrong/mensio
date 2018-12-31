@@ -190,6 +190,55 @@ return [
             'name' => 'Name',
         ],
     ],
+	'surveys' => [
+			'assignsurvey' => [
+				'user-assigned' => 'Survey assigned sucessfully.',
+			],
+            'create' => [
+                'breadcrumb' => 'Create',
+                'form-title' => 'Create Survey',
+                'title' => 'Create Survey',
+            ],
+            'edit' => [
+                'breadcrumb' => 'Edit',
+                'form-title' => 'Edit Survey',
+                'title' => 'Edit Survey',
+            ],
+            'form' => [
+                'cancel' => 'Cancel',
+                'name' => 'Name',
+                'description' => 'Description',
+                'questionnaires' => 'Questionnaires',
+                'save' => 'Save',
+            ],
+            'form-delete' => [
+                'delete' => 'Delete',
+                'on-submit' => 'Are you sure you want to delete this Survey?',
+            ],
+            'form-search' => [
+                'search' => 'Search...',
+                'submit' => 'Get Results',
+            ],
+            'index' => [
+                'breadcrumb' => 'Surveys',
+                'create-survey' => 'Create Survey',
+                'created-survey' => 'Survey was successfully created.',
+                'deleted-survey' => 'Survey was successfully deleted.',
+                'no-results' => 'No survey were found...',
+                'surveys' => 'Surveys',
+                'updated-survey' => 'Survey was successfully updated.',
+                'title' => 'All Surveys',
+            ],
+            'table' => [
+                'actions' => 'Actions',
+                'delete' => 'Delete',
+                'edit' => 'Edit',
+                'label' => 'Label',
+                'members' => 'Members',
+                'name' => 'Name',
+                'link' => 'Link',
+            ],
+    ],
     'groups' => [
             'create' => [
                 'breadcrumb' => 'Create',

@@ -5,9 +5,17 @@
 @section('content.breadcrumbs', Breadcrumbs::render('responses.index'))
 @section('content.dashboard')
     <div class="card">
-        <div class="card-header">
-            <i class="fas fa-question mr-1"></i>
-            @lang('responses.index.card-title')
+        <div class="card-header d-flex align-items-center">
+			<span>
+				<i class="fas fa-question mr-1"></i>
+				@lang('responses.index.card-title')
+			</span>
+			 <a
+                class="btn btn-primary btn-sm ml-auto"
+                href="{{ url("clients/".Auth::user()->id."/surveys") }}"
+			>
+               @lang('clients.surveys.table.response_multiple')  
+             </a>
         </div>
 
         <div class="card-body">

@@ -10,8 +10,12 @@ use App\Services\IBaseService;
 interface IResponseService extends IBaseService
 {
     public function answer($response, string $answers);
+	
+    public function answersurvey($survey, string $answers);
 
     public function assignToClient($client, $questionnaire);
+	
+    public function assignSurveyToClient($client, $survey);
 
     public function getJson($response);
 
