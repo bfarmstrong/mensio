@@ -6,6 +6,7 @@ use App\Exceptions\DigitalSignatureInvalidException;
 use App\Notifications\NewAccountEmail;
 use App\Services\BaseService;
 use Auth;
+use App\Models\Clinic;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -338,7 +339,7 @@ class UserService extends BaseService implements IUserService
      *
      * @return void
      */
-    public function assignClinic($clinic, $user, $role_id=false)
+	public function assignClinic($clinic=false, $user, $role_id=false)
     {
         $user = $this->find($user);
 		if($role_id == false){
@@ -346,7 +347,15 @@ class UserService extends BaseService implements IUserService
 		}
 			$user->clinics()->detach($clinic);
 			foreach($role_id as $role){
-				$user->clinics()->attach($clinic, ['role_id' => $role]);
+				if($role != 5){
+					$user->clinics()->attach($clinic, ['role_id' => $role]);
+				} else if($clinic == false || $role == 5 ) {
+					$clinics = Clinic::pluck('id');
+					foreach($clinics as $clinic){
+						$user->clinics()->attach($clinic, ['role_id' => $role]);
+					}
+					$user->clinics()->attach(0, ['role_id' => $role]);
+				}
 			}
 
     }
