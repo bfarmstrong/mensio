@@ -15,7 +15,7 @@ class ImportLegacyUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'import:legacy-users';
+    protected $signature = 'import:legacy-users {--clinic=}';
 
     /**
      * The console command description.
@@ -53,7 +53,7 @@ class ImportLegacyUsers extends Command
     public function handle()
     {
         $this->info('Beginning the import process.');
-        $this->importer->importLegacyUserData();
+        $this->importer->importLegacyUserData($this->option('clinic'));
         $this->info('Import process was successful.');
     }
 }

@@ -21,7 +21,7 @@ class WhereEqual extends Criteria
     /**
      * The value to compare the column against.
      *
-     * @var string
+     * @var mixed
      */
     protected $value;
 
@@ -29,9 +29,9 @@ class WhereEqual extends Criteria
      * Creates an instance of `WhereEqual`.
      *
      * @param string $column
-     * @param string $value
+     * @param mixed  $value
      */
-    public function __construct(string $column, string $value)
+    public function __construct(string $column, $value)
     {
         $this->column = $column;
         $this->value = $value;

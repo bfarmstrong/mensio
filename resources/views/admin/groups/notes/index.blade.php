@@ -9,30 +9,66 @@
                 <i class="fas fa-list-ul mr-1"></i>
                 @lang('groups.notes.index.notes')
             </span>
-			@if (!Auth::user()->isAdmin() && !Auth::user()->isClient())
-            <a
-                class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("groups/$group->uuid/notes/create") }}"
-            >
-                @lang('groups.notes.index.create')
-            </a>
-			@endif
+
+            <div class="ml-auto">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/attachments/create") }}"
+                >
+                    <i class="fas fa-paperclip mr-1"></i>
+                    @lang('clients.notes.index.create-attachment')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/communication/create") }}"
+                >
+                    <i class="fas fa-comment-alt mr-1"></i>
+                    @lang('clients.notes.index.create-communication-log')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/notes/create") }}"
+                >
+                    <i class="fas fa-sticky-note mr-1"></i>
+                    @lang('groups.notes.index.create')
+                </a>
+
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("groups/$group->uuid/receipts/create") }}"
+                >
+                    <i class="fas fa-receipt mr-1"></i>
+                    @lang('clients.notes.index.create-receipt')
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    @if ($notes->isNotEmpty())
-                        @include('admin.groups.notes.table', [
-                            'notes' => $notes,
+                    @if (
+                        $attachments->isNotEmpty() ||
+                        $communication->isNotEmpty() ||
+                        $drafts->isNotEmpty() ||
+                        $finals->isNotEmpty() ||
+                        $receipts->isNotEmpty()
+                    )
+                        @include('clients.notes.table', [
+                            'attachments' => $attachments,
+                            'communication' => $communication,
+                            'drafts' => $drafts,
+                            'finals' => $finals,
+                            'group' => $group,
+                            'prefix' => "groups/$group->uuid",
+                            'receipts' => $receipts,
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">
                             @lang('groups.notes.index.no-results')
                         </p>
                     @endif
-
-                    {{ $notes->links() }}
                 </div>
             </div>
         </div>

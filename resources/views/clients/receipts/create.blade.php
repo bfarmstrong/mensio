@@ -19,7 +19,9 @@
                     'url' => url("clients/$client->id/receipts"),
                 ])
             !!}
-            @include('clients.receipts.form')
+            @include('clients.receipts.form', [
+                'disabled' => $requiresSignature,
+            ])
             {!! Form::close() !!}
         </div>
     </div>

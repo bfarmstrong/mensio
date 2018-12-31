@@ -29,7 +29,6 @@ class CreateGroupNoteRequest extends FormRequest
         return [
             'contents' => 'required',
             'is_draft' => 'required|boolean',
-            'group_id' => 'required|exists:groups,id',
             'signature.license' => 'required_if:is_draft,0',
             'signature.name' => 'required_if:is_draft,0',
         ];

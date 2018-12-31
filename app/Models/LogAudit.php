@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Encryptable;
 use App\Models\Traits\Uuids;
 use Spatie\Activitylog\Models\Activity;
 
@@ -12,7 +11,6 @@ use Spatie\Activitylog\Models\Activity;
  */
 class LogAudit extends Activity
 {
-    use Encryptable;
     use Uuids;
 
     /**
@@ -28,11 +26,4 @@ class LogAudit extends Activity
      * @var bool
      */
     public $incrementing = false;
-
-    /**
-     * The columns in the activity log that are encrypted.
-     *
-     * @var array
-     */
-    protected $encrypts = ['properties'];
 }

@@ -2,7 +2,19 @@
 
 @section('content.main')
     <div class="container-fluid">
-        <div class="row mb-5">
+        @isset ($logo)
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <img
+                        class="img-fluid"
+                        src="{{ $logo }}"
+                        style="height: 100px;"
+                    />
+                </div>
+            </div>
+        @endisset
+
+        <div class="row mb-3">
             <div class="col-12">
                 <p class="mb-0 font-weight-bold">
                     {{ $receipt->clinic->name }}
@@ -25,7 +37,7 @@
             </div>
         </div>
 
-        <div class="row mb-5">
+        <div class="row mb-3">
             <div class="col-12">
                 <p class="mb-0">
                     To whom it may concern,
@@ -60,7 +72,7 @@
             </div>
         </div>
 
-        <div class="row mb-5">
+        <div class="row mb-3">
             <div class="col-12">
                 <p class="font-weight-bold">
                     {{ $receipt->appointment_date }}
@@ -78,7 +90,7 @@
             </div>
         </div>
 
-        <div class="row text-right mb-5">
+        <div class="row text-right mb-3">
             <div class="col-12">
                 <p class="font-weight-bold mb-0">
                     Therapist /
@@ -106,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="row text-right mb-5">
+            <div class="row text-right mb-3">
                 <div class="col-12">
                     <p class="font-weight-bold mb-0">
                         Supervisor /

@@ -38,6 +38,32 @@
     'province' => $doctor->province ?? null,
 ])
 
+<hr class="mt-1">
+
+<div class="form-row">
+    <div class="form-group col-12">
+        <div class="custom-file">
+            {!!
+                Form::file(
+                    'file',
+                    [
+                        'class' => 'custom-file-input',
+                        'id' => 'file',
+                    ]
+                )
+            !!}
+
+            {!!
+                Form::label(
+                    'file',
+                    __('admin.clinics.form.logo'),
+                    ['class' => 'custom-file-label']
+                )
+            !!}
+        </div>
+    </div>
+</div>
+
 <div class="form-row">
     <div class="form-group col-12">
         {!!
@@ -48,3 +74,11 @@
         !!}
     </div>
 </div>
+
+@push('scripts')
+<script type="text/javascript">
+    window.$('.custom-file-input').change(function (event) {
+        window.$(this).next('.custom-file-label').html(event.target.files[0].name);
+    });
+</script>
+@endpush

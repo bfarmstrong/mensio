@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminAssignClinicRequest;
 use App\Http\Requests\UserInviteRequest;
-use App\Models\UserClinic;
 use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\General\WhereEqual;
-use App\Services\Criteria\General\WhereIn;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Criteria\General\WhereRelationNotEqual;
 use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IClinicService;
 use App\Services\Impl\IDoctorService;
@@ -18,6 +20,8 @@ use App\Services\Impl\IUserService;
 use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Route;
+use Yajra\Datatables\Datatables;
 
 /**
  * Manages administrative actions against users.
@@ -78,9 +82,80 @@ class UserController extends Controller
      */
     public function index()
     {
+        $query = $this->userService
+            ->pushCriteria(new WithRelation('clinics'))
+            ->pushCriteria(new WithRelation('roles'))
+            ->pushCriteria(new WhereEqual('is_active', 1));
+
+        if (
+            ! request()->user()->isSuperAdmin() ||
+            ! is_null(request()->attributes->get('clinic'))
+        ) {
+            $query = $query->pushCriteria(
+                new WhereRelationEqual(
+                    'clinics',
+                    'clinics.id',
+                    request()->attributes->get('clinic')->id
+                )
+            );
+        }
+
+        $type = Route::currentRouteName();
+        if ('admin.clients' === $type) {
+            $type = 'clients';
+            $query = $query->pushCriteria(
+                new WhereRelationEqual(
+                    'roles',
+                    'level',
+                    Roles::Client
+                )
+            );
+        } elseif ('admin.therapists' === $type) {
+            $type = 'therapists';
+            $query = $query->pushCriteria(
+                new WhereRelationNotEqual(
+                    'roles',
+                    'level',
+                    Roles::Client
+                )
+            );
+        }
+
+        // Data tables support.  Utilizes the existing query.
+        if (request()->expectsJson()) {
+            $query->applyCriteria();
+
+            return DataTables::of($query->getModel())->toJson();
+        }
+
+        $users = $query->paginate();
+
+        $clients = $users->filter(function ($user) {
+            return $user->isClient();
+        });
+
+        $therapists = $users->filter(function ($user) {
+            return $user->isTherapist() || $user->isAdmin();
+        });
+
+        return view('admin.users.index')->with([
+            'clients' => $clients,
+            'therapists' => $therapists,
+            'type' => $type,
+            'users' => $users,
+        ]);
+    }
+	/**
+     * Display a listing of the therapist.
+     *
+     * @return Response
+     */
+    public function gettherapists()
+    {
         if (request()->user()->isSuperAdmin()) {
             $users = $this->userService
                 ->pushCriteria(new WithRole())
+				->pushCriteria(new WhereTherapist())
                 ->pushCriteria(new WhereEqual('is_active', 1))
                 ->all();
         } else {
@@ -91,15 +166,45 @@ class UserController extends Controller
             $users = $this->userService
                 ->pushCriteria(new WithRole())
                 ->pushCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WhereTherapist())
                 ->pushCriteria(new WhereIn('id', $user_id))
                 ->all();
         }
 
         return view('admin.users.index')->with([
-            'users' => $users,
+            'therapists' => $users,
         ]);
     }
+	/**
+     * Display a listing of the clients.
+     *
+     * @return Response
+     */
+    public function getclients()
+    {
+        if (request()->user()->isSuperAdmin()) {
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+				->pushCriteria(new WhereRelationEqual('roles', 'level', 1))
+                ->pushCriteria(new WhereEqual('is_active', 1))
+                ->all();
+        } else {
+            $user_id = UserClinic::where(
+                'clinic_id',
+                request()->attributes->get('clinic')->id
+            )->pluck('user_id');
+            $users = $this->userService
+                ->pushCriteria(new WithRole())
+                ->pushCriteria(new WhereEqual('is_active', 1))
+				->pushCriteria(new WhereRelationEqual('roles', 'level', 1))
+                ->pushCriteria(new WhereIn('id', $user_id))
+                ->all();
+        }
 
+        return view('admin.users.index')->with([
+            'clients' => $users,
+        ]);
+    }
     /**
      * Display a listing of the resource searched.
      *
@@ -160,9 +265,13 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $user = $this->userService->invite($request->except(['_token', '_method']));
-        $clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
-        $this->userService->assignClinic($clinic->id, $user->id);
+        $user = $this->userService->invite($request->except(['_token', '_method','role_id']));
+        $clinic = $request->attributes->get('clinic');
+        if (! is_null($clinic)) {
+            $this->userService->assignClinic($clinic->id, $user->id,$request->role_id);
+        } else {
+			$this->userService->assignClinic(false, $user->id,$request->role_id);
+		}
 
         return redirect('admin/users')->with([
             'message' => __('admin.users.index.created-user'),
@@ -274,6 +383,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = $this->userService
+            ->pushCriteria(new WithRelation('clinics'))
             ->pushCriteria(new WithRelation('doctor'))
             ->pushCriteria(new WithRelation('referrer'))
             ->pushCriteria(new WithRelation('role'))
@@ -300,9 +410,15 @@ class UserController extends Controller
     {
         $this->userService->update(
             $id,
-            $request->except(['_token', '_method'])
+            $request->except(['_token', '_method','role_id'])
         );
+		if (Config::get('subdomain') != ''){
+			$clinic = $this->clinicservice->findBy('subdomain', Config::get('subdomain'));
+			$this->userService->assignClinic($clinic->id, $id, $request->role_id);
 
+		} else {
+			$this->userService->assignClinic(false, $id, $request->role_id);
+		}
         return back()->with([
             'message' => __('admin.users.index.updated-user'),
         ]);
@@ -359,23 +475,24 @@ class UserController extends Controller
         }
 
         return redirect('admin/users')->with([
-            'message' => __('clinic assigned'),
+            'message' => __('admin.users.index.clinic-assigned'),
         ]);
     }
 
     /**
-     * inactivate a user.
+     * Deactivates a user account.  Makes it so that they can no longer use the
+     * system.
+     *
+     * @param string $id
      *
      * @return Response
      */
     public function inactivateUser(string $id)
     {
-        if (is_null($id)) {
-            abort(404);
-        }
+        $user = $this->userService->find($id);
         $this->userService->update(
-            $id,
-            ['is_active'=>0]
+            $user,
+            ['is_active' => 0]
         );
 
         return redirect('admin/users')->with([
@@ -384,18 +501,18 @@ class UserController extends Controller
     }
 
     /**
-     * inactivate a user.
+     * Activates a user, allowing them to once again use the system.
+     *
+     * @param string $id
      *
      * @return Response
      */
     public function activateUser(string $id)
     {
-        if (is_null($id)) {
-            abort(404);
-        }
+        $user = $this->userService->find($id);
         $this->userService->update(
-            $id,
-            ['is_active'=>1]
+            $user,
+            ['is_active' => 1]
         );
 
         return redirect('admin/users')->with([

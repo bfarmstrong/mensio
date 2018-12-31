@@ -1,8 +1,9 @@
-<table class="table table-hover table-outline table-striped">
+<table class="datatable table table-hover table-outline table-striped dt-responsive nowrap w-100">
     <thead class="thead-light">
         <tr>
             <th>@lang('admin.clinics.table.name')</th>
             <th>@lang('admin.clinics.table.email')</th>
+            <th>@lang('admin.clinics.table.roles')</th>
             <th>@lang('admin.clinics.table.actions')</th>
         </tr>
     </thead>
@@ -12,6 +13,7 @@
             <tr>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->assignClinicRoleName() }}</td>
                 <td>
 
                     {!!

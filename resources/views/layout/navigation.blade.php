@@ -20,7 +20,20 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <ul class="nav navbar-nav ml-auto">
-        @include('layout.dropdown-user-settings')
-    </ul>
+    <span class="ml-auto">
+        <ul class="nav navbar-nav">
+            @if ($requiresSignature ?? false)
+                <li>
+                    <i
+                        class="fas fa-exclamation-triangle text-danger mr-1"
+                        data-placement="bottom"
+                        data-toggle="tooltip"
+                        title="{{ __('layout.navigation.signature-required') }}"
+                    >
+                    </i>
+                </li>
+            @endif
+            @include('layout.dropdown-user-settings')
+        </ul>
+    </span>
 </header>

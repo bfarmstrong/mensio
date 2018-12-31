@@ -29,6 +29,7 @@ class AssignClinicRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'clinic_id' => 'required|exists:clinics,id',
+            'role_id' => 'required|exists:roles,id',
         ];
     }
 }

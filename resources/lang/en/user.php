@@ -43,8 +43,8 @@ return [
         'therapists' => 'Therapists',
         'groups' => 'Groups',
         'work-phone' => 'Work Phone',
-        'inactive' => 'Inactive',
-        'active' => 'Active',
+        'inactive' => 'Deactivate',
+        'active' => 'Activate',
     ],
     'form-signature' => [
         'current-signature' => 'Current Signature',

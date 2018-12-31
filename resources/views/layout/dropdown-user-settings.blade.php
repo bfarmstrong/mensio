@@ -27,6 +27,16 @@
             @lang('layout.dropdown-user-settings.change-password')
         </a>
 
+        @if (Auth::user()->isTherapist() || Auth::user()->isAdmin())
+            <a
+                class="dropdown-item {{ ($requiresSignature ?? false) ? 'font-weight-bold' : '' }}"
+                href="{{ url('user/signature') }}"
+            >
+                <i class="fas fa-signature"></i>
+                @lang('user.form-settings.change-signature')
+            </a>
+        @endif
+
         <a class="dropdown-item" href="{{ url('logout') }}">
             <i class="fas fa-sign-out-alt"></i>
             @lang('layout.dropdown-user-settings.sign-out')

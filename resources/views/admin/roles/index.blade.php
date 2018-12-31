@@ -15,6 +15,7 @@
                 class="btn btn-primary btn-sm ml-auto"
                 href="{{ url('admin/roles/create') }}"
             >
+                <i class="fas fa-plus mr-1"></i>
                 @lang('admin.roles.index.create-role')
             </a>
         </div>

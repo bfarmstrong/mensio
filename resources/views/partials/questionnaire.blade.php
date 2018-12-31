@@ -7,19 +7,17 @@
 </div>
 
 @isset ($response)
-    @can ('submit', $response)
-        {!!
-            Form::open([
-                'id' => "form-$id",
-                'method' => 'patch',
-                'url' => URL::signedRoute('responses.update-data', [
-                    'response_id' => $response->uuid,
-                ]),
-            ])
-        !!}
-        {!! Form::hidden('data', null) !!}
-        {!! Form::close() !!}
-    @endcan
+    {!!
+        Form::open([
+            'id' => "form-$id",
+            'method' => 'patch',
+            'url' => URL::signedRoute('responses.update-data', [
+                'response_id' => $response->uuid,
+            ]),
+        ])
+    !!}
+    {!! Form::hidden('data', null) !!}
+    {!! Form::close() !!}
 @endisset
 
 @push('scripts')
@@ -34,9 +32,9 @@
             @if ($response->data)
                 data: @json(json_decode($response->data)),
             @endif
-            @unless (Auth::user()->isClient())
+            @if (Auth::check() && !Auth::user()->isClient())
                 mode: 'display',
-            @endunless
+            @endif
             model: survey,
             onComplete: function(sender, options) {
                 dataInput.val(JSON.stringify(sender.data));

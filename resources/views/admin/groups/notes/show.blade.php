@@ -17,11 +17,17 @@
                         'url' => "groups/$group->uuid/notes/$note->uuid",
                     ])
                 !!}
-
+            @else
+                {!!
+                    Form::open([
+                        'method' => 'post',
+                        'url' => "groups/$group->uuid/notes/$note->uuid/addition",
+                    ])
+                !!}
             @endif
-            @include('admin.groups.notes.form', [
-                'group' => $group,
+            @include('clients.notes.form', [
                 'note' => $note,
+                'therapist' => $note->therapist,
             ])
             {!! Form::close() !!}
         </div>

@@ -17,7 +17,7 @@ class ImportSheetData extends Command
      *
      * @var string
      */
-    protected $signature = 'import:sheet-data {sheet} {--language=en}';
+    protected $signature = 'import:sheet-data {sheet} {--clinic=} {--language=en}';
 
     /**
      * The console command description.
@@ -66,13 +66,13 @@ class ImportSheetData extends Command
         $this->info('Beginning the import process.');
         switch ($this->argument('sheet')) {
             case 'assess':
-                $this->importer->importAssess($language);
+                $this->importer->importAssess($language, $this->option('clinic'));
                 break;
             case 'mbct':
-                $this->importer->importMbct($language);
+                $this->importer->importMbct($language, $this->option('clinic'));
                 break;
             case 'mbsr':
-                $this->importer->importMbsr($language);
+                $this->importer->importMbsr($language, $this->option('clinic'));
                 break;
             default:
                 $this->error('Selected sheet is not available.');

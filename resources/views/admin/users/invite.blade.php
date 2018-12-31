@@ -16,7 +16,11 @@
                     'url' => url('admin/users/invite')
                 ])
             !!}
-            @include('user.form-settings')
+            @include('user.form-settings', [
+                'features' => [
+                    'license' => true,
+                ],
+            ])
             {!! Form::close() !!}
         </div>
     </div>

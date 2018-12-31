@@ -28,6 +28,8 @@ class AddAdditionalNoteRequest extends FormRequest
     {
         return [
             'addition' => 'required',
+            'signature.license' => 'required',
+            'signature.name' => 'required',
         ];
     }
 }

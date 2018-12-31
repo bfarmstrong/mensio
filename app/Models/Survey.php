@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,8 +16,9 @@ class Survey extends Model
 {
     // Log any changes to the survey model
     use Loggable;
-	use SetsUuids;
-    /**
+    use SetsUuids;
+
+  /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -30,6 +32,13 @@ class Survey extends Model
      */
     protected $uuids = ['uuid'];
 	
+    /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
+
     /**
      * A survey may have many questionnaires attached to it.
      *

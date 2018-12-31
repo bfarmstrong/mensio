@@ -272,6 +272,9 @@ class ResponseService extends BaseService implements IResponseService
                 is_null($key) &&
                 $answer->question->name === ($answer->questionItem->name ?? $answer->question->name)
             ) {
+                if (! $data instanceof Collection) {
+                    $data = collect([$data]);
+                }
                 $json->put($answer->question->name, $data->push($value));
 
                 return;
