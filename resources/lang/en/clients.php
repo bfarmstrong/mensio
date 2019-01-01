@@ -15,8 +15,28 @@ return [
         'show' => [
             'attachment' => 'Attachment',
             'breadcrumb' => 'View Attachment',
+            'signature-invalid' => 'This attachment has been unexpectedly modified.',
             'title' => 'Attachment',
         ],
+    ],
+	'surveys' => [
+        'table' => [
+            'name' => 'Name',
+            'description' => 'Description',
+            'questionnaire' => 'Questionnaire',
+            'create' => 'Assign',
+            'link' => 'Survey',
+			'response_multiple' => 'Response Multiple'
+        ],
+		'index' => [
+			'title' => 'Survey',
+			'card-title' => 'Survey',
+			'no-results' => 'no-results'
+		],
+		'create' => [
+			'title' => 'Survey',
+			'form-title' => 'Assign Survey'
+		]
     ],
     'communication' => [
         'create' => [
@@ -35,6 +55,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'notes' => 'Notes',
             'reason' => 'Reason For Meeting',
+            'signature-invalid' => 'This communication log has been unexpectedly modified.',
         ],
         'show' => [
             'breadcrumb' => 'View Communication Log',
@@ -94,6 +115,7 @@ return [
             'appointment-date' => 'Appointment Date',
             'attachments' => 'Attachments',
             'communication-logs' => 'Communication Logs',
+            'client' => 'Client',
             'creator' => 'Therapist',
             'date' => 'Date',
             'draft' => 'Draft',
@@ -136,6 +158,7 @@ return [
         ],
         'table' => [
             'actions' => 'Actions',
+            'client' => 'Client',
             'name' => 'Name',
             'status' => 'Status',
             'view' => 'View',
@@ -168,9 +191,11 @@ return [
         'actions' => 'Actions',
         'edit' => 'Edit',
         'email' => 'Email',
+        'insurance' => 'Insurance',
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',
+        'surveys' => 'Surveys',
         'toggle-dropdown' => 'Toggle dropdown',
         'view' => 'View',
     ],

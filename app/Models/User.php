@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Roles;
-use App\Models\Traits\Encryptable;
+use App\Models\Traits\Anonymize;
 use App\Models\Traits\Loggable;
 use App\Models\Traits\SetsBlindIndex;
 use App\Models\Traits\Uuids;
@@ -18,31 +18,31 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Anonymize;
     use Loggable;
     use Notifiable;
-    use Encryptable;
     use SetsBlindIndex;
     use Uuids;
     use UserPresenter;
     use SoftDeletes;
 
-    protected $encrypts = [
-        'address_line_1',
-        'address_line_2',
-        'city',
-        'country',
-        'emergency_name',
-        'emergency_phone',
-        'emergency_relationship',
-        'health_card_number',
-        'home_phone',
-        'license',
-        'name',
-        'notes',
-        'postal_code',
-        'province',
-        'work_phone',
-        'written_signature',
+    /**
+     * The columns that should be anonymized.
+     *
+     * @var array
+     */
+    protected $anonymize = [
+        'address_line_1' => 'streetAddress',
+        'city' => 'city',
+        'email' => 'safeEmail',
+        'emergency_name' => 'name',
+        'emergency_phone' => 'phoneNumber',
+        'health_card_number' => 'randomNumber',
+        'home_phone' => 'phoneNumber',
+        'license' => 'randomNumber',
+        'name' => 'name',
+        'postal_code' => 'postcode',
+        'work_phone' => 'phoneNumber',
     ];
 
     /**
@@ -151,16 +151,6 @@ class User extends Authenticatable
     }
 
     /**
-     * A user has either group notes created for them or group notes created by them.
-     *
-     * @return HasMany
-     */
-    public function groupnotes()
-    {
-        return $this->hasMany(GroupNote::class, 'created_by');
-    }
-
-    /**
      * Returns the list of patients associated to a user.
      *
      * @return BelongsToMany
@@ -246,7 +236,11 @@ class User extends Authenticatable
      */
     public function hasRole(int $level)
     {
-        return $this->role->level == $level;
+
+		if ($this->roles()->where('level', $level)->first()) {
+			return true;
+		}
+			return false;
     }
 
     /**
@@ -298,7 +292,12 @@ class User extends Authenticatable
      */
     public function hasAtLeastRole(int $level)
     {
-        return $this->role->level >= $level;
+		foreach($this->roles()->pluck('roles.id') as $roles){
+			if($roles >= $level){
+				return true;
+			}
+		}
+		return false;
     }
 
     /**
@@ -343,5 +342,30 @@ class User extends Authenticatable
     public function clinics()
     {
         return $this->belongsToMany('App\Models\Clinic', 'user_clinics', 'user_id', 'clinic_id');
+    }
+	
+	/**
+     * return clinic if in user xlinix.
+     *
+     * @param string clinic_id
+     */
+    public function surveys()
+    {
+		return $this->hasMany(Survey::class, 'user_id');
+    }
+	
+	public function user_surveys()
+    {
+        return $this->belongsToMany('App\Models\Survey', 'user_surveys', 'user_id', 'survey_id');
+  }
+  
+	/**
+     * return roles if in user xlinix.
+     *
+     * @param string role_id
+    */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'user_clinics', 'user_id', 'role_id');
     }
 }

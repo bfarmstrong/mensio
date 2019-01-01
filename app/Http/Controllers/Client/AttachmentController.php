@@ -142,6 +142,7 @@ class AttachmentController extends Controller
             'file_name' => $file->getClientOriginalName(),
             'file_size' => $file->getClientSize(),
             'mime_type' => $file->getClientMimeType(),
+            'therapist_id' => $request->user()->id,
             'user_id' => $client->id,
         ]);
 

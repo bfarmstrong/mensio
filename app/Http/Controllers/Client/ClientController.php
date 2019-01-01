@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\SearchClientRequest;
 use App\Models\User;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Criteria\General\WithRelation;
 use App\Services\Criteria\User\WhereClient;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WithRole;
@@ -12,6 +15,7 @@ use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Response;
+use Yajra\Datatables\Datatables;
 
 /**
  * Manages a list of clients.
@@ -62,14 +66,20 @@ class ClientController extends Controller
     public function index()
     {
         $this->authorize('viewClients', User::class);
-        $clients = $this->user
-            ->pushCriteria(new WhereClient())
+        $query = $this->user
+            ->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
             ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-            ->pushCriteria(new WithRole())
-            ->all();
+            ->pushCriteria(new WithRelation('roles'));
+
+        // Data tables support.  Utilizes the existing query.
+        if (request()->expectsJson()) {
+            $query->applyCriteria();
+
+            return DataTables::of($query->getModel())->toJson();
+        }
 
         return view('clients.index')->with([
-            'clients' => $clients,
+            'clients' => $query->paginate(),
         ]);
     }
 

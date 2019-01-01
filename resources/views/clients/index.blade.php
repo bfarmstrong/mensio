@@ -17,7 +17,7 @@
                 <div class="col-12">
                     @if ($clients->isNotEmpty())
                         @include('clients.table', [
-                            'users' => $clients
+                            'users' => $clients,
                         ])
                     @else
                         <p class="lead text-center text-muted mt-3">

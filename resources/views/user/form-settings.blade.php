@@ -223,15 +223,25 @@
                     __('user.form-settings.role')
                 )
             !!}
-
-            {!!
+	@if(isset($user))
+			{!!
                 Form::select(
-                    'role_id',
+                    'role_id[]',
                     $roles->pluck('label', 'id'),
-                    old('role_id'),
-                    ['class' => 'form-control selectpicker']
+                    $user->roles()->pluck('roles.id')->toArray(),
+                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
                 )
             !!}
+	@else
+            {!!
+                Form::select(
+                    'role_id[]',
+                    $roles->pluck('label', 'id'),
+                    old('role_id'),
+                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
+                )
+            !!}
+	@endif
         </div>
     </div>
 @endif
@@ -554,7 +564,25 @@
                 >
                     @lang('user.form-settings.groups')
                 </a>
-			@endif
+            @endif
+
+            @if ($features['active'] ?? false)
+                @if ($user->is_active == 1)
+                    <a
+                        class="btn btn-danger"
+                        href="{{ url("admin/users/inactivate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.inactive')
+                    </a>
+                @else
+                    <a
+                        class="btn btn-success"
+                        href="{{ url("admin/users/activate/$user->id") }}"
+                    >
+                        @lang('user.form-settings.active')
+                    </a>
+                @endif
+            @endif
         </div>
     </div>
 </div>

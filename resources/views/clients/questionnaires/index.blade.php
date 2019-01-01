@@ -18,6 +18,7 @@
                 class="btn btn-primary btn-sm ml-auto"
                 href="{{ url("clients/$user->id/questionnaires/create") }}"
             >
+                <i class="fas fa-plus mr-1"></i>
                 @lang('clients.questionnaires.index.assign')
             </a>
         </div>

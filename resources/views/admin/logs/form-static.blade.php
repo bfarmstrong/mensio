@@ -7,7 +7,7 @@
         </div>
 
         <div class="col-9">
-            <p class="form-control-static">{{ $log->causer_type }}</p>
+            <p class="form-control-static">{{ $log->causer_type ?? 'N/A' }}</p>
         </div>
     </div>
 
@@ -19,7 +19,9 @@
         </div>
 
         <div class="col-9">
-            <p class="form-control-static">{{ $log->causer_id }}</p>
+            <p class="form-control-static">
+                {{ $log->causer->uuid ?? $log->causer->id ?? 'N/A' }}
+            </p>
         </div>
     </div>
 
@@ -31,7 +33,7 @@
         </div>
 
         <div class="col-9">
-            <p class="form-control-static">{{ $log->action }}</p>
+            <p class="form-control-static">{{ $log->action ?? 'N/A' }}</p>
         </div>
     </div>
 
@@ -43,7 +45,7 @@
         </div>
 
         <div class="col-9">
-            <p class="form-control-static">{{ $log->subject_type }}</p>
+            <p class="form-control-static">{{ $log->subject_type ?? 'N/A' }}</p>
         </div>
     </div>
 
@@ -55,7 +57,9 @@
         </div>
 
         <div class="col-9">
-            <p class="form-control-static">{{ $log->subject_id }}</p>
+            <p class="form-control-static">
+                {{ $log->subject->uuid ?? $log->subject->id ?? 'N/A' }}
+            </p>
         </div>
     </div>
 

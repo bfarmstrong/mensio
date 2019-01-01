@@ -72,16 +72,18 @@ class QuestionnaireService extends BaseService implements IQuestionnaireService
      * questionnaire object.
      *
      * @param mixed $data
+     * @param mixed $options
      *
      * @return Model
      */
-    public function importFromJson($data)
+    public function importFromJson($data, $options = null)
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $options) {
             $rawData = $data;
             $questionnaire = $this->create([
                 'data' => json_encode($rawData),
-                'name' => $data->pages[0]->name,
+                'name' => $options['name'] ?? $data->pages[0]->name,
+                'scoring_method' => $options['scoring_method'] ?? null,
             ]);
 
             foreach ($data->pages as $page) {
@@ -100,11 +102,12 @@ class QuestionnaireService extends BaseService implements IQuestionnaireService
                     );
 
                     // Add each choice as a question item
-                    foreach ($choices as $choice) {
+                    foreach ($choices as $index => $choice) {
                         $questionItem = $this->questionItemService->create([
                             'label' => $choice->title ?? $choice->name ?? $choice->text ?? null,
                             'name' => $choice->name ?? $element->name,
                             'question_id' => $question->id,
+                            'score' => $element->scores[$index] ?? null,
                             'value' => is_string($choice) ?
                                 $choice :
                                 $choice->value ?? null,
@@ -119,6 +122,7 @@ class QuestionnaireService extends BaseService implements IQuestionnaireService
                         $this->questionGridService->create([
                             'index' => $index,
                             'question_id' => $question->id,
+                            'score' => $element->scores[$index] ?? null,
                             'type' => 'C',
                             'value' => $column,
                         ]);

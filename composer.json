@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^0.8.3",
         "bensampo/laravel-enum": "^1.15",
         "davejamesmiller/laravel-breadcrumbs": "5.x",
+        "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
         "grafite/builder": "^2.5",
         "guzzlehttp/guzzle": "^6.3",
@@ -18,7 +19,8 @@
         "pragmarx/countries-laravel": "^0.6.2",
         "spatie/laravel-activitylog": "^2.8",
         "stevebauman/purify": "2.0.*",
-        "webpatser/laravel-uuid": "^3.0"
+        "webpatser/laravel-uuid": "^3.0",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "ajthinking/tinx": "^2.1",

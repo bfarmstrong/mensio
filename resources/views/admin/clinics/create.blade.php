@@ -6,13 +6,14 @@
 @section('content.dashboard')
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-user-md mr-1"></i>
+            <i class="fas fa-hospital mr-1"></i>
             @lang('admin.clinics.create.form-title')
         </div>
 
         <div class="card-body">
             {!!
                 Form::open([
+                    'files' => true,
                     'url' => url('admin/clinics')
                 ])
             !!}

@@ -22,7 +22,10 @@
         {!!
             Form::submit(
                 __('clients.receipts.form.submit'),
-                ['class' => 'btn btn-primary']
+                [
+                    'class' => 'btn btn-primary',
+                    'disabled' => $disabled,
+                ]
             )
         !!}
     </div>

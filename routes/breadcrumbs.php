@@ -13,16 +13,27 @@ Breadcrumbs::for('admin.logs.show', function ($trail, $log) {
 
 // Clients
 Breadcrumbs::for('clients.index', function ($trail) {
-    $trail->push(__('clients.index.breadcrumb'), url('clients'));
+    if (request()->user()->isAdmin()) {
+        $trail->push(__('admin.users.index.breadcrumb'), url('admin/users'));
+    } else {
+        $trail->push(__('clients.index.breadcrumb'), url('clients'));
+    }
 });
 
 // Clients > Client Profile
 Breadcrumbs::for('clients.show', function ($trail, $user) {
     $trail->parent('clients.index');
-    $trail->push(
-        __('clients.show.breadcrumb'),
-        url("clients/$user->id")
-    );
+    if (request()->user()->isAdmin()) {
+        $trail->push(
+            __('admin.users.show.breadcrumb', ['role' => $user->roleName()]),
+            url("admin/users/$user->id")
+        );
+    } else {
+        $trail->push(
+            __('clients.show.breadcrumb'),
+            url("clients/$user->id")
+        );
+    }
 });
 
 // Clients > Client Profile > Notes
@@ -162,13 +173,19 @@ Breadcrumbs::for('admin.clinics.index', function ($trail) {
 // Clinics > assign
 Breadcrumbs::for('admin.clinics.assignclinic', function ($trail, $clinic) {
     $trail->parent('admin.clinics.index');
-    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics'));
+    $trail->push(
+        __('admin.clinics.assignclinic.breadcrumb'),
+        url("admin/clinics/$clinic->uuid/assignclinic")
+    );
 });
 
 // Clinics > assign >assign user
 Breadcrumbs::for('admin.clinics.assignclinic.assignuser', function ($trail, $clinic) {
-    $trail->parent('admin.clinics.index');
-    $trail->push(__('admin.clinics.assignclinic.breadcrumb'), url('admin/clinics/$clinic->id/assignclinics/assign'));
+    $trail->parent('admin.clinics.assignclinic', $clinic);
+    $trail->push(
+        __('admin.clinics.assignclinic.breadcrumb-add-user'),
+        url("admin/clinics/$clinic->uuid/assignclinic/assign")
+    );
 });
 
 // Clinics > Create
@@ -216,7 +233,12 @@ Breadcrumbs::for('admin.roles.create', function ($trail) {
 
 // Groups
 Breadcrumbs::for('admin.groups.index', function ($trail) {
-    $trail->push(__('admin.groups.index.breadcrumb'), url('admin/groups'));
+    $trail->push(
+        __('admin.groups.index.breadcrumb'),
+        request()->user()->isAdmin() ?
+            url('admin/groups') :
+            url('groups')
+    );
 });
 
 // Groups > Create
@@ -242,7 +264,7 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
 
 // Admin > Groups > Notes
 Breadcrumbs::for('groups.notes.index', function ($trail, $group) {
-    // $trail->parent('groups.index');
+    $trail->parent('admin.groups.index');
     $trail->push(
         __('groups.notes.index.breadcrumb'),
         url("groups/$group->uuid/notes")
@@ -267,6 +289,51 @@ Breadcrumbs::for('groups.notes.show', function ($trail, $group, $note) {
     );
 });
 
+// Admin > Groups > Attachments > Create
+Breadcrumbs::for('groups.attachments.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.attachments.create.breadcrumb'),
+        url("groups/$group->uuid/attachments/create")
+    );
+});
+
+// Admin > Groups > Attachments > View
+Breadcrumbs::for('groups.attachments.show', function ($trail, $group, $attachment) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.attachments.show.breadcrumb'),
+        url("groups/$group->uuid/attachments/$attachment->uuid")
+    );
+});
+
+// Admin > Groups > Communication Log > Create
+Breadcrumbs::for('groups.communication.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.communication.create.breadcrumb'),
+        url("groups/$group->uuid/communication/create")
+    );
+});
+
+// Admin > Groups > Communication Log > View
+Breadcrumbs::for('groups.communication.show', function ($trail, $group, $communication) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.communication.show.breadcrumb'),
+        url("groups/$group->uuid/communication/$communication->uuid")
+    );
+});
+
+// Admin > Groups > Receipts > Create
+Breadcrumbs::for('groups.receipts.create', function ($trail, $group) {
+    $trail->parent('groups.notes.index', $group);
+    $trail->push(
+        __('clients.receipts.create.breadcrumb'),
+        url("groups/$group->uuid/receipts/create")
+    );
+});
+
 // Groups > Group Profile > Questionnaires
 Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
     $trail->push(
@@ -277,6 +344,7 @@ Breadcrumbs::for('groups.questionnaires.index', function ($trail, $group) {
 
 // Groups > Group Profile > Questionnaires > Assign
 Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
+    $trail->parent('admin.groups.index');
     $trail->push(
         __('groups.questionnaires.create.breadcrumb'),
         url("groups/$group->uuid/questionnaires/create")
@@ -285,6 +353,7 @@ Breadcrumbs::for('groups.questionnaires.create', function ($trail, $group) {
 
 // Groups > Group Profile > Questionnaires > View
 Breadcrumbs::for('groups.questionnaires.show', function ($trail, $group, $response) {
+    $trail->parent('groups.questionnaires.create', $group);
     $trail->push(
         __('groups.questionnaires.show.breadcrumb'),
         url("groups/$group->uuid/questionnaires/$response->uuid")
@@ -306,6 +375,12 @@ Breadcrumbs::for('admin.users.edit', function ($trail, $user) {
 Breadcrumbs::for('admin.users.invite', function ($trail) {
     $trail->parent('admin.users.index');
     $trail->push(__('admin.users.create.breadcrumb'), url('admin/users/invite'));
+});
+
+// Users > Invite
+Breadcrumbs::for('admin.users.add', function ($trail) {
+    $trail->parent('admin.users.index');
+    $trail->push(__('admin.users.add.breadcrumb'), url('admin/users/add'));
 });
 
 // Users > User Profile

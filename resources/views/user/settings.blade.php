@@ -18,10 +18,7 @@
                 )
             !!}
             @include('user.form-settings', [
-                'features' => [
-                    'change_password' => true,
-                    'change_signature' => true,
-                ]
+                'features' => []
             ])
             {!! Form::close() !!}
         </div>

@@ -43,7 +43,7 @@ class LoginController extends Controller
      * @return
      */
     public function authenticated()
-    {
+    { 
         if (auth()->user()->isAdmin()) {
             return redirect('/admin/dashboard');
         }

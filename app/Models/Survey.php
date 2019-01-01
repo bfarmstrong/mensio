@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,13 +16,28 @@ class Survey extends Model
 {
     // Log any changes to the survey model
     use Loggable;
+    use SetsUuids;
 
-    /**
+  /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['description', 'name'];
+    protected $fillable = ['description', 'name','user_id'];
+	
+    /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
+	
+    /**
+     * Sets the columns that should have a UUID generated.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * A survey may have many questionnaires attached to it.
@@ -30,13 +47,24 @@ class Survey extends Model
     public function questionnaires()
     {
         return $this->belongsToMany(
-            Questionnaire::class,
+            'App\Models\Questionnaire',
             'questionnaire_survey',
             'survey_id',
             'questionnaire_id'
         );
     }
 
+	/**
+     * A survey may have many users attached to it.
+     *
+     * @return BelongsTo
+     */
+    public function users()
+    {
+
+		return $this->belongsTo(User::class, 'user_id');
+    }
+	
     /**
      * A survey may have many responses.
      *

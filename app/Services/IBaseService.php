@@ -7,6 +7,8 @@ namespace App\Services;
  */
 interface IBaseService
 {
+    public function getModel();
+
     public function optional(bool $optional = true);
 
     public function all();
@@ -19,7 +21,7 @@ interface IBaseService
 
     public function findBy($field, $value = null);
 
-    public function paginate(int $limit = 15);
+    public function paginate(int $limit = 15, string $page = 'page');
 
     public function search(string $query);
 

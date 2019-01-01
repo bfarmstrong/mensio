@@ -27,6 +27,7 @@ class CreateClinicRequest extends FormRequest
     public function rules()
     {
         return [
+            'logo' => 'sometimes|file',
             'name' => 'required',
         ];
     }

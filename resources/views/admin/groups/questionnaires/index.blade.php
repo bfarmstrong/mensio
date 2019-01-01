@@ -14,12 +14,14 @@
                 @lang('clients.questionnaires.index.card-title')
             </span>
 
-            <a
-                class="btn btn-primary btn-sm ml-auto"
-                href="{{ url("clients/$user->id/questionnaires/create") }}"
-            >
-                @lang('clients.questionnaires.index.assign')
-            </a>
+            <div class="ml-auto">
+                <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/$user->id/questionnaires/create") }}"
+                >
+                    @lang('clients.questionnaires.index.assign')
+                </a>
+            </div>
         </div>
 
         <div class="card-body">

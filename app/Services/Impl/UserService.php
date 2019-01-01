@@ -6,6 +6,7 @@ use App\Exceptions\DigitalSignatureInvalidException;
 use App\Notifications\NewAccountEmail;
 use App\Services\BaseService;
 use Auth;
+use App\Models\Clinic;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -147,7 +148,10 @@ class UserService extends BaseService implements IUserService
     {
         $therapist = $this->find($therapist);
 
-        return $therapist->patients()->where('patient_id', $client)->exists();
+        return
+            $therapist->isAdmin() ||
+            $therapist->patients()->where('patient_id', $client)->exists()
+        ;
     }
 
     /**
@@ -335,10 +339,24 @@ class UserService extends BaseService implements IUserService
      *
      * @return void
      */
-    public function assignClinic($clinic, $user)
+	public function assignClinic($clinic=false, $user, $role_id=false)
     {
         $user = $this->find($user);
+		if($role_id == false){
+			$role_id = $user->roles()->pluck('role_id');
+		}
+			$user->clinics()->detach($clinic);
+			foreach($role_id as $role){
+				if($role != 5){
+					$user->clinics()->attach($clinic, ['role_id' => $role]);
+				} else if($clinic == false || $role == 5 ) {
+					$clinics = Clinic::pluck('id');
+					foreach($clinics as $clinic){
+						$user->clinics()->attach($clinic, ['role_id' => $role]);
+					}
+					$user->clinics()->attach(0, ['role_id' => $role]);
+				}
+			}
 
-        $user->clinics()->sync($clinic, false);
     }
 }

@@ -202,6 +202,16 @@ abstract class BaseService implements IBaseService, ICriteria
     }
 
     /**
+     * Returns the current model object.  Useful for retrieving the current
+     * query outside the scope of the service.
+     *
+     * @return Model
+     */
+    public function getModel() {
+        return $this->model;
+    }
+
+    /**
      * Sets the optional parameter.
      *
      * @param bool $optional
@@ -313,14 +323,15 @@ abstract class BaseService implements IBaseService, ICriteria
     /**
      * Returns a paginated list of a model.
      *
-     * @param int $limit
+     * @param int    $limit
+     * @param string $page
      *
      * @return LengthAwarePaginator
      */
-    public function paginate(int $limit = 15)
+    public function paginate(int $limit = 15, string $page = 'page')
     {
         $this->applyCriteria();
-        $results = $this->model->paginate($limit);
+        $results = $this->model->paginate($limit, ['*'], $page);
         $this->resetCriteria();
 
         return $results;

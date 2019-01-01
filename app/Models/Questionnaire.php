@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Loggable;
+use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +15,7 @@ class Questionnaire extends Model
 {
     // Log any changes to the questionnaire model
     use Loggable;
+    use SetsUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +23,13 @@ class Questionnaire extends Model
      * @var array
      */
     protected $fillable = ['data', 'description', 'name', 'scoring_method'];
+
+    /**
+     * The columns that generate a UUID.
+     *
+     * @var array
+     */
+    protected $uuids = ['uuid'];
 
     /**
      * A questionnaire has many questions assigned to it.

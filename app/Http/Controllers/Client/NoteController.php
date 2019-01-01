@@ -66,12 +66,13 @@ class NoteController extends Controller
      *
      * @var IClinicService
      */
-    protected $clinicservice;
+    protected $clinicService;
 
     /**
      * Creates an instance of `NoteController`.
      *
      * @param IAttachmentService       $attachmentService
+     * @param IClinicService           $clinicService
      * @param ICommunicationLogService $communicationLogService
      * @param INoteService             $noteService
      * @param IReceiptService          $receiptService
@@ -79,6 +80,7 @@ class NoteController extends Controller
      */
     public function __construct(
         IAttachmentService $attachmentService,
+        IClinicService $clinicService,
         ICommunicationLogService $communicationLogService,
         INoteService $noteService,
         IReceiptService $receiptService,
@@ -89,7 +91,7 @@ class NoteController extends Controller
         $this->noteService = $noteService;
         $this->receiptService = $receiptService;
         $this->userService = $userService;
-        $this->clinicservice = $clinicservice;
+        $this->clinicService = $clinicService;
     }
 
     /**
@@ -146,35 +148,45 @@ class NoteController extends Controller
         $client = $this->userService->find($client);
         $this->authorize('viewNotes', $client);
         $clinic_id = request()->attributes->get('clinic')->id;
-        $notes = $this->noteService
+        $finals = $this->noteService
             ->pushCriteria(new WhereClient($client->id))
             ->pushCriteria(new WhereParent())
             ->pushCriteria(new WithTherapist())
+            ->pushCriteria(new WhereEqual('is_draft', 0))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+            ->paginate(15, 'finals_page');
+
+        $drafts = $this->noteService
+            ->pushCriteria(new WhereClient($client->id))
+            ->pushCriteria(new WhereParent())
+            ->pushCriteria(new WithTherapist())
+            ->pushCriteria(new WhereEqual('is_draft', 1))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->paginate(15, 'drafts_page');
 
         $attachments = $this->attachmentService
             ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+            ->paginate(15, 'attachments_page');
 
         $communication = $this->communicationLogService
             ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+            ->paginate(15, 'communication_page');
 
         $receipts = $this->receiptService
             ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+            ->paginate(15, 'receipts_page');
 
         return view('clients.notes.index')->with([
             'attachments' => $attachments,
             'communication' => $communication,
-            'notes' => $notes,
+            'drafts' => $drafts,
+            'finals' => $finals,
             'receipts' => $receipts,
             'user' => $client,
         ]);
@@ -218,6 +230,12 @@ class NoteController extends Controller
         $client = $this->userService->find($request->user_id);
         $this->authorize('addNote', $client);
         $clinic_id = request()->attributes->get('clinic')->id ?? null;
+        if (! $request->get('is_draft')) {
+            $this->userService->compareSignature(
+                $request->user(),
+                $request->get('signature')
+            );
+        }
         $this->noteService->create(array_merge($request->all(), [
             'client_id' => $client->id,
             'clinic_id' => $clinic_id,
@@ -245,6 +263,12 @@ class NoteController extends Controller
             ->pushCriteria(new WhereParent())
             ->findBy('uuid', $request->note_id);
 
+        if (! $request->get('is_draft')) {
+            $this->userService->compareSignature(
+                $request->user(),
+                $request->get('signature')
+            );
+        }
         $this->noteService->update($note, $request->all());
 
         return redirect()->to("clients/$client->id/notes")->with([

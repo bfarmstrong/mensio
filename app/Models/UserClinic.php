@@ -26,6 +26,7 @@ class UserClinic extends Model
     protected $fillable = [
         'user_id',
         'clinic_id',
+		'role_id',
     ];
 
     /**
@@ -56,5 +57,15 @@ class UserClinic extends Model
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+	
+	/**
+     * A UserClinic is created for a user.
+     *
+     * @return BelongsTo
+    */
+    public function roles()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

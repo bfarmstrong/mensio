@@ -7,12 +7,13 @@ use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use App\Services\Impl\IClinicService;
+use App\Services\Impl\ISurveyService;
 use App\Services\Impl\IResponseService;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use \App\Models\Survey;
 /**
  * Controller which handles unauthenticated access to questionnaires.
  */
@@ -31,16 +32,23 @@ class ResponseController extends Controller
      * @var IClinicService
      */
     protected $clinicservice;
-
+	
+    /**
+     * The service implementation for survey.
+     *
+     * @var ISurveyService
+     */
+    protected $survey;
     /**
      * Creates an instance of `ResponseController`.
      *
      * @param IResponseService $response
      */
-    public function __construct(IResponseService $response, IClinicService $clinicservice)
+    public function __construct(IResponseService $response, IClinicService $clinicservice, ISurveyService $survey)
     {
         $this->response = $response;
         $this->clinicservice = $clinicservice;
+		$this->survey = $survey;
     }
 
     /**
@@ -116,7 +124,7 @@ class ResponseController extends Controller
      * @return Response
      */
     public function updateData(UpdateDataRequest $request)
-    {
+    { 
         // Ensure that the request signature is valid
         if (! $request->hasValidSignature()) {
             abort(401);
@@ -134,5 +142,23 @@ class ResponseController extends Controller
         return redirect()
             ->back()
             ->with('message', __('responses.index.questionnaire-complete'));
+    } 
+	
+	public function updateDataSurvey(UpdateDataRequest $request,string $survey)
+    {
+		
+        // Ensure that the request signature is valid
+        if (! $request->hasValidSignature()) {
+            abort(401);
+        } 
+		$survey = Survey::where('uuid',$survey)->first();
+		
+		DB::transaction(function () use ($request, $survey) { 
+			$this->response->answersurvey($survey->id, $request->get('data'));
+		});
+
+        return redirect()
+            ->back()
+            ->with('message', __('complete'));
     }
 }

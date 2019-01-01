@@ -31,6 +31,7 @@ class Note extends Model
         'client_id',
         'contents',
         'digital_signature',
+        'group_id',
         'is_draft',
         'note_id',
         'therapist_id',

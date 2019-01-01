@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupCreateRequest;
 use App\Models\Group;
-use App\Models\GroupNote;
 use App\Models\User;
+use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WithRole;
 use App\Services\Impl\IGroupService;
 use App\Services\Impl\IUserService;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -41,34 +42,47 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     *
      * @return Response
      */
     public function index(Request $request)
     {
+        $user = $request->user_id ?? null;
+
         if ($request->user()->isAdmin()) {
             $groups = $this->group->paginate();
-            if ($request->user_id) {
-                $all_groups = $groups;
-                $user = User::find($request->user_id);
-                $groups = $user->groups()->paginate();
+            if ($user) {
+                $user = $this->user->find($user);
+                $userGroups = $this->group->findByClient($user);
 
                 return view('admin.users.groups.index')->with([
-                'groups' => $groups,
-                'user' => $user,
-                'all_groups' => $all_groups,
+                    'all_groups' => $groups->reject(function ($value) use ($userGroups) {
+                        return $userGroups->contains($value);
+                    }),
+                    'groups' => $userGroups,
+                    'user' => $user,
                 ]);
-            } else {
-                return view('admin.groups.index')->with([
-                'groups' => $groups,
-            ]);
             }
-        } else {
-            $groups = $request->user()->groups()->paginate();
 
             return view('admin.groups.index')->with([
                 'groups' => $groups,
             ]);
         }
+
+        $groups = $this->group
+            ->getByCriteria(
+                new WhereRelationEqual(
+                    'users',
+                    'users.id',
+                    $request->user()->id
+                )
+            )
+            ->paginate();
+
+        return view('admin.groups.index')->with([
+            'groups' => $groups,
+        ]);
     }
 
     /**
@@ -107,6 +121,8 @@ class GroupController extends Controller
             ->pushCriteria(new WhereTherapist())
             ->pushCriteria(new WithRole())
             ->all();
+
+        $therapists = $therapists->sortBy('name');
 
         return view('admin.groups.create')->with([
             'therapists' => $therapists,
@@ -164,6 +180,8 @@ class GroupController extends Controller
             ->pushCriteria(new WithRole())
             ->all();
 
+        $therapists = $therapists->sortBy('name');
+
         return view('admin.groups.edit')->with([
             'group' => $group,
             'therapists' => $therapists,
@@ -172,7 +190,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Updates a group in the database.  Syncs the list of therapists.
      *
      * @param Request $request
      * @param string  $uuid
@@ -181,25 +199,29 @@ class GroupController extends Controller
      */
     public function update(Request $request, string $uuid)
     {
-        $group = $this->group->findBy('uuid', $uuid);
+        return DB::transaction(function () use ($request, $uuid) {
+            $group = $this->group->findBy('uuid', $uuid);
 
-        $this->group->update(
-            $group->id,
-            $request->except(['_token', '_method'])
-        );
-        $users = $group->users()->get();
-        foreach ($users as $user) {
-            $group->users()->detach($user->user_id);
-        }
+            $this->group->update(
+                $group,
+                $request->except(['_token', '_method'])
+            );
 
-        foreach ($request->therapist_id as $userid) {
-            $user = User::find($userid);
-            $user->groups()->attach($group->id);
-        }
+            $therapists = $this->group->findTherapists($group);
+            $users = $group->users();
+            foreach ($therapists as $therapist) {
+                $users->detach($therapist->id);
+            }
 
-        return back()->with([
-            'message' => __('admin.groups.index.updated-group'),
-        ]);
+            foreach ($request->therapist_id as $therapist) {
+                $therapist = $this->user->find($therapist);
+                $users->attach($therapist->id);
+            }
+
+            return back()->with([
+                'message' => __('admin.groups.index.updated-group'),
+            ]);
+        });
     }
 
     /**
@@ -220,7 +242,6 @@ class GroupController extends Controller
         } else {
             $group = $this->group->findBy('uuid', $uuid);
 
-            GroupNote::where('group_id', $group->id)->delete();
             $users = $group->users()->get();
             foreach ($users as $user) {
                 $group->users()->detach($user->user_id);

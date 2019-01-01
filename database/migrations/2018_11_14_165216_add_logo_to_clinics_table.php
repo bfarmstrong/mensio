@@ -4,7 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUuidToGroupNotes extends Migration
+/**
+ * Adds the logo image column to the clinics table.
+ */
+class AddLogoToClinicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +16,8 @@ class AddUuidToGroupNotes extends Migration
      */
     public function up()
     {
-        Schema::table('group_notes', function (Blueprint $table) {
-            $table->uuid('uuid');
-            $table->index('uuid');
+        Schema::table('clinics', function (Blueprint $table) {
+            $table->string('logo')->nullable();
         });
     }
 
@@ -26,9 +28,8 @@ class AddUuidToGroupNotes extends Migration
      */
     public function down()
     {
-        Schema::table('group_notes', function (Blueprint $table) {
-            $table->dropIndex(['uuid']);
-            $table->dropColumn('uuid');
+        Schema::table('clinics', function (Blueprint $table) {
+            $table->dropColumn('logo');
         });
     }
 }

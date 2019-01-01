@@ -36,7 +36,7 @@ class LogAuditService
      */
     public function all()
     {
-        return $this->model->all();
+        return $this->model->with('subject', 'causer')->all();
     }
 
     /**
@@ -48,7 +48,7 @@ class LogAuditService
      */
     public function find(string $id)
     {
-        $log = $this->model->find($id);
+        $log = $this->model->with('subject', 'causer')->find($id);
         activity()->performedOn($log)->log('viewed');
 
         return $log;
@@ -61,6 +61,9 @@ class LogAuditService
      */
     public function paginate()
     {
-        return $this->model->orderBy('created_at', 'desc')->paginate();
+        return $this->model
+            ->with('subject', 'causer')
+            ->orderBy('created_at', 'desc')
+            ->paginate();
     }
 }
