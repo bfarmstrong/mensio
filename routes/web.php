@@ -209,6 +209,7 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::get('/dashboard', 'PagesController@dashboard');
+        Route::post('/dashboard', 'PagesController@checkconsent');
 
         /*
         |--------------------------------------------------------------------------

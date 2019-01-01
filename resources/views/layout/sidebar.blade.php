@@ -221,3 +221,11 @@
         type="button"
     ></button>
 </div>
+<script>
+
+	function switch_domain(selval) {
+		$('#clinic_id').val(selval);
+		document.getElementById("switchclinic").submit(); 
+	}
+
+</script>

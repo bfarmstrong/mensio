@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Notification;
+use App\Notifications\ConsentEmail;
 
 class PagesController extends Controller
 {
@@ -27,4 +29,12 @@ class PagesController extends Controller
 
         return view('dashboard');
     }
+	public function checkconsent()
+	{
+		if (\Auth::user()->first_time_login == 0) {
+			\Auth::user()->first_time_login = 1; 
+			\Auth::user()->save();
+			Notification::send(\Auth::user(), new ConsentEmail());
+		}
+	}
 }
