@@ -34,6 +34,22 @@ sudo chmod -R 777 storage bootstrap/cache
 
 After doing all of this, you should be able to access your localhost URL, `http://localhost` or the default Mindspace clinic, `http://mindspace.localhost`.  You should be able to sign into both websites with the default administrator credentials, `admin@example.com:secret`.
 
+## Deployment
+
+The only action required to deploy to the production environment is to ensure that a Docker image is built for the most up-to-date code.  To generate this preview you must run the following code.  Ensure that you have Ansible installed on your machine.
+
+```bash
+# Install Ansible if it isn't installed already
+brew install ansible
+
+# Run the "playbook" to generate the Docker image
+ansible-playbook playbooks/deploy_docker_image.yml
+```
+
+You **must** be authenticated with the production AWS on your machine.  If you aren't then the upload step will fail.  Once the image has been uploaded you then can go to ECS and update the existing task in the cluster to use the newest image tag.  The cluster should replace the instances automatically.
+
+There is a second task in ECS for migrating the database.  If you want to migrate the production database then simply run the migrate task in ECS and it will run the latest migrations from the newest image tag.
+
 ## Extras
 
 ### Importing Legacy Users
@@ -49,6 +65,8 @@ To import the users into a specific clinic, provide the UUID of the clinic as an
 ```bash
 php artisan import:legacy-users --clinic="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
+
+When not running in production `APP_ENV=production`, the data that is loaded from the legacy users server will be anonymized with random values.
 
 ### Importing Legacy Questionnaires
 

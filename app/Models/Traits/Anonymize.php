@@ -19,8 +19,7 @@ trait Anonymize
         $faker = Factory::create();
 
         static::creating(function ($instance) use ($faker) {
-            // Only anonymize data when not in production
-            if (config('app.env') !== 'production') {
+            if (config('anonymize.enabled') === true) {
                 foreach ($instance->getAnonymizedColumns() as $column => $fn) {
                     if (! is_null($instance[$column])) {
                         $instance[$column] = $faker->$fn;
