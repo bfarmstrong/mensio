@@ -16,6 +16,7 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
+		"league/flysystem-aws-s3-v3": "^1.0",
         "pragmarx/countries-laravel": "^0.6.2",
         "spatie/laravel-activitylog": "^2.8",
         "stevebauman/purify": "2.0.*",

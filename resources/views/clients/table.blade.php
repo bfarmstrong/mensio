@@ -42,7 +42,7 @@
             
             <a
                 class="dropdown-item"
-                href="{{ url("clients/$user->id/surveys") }}"
+                href="{{ url("clients/USER_ID/surveys") }}"
             >
                 @lang('clients.table.surveys')
             </a>
