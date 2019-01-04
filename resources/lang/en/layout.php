@@ -16,6 +16,7 @@ return [
         'toggle-sidebar' => 'Toggle sidebar',
     ],
     'sidebar' => [
+		'miscellaneous' => 'Miscellaneous',
         'activity' => 'Activity',
         'admin' => 'Admin',
         'all-clients' => 'All Clients',

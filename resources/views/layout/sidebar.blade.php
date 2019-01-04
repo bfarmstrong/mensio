@@ -102,7 +102,16 @@
                                 @lang('layout.sidebar.users')
                             </a>
                         </li>
+					</ul>
+				</li>
+				<li class="nav-item nav-dropdown open">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="nav-icon fas fa-user-tie"></i>
+                        @lang('layout.sidebar.miscellaneous')
+                    </a>
+					<ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
 						<li class="nav-item">
+
                             <a
                                 class="nav-link"
                                 href="{{ url('admin/surveys') }}"
@@ -164,7 +173,16 @@
 							@lang('layout.sidebar.questionnaires')
 						</a>
 					</li>
-				<li class="nav-item">
+
+				</ul>
+			</li>
+			<li class="nav-item nav-dropdown open">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon fas fa-user-tie"></i>
+                        @lang('layout.sidebar.miscellaneous')
+                </a>
+				<ul class="nav-dropdown-items" style="padding-left: 15px;list-style: none;">
+					<li class="nav-item">
                     <a
                         class="nav-link"
                         href="{{ url('groups') }}"
@@ -172,7 +190,7 @@
                         <i class="nav-icon fas fa-user-plus"></i>
                         @lang('layout.sidebar.groups')
                     </a>
-                </li>
+					</li>
 				</ul>
 			</li>
             @endif
