@@ -78,8 +78,17 @@
                 __('partials.form-address.province')
             )
         !!}
-
-        {!! Form::hidden('_province', $province ?? null) !!}
+		@if(isset($clinic))
+			{!! Form::hidden('_province', $province ?? $clinic->province) !!}
+		@php 
+			$selected_country = $clinic->country;
+		@endphp
+		@else
+			{!! Form::hidden('_province', $province ?? null) !!}
+		@php 
+			$selected_country = 'CAN';
+		@endphp
+		@endif
         {!!
             Form::select(
                 'province',
@@ -104,7 +113,7 @@
                 Countries::all()->map(function ($country) {
                     return $country->get('name.common');
                 }),
-                old('country') ?? 'CAN',
+                old('country') ?? $selected_country,
                 ['class' => 'form-control countrypicker selectpicker']
             )
         !!}

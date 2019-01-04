@@ -327,7 +327,6 @@
         !!}
     </div>
 </div>
-
 <div class="form-row">
     <div class="form-group col-12 col-md-6">
         {!!
@@ -337,7 +336,7 @@
             )
         !!}
 
-        {!! Form::hidden('_province', $user->province ?? null) !!}
+        {!! Form::hidden('_province', $user->province ?? $currentClinic->province) !!}
         {!!
             Form::select(
                 'province',
@@ -362,7 +361,7 @@
                 Countries::all()->map(function ($country) {
                     return $country->get('name.common');
                 }),
-                old('country') ?? 'CAN',
+                old('country') ?? $currentClinic->country,
                 ['class' => 'form-control countrypicker selectpicker']
             )
         !!}

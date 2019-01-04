@@ -21,6 +21,7 @@ use Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Route;
+use App\Services\Criteria\General\WhereNotEqual;
 use Yajra\Datatables\Datatables;
 
 /**
@@ -250,8 +251,13 @@ class UserController extends Controller
     public function getInvite()
     {
         $doctors = $this->doctorService->all();
-        $roles = $this->roleService->all();
-
+		if (request()->user()->isSuperAdmin()) {
+			$roles = $this->roleService->all();
+		} else {
+			$roles = $this->roleService
+					->pushCriteria(new WhereNotEqual('level',5))
+					->all();
+		}
         return view('admin.users.invite', [
             'doctors' => $doctors,
             'roles' => $roles,

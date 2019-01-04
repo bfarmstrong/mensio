@@ -29,7 +29,6 @@ class UserInviteRequest extends FormRequest
     {
         return [
             'email' => 'required|unique:users',
-            'health_card_number' => 'required|unique:users',
         ];
     }
 }
