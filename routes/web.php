@@ -105,6 +105,7 @@ Route::group(['middleware' => ['domain']], function () {
             Route::get('', 'ClientController@index');
             Route::post('search', 'ClientController@search');
             Route::get('{user_id}', 'ClientController@show');
+            Route::get('{user_id}/charts', 'ClientController@charts');
 
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('{user_id}/notes', 'NoteController@index');

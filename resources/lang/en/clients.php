@@ -176,6 +176,9 @@ return [
             'submit' => 'Submit',
         ],
     ],
+	'chart' => [
+		'title' => 'Response Chart',
+	],
     'show' => [
         'assign-questionnaire' => 'Assign Questionnaire',
         'assigned-questionnaires' => 'Assigned Questionnaires',
@@ -195,7 +198,8 @@ return [
         'name' => 'Name',
         'notes' => 'Notes',
         'questionnaires' => 'Questionnaires',
-        'surveys' => 'Surveys',
+        'charts' => 'Charts',
+		'surveys' => 'Surveys',
         'toggle-dropdown' => 'Toggle dropdown',
         'view' => 'View',
     ],

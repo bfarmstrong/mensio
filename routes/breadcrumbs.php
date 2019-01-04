@@ -110,7 +110,7 @@ Breadcrumbs::for('clients.receipts.create', function ($trail, $user) {
 
 // Clients > Client Profile > Questionnaires
 Breadcrumbs::for('clients.questionnaires.index', function ($trail, $user) {
-    $trail->parent('clients.show', $user);
+   // $trail->parent('clients.show', $user);
     $trail->push(
         __('clients.questionnaires.index.breadcrumb'),
         url("clients/$user->id/questionnaires")
@@ -259,6 +259,15 @@ Breadcrumbs::for('admin.users.groups.index', function ($trail, $user) {
     $trail->push(
         __('admin.users.groups.index.breadcrumb'),
         url("admin/users/$user->id/groups")
+    );
+});
+
+// User > charts
+Breadcrumbs::for('admin.users.charts.title', function ($trail, $user) {
+	$trail->push(__('clients.index.breadcrumb'), url('clients'));
+    $trail->push(
+        __('admin.users.charts.title'),
+        url("admin/clients/$user->id")
     );
 });
 

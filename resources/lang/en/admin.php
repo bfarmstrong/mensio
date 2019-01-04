@@ -284,6 +284,10 @@ return [
             ],
     ],
     'users' => [
+		'charts' => [
+            'breadcrumb' => 'Response Chart',
+			'title' => 'Add User',
+        ],
         'add' => [
             'breadcrumb' => 'Invite',
             'form-title' => 'Invite User',
@@ -406,8 +410,10 @@ return [
                 'supervisor-required' => 'A supervisor should be assigned.',
             ],
         ],
-
-       'groups' => [
+		'charts' =>[
+			'title' => 'Charts',
+		],
+		'groups' => [
             'form-add' => [
                 'name' => 'Name',
                 'save' => 'Save',

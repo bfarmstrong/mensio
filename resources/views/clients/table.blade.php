@@ -54,6 +54,14 @@
                 <i class="fas fa-question mr-1"></i>
                 @lang('clients.table.questionnaires')
             </a>
+			
+			<a
+                class="dropdown-item"
+                href="{{ url("clients/$user->id/charts") }}"
+            >
+                    <i class="fas fa-chart-bar mr-1"></i>
+                    @lang('clients.table.charts')
+            </a>
         </div>
     </div>
 </div>

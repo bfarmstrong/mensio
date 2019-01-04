@@ -15,6 +15,11 @@ use App\Services\Impl\IQuestionnaireService;
 use App\Services\Impl\IResponseService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Response;
+use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\Questionnaire\WhereAssigned;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\Questionnaire\WithQuestionnaire;
+use Yajra\Datatables\Datatables;
 use Yajra\Datatables\Datatables;
 
 /**
@@ -142,4 +147,40 @@ class ClientController extends Controller
             'user' => $client,
         ]);
     }
+	 
+	/**
+     * Displays the chart for a client's information. 
+     * 
+     *
+     * @param string $user
+     *
+     * @return Response
+    */
+	public function charts(string $user)
+	{
+		$client = $this->user
+            ->pushCriteria(new WhereClient())
+            ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+            ->pushCriteria(new WithRole())
+            ->find($user);
+        $this->authorize('view', $client);
+		$clinic_id = request()->attributes->get('clinic')->id;
+        $responses = $this->response
+            ->pushCriteria(new WithRelation('questionnaire'))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->pushCriteria(new WhereAssigned(\Auth::user()->id))
+            ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
+			->all();
+		foreach($responses as $response) {
+		    $response_details = $this->response
+				->getByCriteria(new WithQuestionnaire())
+				->findBy('uuid', $response->uuid);
+			$score[$response->uuid] = $this->response->getScore($response_details);
+		}
+		return view('clients.charts.show')->with([
+				'user' => $client,
+				'score' => $score,
+				'responses' => $responses
+			]);
+	}
 }
