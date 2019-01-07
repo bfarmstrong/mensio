@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUuidToSurveys extends Migration
+class AddDocumentTypeIdToDocuments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUuidToSurveys extends Migration
      */
     public function up()
     {
-        Schema::table('surveys', function (Blueprint $table) {
-            $table->uuid('uuid');
+        Schema::table('documents', function (Blueprint $table) {
+            $table->text('document_type_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddUuidToSurveys extends Migration
      */
     public function down()
     {
-        Schema::table('surveys', function (Blueprint $table) {
-            $table->dropColumn('uuid');
+        Schema::table('documents', function (Blueprint $table) {
+            //
         });
     }
 }

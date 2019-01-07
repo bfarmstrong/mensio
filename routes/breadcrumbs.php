@@ -108,6 +108,20 @@ Breadcrumbs::for('clients.receipts.create', function ($trail, $user) {
     );
 });
 
+// Admin  > documents
+Breadcrumbs::for('admin.documents.index', function ($trail) {
+    $trail->push(__('admin.documents.index.breadcrumb'), url('admin/documents'));
+});
+
+// Admin > documents > Create Attachment
+Breadcrumbs::for('admin.documents.create', function ($trail, $user) {
+	$trail->parent('admin.documents.index', $user);
+    $trail->push(
+        __('admin.documents.create.breadcrumb'),
+        url("admin/documents/create")
+    );
+});
+
 // Clients > Client Profile > Questionnaires
 Breadcrumbs::for('clients.questionnaires.index', function ($trail, $user) {
     $trail->parent('clients.show', $user);

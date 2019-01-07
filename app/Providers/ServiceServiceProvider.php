@@ -31,5 +31,6 @@ class ServiceServiceProvider extends ServiceProvider
         \App\Services\Impl\ISurveyService::class => \App\Services\Impl\SurveyService::class,
         \App\Services\Impl\IUserService::class => \App\Services\Impl\UserService::class,
         \App\Services\Impl\IClinicService::class => \App\Services\Impl\ClinicService::class,
+        \App\Services\Impl\IDocumentService::class => \App\Services\Impl\DocumentService::class,
     ];
 }

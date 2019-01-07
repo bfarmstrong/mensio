@@ -218,6 +218,14 @@ Route::group(['middleware' => ['domain']], function () {
         */
         Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
             Route::get('dashboard', 'DashboardController@index');
+			/*
+            |--------------------------------------------------------------------------
+            | migrate old documents
+            |--------------------------------------------------------------------------
+            */
+			Route::get('documents', 'DocumentController@index');
+            Route::get('documents/create', 'DocumentController@create');
+            Route::post('documents', 'DocumentController@store');
             /*
             |--------------------------------------------------------------------------
             | Surveys
