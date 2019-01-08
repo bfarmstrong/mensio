@@ -62,7 +62,7 @@
         </div>
     </div>
 </div>
-
+@include('partials.digital-signature')
 <div class="form-row">
     <div class="form-group col-12 mb-0">
         {!!

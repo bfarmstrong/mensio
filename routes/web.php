@@ -225,6 +225,7 @@ Route::group(['middleware' => ['domain']], function () {
             */
 			Route::get('documents', 'DocumentController@index');
             Route::get('documents/create', 'DocumentController@create');
+            Route::post('documents/postcreate', 'DocumentController@postcreate');
             Route::post('documents', 'DocumentController@store');
             /*
             |--------------------------------------------------------------------------

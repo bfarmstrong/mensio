@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Services\Impl\IDocumentService;
 use App\Services\Impl\IUserService;
 use App\Services\Impl\IAttachmentService;
+use App\DataTables\DocumentsDataTable;
+use App\DataTables\DocumentsDataTablesEditor;
 
 /**
  * Manages administrative actions against Document.
@@ -53,15 +55,18 @@ class DocumentController extends Controller
      *
      * @return document
      */
-    public function index()
+/*     public function index()
     {
 		$documents = $this->documentService->paginate();
 
         return view('admin.documents.index')->with([
                 'documents' => $documents,
             ]);
+    } */
+	public function index(DocumentsDataTable $dataTable)
+    {
+        return $dataTable->render('admin.documents.index');
     }
-
     /**
      * Show the form for creating a Document.
      *
@@ -84,44 +89,79 @@ class DocumentController extends Controller
      *
      * @return Response
      */
-	public function store(Request $request)
+	public function postcreate(Request $request)
     {
        
         $client = $this->userService->find(request()->user()->id);
-		foreach ($request->file('file') as $files) {
-			$file = $files;
-			
-			$path = $file->store('document'); 
-			$attachment_id = $this->attachmentService->create([
-				'clinic_id' => $request->attributes->get('clinic')->id,
-				'file_location' => $path,
-				'file_name' => $file->getClientOriginalName(),
-				'file_size' => $file->getClientSize(),
-				'mime_type' => $file->getClientMimeType(),
-				'therapist_id' => $request->user()->id,
-				'user_id' => $client->id,
-			]);
+		if(is_array($request->file('file'))){
+			foreach ($request->file('file') as $files) {
+				$this->userService->compareSignature(
+					$request->user(),
+					$request->get('signature')
+				);
+				$file = $files;
+				
+				$path = $file->store('document'); 
+				$attachment_id = $this->attachmentService->create([
+					'clinic_id' => $request->attributes->get('clinic')->id,
+					'file_location' => $path,
+					'file_name' => $file->getClientOriginalName(),
+					'file_size' => $file->getClientSize(),
+					'mime_type' => $file->getClientMimeType(),
+					'therapist_id' => $request->user()->id,
+					'user_id' => $client->id,
+				]);
 
-			$this->documentService->create([
-				'name' => $request->name,
-				'file_location' => $path,
-				'file_name' => $file->getClientOriginalName(),
-				'file_size' => $file->getClientSize(),
-				'mime_type' => $file->getClientMimeType(),
-				'user_id' => $client->id,
-				//'digital_signature' =>,
-				'description' => $request->description,
-				//'uuid' =>,
-				//'date' =>,
-				//'document_type' => 4,
-				'clinic_id' => $request->attributes->get('clinic')->id,
-				'document_type_id' => $attachment_id->uuid
-			]);
+				$this->documentService->create([
+					'name' => $request->name,
+					'file_location' => $path,
+					'file_name' => $file->getClientOriginalName(),
+					'file_size' => $file->getClientSize(),
+					'mime_type' => $file->getClientMimeType(),
+					'user_id' => $client->id,
+					'description' => $request->description,
+					'clinic_id' => $request->attributes->get('clinic')->id,
+					'document_type_id' => $attachment_id->uuid
+				]);
+			}
+		} else {
+				$file = $request->file('file');
+				$this->userService->compareSignature(
+					$request->user(),
+					$request->get('signature')
+				);
+				$path = $file->store('document'); 
+				$attachment_id = $this->attachmentService->create([
+					'clinic_id' => $request->attributes->get('clinic')->id,
+					'file_location' => $path,
+					'file_name' => $file->getClientOriginalName(),
+					'file_size' => $file->getClientSize(),
+					'mime_type' => $file->getClientMimeType(),
+					'therapist_id' => $request->user()->id,
+					'user_id' => $client->id,
+				]);
+
+				$this->documentService->create([
+					'name' => $request->name,
+					'file_location' => $path,
+					'file_name' => $file->getClientOriginalName(),
+					'file_size' => $file->getClientSize(),
+					'mime_type' => $file->getClientMimeType(),
+					'user_id' => $client->id,
+					'description' => $request->description,
+					'clinic_id' => $request->attributes->get('clinic')->id,
+					'document_type_id' => $attachment_id->uuid
+				]);
 		}
         return redirect()
             ->to("admin/documents/create")
             ->with([
                 'message' => __('clients.attachments.create.created-attachment'),
             ]);
+    }
+	
+	public function store(DocumentsDataTablesEditor $editor)
+    {
+        return $editor->process(request());
     }
 }

@@ -16,7 +16,7 @@
             {!!
                 Form::open([
                     'files' => true,
-                    'url' => url("admin/documents"),
+                    'url' => url("admin/documents/postcreate"),
                 ])
             !!}
             @include('admin.documents.form')

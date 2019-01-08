@@ -160,6 +160,7 @@ return [
         App\Providers\ImporterServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ServiceServiceProvider::class,
+		Yajra\DataTables\EditorServiceProvider::class,
     ],
 
     /*
