@@ -56,12 +56,12 @@ class DocumentsDataTable extends DataTable
                 'data' => null,
                 'defaultContent' => '',
                 'className' => 'select-checkbox',
-                'title' => 'id',
+                'title' => '',
                 'orderable' => false,
                 'searchable' => false
             ],
             'name',
-			'document_type (1-Notes,2-Questionnaire,3-Contact log )',
+			'document_type (1-Notes,2-Other Attachments )',
 			'Allocated date'
         ];
     }

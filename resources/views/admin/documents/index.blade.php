@@ -64,8 +64,7 @@
 							type: "select",
 							ipOpts: [
 								{ label: "Notes", value: "1" },
-								{ label: "Questionnaire", value: "2"},
-								{ label: "Contact log ", value: "3"},
+								{ label: "Other Attachments", value: "2"}
 								],
 							editField: "document_type" ,
 							"default": 1							

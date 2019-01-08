@@ -25,7 +25,7 @@ class CreateDocumentsTable extends Migration
 			$table->text('description');
 			$table->uuid('uuid');
 			$table->text('date');
-			$table->integer('document_type')->unsigned()->comment = '1-Notes,2-Questionnaire,3-contact log';
+			$table->integer('document_type')->unsigned()->comment = '1-Notes,2-Other attachments';
 			$table->integer('clinic_id')->unsigned();
             $table->timestamps();
         });
