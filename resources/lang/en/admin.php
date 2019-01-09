@@ -219,6 +219,7 @@ return [
 			'form' =>[
 				'name' =>'Name',				
 				'description' => 'Description',
+				'document_type' => 'Document Type',
 			],
 	],
 	'surveys' => [
@@ -397,6 +398,7 @@ return [
             'switch-user' => 'Switch User',
             'therapists' => 'Therapists',
             'title' => ':Role Profile',
+            'documents' => 'Other Documents',
         ],
         'table' => [
             'actions' => 'Actions',

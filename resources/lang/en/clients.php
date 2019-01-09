@@ -129,6 +129,12 @@ return [
             'view' => 'View',
         ],
     ],
+	'documents' => [
+		'form' => [
+            'signed' => 'Signed submit',
+            'unsigned' => 'Unsigned submit',
+        ],
+	],
     'questionnaires' => [
         'create' => [
             'assign-questionnaire' => 'Assign Questionnaire',

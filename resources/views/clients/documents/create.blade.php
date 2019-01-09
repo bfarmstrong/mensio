@@ -16,10 +16,10 @@
             {!!
                 Form::open([
                     'files' => true,
-                    'url' => url("admin/documents/postcreate"),
+                    'url' => url("clients/documents/postcreate/$client->id"),
                 ])
             !!}
-            @include('admin.documents.form')
+            @include('clients.documents.form')
             {!! Form::close() !!}
         </div>
     </div>

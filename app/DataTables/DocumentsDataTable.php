@@ -27,7 +27,7 @@ class DocumentsDataTable extends DataTable
      */
     public function query(Document $model)
     {
-        return $model->newQuery()->select('id', 'name','document_type','date');
+        return $model->newQuery()->select('id', 'name','document_type','date','is_signed')->where( 'client_id', \Request::segment(3) );
     }
 
     /**
@@ -61,8 +61,9 @@ class DocumentsDataTable extends DataTable
                 'searchable' => false
             ],
             'name',
-			'document_type (1-Notes,2-Other Attachments )',
-			'Allocated date'
+			'document_type',
+			'Allocated date',
+			'Is Signed'
         ];
     }
 

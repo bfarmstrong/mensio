@@ -34,7 +34,9 @@ class Document extends Model
 							'document_type',
 							'clinic_id',
 							'document_type_id',
-							'digital_signature'
+							'digital_signature',
+							'client_id',
+							'is_signed'
 							];
 	
     /**
@@ -43,6 +45,16 @@ class Document extends Model
      * @var array
      */
     protected $uuids = ['uuid'];
+	
+	/**
+     * The attributes that are signed.
+     *
+     * @var array
+     */
+    protected $signable = [
+        'client_id',
+        'file_name',
+    ];
 	
 	/**
      * A document may have many users attached to it.

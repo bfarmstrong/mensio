@@ -1,7 +1,7 @@
 @extends('layout.dashboard')
 
 @section('title', __('admin.documents.index.title'))
-
+@section('content.breadcrumbs', Breadcrumbs::render('admin.documents.index', request()->user()))
 @section('content.dashboard')
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.0/css/buttons.bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.4/css/select.bootstrap.min.css">
@@ -16,7 +16,7 @@
 
             <a
                 class="btn btn-primary btn-sm ml-auto"
-                href="{{ url('admin/documents/create') }}"
+                href='{{ url("clients/documents/create/".Request::segment(3)) }}'
             >
                 @lang('admin.documents.index.create-document')
             </a>
@@ -53,13 +53,13 @@
                 });
 
                 var editor = new $.fn.dataTable.Editor({
-                    ajax: "/admin/documents",
+                    ajax: "/clients/documents/{{Request::segment(3)}}",
                     table: "#documents",
-					 idSrc:  'id',
+					idSrc:  'id',
                     display: "bootstrap",
                     fields: [
-                        {label: "name:", name: "name"},
-                        {label: "document_type:",
+                        {label: "Name: ", name: "name"},
+                        {label: "Document Type:",
 							name: "document_type",
 							type: "select",
 							ipOpts: [
@@ -69,8 +69,18 @@
 							editField: "document_type" ,
 							"default": 1							
 						},
-						{ name: "date", type:  'datetime',
+						{ label: "Allocated Date:", name: "date", type:  'datetime',
 							def:   function () { return new Date(); }},
+							
+                        {
+						label: "Is Signed:", 
+						name: "is_signed",
+						type: "select",
+							ipOpts: [
+								{ label: "Signed", value: "1" },
+								{ label: "Unsigned", value: "0"}
+								],
+						editField: "is_signed"},
                     ]
                 });
 
@@ -85,7 +95,7 @@
 						bServerSide: true,
 						searching: false,
 						dom: "Bfrtip",
-						ajax: "/admin/documents",
+						ajax: "/clients/documents/{{Request::segment(3)}}",
 						order: [[ 1, 'asc' ]],
 						columns: [
 							{
@@ -95,8 +105,28 @@
 								orderable: false
 							},
 							{ data: "name" },
-							{ data: "document_type" ,  editField: "document_type"},
+							{ data: "document_type" ,  editField: "document_type",
+								"render": function (data, type, row) {
+ 
+									if (row.document_type == 1) {
+										return 'Notes';
+									} 
+									if (row.document_type == 2) {
+									 	return 'Other Attachments';
+									}
+								}
+							},
 							{ data: "date"},
+							{ data: "is_signed",
+								"render": function (data, type, row) {
+ 
+									if (row.is_signed == 1) {
+										return 'Signed';
+									} else {
+									 	return 'Unsigned';
+									}
+								}
+							},
 						  
 						],
 						select: {
@@ -106,7 +136,8 @@
 						buttons: [
 							{ extend: "edit",   editor: editor },
 							{ extend: "remove", editor: editor }
-						]
+						],
+						
 				});
                
             });

@@ -37,13 +37,35 @@
 			!!}
         </div>
     </div>
+</div> 
+<div class="form-row">
+    <div class="form-group col-12">
+        <div class="custom-file">
+             {!!
+				Form::label(
+					'document_type',
+					__('admin.documents.form.document_type')
+				)
+			!!}
+
+		{!!
+            Form::select(
+                'document_type',
+				[1=>'Notes',2 => "Other Attachments"],
+				old('document_type'),
+                ['class' => 'form-control selectpicker']
+            )
+        !!}
+        </div>
+    </div>
 </div>
+
 <div class="form-row">
     <div class="form-group col-12">
         <div class="custom-file">
             {!!
                 Form::file(
-                    'file[]',
+                    'file',
                     [
                         'class' => 'custom-file-input',
                         'id' => 'file',
@@ -65,12 +87,26 @@
 @include('partials.digital-signature')
 <div class="form-row">
     <div class="form-group col-12 mb-0">
-        {!!
-            Form::submit(
-                __('clients.attachments.form.submit'),
-                ['class' => 'btn btn-primary']
-            )
-        !!}
+        <button
+            class="btn btn-primary"
+            name="is_signed"
+            type="submit"
+            value="1"
+        >
+            <i class="fas fa-file-signature mr-1"></i>
+				 @lang('clients.documents.form.signed')
+        </button>
+
+        
+            <button
+                class="btn btn-secondary"
+                name="is_signed"
+                type="submit"
+                value="0"
+            >
+                 @lang('clients.documents.form.unsigned')
+            </button>
+        
     </div>
 </div>
 

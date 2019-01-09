@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Client\CreateDocumentRequest;
 use App\Services\Impl\IDocumentService;
 use App\Services\Impl\IUserService;
 use App\Services\Impl\IAttachmentService;
@@ -55,28 +56,20 @@ class DocumentController extends Controller
      *
      * @return document
      */
-/*     public function index()
-    {
-		$documents = $this->documentService->paginate();
-
-        return view('admin.documents.index')->with([
-                'documents' => $documents,
-            ]);
-    } */
 	public function index(DocumentsDataTable $dataTable)
-    {
-        return $dataTable->render('admin.documents.index');
+    {	
+        return $dataTable->render('clients.documents.index');
     }
     /**
      * Show the form for creating a Document.
      *
      * @return Response
      */
-    public function create()
-    {
-        $client = $this->userService->find(request()->user()->id);
+    public function create(string $user)
+    { 
+        $client = $this->userService->find($user);
 
-        return view('admin.documents.create')->with([
+        return view('clients.documents.create')->with([
              'client' => $client,
         ]);
     }
@@ -85,31 +78,29 @@ class DocumentController extends Controller
      * Saves an Document to the database.
      *
      * @param Request $request
-     * @param string  $client
+     * @param string  $user
      *
      * @return Response
      */
-	public function postcreate(Request $request)
-    {
-       
-        $client = $this->userService->find(request()->user()->id);
-		if(is_array($request->file('file'))){
-			foreach ($request->file('file') as $files) {
-				$this->userService->compareSignature(
-					$request->user(),
-					$request->get('signature')
-				);
-				$file = $files;
-				
-				$path = $file->store('document'); 
+	public function postcreate(CreateDocumentRequest $request,string $user)
+    { 
+        if ($request->get('is_signed') == 1) {	
+			$this->userService->compareSignature(
+				$request->user(),
+				$request->get('signature')
+			);
+		}
+			$file = $request->file('file');
+			$path = $file->store('document'); 
+			if($request->document_type == 1){
 				$attachment_id = $this->attachmentService->create([
 					'clinic_id' => $request->attributes->get('clinic')->id,
 					'file_location' => $path,
 					'file_name' => $file->getClientOriginalName(),
 					'file_size' => $file->getClientSize(),
 					'mime_type' => $file->getClientMimeType(),
-					'therapist_id' => $request->user()->id,
-					'user_id' => $client->id,
+					'therapist_id' => request()->user()->id,
+					'user_id' => $user,
 				]);
 
 				$this->documentService->create([
@@ -118,50 +109,38 @@ class DocumentController extends Controller
 					'file_name' => $file->getClientOriginalName(),
 					'file_size' => $file->getClientSize(),
 					'mime_type' => $file->getClientMimeType(),
-					'user_id' => $client->id,
+					'user_id' => request()->user()->id,
 					'description' => $request->description,
 					'clinic_id' => $request->attributes->get('clinic')->id,
-					'document_type_id' => $attachment_id->uuid
+					'document_type' => $request->document_type,
+					'document_type_id' => $attachment_id->uuid,
+					'client_id' => $user,
+					'is_signed' =>$request->get('is_signed')
+				]);
+			} else {
+				$this->documentService->create([
+					'name' => $request->name,
+					'file_location' => $path,
+					'file_name' => $file->getClientOriginalName(),
+					'file_size' => $file->getClientSize(),
+					'mime_type' => $file->getClientMimeType(),
+					'user_id' => request()->user()->id,
+					'description' => $request->description,
+					'clinic_id' => $request->attributes->get('clinic')->id,
+					'document_type' => $request->document_type,
+					'client_id' => $user,
+					'is_signed' =>$request->get('is_signed')
 				]);
 			}
-		} else {
-				$file = $request->file('file');
-				$this->userService->compareSignature(
-					$request->user(),
-					$request->get('signature')
-				);
-				$path = $file->store('document'); 
-				$attachment_id = $this->attachmentService->create([
-					'clinic_id' => $request->attributes->get('clinic')->id,
-					'file_location' => $path,
-					'file_name' => $file->getClientOriginalName(),
-					'file_size' => $file->getClientSize(),
-					'mime_type' => $file->getClientMimeType(),
-					'therapist_id' => $request->user()->id,
-					'user_id' => $client->id,
-				]);
-
-				$this->documentService->create([
-					'name' => $request->name,
-					'file_location' => $path,
-					'file_name' => $file->getClientOriginalName(),
-					'file_size' => $file->getClientSize(),
-					'mime_type' => $file->getClientMimeType(),
-					'user_id' => $client->id,
-					'description' => $request->description,
-					'clinic_id' => $request->attributes->get('clinic')->id,
-					'document_type_id' => $attachment_id->uuid
-				]);
-		}
         return redirect()
-            ->to("admin/documents/create")
+            ->to("clients/documents/create/".$user)
             ->with([
                 'message' => __('clients.attachments.create.created-attachment'),
             ]);
     }
 	
-	public function store(DocumentsDataTablesEditor $editor)
-    {
+	public function store(DocumentsDataTablesEditor $editor,string $user)
+    { 	
         return $editor->process(request());
     }
 }

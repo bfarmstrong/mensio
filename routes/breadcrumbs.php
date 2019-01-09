@@ -109,16 +109,18 @@ Breadcrumbs::for('clients.receipts.create', function ($trail, $user) {
 });
 
 // Admin  > documents
-Breadcrumbs::for('admin.documents.index', function ($trail) {
-    $trail->push(__('admin.documents.index.breadcrumb'), url('admin/documents'));
+Breadcrumbs::for('admin.documents.index', function ($trail, $user) {
+	$trail->parent('clients.show', $user);
+    $trail->push(__('admin.documents.index.breadcrumb'), url("clients/documents/$user->id/"));
 });
 
 // Admin > documents > Create Attachment
 Breadcrumbs::for('admin.documents.create', function ($trail, $user) {
+	
 	$trail->parent('admin.documents.index', $user);
     $trail->push(
         __('admin.documents.create.breadcrumb'),
-        url("admin/documents/create")
+        url("clients/documents/create/$user->id/")
     );
 });
 
