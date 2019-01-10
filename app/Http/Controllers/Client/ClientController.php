@@ -20,7 +20,6 @@ use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use Yajra\Datatables\Datatables;
-use Yajra\Datatables\Datatables;
 
 /**
  * Manages a list of clients.
