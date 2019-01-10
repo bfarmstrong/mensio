@@ -21,6 +21,7 @@
         "spatie/laravel-activitylog": "^2.8",
         "stevebauman/purify": "2.0.*",
         "webpatser/laravel-uuid": "^3.0",
+        "yajra/laravel-datatables-editor": "^1.6",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {

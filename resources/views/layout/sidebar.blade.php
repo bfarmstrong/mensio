@@ -142,9 +142,9 @@
                         </li>
 					</ul>
 				</li>
+
 				@endif
-
-
+			
             @can('viewClients', \App\Models\User::class)
                 <li class="nav-item">
                     <a

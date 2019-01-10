@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Traits\SetsUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

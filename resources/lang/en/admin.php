@@ -190,6 +190,38 @@ return [
             'name' => 'Name',
         ],
     ],
+	'documents' => [
+			'index' => [
+                'breadcrumb' => 'Documents',
+                'create-document' => 'Create Document',
+                'created-document' => 'Document was successfully created.',
+                'deleted-document' => 'Document was successfully deleted.',
+                'no-results' => 'No Document were found...',
+                'documents' => 'Documents',
+                'updated-document' => 'Document was successfully updated.',
+                'title' => 'All Documents',
+            ],
+			'table' => [
+                'actions' => 'Actions',
+                'delete' => 'Delete',
+                'edit' => 'Edit',
+                'label' => 'Label',
+                'members' => 'Members',
+                'name' => 'Name',
+                'link' => 'Link',
+            ],
+			'create' => [
+                'breadcrumb' => 'Create',
+                'form-title' => 'Create Document',
+                'title' => 'Create Document',
+				'create-attachment' => 'Create Attachment'
+            ],
+			'form' =>[
+				'name' =>'Name',				
+				'description' => 'Description',
+				'document_type' => 'Document Type',
+			],
+	],
 	'surveys' => [
 			'assignsurvey' => [
 				'user-assigned' => 'Survey assigned sucessfully.',
@@ -370,6 +402,7 @@ return [
             'switch-user' => 'Switch User',
             'therapists' => 'Therapists',
             'title' => ':Role Profile',
+            'documents' => 'Other Documents',
         ],
         'table' => [
             'actions' => 'Actions',

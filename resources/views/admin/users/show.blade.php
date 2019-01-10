@@ -12,6 +12,12 @@
             </span>
 
             <div class="ml-auto">
+				@if (Auth::user()->isTherapist())
+					 <a  class="btn btn-primary btn-sm" href="{{ url("clients/documents/$user->id") }}">
+                        <i class="nav-icon fas fa-file"></i>
+						@lang('admin.users.show.documents') 
+                    </a>
+				@endif
                 <a
                     class="btn btn-primary btn-sm"
                     href="{{ url("admin/users/$user->id/edit") }}"

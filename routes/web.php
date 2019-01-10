@@ -102,7 +102,17 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['prefix' => 'clients', 'middleware' => 'requires-clinic', 'namespace' => 'Client'], function () {
-            Route::get('', 'ClientController@index');
+			/*
+            |--------------------------------------------------------------------------
+            | migrate old documents
+            |--------------------------------------------------------------------------
+            */
+			Route::get('documents/{user_id}', 'DocumentController@index');
+            Route::get('documents/create/{user_id}', 'DocumentController@create');
+            Route::post('documents/postcreate/{user_id}', 'DocumentController@postcreate');
+            Route::post('documents/{user_id}', 'DocumentController@store');
+			
+			Route::get('', 'ClientController@index');
             Route::post('search', 'ClientController@search');
             Route::get('{user_id}', 'ClientController@show');
             Route::get('{user_id}/charts', 'ClientController@charts');
@@ -219,6 +229,7 @@ Route::group(['middleware' => ['domain']], function () {
         */
         Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
             Route::get('dashboard', 'DashboardController@index');
+
             /*
             |--------------------------------------------------------------------------
             | Surveys
