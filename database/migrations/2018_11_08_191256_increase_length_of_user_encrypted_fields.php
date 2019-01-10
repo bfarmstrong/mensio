@@ -14,29 +14,29 @@ class IncreaseLengthOfUserEncryptedFields extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE attachments MODIFY file_location VARCHAR(200)');
-        DB::statement('ALTER TABLE attachments MODIFY file_name VARCHAR(200)');
-        DB::statement('ALTER TABLE attachments MODIFY file_size VARCHAR(200)');
-        DB::statement('ALTER TABLE attachments MODIFY mime_type VARCHAR(200)');
+        DB::statement('ALTER TABLE attachments MODIFY file_location VARCHAR(512)');
+        DB::statement('ALTER TABLE attachments MODIFY file_name VARCHAR(512)');
+        DB::statement('ALTER TABLE attachments MODIFY file_size VARCHAR(512)');
+        DB::statement('ALTER TABLE attachments MODIFY mime_type VARCHAR(512)');
 
-        DB::statement('ALTER TABLE users MODIFY address_line_1 VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY address_line_2 VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY city VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY country VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY emergency_name VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY emergency_phone VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY emergency_relationship VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY health_card_number VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY home_phone VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY license VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY name VARCHAR(200) NOT NULL');
-        DB::statement('ALTER TABLE users MODIFY name_bidx VARCHAR(200) NOT NULL');
-        DB::statement('ALTER TABLE users MODIFY notes VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY phone VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY postal_code VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY province VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY work_phone VARCHAR(200)');
-        DB::statement('ALTER TABLE users MODIFY written_signature VARCHAR(200)');
+        DB::statement('ALTER TABLE users MODIFY address_line_1 VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY address_line_2 VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY city VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY country VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY emergency_name VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY emergency_phone VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY emergency_relationship VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY health_card_number VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY home_phone VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY license VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY name VARCHAR(512) NOT NULL');
+        DB::statement('ALTER TABLE users MODIFY name_bidx VARCHAR(512) NOT NULL');
+        DB::statement('ALTER TABLE users MODIFY notes VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY phone VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY postal_code VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY province VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY work_phone VARCHAR(512)');
+        DB::statement('ALTER TABLE users MODIFY written_signature VARCHAR(512)');
     }
 
     /**
