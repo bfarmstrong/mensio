@@ -15,6 +15,12 @@ class AddClientIdToDocuments extends Migration
     {
         Schema::table('documents', function (Blueprint $table) {
             $table->text('client_id');
+			$table->foreign('client_id')
+                ->references('id')
+                ->on('documents')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->index('client_id');
         });
     }
 
@@ -26,7 +32,9 @@ class AddClientIdToDocuments extends Migration
     public function down()
     {
         Schema::table('documents', function (Blueprint $table) {
-            Schema::dropColumn('client_id');
+			$table->dropForeign(['client_id']);
+            $table->dropIndex(['client_id']);
+            $table->dropColumn('client_id');
         });
     }
 }

@@ -27,6 +27,12 @@ class CreateDocumentsTable extends Migration
 			$table->text('date');
 			$table->integer('document_type')->unsigned()->comment = '1-Notes,2-Other attachments';
 			$table->integer('clinic_id')->unsigned();
+			$table->foreign('clinic_id')
+                ->references('id')
+                ->on('documents')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->index('clinic_id');
             $table->timestamps();
         });
     }
