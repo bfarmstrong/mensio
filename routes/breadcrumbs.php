@@ -412,7 +412,7 @@ Breadcrumbs::for('admin.users.add', function ($trail) {
 Breadcrumbs::for('admin.users.show', function ($trail, $user) {
     $trail->parent('admin.users.index');
     $trail->push(
-        __('admin.users.show.breadcrumb', ['role' => implode(',',$user->roleName())]),
+        __('admin.users.show.breadcrumb', ['role' =>$user->roleName()]),
         url("admin/users/$user->id")
     );
 });
