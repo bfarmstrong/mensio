@@ -20,7 +20,8 @@ use App\Services\Impl\IReceiptService;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\DataTables\CommunicationDataTable;
+use App\DataTables\CommunicationDataTablesEditor;
 /**
  * Handles actions related to notes against a client.
  */
@@ -143,7 +144,7 @@ class NoteController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request, string $client)
+    public function index(Request $request, string $client,CommunicationDataTable $dataTable)
     {
         $client = $this->userService->find($client);
         $this->authorize('viewNotes', $client);
@@ -175,20 +176,19 @@ class NoteController extends Controller
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->paginate(15, 'communication_page');
-
+		
         $receipts = $this->receiptService
             ->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
             ->pushCriteria(new WhereEqual('user_id', $client->id))
             ->pushCriteria(new OrderBy('updated_at', 'desc'))
             ->paginate(15, 'receipts_page');
-
-        return view('clients.notes.index')->with([
+		return $dataTable->render('clients.notes.index',[
             'attachments' => $attachments,
             'communication' => $communication,
             'drafts' => $drafts,
             'finals' => $finals,
             'receipts' => $receipts,
-            'user' => $client,
+            'user' => $client
         ]);
     }
 
@@ -226,7 +226,7 @@ class NoteController extends Controller
      * @return Response
      */
     public function store(CreateNoteRequest $request)
-    {
+    { 
         $client = $this->userService->find($request->user_id);
         $this->authorize('addNote', $client);
         $clinic_id = request()->attributes->get('clinic')->id ?? null;
@@ -245,7 +245,10 @@ class NoteController extends Controller
             'message' => __('clients.notes.index.note-created'),
         ]);
     }
-
+	public function submitlog(CommunicationDataTablesEditor $editor)
+	{
+		return $editor->process(request());
+	}
     /**
      * Updates a note attached to a client.
      *

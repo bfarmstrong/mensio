@@ -13,7 +13,7 @@
         <div class="card-body">
             {!!
                 Form::open([
-                    'url' => url("clients/$user->id/notes"),
+                    'url' => url("clients/$user->id/notes/submit"),
                 ])
             !!}
             @include('clients.notes.form', [

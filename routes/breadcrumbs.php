@@ -25,7 +25,7 @@ Breadcrumbs::for('clients.show', function ($trail, $user) {
     $trail->parent('clients.index');
     if (request()->user()->isAdmin()) {
         $trail->push(
-            __('admin.users.show.breadcrumb', ['role' => implode(',',$user->roleName())]),
+            __('admin.users.show.breadcrumb', ['role' => $user->roleName()]),
             url("admin/users/$user->id")
         );
     } else {
