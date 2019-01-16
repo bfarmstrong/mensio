@@ -87,7 +87,7 @@ trait UserPresenter
 			array_push($rolesnames, __('user.presenter.admin'));
         }
 
-        return implode(',', $rolesnames);
+        return implode(' / ', $rolesnames);
     }
 
 	/**
