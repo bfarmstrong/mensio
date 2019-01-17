@@ -85,7 +85,7 @@ class PagesController extends Controller
 				->pushCriteria(new OrderBy('updated_at', 'desc'))
 				->paginate(1);
 			$communications[$client->id] = $this->communicationLogService
-				//->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
+				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
 				->pushCriteria(new WhereEqual('user_id', $client->id))
 				->pushCriteria(new OrderBy('updated_at', 'desc'))
 				->paginate(1);
