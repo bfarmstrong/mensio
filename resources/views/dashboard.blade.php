@@ -32,7 +32,7 @@
 					  <tr>
 						<td>{{ $client_names[$key]->name}}</td>
 						<td>{{ $log->appointment_date }}</td>
-						<td>{{ $log->notes }}</td>
+						<td>{!! $notes[$key]->contents !!}</td>
 					  </tr>
 						@endforeach
 					@endforeach
