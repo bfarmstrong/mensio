@@ -102,12 +102,12 @@
 					idSrc:  'id',
                     display: "bootstrap",
                     fields: [
-                        {label: "Appointment Date: ", name: "appointment_date", type:  'datetime',
+                        {label: "@lang('clients.notes.index.appointment_date')", name: "appointment_date", type:  'datetime',
 							def:   function () { return new Date(); }},
-                        {label: "Actions:",name: "actions" },
-                        {label: "Notes:",name: "notes" },
+                        {label: "@lang('clients.notes.index.actions')",name: "actions" },
+                        {label: "@lang('clients.notes.index.notes')",name: "notes" },
                         {
-						label: "Digital Signature:",
+						label: "@lang('clients.notes.index.digital-signature')",
 						name: "digital_signature",
 						type: "select",
 						ipOpts: [
