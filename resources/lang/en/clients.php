@@ -106,7 +106,11 @@ return [
 			'appointment_date' => 'Appointment Date:',
 			'actions' => 'Actions:',
 			'notes' => 'Notes:',
-			'digital-signature' => 'Digital Signature:'
+			'digital-signature' => 'Digital Signature:',
+			'heading_appointment_date' => 'Appointment Date',
+			'heading_actions' => 'Actions',
+			'heading_notes' => 'Notes',
+			'heading_digital-signature' => 'Digital Signature'
         ],
         'show' => [
             'additional-added' => 'Additional information has been successfully added to the note.',
