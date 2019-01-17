@@ -53,10 +53,10 @@ class CommunicationDataTable extends DataTable
     {
         return [
             'id',
-            'Appointment Date',
-			'Actions',
-            'Notes',
-            'Digital Signature'
+            __('clients.notes.index.heading_appointment_date'),
+			__('clients.notes.index.heading_actions'),
+            __('clients.notes.index.heading_notes'),
+            __('clients.notes.index.heading_digital-signature')
         ];
     }
 
