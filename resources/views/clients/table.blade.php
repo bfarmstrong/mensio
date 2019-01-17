@@ -57,7 +57,7 @@
 			
 			<a
                 class="dropdown-item"
-                href="{{ url("clients/$user->id/charts") }}"
+                href="{{ url("clients/USER_ID/charts") }}"
             >
                     <i class="fas fa-chart-bar mr-1"></i>
                     @lang('clients.table.charts')
