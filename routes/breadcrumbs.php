@@ -411,8 +411,8 @@ Breadcrumbs::for('admin.users.add', function ($trail) {
 // Users > User Profile
 Breadcrumbs::for('admin.users.show', function ($trail, $user) {
     $trail->parent('admin.users.index');
-    $trail->push(
-        __('admin.users.show.breadcrumb', ['role' => $user->roleName()]),
+	$trail->push(
+		__('admin.users.show.breadcrumb', ['role' =>$user->roleName()]),
         url("admin/users/$user->id")
     );
 });
