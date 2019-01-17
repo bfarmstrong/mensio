@@ -83,12 +83,12 @@ class PagesController extends Controller
 				->pushCriteria(new WithTherapist())
 				->pushCriteria(new WhereEqual('is_draft', 0))
 				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->paginate(1, 'finals_page');
+				->paginate(1);
 			$communications[$client->id] = $this->communicationLogService
 				//->pushCriteria(new WhereEqual('clinic_id', $request->attributes->get('clinic')->id))
 				->pushCriteria(new WhereEqual('user_id', $client->id))
 				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->paginate(1, 'communication_page');
+				->paginate(1);
 			$client_names[$client->id] = $this->userService->find($client->id);
 		}	
         if (auth()->user()->isAdmin()) {

@@ -5,6 +5,7 @@
 @section('content.breadcrumbs', Breadcrumbs::render('dashboard'))
 @section('content.dashboard')
 @if(Auth::user()->isTherapist())
+
 <div class="container ">
     <div id="accordion" class="accordion">
         <div class="card mb-0">
@@ -27,15 +28,16 @@
 					  </tr>
 					</thead>
 					<tbody id="myTable">
-					@foreach ($communications as $key => $communication)
+					@foreach ($communications as $key => $communication) 
+					 @php if(isset($notes[$key][0])) { $not = $notes[$key][0]->contents;} else { $not = ''; } @endphp
 						@foreach ($communication as $log) 
 					  <tr>
 						<td>{{ $client_names[$key]->name}}</td>
 						<td>{{ $log->appointment_date }}</td>
-						<td>{!! $notes[$key]->contents !!}</td>
+						<td>{!! $not !!}</td>
 					  </tr>
 						@endforeach
-					@endforeach
+					@endforeach 
 					</tbody>
 					</table>
 					</div>
