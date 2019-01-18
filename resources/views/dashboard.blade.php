@@ -11,7 +11,7 @@
         <div class="card mb-0">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
                 <a class="card-title">
-                    Your Clients
+                    @lang('dashboard.your_clients')
                 </a>
             </div>
             <div id="collapseOne" class="card-body collapse show" data-parent="#accordion" >
@@ -22,9 +22,9 @@
                 	<table class="table table-striped">
 					<thead>
 					  <tr>
-						<th>Client Name</th>
-						<th>Next Appointment Date</th>
-						<th>Session Notes</th>
+						<th>@lang('dashboard.client_name')</th>
+						<th>@lang('dashboard.next_appointment_date')</th>
+						<th>@lang('dashboard.session_notes')</th>
 					  </tr>
 					</thead>
 					<tbody id="myTable">
