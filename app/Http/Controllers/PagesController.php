@@ -1,21 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
 use Notification;
-use App\Enums\Roles;
 use App\Notifications\ConsentEmail;
-use App\Services\Criteria\General\OrderBy;
-use App\Services\Criteria\General\WhereEqual;
 use App\Services\Impl\IUserService;
-use App\Services\Impl\INoteService;
-use App\Services\Impl\ICommunicationLogService;
-use App\Services\Criteria\General\WhereRelationEqual;
-use App\Services\Criteria\User\WhereCurrentClient;
+use App\Services\Impl\IResponseService;
 use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\General\OrderBy;
+use App\Services\Criteria\Questionnaire\WhereAssigned;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\Questionnaire\WithQuestionnaire;
+use App\Services\Impl\ICommunicationLogService;
+use App\Services\Impl\INoteService;
 use App\Services\Criteria\Note\WhereClient;
 use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithTherapist;
-
 class PagesController extends Controller
 {
 	/**
@@ -25,7 +23,21 @@ class PagesController extends Controller
      */
     protected $noteService;
 	
-	 /**
+	/**
+     * The communication log service implementation.
+     *
+     * @var ICommunicationLogService
+     */
+    protected $communicationLogService;
+	
+	/**
+     * The response service implementation.
+     *
+     * @var IResponseService
+     */
+    protected $response;
+	
+	/**
      * The user service implementation.
      *
      * @var IUserService
@@ -33,25 +45,21 @@ class PagesController extends Controller
     protected $userService;
 	
 	/**
-     * The communication log service implementation.
-     *
-     * @var ICommunicationLogService
-     */
-    protected $communicationLogService;
-	/**
      * Creates an instance of `NoteController`.
-     *
      * @param ICommunicationLogService $communicationLogService
+	 * @param INoteService             $noteService
      * @param IUserService             $userService
      */
-    public function __construct(
-        ICommunicationLogService $communicationLogService,
-        IUserService $userService,
-		INoteService $noteService
-    ) {
+    public function __construct(IResponseService $response,
+	IUserService $userService,
+	INoteService $noteService,
+	ICommunicationLogService $communicationLogService
+	){
+		
         $this->communicationLogService = $communicationLogService;
-        $this->userService = $userService;
+		$this->response = $response;
 		$this->noteService = $noteService;
+        $this->userService = $userService;
     }
 	
     /**
@@ -63,7 +71,6 @@ class PagesController extends Controller
     {
         return redirect('dashboard');
     }
-
     /**
      * Dashboard.
      *
@@ -71,34 +78,44 @@ class PagesController extends Controller
      */
     public function dashboard()
     {
-		$clients = $this->userService
-            ->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
-            ->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
-            ->pushCriteria(new WithRelation('roles'))
+		$client = $this->userService->find(\Auth::user()->id);
+		$clinic_id = request()->attributes->get('clinic')->id;
+		$score = array();
+        $responses = $this->response
+            ->pushCriteria(new WithRelation('questionnaire'))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->pushCriteria(new WhereAssigned(\Auth::user()->id))
+            ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
 			->all();
-		foreach($clients as $client) {	
-			$notes[$client->id] = $this->noteService
-				->pushCriteria(new WhereClient($client->id))
-				->pushCriteria(new WhereParent())
-				->pushCriteria(new WithTherapist())
-				->pushCriteria(new WhereEqual('is_draft', 0))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->paginate(1);
-			$communications[$client->id] = $this->communicationLogService
-				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
-				->pushCriteria(new WhereEqual('user_id', $client->id))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->paginate(1);
-			$client_names[$client->id] = $this->userService->find($client->id);
-		}	
+		foreach($responses as $response) {
+		    $response_details = $this->response
+				->getByCriteria(new WithQuestionnaire())
+				->findBy('uuid', $response->uuid);
+			$score[$response->uuid] = $this->response->getScore($response_details);
+		}
+		
+		$communication = $this->communicationLogService
+            ->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
+            ->pushCriteria(new WhereEqual('user_id', $client->id))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
+			
+		$notes = $this->noteService
+            ->pushCriteria(new WhereClient($client->id))
+            ->pushCriteria(new WhereParent())
+            ->pushCriteria(new WithTherapist())
+            ->pushCriteria(new WhereEqual('is_draft', 0))
+            ->pushCriteria(new OrderBy('updated_at', 'desc'))
+            ->all();
         if (auth()->user()->isAdmin()) {
             return redirect('admin/dashboard');
         }
-
         return view('dashboard')->with([
-            'communications' => $communications,
-            'client_names' => $client_names,
-            'notes' => $notes,
+            'user' => $client,
+			'scores' => $score,
+			'communication' => $communication,
+			'notes' => $notes,
+			'responses' => $responses
         ]);
     }
 	public function checkconsent()
