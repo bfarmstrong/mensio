@@ -23,14 +23,14 @@ class Survey extends Model
      * @var array
      */
     protected $fillable = ['description', 'name','user_id'];
-	
+
     /**
      * Sets the columns that should have a UUID generated.
      *
      * @var array
      */
     protected $uuids = ['uuid'];
-	
+
     /**
      * A survey may have many questionnaires attached to it.
      *
@@ -56,7 +56,7 @@ class Survey extends Model
 
 		return $this->belongsTo(User::class, 'user_id');
     }
-	
+
     /**
      * A survey may have many responses.
      *

@@ -14,10 +14,10 @@ class AddClientIdToDocuments extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->text('client_id');
+            $table->uuid('client_id');
 			$table->foreign('client_id')
                 ->references('id')
-                ->on('documents')
+                ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->index('client_id');

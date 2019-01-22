@@ -119,7 +119,8 @@ Route::group(['middleware' => ['domain']], function () {
 
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('{user_id}/notes', 'NoteController@index');
-                Route::post('{user_id}/notes', 'NoteController@store');
+                Route::post('{user_id}/notes', 'NoteController@submitlog');
+                Route::post('{user_id}/notes/submit', 'NoteController@store');
                 Route::post('{user_id}/notes/{note_id}/addition', 'NoteController@addAddition');
                 Route::get('{user_id}/notes/create', 'NoteController@create');
                 Route::get('{user_id}/notes/{note_id}', 'NoteController@show');
