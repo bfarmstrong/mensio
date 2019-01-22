@@ -88,7 +88,7 @@
                    // editor.inline(this);
 				    editor.inline( this, {
 						buttons: { label: '&gt;', fn: function () { this.submit(); } }
-					} );
+					});
                 });
 				$('#documents').DataTable( {
 					    bProcessing: true,

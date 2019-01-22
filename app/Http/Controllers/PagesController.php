@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use Notification;
 use App\Notifications\ConsentEmail;
@@ -15,7 +14,6 @@ use App\Services\Impl\INoteService;
 use App\Services\Criteria\Note\WhereClient;
 use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithTherapist;
-
 class PagesController extends Controller
 {
 	/**
@@ -73,7 +71,6 @@ class PagesController extends Controller
     {
         return redirect('dashboard');
     }
-
     /**
      * Dashboard.
      *
@@ -113,7 +110,6 @@ class PagesController extends Controller
         if (auth()->user()->isAdmin()) {
             return redirect('admin/dashboard');
         }
-
         return view('dashboard')->with([
             'user' => $client,
 			'scores' => $score,

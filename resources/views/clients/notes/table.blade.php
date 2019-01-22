@@ -196,39 +196,7 @@
 
     @if ($communication->isNotEmpty())
         <div id="communication" class="tab-pane {{ $active === 'communication' ? 'active' : 'fade' }}">
-            <table class="table table-hover table-outline table-striped w-100 nowrap">
-                <thead class="thead-light">
-                    <tr>
-                        @isset ($group)
-                            <th>@lang('clients.notes.table.client')</th>
-                        @endisset
-                        <th>@lang('clients.notes.table.appointment-date')</th>
-                        <th>@lang('clients.notes.table.actions')</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($communication as $log)
-                        <tr>
-                            @isset ($group)
-                                <td>{{ $log->user->name }}</td>
-                            @endisset
-                            <td>{{ $log->appointment_date }}</td>
-                            <td>
-                                <a
-                                    class="btn btn-primary btn-sm"
-                                    href="{{ url("$prefix/communication/$log->uuid") }}"
-                                >
-                                    <i class="fas fa-search mr-1"></i>
-                                    @lang('clients.notes.table.view')
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            {{ $communication->appends('communication_page')->links() }}
+            {{$dataTable->table(['id' => 'commun','style'=>'width:100%','class'=>'table table-striped'])}}
         </div>
     @endif
 

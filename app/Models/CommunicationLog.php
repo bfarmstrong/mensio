@@ -30,6 +30,7 @@ class CommunicationLog extends Model
         'reason',
         'therapist_id',
         'user_id',
+		'actions'
     ];
 
     /**
