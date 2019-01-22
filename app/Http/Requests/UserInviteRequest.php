@@ -29,6 +29,7 @@ class UserInviteRequest extends FormRequest
     {
         return [
             'email' => 'required|unique:users',
+            'gender' => 'required',
         ];
     }
 }
