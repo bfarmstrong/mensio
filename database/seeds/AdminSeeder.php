@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Services\Impl\IClinicService;
+use App\Services\Impl\IRoleService;
 use App\Services\Impl\UserService;
 use Illuminate\Database\Seeder;
 
@@ -16,15 +18,22 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
+        $clinicService = app(IClinicService::class);
+        $roleService = app(IRoleService::class);
         $userService = app(UserService::class);
 
         $user = $userService->optional()->findBy('email', 'admin@example.com');
 
         if (is_null($user)) {
-            factory(User::class)->create([
+            $clinic = $clinicService->findBy('name', 'Mindspace');
+            $role = $roleService->findBy('name', 'superadmin');
+
+            $user = factory(User::class)->create([
                 'email' => 'admin@example.com',
                 'name' => 'Admin',
             ]);
+
+            $userService->assignClinic($clinic, $user, [$role->id]);
         }
     }
 }

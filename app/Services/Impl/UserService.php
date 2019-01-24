@@ -354,7 +354,6 @@ class UserService extends BaseService implements IUserService
 					foreach($clinics as $clinic){
 						$user->clinics()->attach($clinic, ['role_id' => $role]);
 					}
-					$user->clinics()->attach(0, ['role_id' => $role]);
 				}
 			}
 
