@@ -26,7 +26,14 @@
             </td>
             <td>{{ $user->phone }}</td>
         </tr>
-
+		
+        <tr>
+            <td class="font-weight-bold">
+                @lang('admin.users.form-static.gender')
+            </td>
+            <td>{{ $user->gender }}</td>
+        </tr>
+		
         <tr>
             <td class="font-weight-bold">
                 @lang('admin.users.form-static.home-phone')

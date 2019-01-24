@@ -369,6 +369,7 @@ return [
             'referrer' => 'Referrer',
             'user-since' => ':name Since',
             'work-phone' => 'Work Phone',
+            'gender' => 'Gender',
         ],
         'index' => [
             'active-user' => 'User was successfully activated.',

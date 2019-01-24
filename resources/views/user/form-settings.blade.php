@@ -108,7 +108,7 @@
 </div>
 
 <div class="form-row">
-    <div class="form-group col-12">
+    <div class="form-group col-6">
         {!!
             Form::label(
                 'preferred_contact_method',
@@ -124,6 +124,27 @@
                     'PH' => __('user.form-settings.contact-phone'),
                 ],
                 old('preferred_contact_method'),
+                ['class' => 'form-control selectpicker']
+            )
+        !!}
+    </div>
+	<div class="form-group col-6">
+        {!!
+            Form::label(
+                'gender',
+                __('user.form-settings.gender')
+            )
+        !!}
+
+        {!!
+            Form::select(
+                'gender',
+                [
+                    'Male' => __('user.form-settings.male'),
+                    'Female' => __('user.form-settings.female'),
+                    'Other' => __('user.form-settings.other'),
+                ],
+                old('gender'),
                 ['class' => 'form-control selectpicker']
             )
         !!}
