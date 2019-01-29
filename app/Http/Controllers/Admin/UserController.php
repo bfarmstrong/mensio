@@ -370,7 +370,7 @@ class UserController extends Controller
             ->getByCriteria(new OrderBy('is_default', 'desc'))
             ->getByCriteria(new OrderBy('name'))
             ->all();
-        $roles = $this->roleService->all();
+        $roles = $this->roleService->pushCriteria(new WhereNotEqual('level', 5))->all();
 
         return view('admin.users.edit')->with([
             'doctors' => $doctors,

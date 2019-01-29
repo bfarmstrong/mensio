@@ -18,7 +18,14 @@
         </div>
 
         <a class="dropdown-item" href="{{ url('user/settings') }}">
+		@if (Auth::user()->gender == 'Male')
+			<img id="gen" width="20px" height="20px" src="https://user-images.githubusercontent.com/45040226/51488810-941f4580-1d74-11e9-8df9-5f8a0a9b74b1.png" />
+			
+		@elseif (Auth::user()->gender == 'Female')
+			<img id="gen" width="20px" height="20px" src="https://user-images.githubusercontent.com/45040226/51488809-9386af00-1d74-11e9-90ae-f5273f6d9ce5.png" />
+		@else
             <i class="fas fa-user"></i>
+		@endif
             @lang('layout.dropdown-user-settings.profile')
         </a>
 

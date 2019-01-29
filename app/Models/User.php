@@ -112,6 +112,7 @@ class User extends Authenticatable
         'terms_and_cond',
         'work_phone',
         'written_signature',
+		'gender',
     ];
 
     /**

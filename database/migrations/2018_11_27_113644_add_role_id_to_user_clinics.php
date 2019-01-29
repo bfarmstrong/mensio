@@ -17,7 +17,7 @@ class AddRoleIdToUserClinics extends Migration
             $table->integer('role_id')->unsigned()->nullable();
             $table->foreign('role_id')
                 ->references('id')
-                ->on('user_clinics')
+                ->on('roles')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->index('role_id');

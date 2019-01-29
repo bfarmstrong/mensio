@@ -45,6 +45,10 @@ return [
         'work-phone' => 'Work Phone',
         'inactive' => 'Deactivate',
         'active' => 'Activate',
+        'male' => 'Male',
+        'female' => 'Female',
+        'other' => 'Other',
+        'gender' => 'Gender',
     ],
     'form-signature' => [
         'current-signature' => 'Current Signature',
