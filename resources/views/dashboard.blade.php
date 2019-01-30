@@ -28,16 +28,29 @@
 					  </tr>
 					</thead>
 					<tbody id="myTable">
-					@if(!empty($communications))
-					@foreach ($communications as $key => $communication) 
-					 @php if(isset($notes[$key][0])) { $not = $notes[$key][0]->contents;} else { $not = ''; } @endphp
-						@foreach ($communication as $log) 
-					  <tr>
-						<td>{{ $client_names[$key]->name}}</td>
-						<td>{{ $log->appointment_date }}</td>
-						<td>{!! $not !!}</td>
-					  </tr>
-						@endforeach
+	
+					@if(!empty($client_names))
+					@foreach ($client_names as $key => $client_name) 
+						@php 
+							if(isset($notes[$key][0])) { 
+								$not = $notes[$key][0]->contents;
+							} else { 
+								$not = " - "; 
+							} 
+						@endphp
+						
+						<tr>
+							<td>{{ $client_name->name}}</td>
+							@if(isset($communications[$key][0])) 
+								@foreach ($communications[$key] as $log) 
+									<td>{{ $log->appointment_date }}</td>
+								@endforeach
+							@else 
+								<td> - </td>
+							@endif
+							<td>{!! $not !!}</td>
+						</tr>
+						
 					@endforeach
 					@else
 						<tr >
