@@ -260,6 +260,8 @@ Route::group(['middleware' => ['domain']], function () {
             */
             Route::get('users/search', 'UserController@index');
             Route::get('users/invite', 'UserController@getInvite');
+            Route::get('users/createclient', 'UserController@getClient');
+			Route::post('users/postclient', 'UserController@postClient');
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('users/add', 'UserController@getassignclinic');
                 Route::post('users/assign', 'UserController@postassignclinic');

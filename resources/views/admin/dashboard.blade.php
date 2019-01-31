@@ -15,34 +15,12 @@
                 <div class="btn-group">
                     <a
                         class="btn btn-primary btn-sm"
-                        href="{{ url('admin/users/invite') }}"
+                        onclick="openClientForm()"
                     >
                         <i class="fas fa-user-plus mr-1"></i>
-                        @lang('admin.users.index.create-user')
+                        @lang('admin.users.index.createclient')
                     </a>
 
-                    @isset($currentClinic)
-                        <button
-                            aria-expanded="false"
-                            aria-haspopup="true"
-                            class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown"
-                            type="button"
-                        >
-                            <span class="sr-only">
-                                @lang('admin.users.index.toggle-dropdown')
-                            </span>
-                        </button>
-
-                        <div class="dropdown-menu">
-                            <a
-                                class="dropdown-item"
-                                href="{{ url('admin/users/add') }}"
-                            >
-                                @lang('admin.users.index.assign-clinic')
-                            </a>
-                        </div>
-                    @endisset
                 </div>
             </div>
 		</div>
@@ -117,4 +95,36 @@
             </div>
         </div>
     </div>
+	<div class="modal fade" id="client_create_modal" tabindex="-1" role="dialog" aria-labelledby="client_create_modal">
+		<div style="max-width:80%;" class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header"> 
+			@lang('user.form-settings.basic-information')
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+				</button>
+			
+			</div>
+			<div class="modal-body">
+				{!!
+					Form::open([
+						'url' => url('admin/users/createclient')
+					])
+				!!}
+				@include('admin.users.client.form-client', [
+					'features' => [
+						'license' => true,
+					],
+				])
+				{!! Form::close() !!}
+			</div>
+
+		</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	function openClientForm(){
+		$('#client_create_modal').modal('show');
+	}
+	</script>
 @endsection

@@ -124,12 +124,22 @@ class DashboardController extends Controller
 			$therapists = $users->filter(function ($user) {
 				return $user->isTherapist() || $user->isAdmin();
 			});
-
+		
+		$doctors = $this->doctorService->all();
+		if (request()->user()->isSuperAdmin()) {
+			$roles = $this->roleService->all();
+		} else {
+			$roles = $this->roleService
+					->pushCriteria(new WhereNotEqual('level',5))
+					->all();
+		}
         return view('admin.dashboard')->with([
 				'clients' => $clients,
 				'therapists' => $therapists,
 				'type' => $type,
 				'users' => $users,
+				'doctors' => $doctors,
+				'roles' => $roles,
 			]);
     }
 }

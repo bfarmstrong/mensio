@@ -390,6 +390,7 @@ return [
             'toggle-dropdown' => 'Toggle dropdown',
             'updated-user' => 'User was successfully updated.',
             'users' => 'Users',
+            'createclient' => 'Create Client',
         ],
         'show' => [
             'active' => 'Activate',
