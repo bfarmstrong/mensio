@@ -229,11 +229,11 @@ class Importer implements IImporter
         if (empty(trim($answer))) {
             return;
         }
-
+	
         // Fetch the main questionnaire from the database
         $questionnaire = $this->questionnaireService->findBy(
             'name',
-            'all_basic_qs'
+            explode('.', $this->getSpecialMapping($question))[0]
         );
         if (is_null($questionnaire)) {
             return;
@@ -268,8 +268,8 @@ class Importer implements IImporter
             ->optional()
             ->findBy([
                 'name' => implode('>>>', $questionName),
-                'questionnaire_id' => $questionnaire->id,
-            ]);
+                //'questionnaire_id' => $questionnaire->id,
+            ]); 
         if (is_null($existingQuestion)) {
             return;
         }
@@ -324,7 +324,7 @@ class Importer implements IImporter
                 'question_item_id' => $questionItem->id ?? null,
                 'response_id' => $response->id,
                 'row_id' => $row->id ?? null,
-            ]);
+            ]); 
         if (! is_null($existingAnswer)) {
             return;
         }
@@ -420,7 +420,7 @@ class Importer implements IImporter
                     $progress->advance();
                     continue;
                 }
-
+					
                 // Save the questionnaire data to the database
                 foreach ($mapping as $question => $index) {
                     if (
