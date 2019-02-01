@@ -23,6 +23,9 @@ class DefaultClinicSeeder extends Seeder
             factory(Clinic::class)->create([
                 'name' => 'Mindspace',
                 'subdomain' => 'mindspace',
+				'province' => 'NB',
+				'city' => 'ontorio',
+				'country' => 'CAN'
             ]);
         }
     }

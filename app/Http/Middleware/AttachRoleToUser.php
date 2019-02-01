@@ -36,9 +36,16 @@ class AttachRoleToUser
         ) {
             throw new NoSelectedClinicException();
         }
-
+		
+		if (is_null($request->attributes->get('clinic')) &&
+			$request->user()->isSuperAdmin()
+		) {
+            $currentClinic = \Config::get('maindomain');
+            View::share('currentClinic', $currentClinic);
+        }
+		
         if (! is_null($request->attributes->get('clinic'))) {
-            $currentClinic = $request->attributes->get('clinic');
+            $currentClinic = $request->attributes->get('clinic'); 
             View::share('currentClinic', $currentClinic);
         }
 
