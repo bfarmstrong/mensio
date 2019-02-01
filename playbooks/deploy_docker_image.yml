@@ -13,7 +13,6 @@
       docker_image:
         force: yes
         name: '{{ image_name }}'
-        nocache: yes
         path: ./../
         pull: no
         push: yes

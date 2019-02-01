@@ -4,15 +4,20 @@ jobs:
     docker:
       -
         image: 'buildpack-deps:trusty'
-    environment:
-      DEPLOY_SCRIPT: ./deploy.sh
-      REMOTE_HOST: mmc.dev.coretec.io
-      REMOTE_USER: ubuntu
     steps:
       -
         run:
           name: 'Deploy over SSH to development server'
-          command: 'ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "$DEPLOY_SCRIPT"'
+          command: 'ssh -o StrictHostKeyChecking=no $DEVELOP_REMOTE_USER@$DEVELOP_REMOTE_HOST "$DEVELOP_DEPLOY_SCRIPT"'
+  deploy-staging:
+    docker:
+      -
+        image: 'buildpack-deps:trusty'
+    steps:
+      -
+        run:
+          name: 'Deploy over SSH to staging server'
+          command: 'ssh -o StrictHostKeyChecking=no $STAGING_REMOTE_USER@$STAGING_REMOTE_HOST "$STAGING_DEPLOY_SCRIPT"'
 workflows:
   version: 2
   deploy-develop:
@@ -22,4 +27,10 @@ workflows:
           filters:
             branches:
               only: develop
-          context: develop
+  deploy-staging:
+    jobs:
+      -
+        deploy-staging:
+          filters:
+            branches:
+              only: staging
