@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Response\UpdateDataRequest;
 use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\OrderBy;
 use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use App\Services\Impl\IClinicService;
@@ -61,8 +62,9 @@ class ResponseController extends Controller
         $this->authorize('index', \App\Models\Response::class);
         $clinic_id = request()->attributes->get('clinic')->id;
         $responses = $this->response
-            ->pushCriteria(new WhereAssigned(Auth::id()))
-            ->pushCriteria(new WithQuestionnaire())
+            ->getByCriteria(new WhereAssigned(Auth::id()))
+			->getByCriteria(new OrderBy('updated_at', 'desc'))
+            ->getByCriteria(new WithQuestionnaire())
             ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
             ->paginate();
 
