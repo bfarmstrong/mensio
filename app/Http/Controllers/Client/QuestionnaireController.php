@@ -131,9 +131,9 @@ class QuestionnaireController extends Controller
         $this->authorize('viewQuestionnaires', $user);
         $clinic_id = request()->attributes->get('clinic')->id;
         $responses = $this->response
-            ->pushCriteria(new WithRelation('questionnaire'))
-            ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->pushCriteria(new WhereAssigned($user->id))
+            ->getByCriteria(new WithRelation('questionnaire'))
+            ->getByCriteria(new OrderBy('updated_at', 'desc'))
+            ->getByCriteria(new WhereAssigned($user->id))
             ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
             ->paginate();
 

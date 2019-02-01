@@ -14,6 +14,10 @@ use App\Services\Impl\INoteService;
 use App\Services\Criteria\Note\WhereClient;
 use App\Services\Criteria\Note\WhereParent;
 use App\Services\Criteria\Note\WithTherapist;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Enums\Roles;
+use App\Services\Criteria\User\WhereCurrentClient;
+
 class PagesController extends Controller
 {
 	/**
@@ -78,45 +82,81 @@ class PagesController extends Controller
      */
     public function dashboard()
     {
-		$client = $this->userService->find(\Auth::user()->id);
-		$clinic_id = request()->attributes->get('clinic')->id;
-		$score = array();
-        $responses = $this->response
-            ->pushCriteria(new WithRelation('questionnaire'))
-            ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->pushCriteria(new WhereAssigned(\Auth::user()->id))
-            ->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
-			->all();
-		foreach($responses as $response) {
-		    $response_details = $this->response
-				->getByCriteria(new WithQuestionnaire())
-				->findBy('uuid', $response->uuid);
-			$score[$response->uuid] = $this->response->getScore($response_details);
-		}
-		
-		$communication = $this->communicationLogService
-            ->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
-            ->pushCriteria(new WhereEqual('user_id', $client->id))
-            ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+		if(\Auth::user()->isTherapist()) {
+			$communications =array();
+			$client_names =array();
+			$notes =array();
+			$clients = $this->userService
+				->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
+				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+				->pushCriteria(new WithRelation('roles'))
+				->all();
+			foreach($clients as $client) {	
+				$notes[$client->id] = $this->noteService
+					->pushCriteria(new WhereClient($client->id))
+					->pushCriteria(new WhereParent())
+					->pushCriteria(new WithTherapist())
+					->pushCriteria(new WhereEqual('is_draft', 0))
+					->pushCriteria(new OrderBy('updated_at', 'desc'))
+					->paginate(1);
+				$communications[$client->id] = $this->communicationLogService
+					->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
+					->pushCriteria(new WhereEqual('user_id', $client->id))
+					->pushCriteria(new OrderBy('updated_at', 'desc'))
+					->paginate(1);
+				$client_names[$client->id] = $this->userService->find($client->id);
+			}	
+		} 
+		if(\Auth::user()->isClient()){
+			$client = $this->userService->find(\Auth::user()->id);
+			$clinic_id = request()->attributes->get('clinic')->id;
+			$score = array();
+			$responses = $this->response
+				->pushCriteria(new WithRelation('questionnaire'))
+				->pushCriteria(new OrderBy('updated_at', 'desc'))
+				->pushCriteria(new WhereAssigned(\Auth::user()->id))
+				->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
+				->all();
+			foreach($responses as $response) {
+				$response_details = $this->response
+					->getByCriteria(new WithQuestionnaire())
+					->findBy('uuid', $response->uuid);
+				$score[$response->uuid] = $this->response->getScore($response_details);
+			}
 			
-		$notes = $this->noteService
-            ->pushCriteria(new WhereClient($client->id))
-            ->pushCriteria(new WhereParent())
-            ->pushCriteria(new WithTherapist())
-            ->pushCriteria(new WhereEqual('is_draft', 0))
-            ->pushCriteria(new OrderBy('updated_at', 'desc'))
-            ->all();
+			$communication = $this->communicationLogService
+				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
+				->pushCriteria(new WhereEqual('user_id', $client->id))
+				->pushCriteria(new OrderBy('updated_at', 'desc'))
+				->all();
+				
+			$notes = $this->noteService
+				->pushCriteria(new WhereClient($client->id))
+				->pushCriteria(new WhereParent())
+				->pushCriteria(new WithTherapist())
+				->pushCriteria(new WhereEqual('is_draft', 0))
+				->pushCriteria(new OrderBy('updated_at', 'desc'))
+				->all();
+		}
         if (auth()->user()->isAdmin()) {
             return redirect('admin/dashboard');
         }
-        return view('dashboard')->with([
-            'user' => $client,
-			'scores' => $score,
-			'communication' => $communication,
-			'notes' => $notes,
-			'responses' => $responses
-        ]);
+		if(\Auth::user()->isTherapist()) {
+			return view('dashboard')->with([
+				'communications' => $communications,
+				'client_names' => $client_names,
+				'notes' => $notes,
+			]);
+		}
+		if(\Auth::user()->isClient()){
+			return view('dashboard')->with([
+				'user' => $client,
+				'scores' => $score,
+				'communication' => $communication,
+				'notes' => $notes,
+				'responses' => $responses
+			]);
+		}
     }
 	public function checkconsent()
 	{
