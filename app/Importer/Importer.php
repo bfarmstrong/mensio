@@ -446,6 +446,7 @@ class Importer implements IImporter
             foreach ($therapists as $therapist) {
                 $therapistData = [
                     'email' => strtolower($therapist->email),
+                    'gender' => $therapist->gender,
                     'is_active' => 1,
                     'name' => $therapist->name,
                     'password' => Hash::make(str_random(24)),
@@ -478,6 +479,7 @@ class Importer implements IImporter
 				$therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
                     $clientData = [
                         'email' => strtolower($client->email),
+                        'gender' => $client->gender,
                         'is_active' => 1,
                         'name' => $client->name,
                         'password' => Hash::make(str_random(24)),
