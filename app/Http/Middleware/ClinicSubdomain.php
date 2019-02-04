@@ -34,7 +34,8 @@ class ClinicSubdomain
                 $request->attributes->add(['clinic' => $subdomain]);
                 Config::set('subdomain', $subdomain->subdomain);
             }
-
+			$domain = Clinic::where('subdomain', $exploddomain[1])->first();
+			Config::set('maindomain', $domain);
             return $next($request);
         } else {
             return response()->view('errors.404', [], 404);
