@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Importer;
-
 use App\Enums\Roles;
 use App\Enums\Sheets;
 use App\Enums\SheetsMapping;
@@ -23,7 +21,6 @@ use Illuminate\Support\Collection;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Validator;
-
 /**
  * Implementation of the importer for the legacy Google Sheet data.
  */
@@ -35,77 +32,66 @@ class Importer implements IImporter
      * @var IAnswerService
      */
     protected $answerService;
-
     /**
      * The clinic service implementation.
      *
      * @var IClinicService
      */
     protected $clinicService;
-
     /**
      * The legacy API service implementation.
      *
      * @var ILegacyApiService
      */
     protected $legacyApiService;
-
     /**
      * The questionnaire service implementation.
      *
      * @var IQuestionnaireService
      */
     protected $questionnaireService;
-
     /**
      * The question service implementation.
      *
      * @var IQuestionService
      */
     protected $questionService;
-
     /**
      * The question grid service implementation.
      *
      * @var IQuestionGridService
      */
     protected $questionGridService;
-
     /**
      * The question item service implementation.
      *
      * @var IQuestionItemService
      */
     protected $questionItemService;
-
     /**
      * The response service implementation.
      *
      * @var IResponseService
      */
     protected $responseService;
-
     /**
      * The role service implementation.
      *
      * @var IRoleService
      */
     protected $roleService;
-
     /**
      * The sheet service implementation.
      *
      * @var ISheetService
      */
     protected $sheetsService;
-
     /**
      * The user service implementation.
      *
      * @var IUserService
      */
     protected $userService;
-
     /**
      * Creates an instance of `Importer`.
      *
@@ -146,7 +132,6 @@ class Importer implements IImporter
         $this->sheetsService = $sheetsService;
         $this->userService = $userService;
     }
-
     /**
      * Removes odd formatting from the legacy data to more closely match the
      * current data.
@@ -159,7 +144,6 @@ class Importer implements IImporter
     {
         return preg_replace('/\d+[.\-\ ]*\ /', '', $field);
     }
-
     /**
      * Returns the raw CSV data.
      *
@@ -171,7 +155,6 @@ class Importer implements IImporter
     {
         return $this->sheetsService->getSheetAsCsv($sheet);
     }
-
     /**
      * Returns an array of data for a client, sanitized.
      *
@@ -189,7 +172,6 @@ class Importer implements IImporter
             'phone' => $row->get($mapping['general_info.phone']),
         ];
     }
-
     /**
      * Returns a special mapping for a question, if applicable.
      *
@@ -205,10 +187,8 @@ class Importer implements IImporter
             case 'general_info.last_name':
                 return 'general_info.full_name.last_name';
         }
-
         return $question;
     }
-
     /**
      * Processes an answer to a questionnaire.
      *
@@ -229,16 +209,15 @@ class Importer implements IImporter
         if (empty(trim($answer))) {
             return;
         }
-
+	
         // Fetch the main questionnaire from the database
         $questionnaire = $this->questionnaireService->findBy(
             'name',
-            'all_basic_qs'
+            explode('.', $this->getSpecialMapping($question))[0]
         );
         if (is_null($questionnaire)) {
             return;
         }
-
         // Find an existing response or create one if necessary
         $responseArray = [
             'questionnaire_id' => $questionnaire->id,
@@ -257,7 +236,6 @@ class Importer implements IImporter
                 )
             );
         }
-
         // Fetch the question from the database
         $questionName = array_slice(
             explode('.', $this->getSpecialMapping($question)),
@@ -268,12 +246,11 @@ class Importer implements IImporter
             ->optional()
             ->findBy([
                 'name' => implode('>>>', $questionName),
-                'questionnaire_id' => $questionnaire->id,
-            ]);
+                //'questionnaire_id' => $questionnaire->id,
+            ]); 
         if (is_null($existingQuestion)) {
             return;
         }
-
         $questionItem = $this->questionItemService
             ->optional()
             ->pushCriteria(
@@ -283,7 +260,6 @@ class Importer implements IImporter
                 )
             )
             ->findBy('question_id', $existingQuestion->id);
-
         if ($question !== $this->getSpecialMapping($question)) {
             $specialQuestionItem = $this->questionItemService
                 ->optional()
@@ -293,7 +269,6 @@ class Importer implements IImporter
                     'value' => null,
                 ]);
         }
-
         $column = $this->questionGridService
             ->optional()
             ->findBy([
@@ -301,7 +276,6 @@ class Importer implements IImporter
                 'type' => 'C',
                 'value' => $this->getCleanedField($answer),
             ]);
-
         $row = $this->questionGridService
             ->optional()
             ->pushCriteria(
@@ -314,7 +288,6 @@ class Importer implements IImporter
                 'question_id' => $existingQuestion->id,
                 'type' => 'R',
             ]);
-
         // Search for an existing answer, abort early if one is found
         $existingAnswer = $this->answerService
             ->optional()
@@ -324,11 +297,10 @@ class Importer implements IImporter
                 'question_item_id' => $questionItem->id ?? null,
                 'response_id' => $response->id,
                 'row_id' => $row->id ?? null,
-            ]);
+            ]); 
         if (! is_null($existingAnswer)) {
             return;
         }
-
         $this->answerService->create([
             'column_id' => $column->id ?? null,
             'question_id' => $existingQuestion->id,
@@ -338,7 +310,6 @@ class Importer implements IImporter
             'value' => $answer,
         ]);
     }
-
     /**
      * Processes a client, returns the client if it exists.
      *
@@ -354,23 +325,19 @@ class Importer implements IImporter
             'email' => 'required|filled|email',
             'name' => 'required|filled',
         ]);
-
         // Client data is not valid, return `null`
         if ($validator->fails()) {
             return null;
         }
-
         // Client data is valid, search for existing client in database by email
         $client['email'] = strtolower($client['email']);
         $user = $this->userService
             ->optional()
             ->findBy('email', $client['email']);
-
         // Client exists, return the existing client
         if (! is_null($user)) {
             return $user;
         }
-
         // Client does not exist, create a new one and return it
         $clientRole = $this->roleService->findBy('level', Roles::Client);
         $client['is_active'] = 1;
@@ -381,10 +348,8 @@ class Importer implements IImporter
         if (! is_null($clinic)) {
             $this->userService->assignClinic($clinic, $user, [$clientRole->id]);
         }
-
         return $user;
     }
-
     /**
      * Performs a generic import.
      *
@@ -402,12 +367,10 @@ class Importer implements IImporter
             if (! is_null($clinic)) {
                 $clinic = $this->clinicService->findBy('uuid', $clinic);
             }
-
             // Displays a progress bar in the console
             $output = new ConsoleOutput();
             $progress = new ProgressBar($output, $data->count());
             $progress->start();
-
             foreach ($data as $index => $row) {
                 // Import or retrieve the existing client
                 $user = $this->processClientData(
@@ -421,7 +384,7 @@ class Importer implements IImporter
                     $progress->advance();
                     continue;
                 }
-
+					
                 // Save the questionnaire data to the database
                 foreach ($mapping as $question => $index) {
                     if (
@@ -437,7 +400,6 @@ class Importer implements IImporter
                         $headers->get($mapping[$question])
                     );
                 }
-
                 // Save the data for each response to the database.  May
                 // recalculate for some responses, will not change the data
                 // as long as the data is up to date.
@@ -451,15 +413,12 @@ class Importer implements IImporter
                         'data' => json_encode($data),
                     ]);
                 }
-
                 $progress->advance();
             }
-
             $progress->finish();
             $output->writeln('');
         });
     }
-
     /**
      * Processes users from the legacy API to ensure that the user list is up
      * to date before processing questionnaires from the Sheets API.
@@ -473,12 +432,10 @@ class Importer implements IImporter
         DB::transaction(function () use ($clinic) {
             $clientRole = $this->roleService->findBy('level', Roles::Client);
             $therapistRole = $this->roleService->findBy('level', Roles::SeniorTherapist);
-
             // If a clinic is provided, attempt to load it from the database
             if (! is_null($clinic)) {
                 $clinic = $this->clinicService->findBy('uuid', $clinic);
             }
-
             $therapists = $this->legacyApiService->getUserData();
             $numberOfOperations = $therapists->reduce(function ($carry, $item) {
                 return $carry + 1 + $item->clients->count();
@@ -486,7 +443,6 @@ class Importer implements IImporter
             $output = new ConsoleOutput();
             $progress = new ProgressBar($output, $numberOfOperations);
             $progress->start();
-
             foreach ($therapists as $therapist) {
                 $therapistData = [
                     'email' => strtolower($therapist->email),
@@ -494,18 +450,16 @@ class Importer implements IImporter
                     'name' => $therapist->name,
                     'password' => Hash::make(str_random(24)),
                 ];
-
+				
                 // Validate therapist data
                 $validator = Validator::make($therapistData, [
                     'email' => 'required|filled|email',
                     'name' => 'required|filled',
                 ]);
-
                 if ($validator->fails()) {
                     continue;
                 }
-
-                $therapistUser = $this->userService
+               $therapistUser = $this->userService
                     ->optional()
                     ->findBy('email', $therapistData['email']);
                 if (is_null($therapistUser)) {
@@ -520,8 +474,8 @@ class Importer implements IImporter
                         );
                     }
                 }
-
-                $therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
+				
+				$therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
                     $clientData = [
                         'email' => strtolower($client->email),
                         'is_active' => 1,
@@ -529,17 +483,14 @@ class Importer implements IImporter
                         'password' => Hash::make(str_random(24)),
                         'phone' => $client->phone,
                     ];
-
                     // Validate client data
                     $validator = Validator::make($clientData, [
                         'email' => 'required|filled|email',
                         'name' => 'required|filled',
                     ]);
-
                     if ($validator->fails()) {
                         return true;
                     }
-
                     $clientUser = $this->userService
                         ->optional()
                         ->findBy('email', $clientData['email']);
@@ -558,15 +509,12 @@ class Importer implements IImporter
                     $this->userService->addTherapist($therapistUser, $clientUser);
                     $progress->advance();
                 });
-
                 $progress->advance();
             }
-
             $progress->finish();
             $output->writeln('');
         });
     }
-
     /**
      * Imports the `assess` sheet.
      *
@@ -579,10 +527,8 @@ class Importer implements IImporter
     {
         $data = $this->getRawCsvData(Sheets::Assess[$language]);
         $mapping = SheetsMapping::Assess[$language];
-
         return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
-
     /**
      * Imports the `mbct` sheet.
      *
@@ -595,10 +541,8 @@ class Importer implements IImporter
     {
         $data = $this->getRawCsvData(Sheets::Mbct[$language]);
         $mapping = SheetsMapping::Mbct[$language];
-
         return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
-
     /**
      * Imports the `mbsr` sheet.
      *
@@ -611,7 +555,6 @@ class Importer implements IImporter
     {
         $data = $this->getRawCsvData(Sheets::Mbsr[$language]);
         $mapping = SheetsMapping::Mbsr[$language];
-
         return $this->import($data->first(), $data->slice(1), $mapping, $clinic);
     }
 }

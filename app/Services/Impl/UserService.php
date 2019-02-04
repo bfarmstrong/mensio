@@ -347,7 +347,7 @@ class UserService extends BaseService implements IUserService
 		}
 			$user->clinics()->detach($clinic);
 			foreach($role_id as $role){
-				if($role != 5){
+				if($role != 5 && $clinic != false){
 					$user->clinics()->attach($clinic, ['role_id' => $role]);
 				} else if($clinic == false || $role == 5 ) {
 					$clinics = Clinic::pluck('id');
