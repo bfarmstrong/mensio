@@ -6,18 +6,26 @@ jobs:
         image: 'buildpack-deps:trusty'
     steps:
       -
+        add_ssh_keys:
+          fingerprints:
+            - 'ad:56:db:78:09:76:33:57:4c:86:26:f5:7c:ab:71:9c'
+      -
         run:
           name: 'Deploy over SSH to development server'
-          command: 'ssh -o StrictHostKeyChecking=no $DEVELOP_REMOTE_USER@$DEVELOP_REMOTE_HOST "$DEVELOP_DEPLOY_SCRIPT"'
+          command: 'ssh -A -o StrictHostKeyChecking=no $DEVELOP_REMOTE_USER@$DEVELOP_REMOTE_HOST "$DEVELOP_DEPLOY_SCRIPT"'
   deploy-staging:
     docker:
       -
         image: 'buildpack-deps:trusty'
     steps:
       -
+        add_ssh_keys:
+          fingerprints:
+            - 'ad:56:db:78:09:76:33:57:4c:86:26:f5:7c:ab:71:9c'
+      -
         run:
           name: 'Deploy over SSH to staging server'
-          command: 'ssh -o StrictHostKeyChecking=no $STAGING_REMOTE_USER@$STAGING_REMOTE_HOST "$STAGING_DEPLOY_SCRIPT"'
+          command: 'ssh -A -o StrictHostKeyChecking=no $STAGING_REMOTE_USER@$STAGING_REMOTE_HOST "$STAGING_DEPLOY_SCRIPT"'
 workflows:
   version: 2
   deploy-develop:
