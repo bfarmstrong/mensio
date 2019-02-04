@@ -40,7 +40,7 @@
 						@endphp
 						
 						<tr>
-							<td>{{ $client_name->name}}</td>
+							<td><a href="/clients/{{ $key}}" >{{ $client_name->name}}</a></td>
 							@if(isset($communications[$key][0])) 
 								@foreach ($communications[$key] as $log) 
 									<td>{{ $log->appointment_date }}</td>
