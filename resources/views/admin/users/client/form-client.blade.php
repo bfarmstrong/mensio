@@ -3,8 +3,8 @@
         <div class="form-group">
             {!!
                 Form::label(
-                    'email',
-                    __('user.form-settings.email')
+                    'first_name',
+                    __('user.form-client.first_name')
                 )
             !!}
 
@@ -16,9 +16,9 @@
                 </div>
 
                 {!!
-                    Form::email(
-                        'email',
-                        old('email'),
+                    Form::text(
+                        'first_name',
+                        old('first_name'),
                         ['class' => 'form-control']
                     )
                 !!}
@@ -30,15 +30,15 @@
         <div class="form-group">
             {!!
                 Form::label(
-                    'name',
-                    __('user.form-settings.name')
+                    'last_name',
+                    __('user.form-client.last_name')
                 )
             !!}
 
             {!!
                 Form::text(
-                    'name',
-                    old('name'),
+                    'last_name',
+                    old('last_name'),
                     ['class' => 'form-control']
                 )
             !!}
@@ -50,15 +50,15 @@
     <div class="form-group col-12 col-md-4">
         {!!
             Form::label(
-                'phone',
-                __('user.form-settings.phone')
+                'address',
+                __('user.form-client.address')
             )
         !!}
 
         {!!
-            Form::tel(
-                'phone',
-                old('phone'),
+            Form::text(
+                'address',
+                old('address'),
                 ['class' => 'form-control']
             )
         !!}
@@ -67,15 +67,15 @@
     <div class="form-group col-12 col-md-4">
         {!!
             Form::label(
-                'home_phone',
-                __('user.form-settings.home-phone')
+                'telephone_number',
+                __('user.form-client.telephone_number')
             )
         !!}
 
         {!!
             Form::tel(
-                'home_phone',
-                old('home_phone'),
+                'telephone_number',
+                old('telephone_number'),
                 ['class' => 'form-control']
             )
         !!}
@@ -84,15 +84,15 @@
     <div class="form-group col-12 col-md-4">
         {!!
             Form::label(
-                'work_phone',
-                __('user.form-settings.work-phone')
+                'referring_physician',
+                __('user.form-client.referring_physician')
             )
         !!}
 
         {!!
             Form::tel(
-                'work_phone',
-                old('work_phone'),
+                'referring_physician',
+                old('referring_physician'),
                 ['class' => 'form-control']
             )
         !!}
@@ -103,41 +103,32 @@
     <div class="form-group col-6">
         {!!
             Form::label(
-                'preferred_contact_method',
-                __('user.form-settings.preferred-contact-method')
+                'birth_date',
+                __('user.form-client.birth_date')
             )
         !!}
 
         {!!
-            Form::select(
-                'preferred_contact_method',
-                [
-                    'EM' => __('user.form-settings.contact-email'),
-                    'PH' => __('user.form-settings.contact-phone'),
-                ],
-                old('preferred_contact_method'),
-                ['class' => 'form-control selectpicker']
+            Form::text(
+                'birth_date',
+                old('birth_date'),
+                ['class' => 'form-control']
             )
         !!}
     </div>
 	<div class="form-group col-6">
         {!!
             Form::label(
-                'gender',
-                __('user.form-settings.gender')
+                'secondary_telephone_number',
+                __('user.form-client.secondary_telephone_number')
             )
         !!}
 
         {!!
-            Form::select(
-                'gender',
-                [
-                    'Male' => __('user.form-settings.male'),
-                    'Female' => __('user.form-settings.female'),
-                    'Other' => __('user.form-settings.other'),
-                ],
-                old('gender'),
-                ['class' => 'form-control selectpicker']
+            Form::text(
+                'secondary_telephone_number',
+                old('secondary_telephone_number'),
+                ['class' => 'form-control']
             )
         !!}
     </div>
@@ -147,20 +138,16 @@
     <div class="form-group col-12 col-md-6">
         {!!
             Form::label(
-                'doctor_id',
-                __('user.form-settings.doctor')
+                'language',
+                __('user.form-client.language')
             )
         !!}
 
         {!!
-            Form::select(
-                'doctor_id',
-                $doctors->pluck('name', 'id'),
-                old('doctor_id'),
-                [
-                    'class' => 'form-control selectpicker',
-                    'data-live-search' => 'true',
-                ]
+            Form::text(
+                'language',
+                old('language'),
+                ['class' => 'form-control']
             )
         !!}
     </div>
@@ -168,20 +155,16 @@
     <div class="form-group col-12 col-md-6">
         {!!
             Form::label(
-                'referrer_id',
-                __('user.form-settings.referrer')
+                'fee',
+                __('user.form-client.fee')
             )
         !!}
 
         {!!
-            Form::select(
-                'referrer_id',
-                $doctors->pluck('name', 'id'),
-                old('referrer_id'),
-                [
-                    'class' => 'form-control selectpicker',
-                    'data-live-search' => 'true',
-                ]
+            Form::text(
+                'fee',
+                old('fee'),
+                ['class' => 'form-control']
             )
         !!}
     </div>
@@ -191,97 +174,46 @@
     <div class="form-group col-12">
         {!!
             Form::label(
-                'health_card_number',
-                __('user.form-settings.health-card-number')
+                'ramq',
+                __('user.form-client.ramq')
             )
         !!}
 
         {!!
             Form::text(
-                'health_card_number',
-                old('health_card_number'),
+                'ramq',
+                old('ramq'),
                 ['class' => 'form-control']
             )
         !!}
     </div>
 </div>
 
-@if ($features['license'] ?? false)
-    <div class="form-row">
-        <div class="form-group col-12">
-            {!!
-                Form::label(
-                    'license',
-                    __('user.form-settings.license')
-                )
-            !!}
-
-            {!!
-                Form::text(
-                    'license',
-                    old('license'),
-                    ['class' => 'form-control']
-                )
-            !!}
-        </div>
-    </div>
-@endif
-
-@if (Auth::user()->isAdmin() && isset($roles))
-    <div class="form-row">
-        <div class="form-group col-12">
-            {!!
-                Form::label(
-                    'role_id',
-                    __('user.form-settings.role')
-                )
-            !!}
-	@if(isset($user))
-			{!!
-                Form::select(
-                    'role_id[]',
-                    $roles->pluck('label', 'id'),
-                    $user->roles()->pluck('roles.id')->toArray(),
-                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
-                )
-            !!}
-	@else
-            {!!
-                Form::select(
-                    'role_id[]',
-                    $roles->pluck('label', 'id'),
-                    old('role_id'),
-                    ['class' => 'form-control selectpicker','multiple'=>'multiple']
-                )
-            !!}
-	@endif
-        </div>
-    </div>
-@endif
 
 <hr class="mt-1">
 
 <div class="form-row">
     <div class="col-12">
         <p class="h5">
-            @lang('user.form-settings.address')
+            @lang('user.form-client.address')
         </p>
     </div>
 </div>
 
+
 <div class="form-row">
     <div class="form-group col-12 col-md-8">
         {!!
             Form::label(
-                'address_line_1',
-                __('user.form-settings.address-line-1')
+                'referrer',
+                __('user.form-client.referrer')
             )
         !!}
 
         {!!
             Form::text(
-                'address_line_1',
-                old('address_line_1'),
+                'referrer',
+                old('referrer'),
                 ['class' => 'form-control']
             )
         !!}
@@ -290,103 +222,28 @@
     <div class="form-group col-12 col-md-4">
         {!!
             Form::label(
-                'address_line_2',
-                __('user.form-settings.address-line-2')
+                'gender',
+                __('user.form-client.gender')
             )
         !!}
 
         {!!
             Form::text(
-                'address_line_2',
-                old('address_line_2'),
+                'gender',
+                old('gender'),
                 ['class' => 'form-control']
             )
         !!}
     </div>
 </div>
 
-<div class="form-row">
-    <div class="form-group col-12 col-md-8">
-        {!!
-            Form::label(
-                'city',
-                __('user.form-settings.city')
-            )
-        !!}
-
-        {!!
-            Form::text(
-                'city',
-                old('city'),
-                ['class' => 'form-control']
-            )
-        !!}
-    </div>
-
-    <div class="form-group col-12 col-md-4">
-        {!!
-            Form::label(
-                'postal_code',
-                __('user.form-settings.postal-code')
-            )
-        !!}
-
-        {!!
-            Form::text(
-                'postal_code',
-                old('postal_code'),
-                ['class' => 'form-control']
-            )
-        !!}
-    </div>
-</div>
-<div class="form-row">
-    <div class="form-group col-12 col-md-6">
-        {!!
-            Form::label(
-                'province',
-                __('user.form-settings.province')
-            )
-        !!}
-
-        {!! Form::hidden('_province', $user->province ?? $currentClinic->province) !!}
-        {!!
-            Form::select(
-                'province',
-                [],
-                old('province'),
-                ['class' => 'form-control provincepicker selectpicker']
-            )
-        !!}
-    </div>
-
-    <div class="form-group col-12 col-md-6">
-        {!!
-            Form::label(
-                'country',
-                __('user.form-settings.country')
-            )
-        !!}
-
-        {!!
-            Form::select(
-                'country',
-                Countries::all()->map(function ($country) {
-                    return $country->get('name.common');
-                }),
-                old('country') ?? $currentClinic->country,
-                ['class' => 'form-control countrypicker selectpicker']
-            )
-        !!}
-    </div>
-</div>
 
 <hr class="mt-1">
 
 <div class="form-row">
     <div class="col-12">
         <p class="h5">
-            @lang('user.form-settings.emergency-contact')
+            @lang('user.form-client.emergency-contact')
         </p>
     </div>
 </div>
@@ -396,7 +253,7 @@
         {!!
             Form::label(
                 'emergency_name',
-                __('user.form-settings.emergency-name')
+                __('user.form-client.emergency-name')
             )
         !!}
 
@@ -413,7 +270,7 @@
         {!!
             Form::label(
                 'emergency_phone',
-                __('user.form-settings.emergency-phone')
+                __('user.form-client.emergency-phone')
             )
         !!}
 
@@ -430,7 +287,7 @@
         {!!
             Form::label(
                 'emergency_relationship',
-                __('user.form-settings.emergency-relationship')
+                __('user.form-client.emergency-relationship')
             )
         !!}
 
@@ -451,7 +308,7 @@
         {!!
             Form::label(
                 'notes',
-                __('user.form-settings.notes')
+                __('user.form-client.notes')
             )
         !!}
 
@@ -486,7 +343,7 @@
                 {!!
                     Form::label(
                         'marketing',
-                        __('user.form-settings.agree-marketing'),
+                        __('user.form-client.agree-marketing'),
                         ['class' => 'custom-control-label']
                     )
                 !!}
@@ -512,7 +369,7 @@
                         {!!
                             Form::label(
                                 'terms_and_cond',
-                                __('user.form-settings.agree-terms'),
+                                __('user.form-client.agree-terms'),
                                 ['class' => 'custom-control-label']
                             )
                         !!}
@@ -528,7 +385,7 @@
         <div class="form-group mb-0">
             {!!
                 Form::submit(
-                    __('user.form-settings.save'),
+                    __('user.form-client.save'),
                     ['class' => 'btn btn-primary']
                 )
             !!}
@@ -538,7 +395,7 @@
                     class="btn btn-secondary"
                     href="{{ url("admin/users/switch/$user->id") }}"
                 >
-                    @lang('user.form-settings.switch-user')
+                    @lang('user.form-client.switch-user')
                 </a>
             @endif
 
@@ -547,7 +404,7 @@
                     class="btn btn-secondary"
                     href="{{ url('user/password') }}"
                 >
-                    @lang('user.form-settings.change-password')
+                    @lang('user.form-client.change-password')
                 </a>
             @endif
 
@@ -556,7 +413,7 @@
                     class="btn btn-secondary"
                     href="{{ url('user/signature') }}"
                 >
-                    @lang('user.form-settings.change-signature')
+                    @lang('user.form-client.change-signature')
                 </a>
             @endif
 
@@ -565,7 +422,7 @@
                     class="btn btn-secondary"
                     href="{{ url("admin/users/$user->id/therapists") }}"
                 >
-                    @lang('user.form-settings.therapists')
+                    @lang('user.form-client.therapists')
                 </a>
             @endif
 
@@ -574,7 +431,7 @@
                     class="btn btn-secondary"
                     href="{{ url("admin/users/$user->id/groups") }}"
                 >
-                    @lang('user.form-settings.groups')
+                    @lang('user.form-client.groups')
                 </a>
             @endif
 
@@ -584,14 +441,14 @@
                         class="btn btn-danger"
                         href="{{ url("admin/users/inactivate/$user->id") }}"
                     >
-                        @lang('user.form-settings.inactive')
+                        @lang('user.form-client.inactive')
                     </a>
                 @else
                     <a
                         class="btn btn-success"
                         href="{{ url("admin/users/activate/$user->id") }}"
                     >
-                        @lang('user.form-settings.active')
+                        @lang('user.form-client.active')
                     </a>
                 @endif
             @endif
