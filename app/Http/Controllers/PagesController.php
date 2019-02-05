@@ -112,9 +112,9 @@ class PagesController extends Controller
 			$clinic_id = request()->attributes->get('clinic')->id;
 			$score = array();
 			$responses = $this->response
-				->pushCriteria(new WithRelation('questionnaire'))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->pushCriteria(new WhereAssigned(\Auth::user()->id))
+				->getByCriteria(new WithRelation('questionnaire'))
+				->getByCriteria(new OrderBy('updated_at', 'desc'))
+				->getByCriteria(new WhereAssigned(\Auth::user()->id))
 				->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
 				->all();
 			foreach($responses as $response) {
