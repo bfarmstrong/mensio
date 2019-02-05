@@ -46,7 +46,11 @@ class LoginController extends Controller
     { 
         if (auth()->user()->isAdmin()) {
             return redirect('/admin/dashboard');
-        }
+        } else {
+			return redirect('/logout')->with([
+            'message' => __('admin.surveys.assignsurvey.user-assigned'),
+			]);
+		}
 
         return redirect('dashboard');
     }
