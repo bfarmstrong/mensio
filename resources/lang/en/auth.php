@@ -24,6 +24,7 @@ return [
         'form-subtitle' => 'Sign into your account',
         'form-title' => 'Login',
         'title' => 'Login',
+        'temporary_failed' => 'invalid username or password',
     ],
     'passwords' => [
         'forgot-password' => [
