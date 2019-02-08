@@ -103,6 +103,7 @@ return [
             'note-updated' => 'Note was updated successfully.',
             'notes' => 'Notes',
             'title' => 'All Notes',
+            'documents' => 'Old Documents',
 			'appointment_date' => 'Appointment Date:',
 			'actions' => 'Actions:',
 			'notes' => 'Notes:',

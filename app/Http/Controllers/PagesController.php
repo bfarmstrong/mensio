@@ -17,6 +17,7 @@ use App\Services\Criteria\Note\WithTherapist;
 use App\Services\Criteria\General\WhereRelationEqual;
 use App\Enums\Roles;
 use App\Services\Criteria\User\WhereCurrentClient;
+use App\Services\Criteria\User\WhereCurrentClientSupervisorsorTherapist;
 
 class PagesController extends Controller
 {
@@ -86,12 +87,20 @@ class PagesController extends Controller
 			$communications =array();
 			$client_names =array();
 			$notes =array();
-			$clients = $this->userService
+			$all_therapist_supervisor = $this->userService
 				->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
-				->pushCriteria(new WhereCurrentClient(\Auth::user()->id))
+				->getByCriteria(new WhereCurrentClientSupervisorsorTherapist(\Auth::user()->id))
 				->pushCriteria(new WithRelation('roles'))
 				->all();
-			foreach($clients as $client) {	
+			
+			foreach($all_therapist_supervisor as $therapist_supervisor) {	
+				 
+				$clients = $this->userService
+					->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
+					->pushCriteria(new WhereCurrentClient($therapist_supervisor->id))
+					->pushCriteria(new WithRelation('roles'))
+					->all();  
+				foreach($clients as $client){
 				$notes[$client->id] = $this->noteService
 					->pushCriteria(new WhereClient($client->id))
 					->pushCriteria(new WhereParent())
@@ -105,6 +114,7 @@ class PagesController extends Controller
 					->pushCriteria(new OrderBy('updated_at', 'desc'))
 					->paginate(1);
 				$client_names[$client->id] = $this->userService->find($client->id);
+				}
 			}	
 		} 
 		if(\Auth::user()->isClient()){
@@ -112,9 +122,9 @@ class PagesController extends Controller
 			$clinic_id = request()->attributes->get('clinic')->id;
 			$score = array();
 			$responses = $this->response
-				->pushCriteria(new WithRelation('questionnaire'))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->pushCriteria(new WhereAssigned(\Auth::user()->id))
+				->getByCriteria(new WithRelation('questionnaire'))
+				->getByCriteria(new OrderBy('updated_at', 'desc'))
+				->getByCriteria(new WhereAssigned(\Auth::user()->id))
 				->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
 				->all();
 			foreach($responses as $response) {

@@ -46,8 +46,11 @@ class LoginController extends Controller
     { 
         if (auth()->user()->isAdmin()) {
             return redirect('/admin/dashboard');
-        }
-
-        return redirect('dashboard');
+        } elseif(auth()->user()->isClient()) {
+			\Auth::logout();
+			return redirect('/login')->with('message', __('auth.login.temporary_failed'));
+		} else {
+		    return redirect('dashboard');
+		}
     }
 }

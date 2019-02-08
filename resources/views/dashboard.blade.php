@@ -40,7 +40,7 @@
 						@endphp
 						
 						<tr>
-							<td>{{ $client_name->name}}</td>
+							<td><a href="/clients/{{ $key}}" >{{ $client_name->name}}</a></td>
 							@if(isset($communications[$key][0])) 
 								@foreach ($communications[$key] as $log) 
 									<td>{{ $log->appointment_date }}</td>
@@ -180,6 +180,7 @@
     </div>
 	</div>
 @php
+$years = array();
 foreach($responses as $response) {
 	$years[] =date('Y',strtotime($response->updated_at));
 	$months[] =date('m',strtotime($response->updated_at));
@@ -213,6 +214,7 @@ foreach($responses as $response) {
 	</div>
 </div>
 </div>
+	
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
@@ -225,10 +227,16 @@ var chartData = {
 	@php  
 		$dates = ''; 
 		$score_i = ''; 
+	if(!empty($years)){
+		
 		for($i=0;$i<count($years);$i++){
 				$dates .= "'".$years[$i]."-".$months[$i]."-".$days[$i]."',";
 				$score_i .= $sc[$i].',';
 		} 
+	} else {
+		$dates .= "'".date('Y')."-".date('m')."-".date('d')."',";
+		$score_i .= 0;
+	}
 	@endphp
 		labels: [@php echo $dates; @endphp],
 	
@@ -260,7 +268,6 @@ if (chLine) {
   });
 }
 </script>
-
 @endif
 @endsection
 @push('scripts')
