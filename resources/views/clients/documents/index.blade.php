@@ -1,7 +1,7 @@
 @extends('layout.dashboard')
 
 @section('title', __('admin.documents.index.title'))
-@section('content.breadcrumbs', Breadcrumbs::render('admin.documents.index', request()->user()))
+@section('content.breadcrumbs', Breadcrumbs::render('admin.documents.index', $client))
 @section('content.dashboard')
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.0/css/buttons.bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.4/css/select.bootstrap.min.css">

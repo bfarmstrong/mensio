@@ -56,9 +56,12 @@ class DocumentController extends Controller
      *
      * @return document
      */
-	public function index(DocumentsDataTable $dataTable)
+	public function index(DocumentsDataTable $dataTable,string $user)
     {	
-        return $dataTable->render('clients.documents.index');
+		$client = $this->userService->find($user);
+        return $dataTable->render('clients.documents.index')->with([
+             'client' => $client,
+        ]);
     }
     /**
      * Show the form for creating a Document.
