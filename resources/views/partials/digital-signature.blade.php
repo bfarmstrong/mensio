@@ -27,7 +27,8 @@
         </small>
     </div>
 
-    <div class="form-group col-12 col-md-6 col-lg-3">
+	<div class="form-group col-12 col-md-6 col-lg-3">
+	@if(!in_array(2,\Auth::user()->roles()->pluck('roles.level')->toArray()))
         {!!
             Form::label(
                 'signature[license]',
@@ -43,7 +44,9 @@
                 ['class' => 'form-control']
             )
         !!}
-
+	@else
+		{!! Form::hidden('signature[license]', \Auth::user()->license) !!}
+	@endif
         <small class="form-text text-muted d-inline-block d-md-none">
             @lang('partials.digital-signature.signature-notice')
         </small>

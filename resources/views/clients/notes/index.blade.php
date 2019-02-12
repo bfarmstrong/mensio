@@ -14,6 +14,13 @@
             </span>
 
             <div class="ml-auto">
+			    <a
+                    class="btn btn-primary btn-sm"
+                    href="{{ url("clients/documents/$user->id") }}"
+                >
+                    <i class="fas fa-file mr-1"></i>
+                    @lang('clients.notes.index.documents')
+                </a>
                 <a
                     class="btn btn-primary btn-sm"
                     href="{{ url("clients/$user->id/attachments/create") }}"

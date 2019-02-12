@@ -209,7 +209,7 @@ class Importer implements IImporter
         if (empty(trim($answer))) {
             return;
         }
-	
+
         // Fetch the main questionnaire from the database
         $questionnaire = $this->questionnaireService->findBy(
             'name',
@@ -247,7 +247,7 @@ class Importer implements IImporter
             ->findBy([
                 'name' => implode('>>>', $questionName),
                 //'questionnaire_id' => $questionnaire->id,
-            ]); 
+            ]);
         if (is_null($existingQuestion)) {
             return;
         }
@@ -297,7 +297,7 @@ class Importer implements IImporter
                 'question_item_id' => $questionItem->id ?? null,
                 'response_id' => $response->id,
                 'row_id' => $row->id ?? null,
-            ]); 
+            ]);
         if (! is_null($existingAnswer)) {
             return;
         }
@@ -384,7 +384,7 @@ class Importer implements IImporter
                     $progress->advance();
                     continue;
                 }
-					
+
                 // Save the questionnaire data to the database
                 foreach ($mapping as $question => $index) {
                     if (
@@ -430,6 +430,7 @@ class Importer implements IImporter
     public function importLegacyUserData($clinic = null)
     {
         DB::transaction(function () use ($clinic) {
+            $genders = ['Male', 'Female', 'Other'];
             $clientRole = $this->roleService->findBy('level', Roles::Client);
             $therapistRole = $this->roleService->findBy('level', Roles::SeniorTherapist);
             // If a clinic is provided, attempt to load it from the database
@@ -446,12 +447,14 @@ class Importer implements IImporter
             foreach ($therapists as $therapist) {
                 $therapistData = [
                     'email' => strtolower($therapist->email),
-                    'gender' => $therapist->gender,
+                    'gender' => in_array($therapist->gender ?? null, $genders) ?
+                        $therapist->gender :
+                        null,
                     'is_active' => 1,
                     'name' => $therapist->name,
                     'password' => Hash::make(str_random(24)),
                 ];
-				
+
                 // Validate therapist data
                 $validator = Validator::make($therapistData, [
                     'email' => 'required|filled|email',
@@ -475,11 +478,13 @@ class Importer implements IImporter
                         );
                     }
                 }
-				
-				$therapist->clients->each(function ($client) use ($clientRole, $clinic, $progress, $therapistUser) {
+
+				$therapist->clients->each(function ($client) use ($clientRole, $clinic, $genders, $progress, $therapistUser) {
                     $clientData = [
                         'email' => strtolower($client->email),
-                        'gender' => $client->gender,
+                        'gender' => in_array($client->gender ?? null, $genders) ?
+                            $client->gender :
+                            null,
                         'is_active' => 1,
                         'name' => $client->name,
                         'password' => Hash::make(str_random(24)),
