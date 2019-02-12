@@ -102,6 +102,10 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['prefix' => 'clients', 'middleware' => 'requires-clinic', 'namespace' => 'Client'], function () {
+			/* 
+			|client overview 
+			*/
+			Route::get('{user_id}/details', 'ClientController@details');
 			/*
             |--------------------------------------------------------------------------
             | migrate old documents
