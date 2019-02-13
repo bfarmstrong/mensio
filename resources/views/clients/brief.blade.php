@@ -86,7 +86,7 @@
                     @lang('dashboard.appointments')
                 </a>
             </div>
-            <div id="collapseThree" class="card-body collapse" data-parent="#accordion" >
+            <div id="collapseThree" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-6">
 						<h6 class="text-center font-weight-bold">@lang('dashboard.past')</h6>
@@ -121,7 +121,7 @@
                     @lang('dashboard.notes')
                 </a>
             </div>
-            <div id="collapseFour" class="card-body collapse" data-parent="#accordion" >
+            <div id="collapseFour" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-12">
 						
@@ -175,7 +175,7 @@ foreach($responses as $response) {
                     Charts
                 </a>
             </div>
-            <div id="collapseFive" class="card-body collapse" data-parent="#accordion" >
+            <div id="collapseFive" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-12">
 					<canvas id="chLine" ></canvas>

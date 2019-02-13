@@ -87,33 +87,6 @@ class DashboardController extends Controller
 				);
 			}
 
-			$type = Route::currentRouteName();
-			if ('admin.clients' === $type) {
-				$type = 'clients';
-				$query = $query->pushCriteria(
-					new WhereRelationEqual(
-						'roles',
-						'level',
-						Roles::Client
-					)
-				);
-			} elseif ('admin.therapists' === $type) {
-				$type = 'therapists';
-				$query = $query->pushCriteria(
-					new WhereRelationNotEqual(
-						'roles',
-						'level',
-						Roles::Client
-					)
-				);
-			}
-
-			// Data tables support.  Utilizes the existing query.
-			if (request()->expectsJson()) {
-				$query->applyCriteria();
-
-				return DataTables::of($query->getModel())->toJson();
-			}
 
 			$users = $query->paginate();
 
@@ -122,14 +95,19 @@ class DashboardController extends Controller
 			});
 
 			$therapists = $users->filter(function ($user) {
-				return $user->isTherapist() || $user->isAdmin();
+				return $user->isTherapist();
+			});
+			
+			$admin = $users->filter(function ($user) {
+				return $user->isAdmin();
 			});
 
-        return view('admin.dashboard')->with([
+        return view('admin.dashboard.dashboard')->with([
 				'clients' => $clients,
 				'therapists' => $therapists,
-				'type' => $type,
+				'admin' => $admin,
 				'users' => $users,
+				//'type' => $type,
 			]);
     }
 }
