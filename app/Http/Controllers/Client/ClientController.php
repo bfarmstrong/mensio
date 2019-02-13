@@ -27,7 +27,7 @@ use App\Services\Criteria\Note\WithTherapist;
 use App\Services\Criteria\User\WithSupervisors;
 use App\Services\Criteria\User\WhereTherapist;
 use App\Services\Criteria\User\WhereNotCurrentTherapist;
-
+use App\Services\Criteria\User\WithTherapistsAndSupervisors;
 /**
  * Manages a list of clients.
  */
@@ -233,14 +233,14 @@ class ClientController extends Controller
 					->findBy('uuid', $response->uuid);
 				$score[$response->uuid] = $this->response->getScore($response_details);
 			}
-			$therapists = $this->user
-				->pushCriteria(new WithSupervisors($user))
-				->pushCriteria(new WhereTherapist())
-				->pushCriteria(new WithRole())
-				->pushCriteria(new WhereNotCurrentTherapist($user))
-				->all()
-				->sortBy('name');
-				
+			
+			$user_therapists = $this->user
+				->getByCriteria(new WithTherapistsAndSupervisors($user))
+				->find($user); 
+			$therapists	= '';
+			foreach($user_therapists->therapists()->pluck('name') as $name_therapist) {
+				$therapists	.= $name_therapist.',';
+			}
 			$communication = $this->communicationLogService
 				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
 				->pushCriteria(new WhereEqual('user_id', $client->id))
@@ -260,7 +260,7 @@ class ClientController extends Controller
 				'communication' => $communication,
 				'notes' => $notes,
 				'responses' => $responses,
-				'therapists' => $therapists,
+				'therapists' => rtrim($therapists,','),
 			]);
 	}
 	

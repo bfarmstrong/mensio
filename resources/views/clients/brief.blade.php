@@ -59,12 +59,7 @@
                     @lang('dashboard.assigned_personnal') 
                 </a>
             </div>
-			@php
-			$all_therapist = '';
-			foreach ($therapists as $therapist) {
-				$all_therapist .= $therapist->name.', ';
-			}
-			@endphp
+				
             <div id="collapseTwo" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-12">
@@ -72,8 +67,8 @@
 						<tbody>
 						
 							<tr>
-								<td>Assigned Therapist</td>
-								<td>{!! $all_therapist !!}</td>
+								<td>@lang('dashboard.assigned_therapist')</td>
+								<td>{!! $therapists !!}</td>
 							</tr>
 						</tbody>
 					</table>
