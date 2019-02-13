@@ -115,4 +115,33 @@ class TherapistController extends Controller
             ->back()
             ->with('message', __('admin.users.therapists.index.added-therapist'));
     }
+	
+	/**
+     * Adds a therapist and associate supervisors linking to a user.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function storeTherapistSupervisor(Request $request)
+    {	
+		foreach($request->user_id as $user_id) {
+			$client = $this->user->find($user_id);
+			$therapist = $this->user->find($request->get('therapist_id'));
+			$this->user->addTherapist(
+				$request->get('therapist_id'),
+				$user_id
+			);
+			if ($request->get('supervisor_id')) {	
+			$this->user->updateSupervisor(
+				$client,
+				$therapist,
+				$request->get('supervisor_id') ?? null
+			);
+			}
+		}
+        return redirect()
+            ->back()
+            ->with('message', __('admin.users.therapists.index.added-therapist'));
+    }
 }

@@ -55,7 +55,45 @@
 									{!! $client->created_at->toDateString() !!}
 									</td>
 									<td style="vertical-align:middle;">
-									<td>
+			{!!
+                    Form::open([
+                        'method' => 'post',
+                        'url' => url("admin/users/$client->id/therapistssupervisor"),
+                    ])
+                !!}
+
+			<div class="input-group">
+				
+				{!!
+					Form::select(
+						"therapist_id[$client->id]",
+						$not_therapists[$client->id]->pluck('name', 'id'),
+						old('therapist_id'),
+						['class' => 'form-control cus','placeholder' => 'Select Therapist']
+					)
+				!!}
+			
+
+				{!!
+					Form::select(
+						"supervisors_id[$client->id]",
+						$not_supervisors[$client->id]->pluck('name', 'id'),
+						old('supervisors_id'),
+						['class' => 'form-control','placeholder' => 'Select Supervisor']
+					)
+				!!}
+				{!!
+					Form::hidden("user_id[$client->id]",$client->id)
+				!!}
+				{!!
+					Form::submit(
+						__('admin.users.therapists.form-add.save'),
+						['class' => 'btn btn-primary']
+					)
+				!!}
+			</div>
+				{!! Form::close() !!}
+									</td>
 								</tr>
 							@endforeach
 							</tbody>

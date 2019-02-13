@@ -10,6 +10,12 @@ use App\Services\Impl\IClinicService;
 use App\Services\Impl\IDoctorService;
 use App\Services\Impl\IRoleService;
 use App\Services\Impl\IUserService;
+use App\Services\Criteria\User\WithSupervisors;
+use App\Services\Criteria\User\WhereTherapist;
+use App\Services\Criteria\User\WithRole;
+use App\Services\Criteria\User\WhereNotCurrentTherapist;
+use App\Services\Criteria\User\WhereRole;
+use App\Enums\Roles;
 use Route;
 
 class DashboardController extends Controller
@@ -86,28 +92,45 @@ class DashboardController extends Controller
 					)
 				);
 			}
-
-
-			$users = $query->paginate();
-
-			$clients = $users->filter(function ($user) {
+		$users = $query->all();
+		foreach($users as $user) {
+			
+		$not_therapists[$user->id] = $this->userService
+						->pushCriteria(new WithSupervisors($user->id))
+						->pushCriteria(new WhereTherapist())
+						->pushCriteria(new WithRole())
+						->pushCriteria(new WhereNotCurrentTherapist($user->id))
+						->all()
+						->sortBy('name');
+		
+        $not_supervisors[$user->id] = $this->userService
+            ->pushCriteria(new WhereRole(Roles::SeniorTherapist))
+            ->pushCriteria(new WhereNotCurrentTherapist($user->id))
+            ->all()
+            ->sortBy('name');
+		}	
+		
+		$clients = $users->filter(function ($user) {
 				return $user->isClient();
 			});
 
-			$therapists = $users->filter(function ($user) {
+		$therapists = $users->filter(function ($user) {
 				return $user->isTherapist();
 			});
 			
-			$admin = $users->filter(function ($user) {
+		$admin = $users->filter(function ($user) {
 				return $user->isAdmin();
 			});
+			
+			
 
         return view('admin.dashboard.dashboard')->with([
 				'clients' => $clients,
 				'therapists' => $therapists,
 				'admin' => $admin,
 				'users' => $users,
-				//'type' => $type,
+				'not_therapists' => $not_therapists,
+				'not_supervisors' => $not_supervisors
 			]);
     }
 }

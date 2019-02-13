@@ -283,9 +283,11 @@ Route::group(['middleware' => ['domain']], function () {
             | Therapist Management
             |--------------------------------------------------------------------------
             */
+			
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('users/{user_id}/therapists', 'TherapistController@index');
                 Route::post('users/{user_id}/therapists', 'TherapistController@store');
+                Route::post('users/{user_id}/therapistssupervisor', 'TherapistController@storeTherapistSupervisor');
                 Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
             });
 
