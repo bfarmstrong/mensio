@@ -18,6 +18,7 @@ use App\Services\Criteria\General\WhereRelationEqual;
 use App\Enums\Roles;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WhereCurrentClientSupervisorsorTherapist;
+use App\Services\Criteria\User\WithTherapistsAndSupervisors;
 
 class PagesController extends Controller
 {
@@ -134,6 +135,14 @@ class PagesController extends Controller
 				$score[$response->uuid] = $this->response->getScore($response_details);
 			}
 			
+			$user_therapists = $this->userService
+				->getByCriteria(new WithTherapistsAndSupervisors(\Auth::user()->id))
+				->find(\Auth::user()->id); 
+			$therapists	= '';
+			foreach($user_therapists->therapists()->pluck('name') as $name_therapist) {
+				$therapists	.= $name_therapist.',';
+			}
+			
 			$communication = $this->communicationLogService
 				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
 				->pushCriteria(new WhereEqual('user_id', $client->id))
@@ -164,7 +173,8 @@ class PagesController extends Controller
 				'scores' => $score,
 				'communication' => $communication,
 				'notes' => $notes,
-				'responses' => $responses
+				'responses' => $responses,
+				'therapists' => rtrim($therapists,','),
 			]);
 		}
     }

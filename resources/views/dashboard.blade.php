@@ -118,6 +118,33 @@
         </div>
     </div>
 	</div>
+	<div class="col-sm-6 mb-4">
+    <div id="accordion" class="accordion">
+        <div class="card">
+            <div class="card-header collapsed" data-toggle="collapse" href="#collapseTwo">
+                <a class="card-title">
+                    @lang('dashboard.assigned_personnal') 
+                </a>
+            </div>
+				
+            <div id="collapseTwo" class="card-body collapse show" data-parent="#accordion" >
+				<div class="row">
+					<div class="col-sm-12">
+					<table class="table table-bordered table-sm">
+						<tbody>
+						
+							<tr>
+								<td>@lang('dashboard.assigned_therapist')</td>
+								<td>{!! $therapists !!}</td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+	</div>
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
         <div class="card">
@@ -153,6 +180,7 @@
         </div>
     </div>
 	</div>
+	
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
         <div class="card">
@@ -162,16 +190,31 @@
                 </a>
             </div>
             <div id="collapseFour" class="card-body collapse" data-parent="#accordion" >
-				<div class="row">
+			<div class="row">
 					<div class="col-sm-12">
 						
-					<ul class="list-group">
+					<table class="table table-bordered table-sm">
+						<thead>
+						  <tr>
+							<th>Date</th>
+							<th>Notes</th>
+						  </tr>
+						</thead>
 					@foreach($notes as $note)
-						
-							<li class="list-group-item"> {!! $note->contents !!} </li>
-						
+
+							<tbody>
+							<tr>							
+								<td style="vertical-align:middle;">
+								{!! date('d M Y',strtotime($note->updated_at)) !!}
+								</td>
+								<td style="vertical-align:middle;">
+								{!! $note->contents !!}
+								</td>
+							</tr>
+							</tbody>
+							
 					@endforeach
-					</ul>
+					</table>
 					</div>
 
 				</div>
