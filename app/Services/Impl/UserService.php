@@ -164,14 +164,15 @@ class UserService extends BaseService implements IUserService
     public function invite(array $attributes)
     {
         $password = substr(md5(rand(1111, 9999)), 0, 10);
-
+		$roles = $attributes['role_id'];		
+		unset($attributes['role_id']);
         $user = $this->create(array_merge($attributes, [
             'is_active' => true,
             'password' => bcrypt($password),
         ]));
-
-        Notification::send($user, new NewAccountEmail($password));
-
+		if(!in_array(1,$roles)){
+			Notification::send($user, new NewAccountEmail($password));
+		}
         return $user;
     }
 
