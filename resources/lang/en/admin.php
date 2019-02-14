@@ -15,6 +15,10 @@ return [
         'therapist_since' => 'Therapist Since',
         'admin' => 'Admin',
         'admin_since' => 'Admin Since',
+        'address' => 'Address',
+        'designation' => 'Designation',
+        'juniortherapist' => 'Junior Therapist',
+        'seniortherapist' => 'Senior Therapist',
     ],
     'clinics' => [
         'create' => [

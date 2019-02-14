@@ -55,44 +55,44 @@
 									{!! $client->created_at->toDateString() !!}
 									</td>
 									<td style="vertical-align:middle;">
-			{!!
-                    Form::open([
-                        'method' => 'post',
-                        'url' => url("admin/users/$client->id/therapistssupervisor"),
-                    ])
-                !!}
+									{!!
+											Form::open([
+												'method' => 'post',
+												'url' => url("admin/users/$client->id/therapistssupervisor"),
+											])
+										!!}
 
-			<div class="input-group">
-				
-				{!!
-					Form::select(
-						"therapist_id[$client->id]",
-						$not_therapists[$client->id]->pluck('name', 'id'),
-						old('therapist_id'),
-						['class' => 'form-control cus','placeholder' => 'Select Therapist']
-					)
-				!!}
-			
+									<div class="input-group">
+										
+										{!!
+											Form::select(
+												"therapist_id[$client->id]",
+												$not_therapists[$client->id]->pluck('name', 'id'),
+												old('therapist_id'),
+												['class' => 'form-control cus','placeholder' => 'Select Therapist']
+											)
+										!!}
+									
 
-				{!!
-					Form::select(
-						"supervisors_id[$client->id]",
-						$not_supervisors[$client->id]->pluck('name', 'id'),
-						old('supervisors_id'),
-						['class' => 'form-control','placeholder' => 'Select Supervisor']
-					)
-				!!}
-				{!!
-					Form::hidden("user_id[$client->id]",$client->id)
-				!!}
-				{!!
-					Form::submit(
-						__('admin.users.therapists.form-add.save'),
-						['class' => 'btn btn-primary']
-					)
-				!!}
-			</div>
-				{!! Form::close() !!}
+										{!!
+											Form::select(
+												"supervisors_id[$client->id]",
+												$not_supervisors[$client->id]->pluck('name', 'id'),
+												old('supervisors_id'),
+												['class' => 'form-control','placeholder' => 'Select Supervisor']
+											)
+										!!}
+										{!!
+											Form::hidden("user_id[$client->id]",$client->id)
+										!!}
+										{!!
+											Form::submit(
+												__('admin.users.therapists.form-add.save'),
+												['class' => 'btn btn-primary']
+											)
+										!!}
+									</div>
+										{!! Form::close() !!}
 									</td>
 								</tr>
 							@endforeach
@@ -132,17 +132,26 @@
 							<thead>
 							  <tr>
 								<th>@lang('admin.dashboard.name')</th>
+								<th>@lang('admin.dashboard.address')</th>
 								<th>@lang('admin.dashboard.contact_number')</th>
 								<th>@lang('admin.dashboard.email')</th>
 								<th>@lang('admin.dashboard.license')</th>
-								<th>@lang('admin.dashboard.therapist_since')</th>
+								<th>@lang('admin.dashboard.designation')</th>
 							  </tr>
 							</thead>
 							<tbody>
 							@foreach($therapists as $therapist) 
 								<tr>							
 									<td style="vertical-align:middle;">
-									<a href="/admin/users/{{ $therapist->id }}" >{!! $therapist->name !!}
+									<a href="/admin/users/{{ $therapist->id }}" >{!! $therapist->name !!}</a>
+									</td>
+									<td style="vertical-align:middle;">
+									{!! $therapist->address_line_1 !!} 
+									{!! $therapist->address_line_2 !!}
+									{!! $therapist->city !!}
+									{!! $therapist->province !!}
+									{!! $therapist->postal_code !!}
+									{!! $therapist->country !!}
 									</td>
 									<td style="vertical-align:middle;">
 									{!! $therapist->phone !!}
@@ -154,7 +163,15 @@
 									{!! $therapist->license !!}
 									</td>
 									<td style="vertical-align:middle;">
-									{!! $therapist->created_at->toDateString() !!}
+									@if($therapist->isJuniorTherapist() && $therapist->isSeniorTherapist())
+										@lang('admin.dashboard.juniortherapist'), @lang('admin.dashboard.seniortherapist')
+									
+									@elseif($therapist->isJuniorTherapist())
+										@lang('admin.dashboard.juniortherapist')
+									
+									@elseif($therapist->isSeniorTherapist())
+										@lang('admin.dashboard.seniortherapist')
+									@endif
 									</td>
 								</tr>
 							@endforeach
