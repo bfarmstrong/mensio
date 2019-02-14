@@ -132,13 +132,13 @@ class TherapistController extends Controller
 				$request->get('therapist_id')[$key],
 				$user_id
 			);
-			//if ($request->get('supervisor_id')[$key]) {	
+			
 			$this->user->updateSupervisor(
 				$client,
 				$therapist,
-				$request->get('supervisor_id')[$key] ?? null
+				$request->supervisors_id[$key] ?? null
 			);
-			//}
+			
 		}
         return redirect()
             ->back()
