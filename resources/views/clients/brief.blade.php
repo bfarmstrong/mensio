@@ -1,95 +1,9 @@
 @extends('layout.dashboard')
 
-@section('title', __('dashboard.title'))
+@section('title', __('clients.details.title'))
 
-@section('content.breadcrumbs', Breadcrumbs::render('dashboard'))
 @section('content.dashboard')
-@if(Auth::user()->isTherapist())
 
-<div class="container ">
-    <div id="accordion" class="accordion">
-        <div class="card mb-0">
-            <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
-                <a class="card-title">
-                    @lang('dashboard.your_clients')
-                </a>
-            </div>
-            <div id="collapseOne" class="card-body collapse show" data-parent="#accordion" >
-				<div class="row">
-					<div class="col-sm-12">
-					<input class="form-control" id="myInput" type="text" placeholder="Search..">
-					<br>
-                	<table class="table table-striped">
-					<thead>
-					  <tr>
-						<th>@lang('dashboard.client_name')</th>
-						<th>@lang('dashboard.next_appointment_date')</th>
-						<th>@lang('admin.dashboard.email')</th>
-						<th>@lang('admin.dashboard.contact_number')</th>
-						<th>@lang('dashboard.session_notes')</th>
-					  </tr>
-					</thead>
-					<tbody id="myTable">
-	
-					@if(!empty($client_names))
-					@foreach ($client_names as $key => $client_name) 
-						@php
-							if(isset($notes[$key][0])) { 
-								$not = $notes[$key][0]->updated_at->toDateString();
-								$not_uuid = $notes[$key][0]->uuid;
-							} else { 
-								$not = ""; 
-							} 
-							if(isset($notes[$key][1])) { 
-								$not1 = ', '.$notes[$key][1]->updated_at->toDateString();
-								$not_uuid1 = $notes[$key][1]->uuid;
-							} else { 
-								$not1 = ""; 
-								$not_uuid1 = "";
-							} 
-							if(isset($notes[$key][2])) { 
-								$not2 = ', '.$notes[$key][2]->updated_at->toDateString();
-								$not_uuid2 = $notes[$key][2]->uuid;
-							} else { 
-								$not2 = ""; 
-								$not_uuid2 = "";
-							} 
-						@endphp
-						
-						<tr>
-							<td><a href="/clients/{{ $key}}/details" >{{ $client_name->name}}</a></td>
-							@if(isset($communications[$key][0])) 
-								@foreach ($communications[$key] as $log) 
-									<td>{{ $log->appointment_date }}</td>
-								@endforeach
-							@else 
-								<td> - </td>
-							@endif
-							<td>{{ $client_name->email}}</td>
-							<td>{{ $client_name->phone}}</td>
-							<td><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid }}">{!! $not !!}</a> <a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid1 }}">{!! $not1 !!} </a><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid2 }}">{!! $not2 !!}</a></td>
-						</tr>
-						
-					@endforeach
-					@else
-						<tr >
-						<td colspan="3"><center>@lang('dashboard.no_record')<center></td>
-						</tr>
-					@endif
-					</tbody>
-					</table>
-					</div>
-					<!-- <div class="col-sm-2">
-						<button type="button" class="btn btn-primary">Primary</button>
-						<button type="button" class="btn btn-secondary">Secondary</button>
-					</div> -->
-				</div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-@if(Auth::user()->isClient())
 <div class="container ">
 <div class="row">
 	<div class="col-sm-6 mb-4">
@@ -118,12 +32,12 @@
 	<div class="col-sm-6 mb-4">
     <div id="accordion" class="accordion">
         <div class="card">
-            <div class="card-header collapsed" data-toggle="collapse" href="#collapseTwo">
+            <div class="card-header collapsed" data-toggle="collapse" href="#collapseSix">
                 <a class="card-title">
                     @lang('dashboard.scores')
                 </a>
             </div>
-            <div id="collapseTwo" class="card-body collapse show" data-parent="#accordion" >
+            <div id="collapseSix" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-12">
 					<ul class="list-group">
@@ -199,7 +113,6 @@
         </div>
     </div>
 	</div>
-	
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
         <div class="card">
@@ -209,7 +122,7 @@
                 </a>
             </div>
             <div id="collapseFour" class="card-body collapse show" data-parent="#accordion" >
-			<div class="row">
+				<div class="row">
 					<div class="col-sm-12">
 						
 					<table class="table table-bordered table-sm">
@@ -330,7 +243,7 @@ if (chLine) {
   });
 }
 </script>
-@endif
+
 @endsection
 @push('scripts')
 <script>
