@@ -24,6 +24,8 @@
 					  <tr>
 						<th>@lang('dashboard.client_name')</th>
 						<th>@lang('dashboard.next_appointment_date')</th>
+						<th>@lang('admin.dashboard.email')</th>
+						<th>@lang('admin.dashboard.contact_number')</th>
 						<th>@lang('dashboard.session_notes')</th>
 					  </tr>
 					</thead>
@@ -31,11 +33,26 @@
 	
 					@if(!empty($client_names))
 					@foreach ($client_names as $key => $client_name) 
-						@php 
+						@php
 							if(isset($notes[$key][0])) { 
-								$not = $notes[$key][0]->contents;
+								$not = $notes[$key][0]->updated_at->toDateString();
+								$not_uuid = $notes[$key][0]->uuid;
 							} else { 
-								$not = " - "; 
+								$not = ""; 
+							} 
+							if(isset($notes[$key][1])) { 
+								$not1 = ', '.$notes[$key][1]->updated_at->toDateString();
+								$not_uuid1 = $notes[$key][1]->uuid;
+							} else { 
+								$not1 = ""; 
+								$not_uuid1 = "";
+							} 
+							if(isset($notes[$key][2])) { 
+								$not2 = ', '.$notes[$key][2]->updated_at->toDateString();
+								$not_uuid2 = $notes[$key][2]->uuid;
+							} else { 
+								$not2 = ""; 
+								$not_uuid2 = "";
 							} 
 						@endphp
 						
@@ -48,7 +65,9 @@
 							@else 
 								<td> - </td>
 							@endif
-							<td>{!! $not !!}</td>
+							<td>{{ $client_name->email}}</td>
+							<td>{{ $client_name->phone}}</td>
+							<td><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid }}">{!! $not !!}</a> <a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid1 }}">{!! $not1 !!} </a><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid2 }}">{!! $not2 !!}</a></td>
 						</tr>
 						
 					@endforeach
