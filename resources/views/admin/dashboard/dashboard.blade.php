@@ -14,12 +14,12 @@
 						<div class="row">
 						<div class="col-sm-6">
 						
-							Clients
+							@lang('admin.dashboard.clients')
 						
 						</div>
 						<div class="col-sm-6 text-right">
 						
-							count <b>({{ @count($clients) }})</b>
+							@lang('admin.dashboard.count') <b>({{ @count($clients) }})</b>
 						
 						</div>
 						</div>
@@ -31,11 +31,11 @@
 						<table class="table table-bordered table-sm">
 							<thead>
 							  <tr>
-								<th>Name</th>
-								<th>Contact Number</th>
-								<th>Email</th>
-								<th>Client Since</th>
-								<th>Assign Therapist</th>
+								<th>@lang('admin.dashboard.name')</th>
+								<th>@lang('admin.dashboard.contact_number')</th>
+								<th>@lang('admin.dashboard.email')</th>
+								<th>@lang('admin.dashboard.client_since')</th>
+								<th>@lang('admin.dashboard.assign_therapist')</th>
 								
 							  </tr>
 							</thead>
@@ -114,12 +114,12 @@
 						<div class="row">
 						<div class="col-sm-6">
 						
-							Therapist
+							@lang('admin.dashboard.therapist')
 						
 						</div>
 						<div class="col-sm-6 text-right">
 						
-							count <b>({{ @count($therapists) }})</b>
+							@lang('admin.dashboard.count') <b>({{ @count($therapists) }})</b>
 						
 						</div>
 						</div>
@@ -131,11 +131,11 @@
 						<table class="table table-bordered table-sm">
 							<thead>
 							  <tr>
-								<th>Name</th>
-								<th>Contact Number</th>
-								<th>Email</th>
-								<th>License</th>
-								<th>Therapist Since </th>
+								<th>@lang('admin.dashboard.name')</th>
+								<th>@lang('admin.dashboard.contact_number')</th>
+								<th>@lang('admin.dashboard.email')</th>
+								<th>@lang('admin.dashboard.license')</th>
+								<th>@lang('admin.dashboard.therapist_since')</th>
 							  </tr>
 							</thead>
 							<tbody>
@@ -176,12 +176,12 @@
 						<div class="row">
 						<div class="col-sm-6">
 						
-							Admin
+							@lang('admin.dashboard.admin')
 						
 						</div>
 						<div class="col-sm-6 text-right">
 						
-							count <b>({{ @count($admin) }})</b>
+							@lang('admin.dashboard.count') <b>({{ @count($admin) }})</b>
 						
 						</div>
 						</div>
@@ -193,10 +193,10 @@
 						<table class="table table-bordered table-sm">
 							<thead>
 							  <tr>
-								<th>Name</th>
-								<th>Contact Number</th>
-								<th>Email</th>
-								<th>Admin Since</th>
+								<th>@lang('admin.dashboard.name')</th>
+								<th>@lang('admin.dashboard.contact_number')</th>
+								<th>@lang('admin.dashboard.email')</th>
+								<th>@lang('admin.dashboard.admin_since')</th>
 							  </tr>
 							</thead>
 							<tbody>
