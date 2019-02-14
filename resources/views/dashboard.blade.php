@@ -24,8 +24,6 @@
 					  <tr>
 						<th>@lang('dashboard.client_name')</th>
 						<th>@lang('dashboard.next_appointment_date')</th>
-						<th>@lang('admin.dashboard.email')</th>
-						<th>@lang('admin.dashboard.contact_number')</th>
 						<th>@lang('dashboard.session_notes')</th>
 					  </tr>
 					</thead>
@@ -33,31 +31,16 @@
 	
 					@if(!empty($client_names))
 					@foreach ($client_names as $key => $client_name) 
-						@php
+						@php 
 							if(isset($notes[$key][0])) { 
-								$not = $notes[$key][0]->updated_at->toDateString();
-								$not_uuid = $notes[$key][0]->uuid;
+								$not = $notes[$key][0]->contents;
 							} else { 
-								$not = ""; 
-							} 
-							if(isset($notes[$key][1])) { 
-								$not1 = ', '.$notes[$key][1]->updated_at->toDateString();
-								$not_uuid1 = $notes[$key][1]->uuid;
-							} else { 
-								$not1 = ""; 
-								$not_uuid1 = "";
-							} 
-							if(isset($notes[$key][2])) { 
-								$not2 = ', '.$notes[$key][2]->updated_at->toDateString();
-								$not_uuid2 = $notes[$key][2]->uuid;
-							} else { 
-								$not2 = ""; 
-								$not_uuid2 = "";
+								$not = " - "; 
 							} 
 						@endphp
 						
 						<tr>
-							<td><a href="/clients/{{ $key}}/details" >{{ $client_name->name}}</a></td>
+							<td><a href="/clients/{{ $key}}" >{{ $client_name->name}}</a></td>
 							@if(isset($communications[$key][0])) 
 								@foreach ($communications[$key] as $log) 
 									<td>{{ $log->appointment_date }}</td>
@@ -65,9 +48,7 @@
 							@else 
 								<td> - </td>
 							@endif
-							<td>{{ $client_name->email}}</td>
-							<td>{{ $client_name->phone}}</td>
-							<td><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid }}">{!! $not !!}</a> <a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid1 }}">{!! $not1 !!} </a><a target="_blank" href="/clients/{{ $key}}/notes/{{ $not_uuid2 }}">{!! $not2 !!}</a></td>
+							<td>{!! $not !!}</td>
 						</tr>
 						
 					@endforeach
@@ -137,33 +118,6 @@
         </div>
     </div>
 	</div>
-	<div class="col-sm-6 mb-4">
-    <div id="accordion" class="accordion">
-        <div class="card">
-            <div class="card-header collapsed" data-toggle="collapse" href="#collapseTwo">
-                <a class="card-title">
-                    @lang('dashboard.assigned_personnal') 
-                </a>
-            </div>
-				
-            <div id="collapseTwo" class="card-body collapse show" data-parent="#accordion" >
-				<div class="row">
-					<div class="col-sm-12">
-					<table class="table table-bordered table-sm">
-						<tbody>
-						
-							<tr>
-								<td>@lang('dashboard.assigned_therapist')</td>
-								<td>{!! $therapists !!}</td>
-							</tr>
-						</tbody>
-					</table>
-					</div>
-				</div>
-            </div>
-        </div>
-    </div>
-	</div>
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
         <div class="card">
@@ -172,7 +126,7 @@
                     @lang('dashboard.appointments')
                 </a>
             </div>
-            <div id="collapseThree" class="card-body collapse show" data-parent="#accordion" >
+            <div id="collapseThree" class="card-body collapse" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-6">
 						<h6 class="text-center font-weight-bold">@lang('dashboard.past')</h6>
@@ -199,7 +153,6 @@
         </div>
     </div>
 	</div>
-	
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
         <div class="card">
@@ -208,32 +161,17 @@
                     @lang('dashboard.notes')
                 </a>
             </div>
-            <div id="collapseFour" class="card-body collapse show" data-parent="#accordion" >
-			<div class="row">
+            <div id="collapseFour" class="card-body collapse" data-parent="#accordion" >
+				<div class="row">
 					<div class="col-sm-12">
 						
-					<table class="table table-bordered table-sm">
-						<thead>
-						  <tr>
-							<th>Date</th>
-							<th>Notes</th>
-						  </tr>
-						</thead>
+					<ul class="list-group">
 					@foreach($notes as $note)
-
-							<tbody>
-							<tr>							
-								<td style="vertical-align:middle;">
-								{!! date('d M Y',strtotime($note->updated_at)) !!}
-								</td>
-								<td style="vertical-align:middle;">
-								{!! $note->contents !!}
-								</td>
-							</tr>
-							</tbody>
-							
+						
+							<li class="list-group-item"> {!! $note->contents !!} </li>
+						
 					@endforeach
-					</table>
+					</ul>
 					</div>
 
 				</div>
@@ -262,7 +200,7 @@ foreach($responses as $response) {
                     Charts
                 </a>
             </div>
-            <div id="collapseFive" class="card-body collapse show" data-parent="#accordion" >
+            <div id="collapseFive" class="card-body collapse" data-parent="#accordion" >
 				<div class="row">
 					<div class="col-sm-12">
 					<canvas id="chLine" ></canvas>

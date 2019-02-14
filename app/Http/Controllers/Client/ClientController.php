@@ -20,33 +20,12 @@ use App\Services\Criteria\Questionnaire\WhereAssigned;
 use App\Services\Criteria\General\WhereEqual;
 use App\Services\Criteria\Questionnaire\WithQuestionnaire;
 use Yajra\Datatables\Datatables;
-use App\Services\Impl\ICommunicationLogService;
-use App\Services\Impl\INoteService;
-use App\Services\Criteria\Note\WhereParent;
-use App\Services\Criteria\Note\WithTherapist;
-use App\Services\Criteria\User\WithSupervisors;
-use App\Services\Criteria\User\WhereTherapist;
-use App\Services\Criteria\User\WhereNotCurrentTherapist;
-use App\Services\Criteria\User\WithTherapistsAndSupervisors;
+
 /**
  * Manages a list of clients.
  */
 class ClientController extends Controller
 {
-	/**
-     * The note service implementation.
-     *
-     * @var INoteService
-     */
-    protected $noteService;
-	
-	/**
-     * The communication log service implementation.
-     *
-     * @var ICommunicationLogService
-     */
-    protected $communicationLogService;
-	
     /**
      * The questionnaire service implementation.
      *
@@ -76,15 +55,11 @@ class ClientController extends Controller
     public function __construct(
         IQuestionnaireService $questionnaire,
         IResponseService $response,
-        IUserService $user,
-		INoteService $noteService,
-		ICommunicationLogService $communicationLogService
+        IUserService $user
     ) {
         $this->questionnaire = $questionnaire;
         $this->response = $response;
         $this->user = $user;
-		$this->communicationLogService = $communicationLogService;
-		$this->noteService = $noteService;
     }
 
     /**
@@ -207,61 +182,4 @@ class ClientController extends Controller
 				'responses' => $responses
 			]);
 	}
-	
-	/**
-     * Displays the details for a client's information. 
-     * 
-     *
-     * @param string $user
-     *
-     * @return Response
-    */
-	public function details(string $user)
-	{
-			$client = $this->user->find($user);
-			$clinic_id = request()->attributes->get('clinic')->id;
-			$score = array();
-			$responses = $this->response
-				->getByCriteria(new WithRelation('questionnaire'))
-				->getByCriteria(new OrderBy('updated_at', 'desc'))
-				->getByCriteria(new WhereAssigned($user))
-				->getByCriteria(new WhereEqual('clinic_id', $clinic_id))
-				->all();
-			foreach($responses as $response) {
-				$response_details = $this->response
-					->getByCriteria(new WithQuestionnaire())
-					->findBy('uuid', $response->uuid);
-				$score[$response->uuid] = $this->response->getScore($response_details);
-			}
-			
-			$user_therapists = $this->user
-				->getByCriteria(new WithTherapistsAndSupervisors($user))
-				->find($user); 
-			$therapists	= '';
-			foreach($user_therapists->therapists()->pluck('name') as $name_therapist) {
-				$therapists	.= $name_therapist.',';
-			}
-			$communication = $this->communicationLogService
-				->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
-				->pushCriteria(new WhereEqual('user_id', $client->id))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->all();
-				
-			$notes = $this->noteService
-				->pushCriteria(new WhereEqual('client_id', $client->id))
-				->pushCriteria(new WhereParent())
-				->pushCriteria(new WithTherapist())
-				->pushCriteria(new WhereEqual('is_draft', 0))
-				->pushCriteria(new OrderBy('updated_at', 'desc'))
-				->all();
-		return view('clients.brief')->with([
-				'user' => $client,
-				'scores' => $score,
-				'communication' => $communication,
-				'notes' => $notes,
-				'responses' => $responses,
-				'therapists' => rtrim($therapists,','),
-			]);
-	}
-	
 }

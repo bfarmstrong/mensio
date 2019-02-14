@@ -1,9 +1,6 @@
 <?php
 
 return [
-	'details' => [
-		'title' => 'Clients Personal Details'
-	],
     'attachments' => [
         'create' => [
             'breadcrumb' => 'Create Attachment',

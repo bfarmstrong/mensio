@@ -3,22 +3,6 @@
 return [
     'dashboard' => [
         'breadcrumb' => 'Dashboard',
-        'clients' => 'Clients',
-        'count' => 'Count',
-        'name' => 'Name',
-        'contact_number' => 'Contact Number',
-        'email' => 'Email',
-        'client_since' => 'Client Since',
-        'assign_therapist' => 'Assign Therapist',
-        'therapist' => 'Therapist',
-        'license' => 'License',
-        'therapist_since' => 'Therapist Since',
-        'admin' => 'Admin',
-        'admin_since' => 'Admin Since',
-        'address' => 'Address',
-        'designation' => 'Designation',
-        'juniortherapist' => 'Junior Therapist',
-        'seniortherapist' => 'Senior Therapist',
     ],
     'clinics' => [
         'create' => [
