@@ -4,6 +4,13 @@
 
 @section('content.breadcrumbs', Breadcrumbs::render('admin.dashboard'))
 @section('content.dashboard')
+{!!
+	Form::open([
+		'method' => 'post',
+		'url' => url("admin/users/therapistssupervisor"),
+	])
+!!}
+
 <!-- client starts -->
 			<div class="container ">
 			<div class="row">
@@ -31,17 +38,23 @@
 						<table class="table table-bordered table-sm">
 							<thead>
 							  <tr>
+								<th>&nbsp;</th>
 								<th>@lang('admin.dashboard.name')</th>
 								<th>@lang('admin.dashboard.contact_number')</th>
 								<th>@lang('admin.dashboard.email')</th>
 								<th>@lang('admin.dashboard.client_since')</th>
-								<th>@lang('admin.dashboard.assign_therapist')</th>
+								
 								
 							  </tr>
 							</thead>
 							<tbody>
 							@foreach($clients as $client) 
-								<tr>							
+								<tr>
+									<td style="vertical-align:middle;">	
+										{!!
+											Form::checkbox("user_id[]",$client->id)
+										!!}								
+									</td>									
 									<td style="vertical-align:middle;">
 									<a href="/clients/{{ $client->id }}/details" >{!! $client->name !!}</a>
 									</td>
@@ -54,46 +67,7 @@
 									<td style="vertical-align:middle;">
 									{!! $client->created_at->toDateString() !!}
 									</td>
-									<td style="vertical-align:middle;">
-									{!!
-											Form::open([
-												'method' => 'post',
-												'url' => url("admin/users/$client->id/therapistssupervisor"),
-											])
-										!!}
-
-									<div class="input-group">
-										
-										{!!
-											Form::select(
-												"therapist_id[$client->id]",
-												$not_therapists[$client->id]->pluck('name', 'id'),
-												old('therapist_id'),
-												['class' => 'form-control cus','placeholder' => 'Select Therapist']
-											)
-										!!}
 									
-
-										{!!
-											Form::select(
-												"supervisors_id[$client->id]",
-												$not_supervisors[$client->id]->pluck('name', 'id'),
-												old('supervisors_id'),
-												['class' => 'form-control','placeholder' => 'Select Supervisor']
-											)
-										!!}
-										{!!
-											Form::hidden("user_id[$client->id]",$client->id)
-										!!}
-										{!!
-											Form::submit(
-												__('admin.users.therapists.form-add.save'),
-												['class' => 'btn btn-primary']
-											)
-										!!}
-									</div>
-										{!! Form::close() !!}
-									</td>
 								</tr>
 							@endforeach
 							</tbody>
@@ -131,6 +105,7 @@
 						<table class="table table-bordered table-sm">
 							<thead>
 							  <tr>
+								<th>&nbsp;</th>
 								<th>@lang('admin.dashboard.name')</th>
 								<th>@lang('admin.dashboard.address')</th>
 								<th>@lang('admin.dashboard.contact_number')</th>
@@ -141,7 +116,12 @@
 							</thead>
 							<tbody>
 							@foreach($therapists as $therapist) 
-								<tr>							
+								<tr>	
+									<td style="vertical-align:middle;">	
+										{!!
+											Form::checkbox("therapist_id[]",$therapist->id)
+										!!}								
+									</td>									
 									<td style="vertical-align:middle;">
 									<a href="/admin/users/{{ $therapist->id }}" >{!! $therapist->name !!}</a>
 									</td>
@@ -185,7 +165,22 @@
 				</div>
 		
 <!-- therapist end -->
+				<div class="form-row col-12">
+						<div class="form-group">
+				{!!
+						Form::submit(
+						__('admin.users.therapists.form-add.save'),
+						['class' => 'btn btn-primary']
+					)
+				!!}
+						</div>
+					</div>
+					</div>
+				</div>
+			
 <!-- Admin starts -->
+<div class="container ">
+			<div class="row">
 				<div class="col-sm-12 mb-4">
 					<div id="accordion" class="accordion">
 					<div class="card mb-0">
@@ -241,7 +236,10 @@
 					</div>
 					</div>
 				</div>
-			</div>
+			
+		</div>
 		</div>
 <!-- Admin end -->
+
+{!! Form::close() !!}
 @endsection

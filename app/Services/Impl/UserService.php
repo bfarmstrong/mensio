@@ -93,7 +93,7 @@ class UserService extends BaseService implements IUserService
      */
     public function addTherapist($therapist, $user)
     {
-        $user = $this->find($user);
+        $user = $this->find($user); 
         $user->therapists()->attach($therapist);
     }
 

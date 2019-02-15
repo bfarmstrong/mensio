@@ -126,19 +126,11 @@ class TherapistController extends Controller
     public function storeTherapistSupervisor(Request $request)
     {	
 		foreach($request->user_id as $key => $user_id) { 
-			$client = $this->user->find($user_id);
-			$therapist = $this->user->find($request->get('therapist_id')[$key]);
-			$this->user->addTherapist(
-				$request->get('therapist_id')[$key],
-				$user_id
-			);
-			
-			$this->user->updateSupervisor(
-				$client,
-				$therapist,
-				$request->supervisors_id[$key] ?? null
-			);
-			
+				$this->user->addTherapist(
+					$request->get('therapist_id'),
+					$user_id
+				);
+				
 		}
         return redirect()
             ->back()
