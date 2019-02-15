@@ -38,7 +38,8 @@
 								$not = $notes[$key][0]->updated_at->toDateString();
 								$not_uuid = $notes[$key][0]->uuid;
 							} else { 
-								$not = ""; 
+								$not = "";
+								$not_uuid = ""								;
 							} 
 							if(isset($notes[$key][1])) { 
 								$not1 = ', '.$notes[$key][1]->updated_at->toDateString();
