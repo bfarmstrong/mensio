@@ -165,11 +165,11 @@
 				</div>
 		
 <!-- therapist end -->
-				<div class="form-row col-12">
-						<div class="form-group">
+				<div class="form-row col-12 text-center">
+						<div class="form-group" style="margin:0 auto 25px;">
 				{!!
 						Form::submit(
-						__('admin.users.therapists.form-add.save'),
+						__('dashboard.associate'),
 						['class' => 'btn btn-primary']
 					)
 				!!}

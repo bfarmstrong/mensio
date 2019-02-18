@@ -21,4 +21,5 @@ return [
     'no_record' => 'No Record Found',
     'assigned_personnal' => 'Assigned Personal',
     'assigned_therapist' => 'Assigned Therapist',
+    'associate' => 'Associate',
 ];
