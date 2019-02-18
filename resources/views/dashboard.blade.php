@@ -8,7 +8,7 @@
 
 <div class="container ">
     <div id="accordion" class="accordion">
-        <div class="card mb-0">
+        <div class="card mb-0" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
                 <a class="card-title">
                     @lang('dashboard.your_clients')
@@ -95,7 +95,7 @@
 <div class="row">
 	<div class="col-sm-6 mb-4">
     <div id="accordion" class="accordion">
-        <div class="card mb-0">
+        <div class="card mb-0" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
                 <a class="card-title">
                     @lang('dashboard.personal_information')

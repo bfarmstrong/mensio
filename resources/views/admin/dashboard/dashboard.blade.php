@@ -16,7 +16,7 @@
 			<div class="row">
 				<div class="col-sm-12 mb-4">
 					<div id="accordion" class="accordion">
-					<div class="card mb-0">
+					<div class="card mb-0" style="border: 1px solid #c8ced3;">
 					<div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
 						<div class="row">
 						<div class="col-sm-6">
@@ -83,7 +83,7 @@
 <!-- therapist starts -->
 				<div class="col-sm-12 mb-4">
 					<div id="accordion" class="accordion">
-					<div class="card mb-0">
+					<div class="card mb-0" style="border: 1px solid #c8ced3;">
 					<div class="card-header collapsed" data-toggle="collapse" href="#collapseTwo">
 						<div class="row">
 						<div class="col-sm-6">
@@ -183,7 +183,7 @@
 			<div class="row">
 				<div class="col-sm-12 mb-4">
 					<div id="accordion" class="accordion">
-					<div class="card mb-0">
+					<div class="card mb-0" style="border: 1px solid #c8ced3;">
 					<div class="card-header collapsed" data-toggle="collapse" href="#collapseThree">
 						<div class="row">
 						<div class="col-sm-6">
