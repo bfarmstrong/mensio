@@ -8,7 +8,7 @@
 <div class="row">
 	<div class="col-sm-6 mb-4">
     <div id="accordion" class="accordion">
-        <div class="card mb-0">
+        <div class="card mb-0" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
                 <a class="card-title">
                     @lang('dashboard.personal_information')
@@ -31,7 +31,7 @@
 	</div>
 	<div class="col-sm-6 mb-4">
     <div id="accordion" class="accordion">
-        <div class="card">
+        <div class="card" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseSix">
                 <a class="card-title">
                     @lang('dashboard.scores')
@@ -53,7 +53,7 @@
 	</div>
 	<div class="col-sm-6 mb-4">
     <div id="accordion" class="accordion">
-        <div class="card">
+        <div class="card" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseTwo">
                 <a class="card-title">
                     @lang('dashboard.assigned_personnal') 
@@ -80,7 +80,7 @@
 	</div>
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
-        <div class="card">
+        <div class="card" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseThree">
                 <a class="card-title">
                     @lang('dashboard.appointments')
@@ -115,7 +115,7 @@
 	</div>
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
-        <div class="card">
+        <div class="card" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseFour">
                 <a class="card-title">
                     @lang('dashboard.notes')
@@ -169,7 +169,7 @@ foreach($responses as $response) {
 @endphp
 	<div class="col-sm-6">
     <div id="accordion" class="accordion">
-        <div class="card">
+        <div class="card" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseFive">
                 <a class="card-title">
                     Charts
