@@ -119,7 +119,7 @@
 								<tr>	
 									<td style="vertical-align:middle;">	
 										{!!
-											Form::checkbox("therapist_id[]",$therapist->id)
+											Form::checkbox("therapist_id[]",$therapist->id,null,['id'=>'therapist_id[]'])
 										!!}								
 									</td>									
 									<td style="vertical-align:middle;">
@@ -170,7 +170,7 @@
 				{!!
 						Form::submit(
 						__('dashboard.associate'),
-						['class' => 'btn btn-primary']
+						['class' => 'btn btn-default associate','disabled' => 'disabled']
 					)
 				!!}
 						</div>
@@ -242,4 +242,119 @@
 <!-- Admin end -->
 
 {!! Form::close() !!}
+@push('scripts')
+<script type="text/javascript">
+jQuery("#collapseOne input:checkbox").click(function(){
+	if(jQuery("#collapseOne input:checkbox:checked").length == 0) {
+		$('.associate').prop("disabled", true); 
+		$('.associate').removeClass('btn-primary');
+		$('.associate').removeClass('btn-danger');
+		$('.associate').removeClass('btn-success');
+		$('.associate').val('Associate');
+		$('.associate').addClass('btn-default');
+	} else {
+		if (jQuery("#collapseTwo input:checkbox:checked").length >= 1 && jQuery("#collapseOne input:checkbox:checked").length >= 1) {
+			$('.associate').prop("disabled", false); 
+			var therapist_id = [];
+			var client_id = [];
+			$.each($("#collapseTwo input:checkbox:checked"), function(){            
+				therapist_id.push($(this).val());
+			});
+			$.each($("#collapseOne input:checkbox:checked"), function(){            
+				client_id.push($(this).val());
+			});
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					}
+			});
+
+			
+			$.ajax({
+				type:'POST',
+				data: {therapist_id:therapist_id,client_id:client_id},
+				url:"/admin/users/checkassignment",
+				success:function(data){
+					if (jQuery("#collapseTwo input:checkbox:checked").length == 1) {
+						if(data == 'De-assign'){
+							$('.associate').removeClass('btn-success');
+							$('.associate').addClass('btn-danger');
+						} else {
+							$('.associate').removeClass('btn-danger');
+							$('.associate').addClass('btn-success');
+						}
+						$('.associate').val(data);
+					} else {
+						$('.associate').removeClass('btn-success');
+						$('.associate').removeClass('btn-danger');
+						$('.associate').addClass('btn-primary');
+						$('.associate').val('Associate');
+						alert(data);
+					}
+					
+				}
+			});
+		} else {
+			$('.associate').prop("disabled", true); 
+			$('.associate').removeClass('btn-primary');
+			$('.associate').removeClass('btn-danger');
+			$('.associate').removeClass('btn-success');
+			$('.associate').val('Associate');
+			$('.associate').addClass('btn-default');
+		}
+	}
+});
+jQuery("#collapseTwo input:checkbox").click(function(){
+if (jQuery("#collapseTwo input:checkbox:checked").length >= 1 && jQuery("#collapseOne input:checkbox:checked").length >= 1) {
+	$('.associate').prop("disabled", false); 
+	var therapist_id = [];
+	var client_id = [];
+	$.each($("#collapseTwo input:checkbox:checked"), function(){            
+		therapist_id.push($(this).val());
+	});
+	$.each($("#collapseOne input:checkbox:checked"), function(){            
+		client_id.push($(this).val());
+	});
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+	});
+
+    
+    $.ajax({
+		type:'POST',
+		data: {therapist_id:therapist_id,client_id:client_id},
+		url:"/admin/users/checkassignment",
+        success:function(data){
+			if (jQuery("#collapseTwo input:checkbox:checked").length == 1) {
+				if(data == 'De-assign'){
+					$('.associate').removeClass('btn-success');
+					$('.associate').addClass('btn-danger');
+				} else {
+					$('.associate').removeClass('btn-danger');
+					$('.associate').addClass('btn-success');
+				}
+				$('.associate').val(data);
+			} else {
+				$('.associate').removeClass('btn-success');
+				$('.associate').removeClass('btn-danger');
+				$('.associate').addClass('btn-primary');
+				$('.associate').val('Associate');
+				alert(data);
+			}
+			
+		}
+    });
+} else {
+	$('.associate').prop("disabled", true); 
+	$('.associate').removeClass('btn-primary');
+	$('.associate').removeClass('btn-danger');
+	$('.associate').removeClass('btn-success');
+	$('.associate').val('Associate');
+	$('.associate').addClass('btn-default');
+}
+});
+</script>
+@endpush
 @endsection

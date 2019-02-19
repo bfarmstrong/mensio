@@ -126,15 +126,73 @@ class TherapistController extends Controller
     public function storeTherapistSupervisor(Request $request)
     {	
 		foreach($request->user_id as $key => $user_id) { 
+			$user = $this->user
+				->getByCriteria(new WithTherapistsAndSupervisors($user_id))
+				->find($user_id);
+			
 			foreach($request->therapist_id as $therapist_id){
-				$this->user->addTherapist(
-					$therapist_id,
-					$user_id
-				);
+				if(in_array($therapist_id,$user->therapists->pluck('id')->toArray())){
+					$this->user->removeTherapist($therapist_id, $user_id);
+				} else {
+					$this->user->addTherapist(
+						$therapist_id,
+						$user_id
+					);
+				}
 			}
 		}
         return redirect()
             ->back()
             ->with('message', __('admin.users.therapists.index.added-therapist'));
     }
+	
+	/**
+     * check a therapist and associate client.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */	
+	public function checkAssignment(Request $request){ 
+		$return='';
+		if(count($_POST['therapist_id']) > 1){
+			$assignedclient_name = [];
+			$assignedtherapist_name = [];
+			$deassignedclient_name = [];
+			$deassignedtherapist_name = [];
+			foreach($_POST['client_id'] as $key => $user_id) { 
+				$user = $this->user
+					->getByCriteria(new WithTherapistsAndSupervisors($user_id))
+					->find($user_id);
+			
+				foreach($_POST['therapist_id'] as $therapist_id){
+					$therapist_name = $this->user->find($therapist_id);
+					
+					if(in_array($therapist_id,$user->therapists->pluck('id')->toArray())){
+						$assignedtherapist_name[] = $therapist_name->name;
+						$assignedclient_name[] = $user->name;
+					} else {
+						$deassignedtherapist_name[] = $therapist_name->name;
+						$deassignedclient_name[] = $user->name;
+					}
+				}
+			}
+			if (!empty($assignedtherapist_name)){
+				$return .= 'You are currently assigning '.implode(',',$assignedtherapist_name).' to '.implode(',',array_unique($assignedclient_name)).'.';
+			} if (!empty($deassignedtherapist_name)){
+			$return .= 'You are currently de-assigning '.implode(',',$deassignedtherapist_name).' to '.implode(',',array_unique($deassignedclient_name)).'.'; 
+			}
+			$return .= 'Are you sure you want to do this?';
+		} else {
+			$user = $this->user
+            ->getByCriteria(new WithTherapistsAndSupervisors($_POST['client_id'][0]))
+            ->find($_POST['client_id'][0]);
+			if(in_array($_POST['therapist_id'][0],$user->therapists->pluck('id')->toArray())){
+				$return .= 'De-assign';
+			} else {
+				$return .= 'Assign';
+			}
+		}
+		return $return;
+	}
 }
