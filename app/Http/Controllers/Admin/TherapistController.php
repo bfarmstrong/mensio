@@ -124,13 +124,14 @@ class TherapistController extends Controller
      * @return Response
      */
     public function storeTherapistSupervisor(Request $request)
-    {	
+    {	//dd($request->therapist_id);
 		foreach($request->user_id as $key => $user_id) { 
+			foreach($request->therapist_id as $therapist_id){
 				$this->user->addTherapist(
-					$request->get('therapist_id'),
+					$therapist_id,
 					$user_id
 				);
-				
+			}
 		}
         return redirect()
             ->back()
