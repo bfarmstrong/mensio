@@ -41,7 +41,7 @@ class WhereCurrentClientSupervisorsorTherapist extends Criteria
     {
         $query = $model->whereHas('supervisors', function ($query) {
             $query->where('therapist_id', $this->id)
-			->orWhere('supervisor_id', $this->id);
+				->orWhere('supervisor_id', $this->id);
         });
         return $query;
     }

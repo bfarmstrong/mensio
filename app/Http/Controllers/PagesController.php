@@ -18,6 +18,7 @@ use App\Services\Criteria\General\WhereRelationEqual;
 use App\Enums\Roles;
 use App\Services\Criteria\User\WhereCurrentClient;
 use App\Services\Criteria\User\WhereCurrentClientSupervisorsorTherapist;
+use App\Services\Criteria\User\WithTherapistsAndSupervisors;
 
 class PagesController extends Controller
 {
@@ -94,27 +95,37 @@ class PagesController extends Controller
 				->all();
 			
 			foreach($all_therapist_supervisor as $therapist_supervisor) {	
-				 
-				$clients = $this->userService
-					->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
-					->pushCriteria(new WhereCurrentClient($therapist_supervisor->id))
-					->pushCriteria(new WithRelation('roles'))
-					->all();  
-				foreach($clients as $client){
-				$notes[$client->id] = $this->noteService
-					->pushCriteria(new WhereClient($client->id))
-					->pushCriteria(new WhereParent())
-					->pushCriteria(new WithTherapist())
-					->pushCriteria(new WhereEqual('is_draft', 0))
-					->pushCriteria(new OrderBy('updated_at', 'desc'))
-					->paginate(1);
-				$communications[$client->id] = $this->communicationLogService
-					->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
-					->pushCriteria(new WhereEqual('user_id', $client->id))
-					->pushCriteria(new OrderBy('updated_at', 'desc'))
-					->paginate(1);
-				$client_names[$client->id] = $this->userService->find($client->id);
-				}
+				
+					$clients = $this->userService
+						->pushCriteria(new WhereRelationEqual('roles', 'level', Roles::Client))
+						->pushCriteria(new WhereCurrentClient($therapist_supervisor->id))
+						->pushCriteria(new WithRelation('roles'))
+						->all();  
+					foreach($clients as $client){ 
+					
+					foreach($client->therapists as $therapist){
+						$supervisors = $therapist->supervisors->first()->id ?? null; 
+					}
+					if (in_array(\Auth::user()->id,$client->therapists->pluck('id')->toArray()) || $supervisors == \Auth::user()->id) { 
+						$clientnames[$client->id] = $this->userService
+								->find($client->id);
+						 
+						$client_names[$client->id]	 =	$clientnames[$client->id];			
+						$notes[$client->id] = $this->noteService
+							->pushCriteria(new WhereClient($client->id))
+							->pushCriteria(new WhereParent())
+							->pushCriteria(new WithTherapist())
+							->pushCriteria(new WhereEqual('is_draft', 0))
+							->pushCriteria(new OrderBy('updated_at', 'desc'))
+							->paginate(3);
+						$communications[$client->id] = $this->communicationLogService
+							->pushCriteria(new WhereEqual('clinic_id', request()->attributes->get('clinic')->id))
+							->pushCriteria(new WhereEqual('user_id', $client->id))
+							->pushCriteria(new OrderBy('updated_at', 'desc'))
+							->paginate(1);
+						
+						}
+					}
 			}	
 		} 
 		if(\Auth::user()->isClient()){
@@ -132,6 +143,14 @@ class PagesController extends Controller
 					->getByCriteria(new WithQuestionnaire())
 					->findBy('uuid', $response->uuid);
 				$score[$response->uuid] = $this->response->getScore($response_details);
+			}
+			
+			$user_therapists = $this->userService
+				->getByCriteria(new WithTherapistsAndSupervisors(\Auth::user()->id))
+				->find(\Auth::user()->id); 
+			$therapists	= '';
+			foreach($user_therapists->therapists()->pluck('name') as $name_therapist) {
+				$therapists	.= $name_therapist.',';
 			}
 			
 			$communication = $this->communicationLogService
@@ -164,7 +183,8 @@ class PagesController extends Controller
 				'scores' => $score,
 				'communication' => $communication,
 				'notes' => $notes,
-				'responses' => $responses
+				'responses' => $responses,
+				'therapists' => rtrim($therapists,','),
 			]);
 		}
     }

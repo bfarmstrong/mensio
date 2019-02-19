@@ -283,7 +283,27 @@ class User extends Authenticatable
     {
         return $this->hasRole(Roles::JuniorTherapist) || $this->hasRole(Roles::SeniorTherapist);
     }
-
+	
+	/**
+     * Returns if the user is a JuniorTherapist.
+     *
+     * @return bool
+     */
+    public function isJuniorTherapist()
+    {
+        return $this->hasRole(Roles::JuniorTherapist);
+    }
+	
+	/**
+     * Returns if the user is a JuniorTherapist.
+     *
+     * @return bool
+     */
+    public function isSeniorTherapist()
+    {
+        return $this->hasRole(Roles::SeniorTherapist);
+    }
+	
     /**
      * Check if user has at least permission level.
      *

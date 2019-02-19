@@ -102,6 +102,10 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['prefix' => 'clients', 'middleware' => 'requires-clinic', 'namespace' => 'Client'], function () {
+			/* 
+			|client overview 
+			*/
+			Route::get('{user_id}/details', 'ClientController@details');
 			/*
             |--------------------------------------------------------------------------
             | migrate old documents
@@ -279,9 +283,12 @@ Route::group(['middleware' => ['domain']], function () {
             | Therapist Management
             |--------------------------------------------------------------------------
             */
+			
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('users/{user_id}/therapists', 'TherapistController@index');
                 Route::post('users/{user_id}/therapists', 'TherapistController@store');
+                Route::post('users/therapistssupervisor', 'TherapistController@storeTherapistSupervisor');
+                Route::post('users/checkassignment', 'TherapistController@checkAssignment');
                 Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
             });
 
