@@ -102,8 +102,6 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['prefix' => 'clients', 'middleware' => 'requires-clinic', 'namespace' => 'Client'], function () {
-			
-			
 			/* 
 			|client overview 
 			*/
@@ -292,7 +290,7 @@ Route::group(['middleware' => ['domain']], function () {
                 Route::post('users/{user_id}/therapists', 'TherapistController@store');
                 Route::get('invite-therapist', 'TherapistController@getInviteTherapist');
                 Route::post('invite-therapist', 'TherapistController@postInviteTherapist');
-				Route::get('invite-client', 'TherapistController@getInviteClient');
+			        	Route::get('invite-client', 'TherapistController@getInviteClient');
                 Route::post('invite-client', 'TherapistController@postInviteClient');
                 Route::post('users/therapistssupervisor', 'TherapistController@storeTherapistSupervisor');
                 Route::post('users/checkassignment', 'TherapistController@checkAssignment');

@@ -20,7 +20,7 @@ return [
         'juniortherapist' => 'Junior Therapist',
         'seniortherapist' => 'Senior Therapist',
         'create-therapist' => 'Create Therapist',
-		'create-client' => 'Create Client',
+		    'create-client' => 'Create Client',
     ],
 	'form-therapist' => [	
 		'breadcrumb' => 'Invite Therapist',

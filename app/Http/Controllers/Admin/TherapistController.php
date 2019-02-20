@@ -316,4 +316,5 @@ class TherapistController extends Controller
             'message' => __('admin.form-client.created-client'),
         ]);
 	}
+
 }

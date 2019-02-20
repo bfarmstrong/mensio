@@ -40,7 +40,7 @@
         {!!
             Form::text(
                 'signature[license]',
-                old('signature[license]'),
+                \Auth::user()->license ?? old('signature[license]'),
                 ['class' => 'form-control']
             )
         !!}

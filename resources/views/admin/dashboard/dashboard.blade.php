@@ -100,6 +100,7 @@
 						<div class="col-sm-6 text-right">
 						
 							@lang('admin.dashboard.count') <b>({{ @count($therapists) }})</b>
+
 						<a
 							class="btn btn-primary btn-sm"
 							href="{{ url('admin/invite-therapist') }}"

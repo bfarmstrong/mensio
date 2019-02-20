@@ -271,7 +271,7 @@ class UserController extends Controller
      */
     public function postInvite(UserInviteRequest $request)
     {
-        $user = $this->userService->invite($request->except(['_token', '_method','role_id']));
+        $user = $this->userService->invite($request->except(['_token', '_method']));
         $clinic = $request->attributes->get('clinic');
         if (! is_null($clinic)) {
             $this->userService->assignClinic($clinic->id, $user->id,$request->role_id);
