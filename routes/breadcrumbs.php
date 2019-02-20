@@ -167,6 +167,12 @@ Breadcrumbs::for('admin.invite-therapist', function ($trail) {
     $trail->push(__('admin.form-therapist.breadcrumb'), url('admin/invite-therapist'));
 });
 
+// Dashboard > Invite Client
+Breadcrumbs::for('admin.invite-client', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push(__('admin.form-client.breadcrumb'), url('admin/invite-client'));
+});
+
 // Doctors
 Breadcrumbs::for('admin.doctors.index', function ($trail) {
     $trail->push(__('admin.doctors.index.breadcrumb'), url('admin/doctors'));

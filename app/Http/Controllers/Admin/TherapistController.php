@@ -20,12 +20,21 @@ use App\Services\Criteria\General\WhereRelationEqual;
 use App\Services\Impl\IRoleService;
 use App\Services\Criteria\General\WhereIn;
 use App\Http\Requests\TherapistInviteRequest;
+use App\Http\Requests\ClientInviteRequest;
+use App\Services\Impl\IDoctorService;
 
 /**
  * Manage a therapist resource for a user.
  */
 class TherapistController extends Controller
 {
+	 /**
+     * The doctor service implementation.
+     *
+     * @var IDoctorService
+     */
+    protected $doctorService;
+	
     /**
      * The user service implementation.
      *
@@ -45,10 +54,11 @@ class TherapistController extends Controller
      *
      * @param IUserService $user
      */
-    public function __construct(IUserService $user, IRoleService $roleService)
+    public function __construct(IUserService $user, IRoleService $roleService, IDoctorService $doctorService)
     {
         $this->user = $user;
 		$this->roleService = $roleService;
+		$this->doctorService = $doctorService;
     }
 
     /**
@@ -270,7 +280,40 @@ class TherapistController extends Controller
 		}
 		
 		return redirect('admin/dashboard')->with([
-            'message' => __('admin.users.index.created-user'),
+            'message' => __('admin.form-client.created-therapist'),
+        ]);
+	}
+	
+	/**
+     * Show the form for inviting a client.
+     *
+     * @return Response
+     */
+	public function getInviteClient()
+	{
+		$doctors = $this->doctorService->all();
+		return view('admin.dashboard.form-client')->with([
+            'doctors' => $doctors
+        ]);
+	}
+	
+	/**
+     * Creates a new client in the database.  Sends them a welcome email.
+     *
+     * @return Response
+     */
+	public function postInviteClient(ClientInviteRequest $request)
+	{
+		$user = $this->user->invite($request->except(['_token', '_method','role_id','fees','language']));
+		$clinic = $request->attributes->get('clinic');
+		if (! is_null($clinic)) {
+            $this->user->assignClinic($clinic->id, $user->id,$request->role_id);
+        } else {
+			$this->user->assignClinic(false, $user->id,$request->role_id);
+		}
+		
+		return redirect('admin/dashboard')->with([
+            'message' => __('admin.form-client.created-client'),
         ]);
 	}
 }

@@ -289,6 +289,8 @@ Route::group(['middleware' => ['domain']], function () {
                 Route::post('users/{user_id}/therapists', 'TherapistController@store');
                 Route::get('invite-therapist', 'TherapistController@getInviteTherapist');
                 Route::post('invite-therapist', 'TherapistController@postInviteTherapist');
+				Route::get('invite-client', 'TherapistController@getInviteClient');
+                Route::post('invite-client', 'TherapistController@postInviteClient');
                 Route::post('users/therapistssupervisor', 'TherapistController@storeTherapistSupervisor');
                 Route::post('users/checkassignment', 'TherapistController@checkAssignment');
                 Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');
