@@ -14,6 +14,12 @@ use App\Services\Criteria\User\WithTherapistsAndSupervisors;
 use App\Services\Impl\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Criteria\General\WithRelation;
+use App\Services\Criteria\General\WhereEqual;
+use App\Services\Criteria\General\WhereRelationEqual;
+use App\Services\Impl\IRoleService;
+use App\Services\Criteria\General\WhereIn;
+use App\Http\Requests\TherapistInviteRequest;
 
 /**
  * Manage a therapist resource for a user.
@@ -26,15 +32,23 @@ class TherapistController extends Controller
      * @var IUserService
      */
     protected $user;
-
+	
+    /**
+     * The role service implementation.
+     *
+     * @var IRoleService
+     */
+    protected $roleService;
+	
     /**
      * Creates an instance of `TherapistController`.
      *
      * @param IUserService $user
      */
-    public function __construct(IUserService $user)
+    public function __construct(IUserService $user, IRoleService $roleService)
     {
         $this->user = $user;
+		$this->roleService = $roleService;
     }
 
     /**
@@ -194,5 +208,69 @@ class TherapistController extends Controller
 			}
 		}
 		return $return;
+	}
+	
+	/**
+     * Show the form for inviting a therapist.
+     *
+     * @return Response
+     */
+	public function getInviteTherapist()
+	{
+		$query = $this->user
+				->pushCriteria(new WithRelation('clinics'))
+				->pushCriteria(new WithRelation('roles'))
+				->pushCriteria(new WhereEqual('is_active', 1));
+
+			if (
+				! request()->user()->isSuperAdmin() ||
+				! is_null(request()->attributes->get('clinic'))
+			) {
+				$query = $query->pushCriteria(
+					new WhereRelationEqual(
+						'clinics',
+						'clinics.id',
+						request()->attributes->get('clinic')->id
+					)
+				);
+			}
+		$users = $query->all();
+
+		$therapists = $users->filter(function ($user) {
+				return $user->isTherapist();
+			});
+		
+		$supervisors = $users->filter(function ($user) {
+				return $user->isSeniorTherapist();
+			});
+					
+		$roles = $this->roleService
+					->pushCriteria(new WhereIn('level', [2,3]))
+					->all();
+        return view('admin.dashboard.form-therapist')->with([
+            'therapists' => $therapists,
+			'roles' => $roles,
+			'supervisors' => $supervisors
+        ]);
+	}
+	
+	/**
+     * Creates a new therapist in the database.  Sends them a welcome email.
+     *
+     * @return Response
+     */
+	public function postInviteTherapist(TherapistInviteRequest $request)
+	{
+		$user = $this->user->invite($request->except(['_token', '_method','role_id']));
+		$clinic = $request->attributes->get('clinic');
+		if (! is_null($clinic)) {
+            $this->user->assignClinic($clinic->id, $user->id,$request->role_id);
+        } else {
+			$this->user->assignClinic(false, $user->id,$request->role_id);
+		}
+		
+		return redirect('admin/dashboard')->with([
+            'message' => __('admin.users.index.created-user'),
+        ]);
 	}
 }

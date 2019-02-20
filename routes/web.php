@@ -287,6 +287,8 @@ Route::group(['middleware' => ['domain']], function () {
             Route::group(['middleware' => 'requires-clinic'], function () {
                 Route::get('users/{user_id}/therapists', 'TherapistController@index');
                 Route::post('users/{user_id}/therapists', 'TherapistController@store');
+                Route::get('invite-therapist', 'TherapistController@getInviteTherapist');
+                Route::post('invite-therapist', 'TherapistController@postInviteTherapist');
                 Route::post('users/therapistssupervisor', 'TherapistController@storeTherapistSupervisor');
                 Route::post('users/checkassignment', 'TherapistController@checkAssignment');
                 Route::delete('users/{user_id}/therapists/{therapist_id}', 'TherapistController@destroy');

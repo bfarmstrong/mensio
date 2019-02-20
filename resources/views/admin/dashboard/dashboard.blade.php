@@ -27,7 +27,7 @@
 						<div class="col-sm-6 text-right">
 						
 							@lang('admin.dashboard.count') <b>({{ @count($clients) }})</b>
-						
+
 						</div>
 						</div>
 					</div>
@@ -94,7 +94,13 @@
 						<div class="col-sm-6 text-right">
 						
 							@lang('admin.dashboard.count') <b>({{ @count($therapists) }})</b>
-						
+						<a
+							class="btn btn-primary btn-sm"
+							href="{{ url('admin/invite-therapist') }}"
+						>
+							<i class="fas fa-user-plus mr-1"></i>
+							@lang('admin.dashboard.create-therapist')
+						</a>
 						</div>
 						</div>
 					</div>
