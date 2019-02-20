@@ -102,6 +102,8 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['prefix' => 'clients', 'middleware' => 'requires-clinic', 'namespace' => 'Client'], function () {
+			
+			
 			/* 
 			|client overview 
 			*/
@@ -167,6 +169,8 @@ Route::group(['middleware' => ['domain']], function () {
         |--------------------------------------------------------------------------
         */
         Route::group(['middleware' => 'requires-clinic'], function () {
+			Route::get('invite-client', 'Admin\TherapistController@getInviteClient');
+			Route::post('invite-client', 'Admin\TherapistController@postInviteClient');
             Route::get('groups', 'Admin\GroupController@index');
             Route::post('groups/search', 'Admin\GroupController@search');
             Route::get('groups/search', 'Admin\GroupController@index');
@@ -226,7 +230,6 @@ Route::group(['middleware' => ['domain']], function () {
         */
         Route::get('/dashboard', 'PagesController@dashboard');
         Route::post('/dashboard', 'PagesController@checkconsent');
-
         /*
         |--------------------------------------------------------------------------
         | Admin

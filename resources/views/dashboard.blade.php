@@ -10,9 +10,22 @@
     <div id="accordion" class="accordion">
         <div class="card mb-0" style="border: 1px solid #c8ced3;">
             <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne">
-                <a class="card-title">
-                    @lang('dashboard.your_clients')
-                </a>
+				<div class="row">
+					<div class="col-sm-6">
+					<a class="card-title">
+						@lang('dashboard.your_clients')
+					</a>
+					</div>
+					<div class="col-sm-6  text-right">
+					<a
+						class="btn btn-primary btn-sm"
+						href="{{ url('invite-client') }}"
+					>
+						<i class="fas fa-user-plus mr-1"></i>
+						@lang('admin.dashboard.create-client')
+					</a>
+					</div>
+				</div>
             </div>
             <div id="collapseOne" class="card-body collapse show" data-parent="#accordion" >
 				<div class="row">
